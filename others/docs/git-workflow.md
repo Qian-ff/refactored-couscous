@@ -17,7 +17,9 @@ python .\others\scripts\workflow.py worktree --role F
 python .\others\scripts\workflow.py worktree --role G
 ~~~
 
-工具从 main 创建任务分支；已有正确工作区时只报告。目录被其他内容占用时停止，不覆盖。A 更新基线后，子聊天在干净的自己的分支执行 git merge main，再继续工作。
+工具从 main 创建任务分支；已有工作区会报告干净状态、HEAD 和相对基线的同步状态，存在不代表可开工。目录被其他内容占用时保留原状。A 发布基线后，子聊天先保留或提交未完成修改，再在干净的自己的分支执行 git merge 指定的基线SHA。不要重置工作区。
+
+使用 `python .\others\scripts\workflow.py status --baseline 已发布SHA` 查看所有工作区是否包含基线及各自契约版本；省略参数时以当前 main 为准。任务提交检查从已提交的 main 核对所有权，拒绝本分支的过期规则；`checkpoint --baseline 已发布SHA` 验证分支包含指定基线，省略时须包含当前 main。
 
 ## 每轮提交
 

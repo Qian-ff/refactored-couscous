@@ -83,6 +83,47 @@ class WorkflowTest(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError, "leaves this worktree"):
             workflow.normalized_paths(self.repo, ["../outside.txt"])
 
+    def test_status_reports_dirty_and_outdated_worktrees(self) -> None:
+        target = Path(workflow.new_worktree(self.repo, "B")["path"])
+        self.write("baseline.txt")
+        self.git("add", "baseline.txt")
+        self.git("commit", "-m", "new published baseline")
+        (target / "uncommitted.txt").write_text("keep me", encoding="utf-8")
+        report = workflow.status(self.repo, self.git("rev-parse", "main"))
+        task = next(item for item in report["worktrees"] if item["role"] == "B")
+        self.assertFalse(task["clean"])
+        self.assertFalse(task["contains_baseline"])
+        self.assertEqual(task["behind"], 1)
+        self.assertIn("?? uncommitted.txt", task["changes"])
+        again = workflow.new_worktree(self.repo, "B")
+        self.assertEqual(again["status"], "already_exists")
+        self.assertFalse(again["contains_baseline"])
+        self.assertEqual((target / "uncommitted.txt").read_text(), "keep me")
+
+    def test_published_scope_change_rejects_stale_task_rules(self) -> None:
+        target = Path(workflow.new_worktree(self.repo, "B")["path"])
+        rules = json.loads((self.repo / "others/contracts/ownership.json").read_text(encoding="utf-8"))
+        rules["version"] += 1
+        self.write("others/contracts/ownership.json", json.dumps(rules))
+        self.git("add", "others/contracts/ownership.json")
+        self.git("commit", "-m", "publish new ownership")
+        file = target / "web/src/features/admin/keep.txt"
+        file.parent.mkdir(parents=True)
+        file.write_text("preserve", encoding="utf-8")
+        with self.assertRaisesRegex(RuntimeError, "Outdated ownership"):
+            workflow.checkpoint(target, "B", "test", ["web/src/features/admin"], "check", False)
+        self.assertEqual(file.read_text(), "preserve")
+
+    def test_unsynchronized_and_invalid_baselines_are_rejected(self) -> None:
+        target = Path(workflow.new_worktree(self.repo, "B")["path"])
+        self.write("baseline.txt")
+        self.git("add", "baseline.txt")
+        self.git("commit", "-m", "advance main")
+        with self.assertRaisesRegex(RuntimeError, "has not synchronized"):
+            workflow.checkpoint(target, "B", "test", ["web/src/features/admin"], "check", False)
+        with self.assertRaisesRegex(RuntimeError, "Unknown baseline"):
+            workflow.status(self.repo, "nonexistent-baseline")
+
     def test_isolated_worktree_and_role_commit(self) -> None:
         result = workflow.new_worktree(self.repo, "B")
         target = Path(result["path"])

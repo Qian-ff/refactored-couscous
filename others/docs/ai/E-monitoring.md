@@ -22,7 +22,7 @@
 - others/ai_worker/monitoring/
 - web/src/features/monitoring/
 
-范围以 ownership.json 为准。依赖、公共路由、数据库迁移及共享类型的变更交给 A，提出需求和兼容影响即可，不在其他聊天文件中临时绕过。
+范围以 ownership.json 为准。前端公共路由交 D 注册；依赖、后端总路由、数据库迁移及共享类型变更交 A 集成，提出需求和兼容影响。
 
 ## 每轮交付
 
