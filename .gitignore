@@ -1,0 +1,58 @@
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+!.env.*.example
+**/local.json
+*.key
+*.pem
+*.p12
+*.pfx
+*.keystore
+*.jks
+# Dependencies and virtual environments
+**/node_modules/
+**/.venv/
+**/venv/
+**/__pycache__/
+*.py[cod]
+.pnpm-store/
+**/.gradle/
+**/.gradle-user-home/
+**/local.properties
+# Build output
+**/dist/
+**/build/
+**/out/
+**/release/
+**/coverage/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+*.egg-info/
+*.apk
+*.aab
+*.exe
+*.msi
+*.msix
+*.asar
+# Runtime data, model weights and local evidence
+/others/worktrees/
+/others/reports/
+/others/.tmp/
+/others/runtime/
+/others/backups/
+/others/models/
+*.db
+*.sqlite
+*.sqlite3
+*.pt
+*.pth
+*.onnx
+*.gguf
+*.log
+# Editor and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

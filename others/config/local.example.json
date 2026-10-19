@@ -1,0 +1,7 @@
+{
+  "java_home": "",
+  "android_sdk_root": "",
+  "worker_python": "",
+  "api_public_url": "",
+  "note": "Copy to ignored local.json for machine-only paths. Shared scripts also inspect existing environment and standard settings."
+}

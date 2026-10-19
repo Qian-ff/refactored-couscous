@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "base_branch": "main",
+  "worktree_root": "others/worktrees",
+  "max_active_chats": 4,
+  "roles": {
+    "A": {
+      "title": "总控与架构",
+      "branch": "main",
+      "worktree": ".",
+      "owned_paths": [
+        "*"
+      ]
+    },
+    "B": {
+      "title": "账号与业务管理",
+      "branch": "task/core",
+      "worktree": "core",
+      "owned_paths": [
+        "others/backend/app/domains/core/",
+        "web/src/features/admin/",
+        "web/src/features/teaching/"
+      ]
+    },
+    "C": {
+      "title": "内容与 AI",
+      "branch": "task/content-ai",
+      "worktree": "content-ai",
+      "owned_paths": [
+        "others/backend/app/domains/content/",
+        "others/backend/app/domains/assistant/",
+        "others/ai_worker/content/",
+        "others/ai_worker/speech/",
+        "web/src/features/content/",
+        "web/src/features/assistant/"
+      ]
+    },
+    "D": {
+      "title": "学习体验与设计系统",
+      "branch": "task/learning-ui",
+      "worktree": "learning-ui",
+      "owned_paths": [
+        "web/src/components/",
+        "web/src/styles/",
+        "web/src/routes/",
+        "web/src/features/student/",
+        "web/src/App.tsx",
+        "web/src/main.tsx"
+      ]
+    },
+    "E": {
+      "title": "监控与风险反馈",
+      "branch": "task/monitoring",
+      "worktree": "monitoring",
+      "owned_paths": [
+        "others/backend/app/domains/monitoring/",
+        "others/ai_worker/monitoring/",
+        "web/src/features/monitoring/"
+      ]
+    },
+    "F": {
+      "title": "Windows 与安卓",
+      "branch": "task/clients",
+      "worktree": "clients",
+      "owned_paths": [
+        "desktop/",
+        "android/",
+        "web/src/platform/"
+      ]
+    },
+    "G": {
+      "title": "独立验收",
+      "branch": "task/qa",
+      "worktree": "qa",
+      "owned_paths": [
+        "others/qa/"
+      ]
+    }
+  }
+}
