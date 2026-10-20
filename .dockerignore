@@ -1,0 +1,15 @@
+# Only public backend source and brand metadata belong in the build context.
+**
+!others/
+!others/backend/
+!others/backend/app/
+!others/backend/app/**
+!others/backend/pyproject.toml
+!others/backend/uv.lock
+!others/backend/alembic.ini
+!others/config/
+!others/config/branding.json
+!others/licenses/
+!others/licenses/fastapi-template-MIT.txt
+**/__pycache__/
+**/*.pyc
