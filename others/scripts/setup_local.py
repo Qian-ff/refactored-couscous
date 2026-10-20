@@ -1,4 +1,4 @@
-"""Generate project-local development secrets; preserve existing configuration."""
+"""Generate project-local development configuration; preserve existing configuration."""
 import secrets
 from pathlib import Path
 
@@ -15,7 +15,7 @@ def main():
         "APP_ENV": "development", "SECRET_KEY": secrets.token_urlsafe(48),
         "POSTGRES_USER": "safelab", "POSTGRES_PASSWORD": password, "POSTGRES_DB": "safelab",
         "DATABASE_URL": f"postgresql+psycopg://safelab:{password}@127.0.0.1:55432/safelab",
-        "SAFELAB_DEMO_PASSWORD": secrets.token_urlsafe(18),
+        "SAFELAB_DEMO_PASSWORD": "88888888",
     }
     with target.open("x", encoding="utf-8", newline="\n") as file:
         file.write("# Generated for local development; ignored by Git.\n")

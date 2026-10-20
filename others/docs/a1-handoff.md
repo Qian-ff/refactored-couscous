@@ -20,7 +20,7 @@
 | 包与凭据 | 三个归档的 ZIP CRC 检查通过，哈希见 artifacts.json；品牌和许可随包保留；Git 源码及客户端资源未包含本机实际数据库口令、服务主密钥或合成账号密码 |
 | 固定依赖 | pnpm/uv 冻结安装通过；生产网页构建和 TypeScript 检查通过；FastAPI 模板来源、适配和 MIT 原文已记录 |
 
-验证日期：2026-10-20。本机证据位于被忽略的 others/reports/a1：persistence.json、web-tests.json、windows-test.json、android-test.json、release-policy.json、artifacts.json，以及 web-*.png、windows-packaged.png、android-device.png。登录密码仅在被忽略的 others/runtime/demo-accounts.json，不进入报告或客户端包。
+验证日期：2026-10-20。本机证据位于被忽略的 others/reports/a1：persistence.json、web-tests.json、windows-test.json、android-test.json、release-policy.json、artifacts.json，以及 web-*.png、windows-packaged.png、android-device.png。数据库和服务端密钥留在忽略配置中；演示账号密码约定见 A1 使用指南，不写入客户端包。
 
 ## 本机交付物
 
@@ -48,7 +48,7 @@ Pop-Location
 
 另开终端运行 `pnpm run dev`，打开 http://127.0.0.1:5173。后端默认8000，PostgreSQL仅本机55432。停止容器保留数据卷；生产环境禁止运行 seed。
 
-学校代码 demo-a：admin、college、teacher、teacher_eng、student、student_chem；demo-b：admin_b、teacher_b；platform：platform。随机密码从 others/runtime/demo-accounts.json 取得。性别/联系方式等完整档案和账号业务由 B 后续扩展。
+学校代码 demo-a：admin、college、teacher、teacher_eng、student、student_chem；demo-b：admin_b、teacher_b；platform：platform。本机演示密码按用户要求统一为 `88888888`，完整清单见 others/runtime/demo-accounts.json。性别/联系方式等完整档案和账号业务由 B 后续扩展。
 
 ## 构建与复验
 
