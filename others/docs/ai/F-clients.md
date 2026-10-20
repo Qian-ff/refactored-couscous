@@ -6,7 +6,7 @@
 
 1. 打开自己的独立工作区 others/worktrees/clients，确认当前分支为 task/clients。
 2. 读根 AGENTS.md、others/docs/design.md、others/contracts/README.md 和 ownership.json。
-3. 从 A1 交接报告取得已发布基线；在干净的本分支合并该基线，确认 contains_baseline=true 后开始实现。
+3. 当前基线为 checkpoint-1，包含最新一键工具及三角色/搜索要求；从交接报告核对后，在干净的本分支合并并确认 contains_baseline=true 再开始实现。
 
 ## 本角色任务
 
@@ -14,6 +14,7 @@
 2. 实现可配置服务地址、安全凭据、文件选择、麦克风/摄像头及返回键适配。
 3. 维护 A1 已通过的构建命令，扩展 Windows 正式安装器、安卓 release 签名和发布流程。
 4. 实机检查登录、三角色、录音、上传和网络；干净目录运行时不依赖开发路径。
+5. 验证三角色搜索在原生端的中文输入、键盘、筛选、返回、定位和文件打开；每次 A 功能合并协助重建两端产物、核对源码/契约版本和本轮一键入口。本端启动器由 F 维护，共用根入口或 others/scripts 的修改交 A 集成。
 
 ## 修改范围
 

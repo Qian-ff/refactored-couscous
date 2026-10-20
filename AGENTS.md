@@ -12,7 +12,9 @@
 ## Git 操作
 
 完整步骤、工作区工具和合并条件见 others/docs/git-workflow.md；各角色任务书见 others/docs/ai/README.md。
-检查工作区与暂存区后，使用 workflow.py checkpoint 或显式逐文件 git add 后 commit。B–G 只提交自己的任务分支；A 验证后合并。保留别人的改动，避免强制重置、清理、强推或改写历史。push 需有用户指令。
+检查工作区与暂存区后，使用 workflow.py checkpoint 或显式逐文件 git add 后 commit。B–G 只提交自己的任务分支；A 验证后合并。保留别人的改动，避免强制重置、清理、强推或改写历史。用户已授权 A 在当前、B/C/D 完成后的第二轮集成、第三轮集成三个节点推送；条件与记录见 others/docs/git-workflow.md。其他轮次保留本地提交，B–G 不自行推送。
+
+每次功能合并须更新并实测一键启动与本轮演示入口，重新构建受影响的客户端并记录产物/源码版本。三角色工作台与权限范围内搜索要求见 others/docs/design.md 第11节。
 
 ## 工程边界
 

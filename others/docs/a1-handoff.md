@@ -2,7 +2,7 @@
 
 状态：**A1 必需验收通过，可以交接后续模块。** 品牌为安研通 / LabConnect。A1 实现账号、授权和基础课程；完整教学、AI 与监控由后续模块实现。
 
-实现与验收代码提交：`7fef37d0fa47f8172fc96294c20615b4559e55c7`。最终交接基线为本地固定标签 **`a1-0.1.0`**，包含上述代码及本报告。执行 `git rev-parse a1-0.1.0` 取得完整发布 SHA。Git 仅本地提交，未 push。
+实现与验收代码提交：`7fef37d0fa47f8172fc96294c20615b4559e55c7`。最初验收基线为固定标签 **`a1-0.1.0`**。后续增加了可见模拟器与三端一键启动；本轮再明确三角色工作台、课件搜索和推送要求。当前新聊天使用 **`checkpoint-1`**，执行 `git rev-parse checkpoint-1` 取得完整 SHA。初始验收时仅本地提交；当前及后续推送授权见 git-workflow.md。
 
 契约版本 `0.1.0`，状态 implemented；OpenAPI SHA256 `2fb5156d12ca6a46e611519a39134e07b2315493e80405a547de80bc15fea949`。公开模型以真实 SQLModel/Alembic 为准，路由见 others/contracts/openapi.json。来源与许可见 upstream.md、licensing.md。
 
@@ -80,8 +80,8 @@ B–G 原工作区仍保留准备提交，尚未同步。每个聊天只在自�
 
 ~~~powershell
 git status --short
-git merge a1-0.1.0
-python others/scripts/workflow.py status --baseline a1-0.1.0
+git merge checkpoint-1
+python others/scripts/workflow.py status --baseline checkpoint-1
 ~~~
 
 必须看到当前工作区 contains_baseline=true、contract_version=0.1.0 才开始。选择共用本机开发数据库时，先将主工作区被忽略的 .env 私密复制到自己的 .env，再运行 Bootstrap；不启动第二套同端口 Compose，不覆盖主工作区配置。各自虚拟环境、缓存与模型留在忽略区。

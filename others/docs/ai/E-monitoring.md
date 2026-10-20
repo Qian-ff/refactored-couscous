@@ -6,7 +6,7 @@
 
 1. 打开自己的独立工作区 others/worktrees/monitoring，确认当前分支为 task/monitoring。
 2. 读根 AGENTS.md、others/docs/design.md、others/contracts/README.md 和 ownership.json。
-3. 从 A1 交接报告取得已发布基线；在干净的本分支合并该基线，确认 contains_baseline=true 后开始实现。
+3. 当前基线为 checkpoint-1，包含最新一键工具及三角色/搜索要求；从交接报告核对后，在干净的本分支合并并确认 contains_baseline=true 再开始实现。
 
 ## 本角色任务
 
@@ -15,6 +15,7 @@
 3. 实现疑似、确认/排除、关闭、日志、队列和失败处理。
 4. 只向云 AI 提交去身份事件摘要；与 C 的案例草稿接口对接。
 5. 建立独立样例评估，记录误报、漏报、延迟与资源；未合格保持实验性标识。
+6. 实现授权实验室范围内的告警搜索和日期/状态/类型筛选，先鉴权再计数与分页；学生搜索和选课不授予监控或原始媒体访问权限。搜索组件与入口和 D 协调。
 
 ## 修改范围
 

@@ -52,4 +52,6 @@ python .\others\scripts\workflow.py status
 
 https://github.com/Qian-ff/refactored-couscous.git
 
-本地 commit 与远端 push 是不同操作；本次准备仅建立本地版本及远端地址。首次发布或推送按用户后续指令执行。
+本地 commit 与远端 push 是不同操作；每轮保存本地提交，远端推送由 A 按已授权节点执行。
+
+用户已授权 A 在当前、B/C/D完成后的第二轮集成、第三轮集成三个节点推送，规则见 [Git 协作流程](others/docs/git-workflow.md)。当前后续聊天同步 checkpoint-1，包含最新一键工具及[三角色工作台与搜索要求](others/docs/design.md#11-三角色工作台与搜索新增要求待后续模块实现)。搜索和角色独立工作台仍由 B/C/D 等后续模块实现，当前 A1 页面不代表这些功能已经完成。
