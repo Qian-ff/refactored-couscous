@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { authLoginData, authLoginErrors, authLoginResponses, authLogoutData, authLogoutResponses, authMeData, authMeResponses, coursesContextData, coursesContextResponses, coursesCourseData, coursesCourseErrors, coursesCourseResponses, coursesCoursesData, coursesCoursesErrors, coursesCoursesResponses, coursesCreateCourseData, coursesCreateCourseErrors, coursesCreateCourseResponses, systemHealthData, systemHealthResponses } from './types.gen';
+import type { authLoginData, authLoginErrors, authLoginResponses, authLogoutData, authLogoutResponses, authMeData, authMeErrors, authMeResponses, coursesContextData, coursesContextErrors, coursesContextResponses, coursesCourseData, coursesCourseErrors, coursesCourseResponses, coursesCoursesData, coursesCoursesErrors, coursesCoursesResponses, coursesCreateCourseData, coursesCreateCourseErrors, coursesCreateCourseResponses, systemHealthData, systemHealthResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -50,7 +50,7 @@ export class AuthService {
      * Me
      */
     public static me<ThrowOnError extends boolean = true>(options?: Options<authMeData, ThrowOnError>) {
-        return (options?.client ?? client).get<authMeResponses, unknown, ThrowOnError>({
+        return (options?.client ?? client).get<authMeResponses, authMeErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
             url: '/api/v1/auth/me',
@@ -92,7 +92,7 @@ export class CoursesService {
      * Context
      */
     public static context<ThrowOnError extends boolean = true>(options?: Options<coursesContextData, ThrowOnError>) {
-        return (options?.client ?? client).get<coursesContextResponses, unknown, ThrowOnError>({
+        return (options?.client ?? client).get<coursesContextResponses, coursesContextErrors, ThrowOnError>({
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
             url: '/api/v1/courses/context',

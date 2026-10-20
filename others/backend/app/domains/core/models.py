@@ -67,15 +67,33 @@ class RoleGrant(SQLModel, table=True):
     college_id: UUID | None = Field(default=None)
 
 
+class CourseCatalog(SQLModel, table=True):
+    __tablename__ = "course_catalog"
+    __table_args__ = (
+        UniqueConstraint("school_id", "code"), UniqueConstraint("id", "school_id"),
+        ForeignKeyConstraint(["college_id", "school_id"], ["college.id", "college.school_id"]),
+        ForeignKeyConstraint(["owner_id", "school_id"], ["app_user.id", "app_user.school_id"]),
+    )
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    school_id: UUID = Field(foreign_key="school.id", index=True)
+    college_id: UUID
+    owner_id: UUID | None = None
+    code: str = Field(max_length=40)
+    title: str = Field(max_length=120)
+    created_at: datetime = Field(default_factory=now)
+
+
 class Course(SQLModel, table=True):
     __tablename__ = "course"
     __table_args__ = (
         UniqueConstraint("school_id", "code"), UniqueConstraint("id", "school_id"),
         ForeignKeyConstraint(["college_id", "school_id"], ["college.id", "college.school_id"]),
+        ForeignKeyConstraint(["catalog_id", "school_id"], ["course_catalog.id", "course_catalog.school_id"]),
     )
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     school_id: UUID = Field(foreign_key="school.id", index=True)
     college_id: UUID
+    catalog_id: UUID = Field(index=True)
     code: str = Field(max_length=40)
     title: str = Field(max_length=120)
     created_at: datetime = Field(default_factory=now)
@@ -115,3 +133,4 @@ class LoginSession(SQLModel, table=True):
     user_id: UUID = Field(foreign_key="app_user.id", index=True)
     expires_at: datetime
     revoked: bool = False
+    default_work_role: str | None = Field(default=None, max_length=20)

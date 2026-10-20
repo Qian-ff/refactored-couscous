@@ -8,6 +8,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.db import engine
+from app.core.release import BUILD, VERSION
 from app.domains.core.routes import router
 
 
@@ -15,10 +16,11 @@ def custom_generate_unique_id(route: APIRoute) -> str:
     return f"{route.tags[0]}-{route.name}"
 
 
-app = FastAPI(title=settings.PROJECT_NAME, version="0.1.0", openapi_url="/api/v1/openapi.json",
+app = FastAPI(title=settings.PROJECT_NAME, version=VERSION, openapi_url="/api/v1/openapi.json",
               generate_unique_id_function=custom_generate_unique_id)
 app.add_middleware(CORSMiddleware, allow_origins=settings.CORS_ORIGINS.split(","),
-                   allow_credentials=True, allow_methods=["GET", "POST"], allow_headers=["Authorization", "Content-Type"])
+                   allow_credentials=True, allow_methods=["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE"],
+                   allow_headers=["Authorization", "Content-Type", "X-Work-Role", "Idempotency-Key", "If-Match"])
 app.include_router(router, prefix="/api/v1")
 
 
@@ -32,4 +34,10 @@ async def database_unavailable(_request, _exception):
 def health() -> dict[str, str]:
     with engine.connect() as connection:
         connection.execute(text("SELECT 1"))
-    return {"status": "ok", "database": "postgresql", "contract": "0.1.0"}
+    return {"status": "ok", "database": "postgresql", "contract": VERSION}
+
+
+if settings.APP_ENV != "production":
+    @app.get("/api/v1/dev/identity", tags=["system"], include_in_schema=False)
+    def dev_identity() -> dict[str, str]:
+        return BUILD

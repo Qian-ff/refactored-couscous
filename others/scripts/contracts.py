@@ -47,7 +47,8 @@ def main():
     parser.add_argument("mode", choices=["generate", "check"])
     mode = parser.parse_args().mode
     schema = export_schema()
-    version = {"version": "0.1.0", "status": "implemented", "openapi_sha256": hashlib.sha256(schema.encode("utf-8")).hexdigest()}
+    release = json.loads((ROOT / "others/config/application.json").read_text(encoding="utf-8"))["version"]
+    version = {"version": release, "status": "implemented", "openapi_sha256": hashlib.sha256(schema.encode("utf-8")).hexdigest()}
     if mode == "generate":
         SCHEMA.write_text(schema, encoding="utf-8", newline="\n")
         (SCHEMA.parent / "version.json").write_text(json.dumps(version, indent=2) + "\n", encoding="utf-8")

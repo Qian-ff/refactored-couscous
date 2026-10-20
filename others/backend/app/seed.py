@@ -10,7 +10,7 @@ from sqlmodel import Session, select
 from app.core.config import ROOT, settings
 from app.core.db import engine
 from app.core.security import get_password_hash
-from app.models import College, Course, CourseStaff, Enrollment, LoginSession, Role, RoleGrant, School, User
+from app.models import College, Course, CourseCatalog, CourseStaff, Enrollment, LoginSession, Role, RoleGrant, School, User
 
 DEMO_ACCOUNTS = [
     ("platform", None, None, Role.PLATFORM_ADMIN, "平台运维"),
@@ -61,8 +61,14 @@ def seed(session: Session, password: str) -> dict:
         ("isolated", "隔离学校验证课程", "b-chem", "teacher_b"),
     ):
         college = colleges[college_key]
-        courses[key] = add(Course, "course-" + key, school_id=college.school_id, college_id=college.id,
-                           code=key.upper(), title=title)
+        existing = session.get(Course, fixture_id("course-" + key))
+        if existing:
+            courses[key] = existing
+        else:
+            catalog = add(CourseCatalog, "catalog-" + key, school_id=college.school_id,
+                          college_id=college.id, owner_id=users[teacher].id, code=key.upper(), title=title)
+            courses[key] = add(Course, "course-" + key, school_id=college.school_id, college_id=college.id,
+                               catalog_id=catalog.id, code=key.upper(), title=title)
         add(CourseStaff, "staff-" + key, school_id=college.school_id, course_id=courses[key].id,
             user_id=users[teacher].id, is_primary=True)
     for username in ("student", "student_chem"):

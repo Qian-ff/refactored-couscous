@@ -4,23 +4,50 @@ from typing import Annotated
 from uuid import UUID
 
 import jwt
-from fastapi import Depends, HTTPException
+from fastapi import Depends, Header, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlmodel import Session, select
 
 from app.core.config import settings
 from app.core.db import get_db
+from app.core.grants import validate_role_family
 from app.domains.core.models import LoginSession, Role, RoleGrant, User
 
 Db = Annotated[Session, Depends(get_db)]
 bearer = HTTPBearer(auto_error=False)
 
 
+WORK_ROLES = {
+    "student": {Role.STUDENT},
+    "teacher": {Role.TEACHER},
+    "administrator": {Role.PLATFORM_ADMIN, Role.SCHOOL_ADMIN, Role.COLLEGE_ADMIN},
+}
+
+
+def available_work_roles(grants: list[RoleGrant]) -> list[str]:
+    validate_role_family({g.role for g in grants})
+    return [work for work, roles in WORK_ROLES.items() if any(g.role in roles for g in grants)]
+
+
+def default_work_role(grants: list[RoleGrant]) -> str | None:
+    available = available_work_roles(grants)
+    return "teacher" if "teacher" in available else (available[0] if available else None)
+
+
 @dataclass
-class Identity:
+class Account:
     user: User
-    grants: list[RoleGrant]
+    all_grants: list[RoleGrant]
     login: LoginSession
+
+
+@dataclass
+class Identity(Account):
+    work_role: str | None
+
+    @property
+    def grants(self) -> list[RoleGrant]:
+        return [g for g in self.all_grants if g.role in WORK_ROLES.get(self.work_role, set())]
 
     def has(self, role: Role) -> bool:
         return any(g.role == role and g.school_id == self.user.school_id for g in self.grants)
@@ -41,7 +68,7 @@ class Identity:
         )
 
 
-def get_identity(db: Db, credential: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer)]) -> Identity:
+def get_account(db: Db, credential: Annotated[HTTPAuthorizationCredentials | None, Depends(bearer)]) -> Account:
     denied = HTTPException(status_code=401, detail="登录已失效，请重新登录", headers={"WWW-Authenticate": "Bearer"})
     if credential is None:
         raise denied
@@ -57,7 +84,26 @@ def get_identity(db: Db, credential: Annotated[HTTPAuthorizationCredentials | No
         raise denied
     # Grants are fetched on every request: token claims never freeze an old role.
     grants = list(db.exec(select(RoleGrant).where(RoleGrant.user_id == user.id)).all())
-    return Identity(user, grants, login)
+    return Account(user, grants, login)
+
+
+CurrentAccount = Annotated[Account, Depends(get_account)]
+
+
+def get_identity(account: CurrentAccount, db: Db,
+                 work_role: Annotated[str | None, Header(alias="X-Work-Role")] = None) -> Identity:
+    try:
+        available = available_work_roles(account.all_grants)
+    except ValueError as error:
+        raise HTTPException(status_code=403, detail=str(error)) from error
+    if account.login.default_work_role is None and available:
+        account.login.default_work_role = default_work_role(account.all_grants)
+        db.add(account.login)
+        db.commit()
+    selected = work_role if work_role is not None else account.login.default_work_role
+    if selected is not None and selected not in available:
+        raise HTTPException(status_code=403, detail="当前工作身份未授权或已撤销，请重新选择身份或登录")
+    return Identity(account.user, account.all_grants, account.login, selected)
 
 
 CurrentIdentity = Annotated[Identity, Depends(get_identity)]

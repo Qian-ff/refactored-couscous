@@ -49,6 +49,10 @@ export type CourseCreate = {
  */
 export type CoursePublic = {
     /**
+     * Catalog Id
+     */
+    catalog_id: string;
+    /**
      * Code
      */
     code: string;
@@ -184,11 +188,23 @@ export type Token = {
  * UserPublic
  */
 export type UserPublic = {
+    /**
+     * Active Work Role
+     */
+    active_work_role: 'student' | 'teacher' | 'administrator' | null;
+    /**
+     * Available Work Roles
+     */
+    available_work_roles: Array<'student' | 'teacher' | 'administrator'>;
     college: OrganizationPublic | null;
     /**
      * Display Name
      */
     display_name: string;
+    /**
+     * Effective Grants
+     */
+    effective_grants: Array<GrantPublic>;
     /**
      * Grants
      */
@@ -279,10 +295,25 @@ export type authLogoutResponse = authLogoutResponses[keyof authLogoutResponses];
 
 export type authMeData = {
     body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
     path?: never;
     query?: never;
     url: '/api/v1/auth/me';
 };
+
+export type authMeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type authMeError = authMeErrors[keyof authMeErrors];
 
 export type authMeResponses = {
     /**
@@ -295,6 +326,12 @@ export type authMeResponse = authMeResponses[keyof authMeResponses];
 
 export type coursesCoursesData = {
     body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
     path?: never;
     query?: {
         /**
@@ -329,6 +366,12 @@ export type coursesCoursesResponse = coursesCoursesResponses[keyof coursesCourse
 
 export type coursesCreateCourseData = {
     body: CourseCreate;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
     path?: never;
     query?: never;
     url: '/api/v1/courses';
@@ -354,10 +397,25 @@ export type coursesCreateCourseResponse = coursesCreateCourseResponses[keyof cou
 
 export type coursesContextData = {
     body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
     path?: never;
     query?: never;
     url: '/api/v1/courses/context';
 };
+
+export type coursesContextErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type coursesContextError = coursesContextErrors[keyof coursesContextErrors];
 
 export type coursesContextResponses = {
     /**
@@ -370,6 +428,12 @@ export type coursesContextResponse = coursesContextResponses[keyof coursesContex
 
 export type coursesCourseData = {
     body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
     path: {
         /**
          * Course Id

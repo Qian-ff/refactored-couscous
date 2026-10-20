@@ -8,8 +8,8 @@ from sqlmodel import select
 
 from app.core.config import settings
 from app.core.security import create_access_token, get_password_hash, verify_password
-from app.domains.core.auth import CurrentIdentity, Db
-from app.domains.core.models import College, Course, CourseStaff, Enrollment, LoginSession, Role, RoleGrant, School, User
+from app.domains.core.auth import CurrentAccount, CurrentIdentity, Db, available_work_roles, default_work_role
+from app.domains.core.models import College, Course, CourseCatalog, CourseStaff, Enrollment, LoginSession, Role, RoleGrant, School, User
 from app.domains.core.schemas import (CourseContext, CourseCreate, CoursePublic, CoursesPublic,
                                       GrantPublic, LoginInput, Message, OrganizationPublic, Token, UserPublic)
 
@@ -30,7 +30,12 @@ def login(body: LoginInput, db: Db):
         user.hashed_password = updated
         db.add(user)
     expires = datetime.now(UTC) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    session = LoginSession(user_id=user.id, expires_at=expires)
+    grants = list(db.exec(select(RoleGrant).where(RoleGrant.user_id == user.id)).all())
+    try:
+        selected = default_work_role(grants)
+    except ValueError as error:
+        raise HTTPException(status_code=403, detail=str(error)) from error
+    session = LoginSession(user_id=user.id, expires_at=expires, default_work_role=selected)
     db.add(session)
     db.commit()
     encoded = create_access_token(user.id, timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES), str(session.id))
@@ -38,7 +43,7 @@ def login(body: LoginInput, db: Db):
 
 
 @router.post("/auth/logout", tags=["auth"], response_model=Message)
-def logout(identity: CurrentIdentity, db: Db):
+def logout(identity: CurrentAccount, db: Db):
     identity.login.revoked = True
     db.add(identity.login)
     db.commit()
@@ -54,7 +59,9 @@ def me(identity: CurrentIdentity, db: Db):
     return UserPublic(id=user.id, username=user.username, display_name=user.display_name,
                       school=OrganizationPublic(id=school.id, name=school.name) if school else None,
                       college=OrganizationPublic(id=college.id, school_id=college.school_id, name=college.name) if college else None,
-                      grants=[GrantPublic(role=g.role, college_id=g.college_id) for g in identity.grants],
+                      grants=[GrantPublic(role=g.role, college_id=g.college_id) for g in identity.all_grants],
+                      effective_grants=[GrantPublic(role=g.role, college_id=g.college_id) for g in identity.grants],
+                      available_work_roles=available_work_roles(identity.all_grants), active_work_role=identity.work_role,
                       permissions=["courses:read"] + (["courses:create"] if create else []))
 
 
@@ -78,7 +85,7 @@ def public_course(course: Course, db: Db) -> CoursePublic:
     college = db.get(College, course.college_id)
     primary = db.exec(select(User).join(CourseStaff, CourseStaff.user_id == User.id).where(
         CourseStaff.course_id == course.id, CourseStaff.is_primary == True)).first()  # noqa: E712
-    return CoursePublic(id=course.id, school_id=course.school_id, college_id=course.college_id,
+    return CoursePublic(id=course.id, school_id=course.school_id, college_id=course.college_id, catalog_id=course.catalog_id,
                         college_name=college.name, code=course.code, title=course.title,
                         teacher_name=primary.display_name if primary else "待分配")
 
@@ -131,10 +138,15 @@ def create_course(body: CourseCreate, identity: CurrentIdentity, db: Db):
         raise HTTPException(status_code=422, detail="主教师必须是本校已授权的教师")
     if not identity.manages(college.id, college.school_id) and teacher.id != identity.user.id:
         raise HTTPException(status_code=403, detail="教师只能创建由本人负责的课程")
-    record = Course(school_id=college.school_id, college_id=college.id, code=body.code, title=body.title.strip())
-    if not record.title:
+    if not body.title.strip():
         raise HTTPException(status_code=422, detail="课程名称不能为空")
+    catalog = CourseCatalog(school_id=college.school_id, college_id=college.id, owner_id=teacher.id,
+                            code=body.code, title=body.title.strip())
+    record = Course(school_id=college.school_id, college_id=college.id, catalog_id=catalog.id,
+                    code=body.code, title=body.title.strip())
     try:
+        db.add(catalog)
+        db.flush()
         db.add(record)
         db.flush()
         db.add(CourseStaff(school_id=college.school_id, course_id=record.id, user_id=teacher.id, is_primary=True))

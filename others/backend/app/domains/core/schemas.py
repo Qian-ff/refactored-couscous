@@ -1,4 +1,5 @@
 from uuid import UUID
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -38,6 +39,9 @@ class UserPublic(BaseModel):
     college: OrganizationPublic | None
     grants: list[GrantPublic]
     permissions: list[str]
+    available_work_roles: list[Literal["student", "teacher", "administrator"]]
+    active_work_role: Literal["student", "teacher", "administrator"] | None
+    effective_grants: list[GrantPublic]
 
 
 class CourseCreate(BaseModel):
@@ -51,6 +55,7 @@ class CoursePublic(BaseModel):
     id: UUID
     school_id: UUID
     college_id: UUID
+    catalog_id: UUID
     college_name: str
     code: str
     title: str

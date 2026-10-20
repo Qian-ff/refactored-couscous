@@ -36,6 +36,6 @@ function visit(name, from = root) {
   for (const child of Object.keys(metadata.dependencies || {})) visit(child, directory)
 }
 for (const name of ['react', 'react-dom', 'axios', '@radix-ui/react-slot', 'class-variance-authority', 'clsx',
-  'tailwind-merge', 'lucide-react', '@capacitor/core', '@capacitor/android', 'electron', '@hey-api/openapi-ts']) visit(name)
+  'tailwind-merge', 'lucide-react', 'react-router', '@capacitor/core', '@capacitor/android', 'electron', '@hey-api/openapi-ts']) visit(name)
 fs.writeFileSync(path.join(output, 'npm-runtime.json'), JSON.stringify([...seen.values()].sort((a, b) => a.name.localeCompare(b.name)), null, 2) + '\n')
 console.log(`Recorded ${seen.size} installed packages and their shipped license notices`)

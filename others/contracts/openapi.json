@@ -67,6 +67,11 @@
       },
       "CoursePublic": {
         "properties": {
+          "catalog_id": {
+            "format": "uuid",
+            "title": "Catalog Id",
+            "type": "string"
+          },
           "code": {
             "title": "Code",
             "type": "string"
@@ -103,6 +108,7 @@
           "id",
           "school_id",
           "college_id",
+          "catalog_id",
           "college_name",
           "code",
           "title",
@@ -269,6 +275,34 @@
       },
       "UserPublic": {
         "properties": {
+          "active_work_role": {
+            "anyOf": [
+              {
+                "enum": [
+                  "student",
+                  "teacher",
+                  "administrator"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Active Work Role"
+          },
+          "available_work_roles": {
+            "items": {
+              "enum": [
+                "student",
+                "teacher",
+                "administrator"
+              ],
+              "type": "string"
+            },
+            "title": "Available Work Roles",
+            "type": "array"
+          },
           "college": {
             "anyOf": [
               {
@@ -282,6 +316,13 @@
           "display_name": {
             "title": "Display Name",
             "type": "string"
+          },
+          "effective_grants": {
+            "items": {
+              "$ref": "#/components/schemas/GrantPublic"
+            },
+            "title": "Effective Grants",
+            "type": "array"
           },
           "grants": {
             "items": {
@@ -324,7 +365,10 @@
           "school",
           "college",
           "grants",
-          "permissions"
+          "permissions",
+          "available_work_roles",
+          "active_work_role",
+          "effective_grants"
         ],
         "title": "UserPublic",
         "type": "object"
@@ -379,7 +423,7 @@
   },
   "info": {
     "title": "安研通——实验室安全智能协同管理平台",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -453,6 +497,24 @@
     "/api/v1/auth/me": {
       "get": {
         "operationId": "auth-me",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Work-Role",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Work-Role"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -463,6 +525,16 @@
               }
             },
             "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
         "security": [
@@ -502,6 +574,22 @@
               "title": "Limit",
               "type": "integer"
             }
+          },
+          {
+            "in": "header",
+            "name": "X-Work-Role",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Work-Role"
+            }
           }
         ],
         "responses": {
@@ -538,6 +626,24 @@
       },
       "post": {
         "operationId": "courses-create_course",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Work-Role",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Work-Role"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -584,6 +690,24 @@
     "/api/v1/courses/context": {
       "get": {
         "operationId": "courses-context",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Work-Role",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Work-Role"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "content": {
@@ -594,6 +718,16 @@
               }
             },
             "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
           }
         },
         "security": [
@@ -619,6 +753,22 @@
               "format": "uuid",
               "title": "Course Id",
               "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Work-Role",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Work-Role"
             }
           }
         ],

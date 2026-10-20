@@ -122,6 +122,15 @@
     ]
   },
   {
+    "name": "@remix-run/route-pattern",
+    "version": "0.22.1",
+    "license": "MIT",
+    "source": "git+https://github.com/remix-run/remix.git",
+    "noticeFiles": [
+      "_remix-run_route-pattern_0.22.1-LICENSE.txt"
+    ]
+  },
+  {
     "name": "@types/json-schema",
     "version": "7.0.15",
     "license": "MIT",
@@ -279,6 +288,15 @@
     "source": "unjs/confbox",
     "noticeFiles": [
       "confbox_0.3.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "cookie-es",
+    "version": "3.1.1",
+    "license": "MIT",
+    "source": "unjs/cookie-es",
+    "noticeFiles": [
+      "cookie-es_3.1.1-LICENSE.txt"
     ]
   },
   {
@@ -763,6 +781,15 @@
     "source": "https://github.com/react/react.git",
     "noticeFiles": [
       "react-dom_19.2.8-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "react-router",
+    "version": "8.5.0",
+    "license": "MIT",
+    "source": "https://github.com/remix-run/react-router",
+    "noticeFiles": [
+      "react-router_8.5.0-LICENSE.md.txt"
     ]
   },
   {

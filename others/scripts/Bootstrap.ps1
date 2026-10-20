@@ -20,9 +20,11 @@ if (-not (Test-Path -LiteralPath $uvExe)) {
 Push-Location $projectRoot
 try {
     python others/scripts/setup_local.py
-    $projectPython = & py -3.14 -c 'import sys; print(sys.executable)'
-    if ($LASTEXITCODE -ne 0) { throw 'Python 3.14 is required; check the existing Python launcher' }
-    & $uvExe sync --frozen --directory others/backend --python $projectPython --cache-dir (Join-Path $projectRoot 'others\cache\uv')
+    $projectPythonRoot = Join-Path $projectRoot 'others/cache/python'
+    & $uvExe python install 3.14.6 --install-dir $projectPythonRoot --no-bin
+    if ($LASTEXITCODE -ne 0) { throw 'Project-local Python download failed' }
+    $projectPython = Join-Path $projectPythonRoot 'cpython-3.14.6-windows-x86_64-none/python.exe'
+    & $uvExe sync --frozen --all-groups --directory others/backend --python $projectPython --cache-dir (Join-Path $projectRoot 'others\cache\uv')
     if ($LASTEXITCODE -ne 0) { throw 'Backend dependency setup failed' }
     $env:ELECTRON_CACHE = Join-Path $projectRoot 'others\cache\electron'
     $env:ELECTRON_GET_USE_PROXY = '1'

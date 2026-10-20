@@ -62,7 +62,7 @@ def test_cross_college_enrollment_minimum_data(client, auth):
     assert not any("monitor" in permission for permission in me["permissions"])
     data = client.get(f"/api/v1/courses/{fixture_id('course-general')}", headers=headers)
     assert data.status_code == 200
-    assert set(data.json()) == {"id", "school_id", "college_id", "college_name", "code", "title", "teacher_name"}
+    assert set(data.json()) == {"id", "school_id", "college_id", "catalog_id", "college_name", "code", "title", "teacher_name"}
     assert client.get(f"/api/v1/courses/{fixture_id('course-electrical')}", headers=headers).status_code == 404
     assert client.get("/api/v1/courses/context", headers=headers).json() == {"can_create": False, "colleges": [], "teachers": []}
     assert client.post("/api/v1/courses", headers=headers, json={
@@ -87,8 +87,8 @@ def test_role_revocation_and_disabled_user_take_effect_immediately(client, auth,
     grant = db.exec(select(RoleGrant).where(RoleGrant.user_id == fixture_id("user-teacher"))).first()
     db.delete(grant)
     db.commit()
-    assert client.get("/api/v1/courses", headers=headers).json()["count"] == 0
-    assert "courses:create" not in client.get("/api/v1/auth/me", headers=headers).json()["permissions"]
+    assert client.get("/api/v1/courses", headers=headers).status_code == 403
+    assert client.get("/api/v1/auth/me", headers=headers).status_code == 403
     user = db.get(User, fixture_id("user-teacher"))
     user.is_active = False
     db.add(user)

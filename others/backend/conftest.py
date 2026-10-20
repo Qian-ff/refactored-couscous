@@ -9,7 +9,7 @@ from dotenv import dotenv_values
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[2]
 config = dotenv_values(ROOT / ".env")
 base_url = make_url(os.environ.get("DATABASE_URL") or config["DATABASE_URL"])
 if base_url.host not in ("127.0.0.1", "localhost"):
