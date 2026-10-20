@@ -1,4 +1,5 @@
 {
-  "version": "0.0.0-preparation",
-  "status": "not_implemented"
+  "version": "0.1.0",
+  "status": "implemented",
+  "openapi_sha256": "2fb5156d12ca6a46e611519a39134e07b2315493e80405a547de80bc15fea949"
 }

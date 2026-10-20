@@ -1,0 +1,6 @@
+{
+  "name": "@safelab/android", "version": "0.1.0", "private": true,
+  "scripts": { "init:native": "cap add android", "sync:debug": "cap sync android && node scripts/debug-assets.mjs", "sync:release": "cap sync android", "test": "node tests/smoke.cjs" },
+  "dependencies": { "@capacitor/core": "8.5.3", "@capacitor/android": "8.5.3" },
+  "devDependencies": { "@capacitor/cli": "8.5.3", "typescript": "6.0.3" }
+}

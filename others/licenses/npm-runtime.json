@@ -1,0 +1,894 @@
+[
+  {
+    "name": "@capacitor/android",
+    "version": "8.5.3",
+    "license": "MIT",
+    "source": "git+https://github.com/ionic-team/capacitor.git",
+    "noticeFiles": [
+      "_capacitor_android_8.5.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "@capacitor/core",
+    "version": "8.5.3",
+    "license": "MIT",
+    "source": "git+https://github.com/ionic-team/capacitor.git",
+    "noticeFiles": [
+      "_capacitor_core_8.5.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "@electron-internal/extract-zip",
+    "version": "1.0.5",
+    "license": "BSD-2-Clause",
+    "source": "https://github.com/electron/extract-zip",
+    "noticeFiles": []
+  },
+  {
+    "name": "@electron/get",
+    "version": "5.1.0",
+    "license": "MIT",
+    "source": "https://github.com/electron/get",
+    "noticeFiles": [
+      "_electron_get_5.1.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "@hey-api/codegen-core",
+    "version": "0.8.2",
+    "license": "MIT",
+    "source": "git+https://github.com/hey-api/openapi-ts.git",
+    "noticeFiles": [
+      "_hey-api_codegen-core_0.8.2-LICENSE.md.txt"
+    ]
+  },
+  {
+    "name": "@hey-api/json-schema-ref-parser",
+    "version": "1.4.2",
+    "license": "MIT",
+    "source": "git+https://github.com/hey-api/openapi-ts.git",
+    "noticeFiles": [
+      "_hey-api_json-schema-ref-parser_1.4.2-LICENSE.md.txt"
+    ]
+  },
+  {
+    "name": "@hey-api/openapi-ts",
+    "version": "0.97.3",
+    "license": "MIT",
+    "source": "git+https://github.com/hey-api/openapi-ts.git",
+    "noticeFiles": [
+      "_hey-api_openapi-ts_0.97.3-LICENSE.md.txt"
+    ]
+  },
+  {
+    "name": "@hey-api/shared",
+    "version": "0.4.5",
+    "license": "MIT",
+    "source": "git+https://github.com/hey-api/openapi-ts.git",
+    "noticeFiles": [
+      "_hey-api_shared_0.4.5-LICENSE.md.txt"
+    ]
+  },
+  {
+    "name": "@hey-api/spec-types",
+    "version": "0.2.0",
+    "license": "MIT",
+    "source": "git+https://github.com/hey-api/openapi-ts.git",
+    "noticeFiles": [
+      "_hey-api_spec-types_0.2.0-LICENSE.md.txt"
+    ]
+  },
+  {
+    "name": "@hey-api/types",
+    "version": "0.1.4",
+    "license": "MIT",
+    "source": "git+https://github.com/hey-api/openapi-ts.git",
+    "noticeFiles": [
+      "_hey-api_types_0.1.4-LICENSE.md.txt"
+    ]
+  },
+  {
+    "name": "@jsdevtools/ono",
+    "version": "7.1.3",
+    "license": "MIT",
+    "source": "https://github.com/JS-DevTools/ono.git",
+    "noticeFiles": [
+      "_jsdevtools_ono_7.1.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "@lukeed/ms",
+    "version": "2.0.2",
+    "license": "MIT",
+    "source": "lukeed/ms",
+    "noticeFiles": [
+      "_lukeed_ms_2.0.2-license.txt"
+    ]
+  },
+  {
+    "name": "@radix-ui/react-compose-refs",
+    "version": "1.1.2",
+    "license": "MIT",
+    "source": "git+https://github.com/radix-ui/primitives.git",
+    "noticeFiles": []
+  },
+  {
+    "name": "@radix-ui/react-slot",
+    "version": "1.2.4",
+    "license": "MIT",
+    "source": "git+https://github.com/radix-ui/primitives.git",
+    "noticeFiles": [
+      "_radix-ui_react-slot_1.2.4-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "@types/json-schema",
+    "version": "7.0.15",
+    "license": "MIT",
+    "source": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+    "noticeFiles": [
+      "_types_json-schema_7.0.15-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "@types/node",
+    "version": "24.19.2",
+    "license": "MIT",
+    "source": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+    "noticeFiles": [
+      "_types_node_24.19.2-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "agent-base",
+    "version": "6.0.2",
+    "license": "MIT",
+    "source": "git://github.com/TooTallNate/node-agent-base.git",
+    "noticeFiles": []
+  },
+  {
+    "name": "ansi-colors",
+    "version": "4.1.3",
+    "license": "MIT",
+    "source": "doowb/ansi-colors",
+    "noticeFiles": [
+      "ansi-colors_4.1.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "argparse",
+    "version": "2.0.1",
+    "license": "Python-2.0",
+    "source": "nodeca/argparse",
+    "noticeFiles": [
+      "argparse_2.0.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "asynckit",
+    "version": "0.4.0",
+    "license": "MIT",
+    "source": "git+https://github.com/alexindigo/asynckit.git",
+    "noticeFiles": [
+      "asynckit_0.4.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "axios",
+    "version": "1.18.0",
+    "license": "MIT",
+    "source": "https://github.com/axios/axios.git",
+    "noticeFiles": [
+      "axios_1.18.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "bundle-name",
+    "version": "4.1.1",
+    "license": "MIT",
+    "source": "sindresorhus/bundle-name",
+    "noticeFiles": [
+      "bundle-name_4.1.1-license.txt"
+    ]
+  },
+  {
+    "name": "c12",
+    "version": "3.3.4",
+    "license": "MIT",
+    "source": "unjs/c12",
+    "noticeFiles": [
+      "c12_3.3.4-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "call-bind-apply-helpers",
+    "version": "1.0.2",
+    "license": "MIT",
+    "source": "git+https://github.com/ljharb/call-bind-apply-helpers.git",
+    "noticeFiles": [
+      "call-bind-apply-helpers_1.0.2-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "chokidar",
+    "version": "5.0.0",
+    "license": "MIT",
+    "source": "git+https://github.com/paulmillr/chokidar.git",
+    "noticeFiles": [
+      "chokidar_5.0.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "class-variance-authority",
+    "version": "0.7.1",
+    "license": "Apache-2.0",
+    "source": "https://github.com/joe-bell/cva.git",
+    "noticeFiles": [
+      "class-variance-authority_0.7.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "clsx",
+    "version": "2.1.1",
+    "license": "MIT",
+    "source": "lukeed/clsx",
+    "noticeFiles": [
+      "clsx_2.1.1-license.txt"
+    ]
+  },
+  {
+    "name": "color-support",
+    "version": "1.1.3",
+    "license": "ISC",
+    "source": "git+https://github.com/isaacs/color-support.git",
+    "noticeFiles": [
+      "color-support_1.1.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "combined-stream",
+    "version": "1.0.8",
+    "license": "MIT",
+    "source": "git://github.com/felixge/node-combined-stream.git",
+    "noticeFiles": [
+      "combined-stream_1.0.8-License.txt"
+    ]
+  },
+  {
+    "name": "commander",
+    "version": "14.0.3",
+    "license": "MIT",
+    "source": "git+https://github.com/tj/commander.js.git",
+    "noticeFiles": [
+      "commander_14.0.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "confbox",
+    "version": "0.2.4",
+    "license": "MIT",
+    "source": "unjs/confbox",
+    "noticeFiles": [
+      "confbox_0.2.4-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "confbox",
+    "version": "0.3.1",
+    "license": "MIT",
+    "source": "unjs/confbox",
+    "noticeFiles": [
+      "confbox_0.3.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "cross-spawn",
+    "version": "7.0.6",
+    "license": "MIT",
+    "source": "git@github.com:moxystudio/node-cross-spawn.git",
+    "noticeFiles": [
+      "cross-spawn_7.0.6-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "debug",
+    "version": "4.4.3",
+    "license": "MIT",
+    "source": "git://github.com/debug-js/debug.git",
+    "noticeFiles": [
+      "debug_4.4.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "default-browser",
+    "version": "5.5.1",
+    "license": "MIT",
+    "source": "sindresorhus/default-browser",
+    "noticeFiles": [
+      "default-browser_5.5.1-license.txt"
+    ]
+  },
+  {
+    "name": "default-browser-id",
+    "version": "5.0.1",
+    "license": "MIT",
+    "source": "sindresorhus/default-browser-id",
+    "noticeFiles": [
+      "default-browser-id_5.0.1-license.txt"
+    ]
+  },
+  {
+    "name": "define-lazy-prop",
+    "version": "3.0.0",
+    "license": "MIT",
+    "source": "sindresorhus/define-lazy-prop",
+    "noticeFiles": [
+      "define-lazy-prop_3.0.0-license.txt"
+    ]
+  },
+  {
+    "name": "defu",
+    "version": "6.1.7",
+    "license": "MIT",
+    "source": "unjs/defu",
+    "noticeFiles": [
+      "defu_6.1.7-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "delayed-stream",
+    "version": "1.0.0",
+    "license": "MIT",
+    "source": "git://github.com/felixge/node-delayed-stream.git",
+    "noticeFiles": [
+      "delayed-stream_1.0.0-License.txt"
+    ]
+  },
+  {
+    "name": "destr",
+    "version": "2.0.5",
+    "license": "MIT",
+    "source": "unjs/destr",
+    "noticeFiles": [
+      "destr_2.0.5-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "dotenv",
+    "version": "17.4.2",
+    "license": "BSD-2-Clause",
+    "source": "git://github.com/motdotla/dotenv.git",
+    "noticeFiles": [
+      "dotenv_17.4.2-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "dunder-proto",
+    "version": "1.0.1",
+    "license": "MIT",
+    "source": "git+https://github.com/es-shims/dunder-proto.git",
+    "noticeFiles": [
+      "dunder-proto_1.0.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "electron",
+    "version": "44.9.0",
+    "license": "MIT",
+    "source": "https://github.com/electron/electron",
+    "noticeFiles": [
+      "electron_44.9.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "env-paths",
+    "version": "3.0.0",
+    "license": "MIT",
+    "source": "sindresorhus/env-paths",
+    "noticeFiles": [
+      "env-paths_3.0.0-license.txt"
+    ]
+  },
+  {
+    "name": "es-define-property",
+    "version": "1.0.1",
+    "license": "MIT",
+    "source": "git+https://github.com/ljharb/es-define-property.git",
+    "noticeFiles": [
+      "es-define-property_1.0.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "es-errors",
+    "version": "1.3.0",
+    "license": "MIT",
+    "source": "git+https://github.com/ljharb/es-errors.git",
+    "noticeFiles": [
+      "es-errors_1.3.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "es-object-atoms",
+    "version": "1.1.2",
+    "license": "MIT",
+    "source": "git+https://github.com/ljharb/es-object-atoms.git",
+    "noticeFiles": [
+      "es-object-atoms_1.1.2-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "es-set-tostringtag",
+    "version": "2.1.0",
+    "license": "MIT",
+    "source": "git+https://github.com/es-shims/es-set-tostringtag.git",
+    "noticeFiles": [
+      "es-set-tostringtag_2.1.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "exsolve",
+    "version": "1.1.3",
+    "license": "MIT",
+    "source": "unjs/exsolve",
+    "noticeFiles": [
+      "exsolve_1.1.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "follow-redirects",
+    "version": "1.16.1",
+    "license": "MIT",
+    "source": "git+ssh://git@github.com/follow-redirects/follow-redirects.git",
+    "noticeFiles": [
+      "follow-redirects_1.16.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "form-data",
+    "version": "4.0.6",
+    "license": "MIT",
+    "source": "git://github.com/form-data/form-data.git",
+    "noticeFiles": [
+      "form-data_4.0.6-License.txt"
+    ]
+  },
+  {
+    "name": "function-bind",
+    "version": "1.1.2",
+    "license": "MIT",
+    "source": "https://github.com/Raynos/function-bind.git",
+    "noticeFiles": [
+      "function-bind_1.1.2-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "get-intrinsic",
+    "version": "1.3.0",
+    "license": "MIT",
+    "source": "git+https://github.com/ljharb/get-intrinsic.git",
+    "noticeFiles": [
+      "get-intrinsic_1.3.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "get-proto",
+    "version": "1.0.1",
+    "license": "MIT",
+    "source": "git+https://github.com/ljharb/get-proto.git",
+    "noticeFiles": [
+      "get-proto_1.0.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "get-tsconfig",
+    "version": "4.14.0",
+    "license": "MIT",
+    "source": "privatenumber/get-tsconfig",
+    "noticeFiles": [
+      "get-tsconfig_4.14.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "giget",
+    "version": "3.3.1",
+    "license": "MIT",
+    "source": "unjs/giget",
+    "noticeFiles": [
+      "giget_3.3.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "gopd",
+    "version": "1.2.0",
+    "license": "MIT",
+    "source": "git+https://github.com/ljharb/gopd.git",
+    "noticeFiles": [
+      "gopd_1.2.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "graceful-fs",
+    "version": "4.2.11",
+    "license": "ISC",
+    "source": "https://github.com/isaacs/node-graceful-fs",
+    "noticeFiles": [
+      "graceful-fs_4.2.11-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "has-symbols",
+    "version": "1.1.0",
+    "license": "MIT",
+    "source": "git://github.com/inspect-js/has-symbols.git",
+    "noticeFiles": [
+      "has-symbols_1.1.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "has-tostringtag",
+    "version": "1.0.2",
+    "license": "MIT",
+    "source": "git+https://github.com/inspect-js/has-tostringtag.git",
+    "noticeFiles": [
+      "has-tostringtag_1.0.2-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "hasown",
+    "version": "2.0.4",
+    "license": "MIT",
+    "source": "git+https://github.com/inspect-js/hasOwn.git",
+    "noticeFiles": [
+      "hasown_2.0.4-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "https-proxy-agent",
+    "version": "5.0.1",
+    "license": "MIT",
+    "source": "git://github.com/TooTallNate/node-https-proxy-agent.git",
+    "noticeFiles": []
+  },
+  {
+    "name": "is-docker",
+    "version": "3.0.0",
+    "license": "MIT",
+    "source": "sindresorhus/is-docker",
+    "noticeFiles": [
+      "is-docker_3.0.0-license.txt"
+    ]
+  },
+  {
+    "name": "is-in-ssh",
+    "version": "1.0.0",
+    "license": "MIT",
+    "source": "sindresorhus/is-in-ssh",
+    "noticeFiles": [
+      "is-in-ssh_1.0.0-license.txt"
+    ]
+  },
+  {
+    "name": "is-inside-container",
+    "version": "1.0.0",
+    "license": "MIT",
+    "source": "sindresorhus/is-inside-container",
+    "noticeFiles": [
+      "is-inside-container_1.0.0-license.txt"
+    ]
+  },
+  {
+    "name": "is-wsl",
+    "version": "3.1.1",
+    "license": "MIT",
+    "source": "sindresorhus/is-wsl",
+    "noticeFiles": [
+      "is-wsl_3.1.1-license.txt"
+    ]
+  },
+  {
+    "name": "isexe",
+    "version": "2.0.0",
+    "license": "ISC",
+    "source": "git+https://github.com/isaacs/isexe.git",
+    "noticeFiles": [
+      "isexe_2.0.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "jiti",
+    "version": "2.7.0",
+    "license": "MIT",
+    "source": "unjs/jiti",
+    "noticeFiles": [
+      "jiti_2.7.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "js-yaml",
+    "version": "4.1.1",
+    "license": "MIT",
+    "source": "nodeca/js-yaml",
+    "noticeFiles": [
+      "js-yaml_4.1.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "lucide-react",
+    "version": "1.28.0",
+    "license": "ISC",
+    "source": "https://github.com/lucide-icons/lucide.git",
+    "noticeFiles": [
+      "lucide-react_1.28.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "math-intrinsics",
+    "version": "1.1.0",
+    "license": "MIT",
+    "source": "git+https://github.com/es-shims/math-intrinsics.git",
+    "noticeFiles": [
+      "math-intrinsics_1.1.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "mime-db",
+    "version": "1.52.0",
+    "license": "MIT",
+    "source": "jshttp/mime-db",
+    "noticeFiles": [
+      "mime-db_1.52.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "mime-types",
+    "version": "2.1.35",
+    "license": "MIT",
+    "source": "jshttp/mime-types",
+    "noticeFiles": [
+      "mime-types_2.1.35-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "ms",
+    "version": "2.1.3",
+    "license": "MIT",
+    "source": "vercel/ms",
+    "noticeFiles": [
+      "ms_2.1.3-license.md.txt"
+    ]
+  },
+  {
+    "name": "ohash",
+    "version": "2.0.12",
+    "license": "MIT",
+    "source": "unjs/ohash",
+    "noticeFiles": [
+      "ohash_2.0.12-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "open",
+    "version": "11.0.0",
+    "license": "MIT",
+    "source": "sindresorhus/open",
+    "noticeFiles": [
+      "open_11.0.0-license.txt"
+    ]
+  },
+  {
+    "name": "path-key",
+    "version": "3.1.1",
+    "license": "MIT",
+    "source": "sindresorhus/path-key",
+    "noticeFiles": [
+      "path-key_3.1.1-license.txt"
+    ]
+  },
+  {
+    "name": "pathe",
+    "version": "2.0.3",
+    "license": "MIT",
+    "source": "unjs/pathe",
+    "noticeFiles": [
+      "pathe_2.0.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "perfect-debounce",
+    "version": "2.1.0",
+    "license": "MIT",
+    "source": "unjs/perfect-debounce",
+    "noticeFiles": [
+      "perfect-debounce_2.1.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "pkg-types",
+    "version": "2.3.3",
+    "license": "MIT",
+    "source": "unjs/pkg-types",
+    "noticeFiles": [
+      "pkg-types_2.3.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "powershell-utils",
+    "version": "0.1.0",
+    "license": "MIT",
+    "source": "sindresorhus/powershell-utils",
+    "noticeFiles": [
+      "powershell-utils_0.1.0-license.txt"
+    ]
+  },
+  {
+    "name": "progress",
+    "version": "2.0.3",
+    "license": "MIT",
+    "source": "git://github.com/visionmedia/node-progress",
+    "noticeFiles": [
+      "progress_2.0.3-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "proxy-from-env",
+    "version": "2.1.0",
+    "license": "MIT",
+    "source": "git+https://github.com/Rob--W/proxy-from-env.git",
+    "noticeFiles": [
+      "proxy-from-env_2.1.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "rc9",
+    "version": "3.1.0",
+    "license": "MIT",
+    "source": "unjs/rc9",
+    "noticeFiles": [
+      "rc9_3.1.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "react",
+    "version": "19.2.8",
+    "license": "MIT",
+    "source": "https://github.com/react/react.git",
+    "noticeFiles": [
+      "react_19.2.8-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "react-dom",
+    "version": "19.2.8",
+    "license": "MIT",
+    "source": "https://github.com/react/react.git",
+    "noticeFiles": [
+      "react-dom_19.2.8-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "readdirp",
+    "version": "5.1.1",
+    "license": "MIT",
+    "source": "https://github.com/paulmillr/readdirp.git",
+    "noticeFiles": [
+      "readdirp_5.1.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "resolve-pkg-maps",
+    "version": "1.0.0",
+    "license": "MIT",
+    "source": "privatenumber/resolve-pkg-maps",
+    "noticeFiles": [
+      "resolve-pkg-maps_1.0.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "run-applescript",
+    "version": "7.1.0",
+    "license": "MIT",
+    "source": "sindresorhus/run-applescript",
+    "noticeFiles": [
+      "run-applescript_7.1.0-license.txt"
+    ]
+  },
+  {
+    "name": "scheduler",
+    "version": "0.27.0",
+    "license": "MIT",
+    "source": "https://github.com/facebook/react.git",
+    "noticeFiles": [
+      "scheduler_0.27.0-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "semver",
+    "version": "7.8.5",
+    "license": "ISC",
+    "source": "git+https://github.com/npm/node-semver.git",
+    "noticeFiles": [
+      "semver_7.8.5-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "semver",
+    "version": "7.7.4",
+    "license": "ISC",
+    "source": "git+https://github.com/npm/node-semver.git",
+    "noticeFiles": [
+      "semver_7.7.4-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "shebang-command",
+    "version": "2.0.0",
+    "license": "MIT",
+    "source": "kevva/shebang-command",
+    "noticeFiles": [
+      "shebang-command_2.0.0-license.txt"
+    ]
+  },
+  {
+    "name": "shebang-regex",
+    "version": "3.0.0",
+    "license": "MIT",
+    "source": "sindresorhus/shebang-regex",
+    "noticeFiles": [
+      "shebang-regex_3.0.0-license.txt"
+    ]
+  },
+  {
+    "name": "sumchecker",
+    "version": "3.0.1",
+    "license": "Apache-2.0",
+    "source": "git+https://github.com/malept/sumchecker.git",
+    "noticeFiles": [
+      "sumchecker_3.0.1-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "tailwind-merge",
+    "version": "3.6.0",
+    "license": "MIT",
+    "source": "https://github.com/dcastil/tailwind-merge.git",
+    "noticeFiles": [
+      "tailwind-merge_3.6.0-LICENSE.md.txt"
+    ]
+  },
+  {
+    "name": "tslib",
+    "version": "2.8.1",
+    "license": "0BSD",
+    "source": "https://github.com/Microsoft/tslib.git",
+    "noticeFiles": [
+      "tslib_2.8.1-LICENSE.txt.txt"
+    ]
+  },
+  {
+    "name": "undici-types",
+    "version": "7.24.6",
+    "license": "MIT",
+    "source": "git+https://github.com/nodejs/undici.git",
+    "noticeFiles": [
+      "undici-types_7.24.6-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "which",
+    "version": "2.0.2",
+    "license": "ISC",
+    "source": "git://github.com/isaacs/node-which.git",
+    "noticeFiles": [
+      "which_2.0.2-LICENSE.txt"
+    ]
+  },
+  {
+    "name": "wsl-utils",
+    "version": "0.3.1",
+    "license": "MIT",
+    "source": "sindresorhus/wsl-utils",
+    "noticeFiles": [
+      "wsl-utils_0.3.1-license.txt"
+    ]
+  }
+]

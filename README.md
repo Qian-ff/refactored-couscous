@@ -1,12 +1,17 @@
-# SafeLabPlatform
+# 安研通
+
+**安研通——实验室安全智能协同管理平台** · LabConnect
+
+让安全管理更智能，让实验协同更畅通。
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：开工前准备。** 已准备项目约定、目录、设计基线、聊天任务书和本地工作流工具；应用、API、数据库迁移、模型及客户端安装包尚未实现。
+**当前阶段：A1 三端共享技术底座实施中。** 已接入真实 PostgreSQL、账号/授权/基础课程及共享网页；客户端运行验收和最终基线以 [A1 交接报告](others/docs/a1-handoff.md) 为准。完整教学、语音与监控由后续模块扩展。
 
 ## 从这里开始
 
 - [设计基线](others/docs/design.md)：本聊天确认的功能、范围、数据和视觉要求。
+- [A1 状态与交接](others/docs/a1-handoff.md)：已验证证据、待完成项目和可发布基线。
 - [开工与交接](others/docs/start-here.md)：先后顺序及当前状态。
 - [本机环境](others/docs/environment.md)：实际工具检查、会话级 JDK/SDK 设置与未验证项。
 - [七个 AI 聊天任务](others/docs/ai/README.md)：复制对应任务书到聊天。
@@ -25,7 +30,9 @@ python -m unittest discover -s .\others\qa -p "test_*.py" -v
 python .\others\scripts\workflow.py status
 ~~~
 
-这些是仓库与协作工具检查，不是业务运行测试。应用启动和打包命令由 A 在框架接入后以真实可执行命令补充。
+这些是仓库与协作工具检查。应用准备及数据库启动见 [后端说明](others/backend/README.md)。另开终端执行 `./others/scripts/Start-Backend.ps1` 与 `pnpm run dev`。网页使用 http://127.0.0.1:5173；合成账号见忽略的 others/runtime/demo-accounts.json。
+
+在根目录执行 `pnpm run build:desktop` 构建 Windows 测试包，`pnpm run build:android` 构建安卓调试 APK。三端具体命令与阶段状态见各端 README；构建成功和实际运行通过分别记录。
 
 ## 目录与交付
 

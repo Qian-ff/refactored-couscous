@@ -1,6 +1,8 @@
 # 开源与素材要求
 
-用户允许按适用开源条款交付组件。当前仅有自行编写的准备文件，尚未导入 FastAPI 模板、Electron、Capacitor、推理库或模型权重。
+用户允许按适用开源条款交付组件。A1 已导入固定 FastAPI 模板的基础代码及 Electron/Capacitor 依赖；来源与适配见 upstream.md。未引入推理库或模型权重。
+
+others/licenses 保存模板 MIT 原文、实际前端运行依赖的许可文本与版本来源清单；运行 `node others/scripts/licenses.mjs` 从已安装依赖更新。文本随网页 dist/licenses、Windows 资源及安卓网页资源交付。Python 完整依赖由 uv.lock 固定，安装后的发行包保留其自带 dist-info 许可。Electron 包另保留 Chromium 自带许可。
 
 框架接入时逐项记录：名称、固定版本/提交、原始 URL、代码许可、权重许可、素材许可、修改及分发要求。代码许可不能替代模型或素材许可。完整许可证与 NOTICE 随适用组件交付。
 

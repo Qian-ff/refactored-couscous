@@ -19,6 +19,8 @@
 .pnpm-store/
 **/.gradle/
 **/.gradle-user-home/
+**/.avd/
+**/.android-home/
 **/local.properties
 # Build output
 **/dist/

@@ -1,0 +1,15 @@
+{
+  "name": "@safelab/desktop", "version": "0.1.0", "private": true,
+  "description": "SafeLabPlatform Windows client", "author": "SafeLabPlatform team",
+  "main": "main.cjs",
+  "scripts": { "dev": "electron .", "pack": "node scripts/pack.cjs", "test": "node tests/smoke.cjs" },
+  "devDependencies": { "electron": "44.9.0", "electron-builder": "26.8.1" },
+  "build": {
+    "appId": "cn.labconnect.platform", "productName": "LabConnect",
+    "directories": { "output": "release" },
+    "electronDist": "../node_modules/electron/dist",
+    "files": ["main.cjs", "package.json"],
+    "extraResources": [{ "from": "../web/dist", "to": "web" }, { "from": "../others/licenses", "to": "licenses" }],
+    "win": { "target": "dir", "signAndEditExecutable": false }
+  }
+}

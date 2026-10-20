@@ -1,0 +1,37 @@
+{
+  "name": "@safelab/web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "build:debug": "tsc --noEmit && vite build --mode debug",
+    "preview": "vite preview --host 127.0.0.1 --port 5173",
+    "check": "tsc --noEmit",
+    "generate-client": "openapi-ts",
+    "test": "playwright test"
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "axios": "1.18.0",
+    "@radix-ui/react-slot": "1.2.4",
+    "class-variance-authority": "0.7.1",
+    "clsx": "2.1.1",
+    "tailwind-merge": "3.6.0",
+    "lucide-react": "1.28.0"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vite": "8.2.0",
+    "@vitejs/plugin-react-swc": "4.3.3",
+    "@tailwindcss/vite": "4.3.3",
+    "tailwindcss": "4.3.3",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@types/node": "26.1.2",
+    "@hey-api/openapi-ts": "0.97.3",
+    "@playwright/test": "1.62.1"
+  }
+}

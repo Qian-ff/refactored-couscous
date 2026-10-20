@@ -1,0 +1,19 @@
+{
+  "name": "safelab-platform",
+  "private": true,
+  "version": "0.1.0",
+  "packageManager": "pnpm@11.25.0",
+  "engines": { "node": ">=24.14.0 <25" },
+  "scripts": {
+    "dev": "pnpm --filter @safelab/web run dev",
+    "build:web": "pnpm --filter @safelab/web run build",
+    "build:debug": "pnpm --filter @safelab/web run build:debug",
+    "generate-client": "python others/scripts/contracts.py generate",
+    "check:contracts": "python others/scripts/contracts.py check",
+    "check": "pnpm --filter @safelab/web run check",
+    "test:web": "pnpm --filter @safelab/web run test",
+    "build:desktop": "pnpm run build:debug && pnpm --filter @safelab/desktop run pack",
+    "sync:android": "pnpm run build:debug && pnpm --filter @safelab/android run sync:debug",
+    "build:android": "pnpm run sync:android && powershell -NoProfile -ExecutionPolicy Bypass -File others/scripts/Build-Android.ps1"
+  }
+}

@@ -1,0 +1,14 @@
+packages:
+  - web
+  - desktop
+  - android
+nodeLinker: hoisted
+storeDir: ./others/cache/pnpm-store
+saveExact: true
+fetchTimeout: 300000
+verifyDepsBeforeRun: false
+allowBuilds:
+  electron: true
+  esbuild: true
+  '@swc/core': true
+  electron-winstaller: false

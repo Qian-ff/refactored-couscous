@@ -1,6 +1,6 @@
 # C：内容与 AI任务书
 
-请作为 SafeLabPlatform 的 C 角色工作。本任务以根 AGENTS.md、设计基线与真实接口契约为准，用户当前仅完成准备工作，应用尚未实现。
+请作为 SafeLabPlatform 的 C 角色工作。本任务以根 AGENTS.md、设计基线与真实接口契约为准，A1 的实际实现、验收状态与可交接基线见 others/docs/a1-handoff.md；后续模块按已发布基线继续开发。
 
 ## 开始前
 
