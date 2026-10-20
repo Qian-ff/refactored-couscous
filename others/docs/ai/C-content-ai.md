@@ -4,9 +4,9 @@
 
 ## 开始前
 
-1. 打开自己的独立工作区 others/worktrees/content-ai，确认当前分支为 task/content-ai。
+1. 打开 A 登记的外部工作树，确认当前分支为 codex/c-content-ai-a2；不使用旧 task/content-ai 工作树。
 2. 读根 AGENTS.md、others/docs/design.md、others/contracts/README.md 和 ownership.json。
-3. 当前基线为 checkpoint-1，包含最新一键工具及三角色/搜索要求；从交接报告核对后，在干净的本分支合并并确认 contains_baseline=true 再开始实现。
+3. 按 others/docs/a2-start.md 核对 a2-start 或 A 后续发布的完整 SHA，确认 registered、clean、contains_baseline、ownership_current。按 shared-environment.md 复用环境；先向 A 提交模型、接口和 worker 依赖提案。
 
 ## 本角色任务
 
@@ -16,6 +16,7 @@
 4. 实现模型适配、掩码配置、连接测试和学校覆盖的业务逻辑；配置公共入口由 A 集成。
 5. 接收去身份事件摘要转案例草稿，发布必须经教师审核。
 6. 实现三角色课件检索后端与内容结果页，以及教师/管理员题库搜索；按设计第11节支持标题/文件名/知识点及已提取正文搜索、筛选分页、匹配片段和定位。服务端先验证学校/学院/课程权限，再计数和生成片段；预览下载再次鉴权。先向 A 提交实际模型/接口提案，D 接入三角色公共搜索入口；不以 AI 模拟搜索结果。
+7. 本轮按 a2-start.md 完成实际语音链路；原生录音/权限桥接由 A 集成，明确向 A 提交接口、音频格式和平台适配需求。worker 独立于业务 Python，实际识别引擎及模型确定后再建立环境，不预装到 B/D。
 
 ## 修改范围
 
@@ -30,4 +31,4 @@
 
 ## 每轮交付
 
-按根 AGENTS.md 检查并提交本轮文件到 task/content-ai；回报 commit ID、可复现的验证命令/结果及未完成事项。无改动不建空提交。准备文件存在不代表功能已实现；以运行证据和 others/qa/acceptance.md 判断完成。客户端包不包含密钥、真实数据或源码路径依赖。
+按根 AGENTS.md 检查并提交本轮文件到 codex/c-content-ai-a2；回报 commit ID、可复现的验证命令/结果及未完成事项。无改动不建空提交。准备文件存在不代表功能已实现；以运行证据和 others/qa/acceptance.md 判断完成。客户端包不包含密钥、真实数据或源码路径依赖。

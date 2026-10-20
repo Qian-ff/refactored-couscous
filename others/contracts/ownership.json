@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "base_branch": "main",
   "worktree_root": "others/worktrees",
   "max_active_chats": 4,
@@ -14,8 +14,8 @@
     },
     "B": {
       "title": "账号与业务管理",
-      "branch": "task/core",
-      "worktree": "core",
+      "branch": "codex/b-core-a2",
+      "worktree": null,
       "owned_paths": [
         "others/backend/app/domains/core/",
         "others/backend/app/domains/learning/",
@@ -25,8 +25,8 @@
     },
     "C": {
       "title": "内容与 AI",
-      "branch": "task/content-ai",
-      "worktree": "content-ai",
+      "branch": "codex/c-content-ai-a2",
+      "worktree": null,
       "owned_paths": [
         "others/backend/app/domains/content/",
         "others/backend/app/domains/assistant/",
@@ -38,8 +38,8 @@
     },
     "D": {
       "title": "学习体验与设计系统",
-      "branch": "task/learning-ui",
-      "worktree": "learning-ui",
+      "branch": "codex/d-learning-ui-a2",
+      "worktree": null,
       "owned_paths": [
         "web/src/components/",
         "web/src/styles/",

@@ -1,5 +1,11 @@
 $ErrorActionPreference = 'Stop'
 $projectRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
+$sharedGitDirectory = & git -C $projectRoot rev-parse --path-format=absolute --git-common-dir
+if ($LASTEXITCODE -ne 0) { throw 'Run Bootstrap only from a registered project Git worktree' }
+$sharedPrimaryRoot = Split-Path -Parent $sharedGitDirectory.Trim()
+if ($projectRoot -ne $sharedPrimaryRoot) {
+    throw 'A maintains the shared environment. In this worktree use shared_env.py probe and install-web; see others/docs/shared-environment.md.'
+}
 $uvRoot = Join-Path $projectRoot 'others\cache\tools\uv'
 $uvExe = Join-Path $uvRoot 'uv.exe'
 if (-not (Test-Path -LiteralPath $uvExe)) {

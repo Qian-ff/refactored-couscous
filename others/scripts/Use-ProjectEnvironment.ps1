@@ -1,13 +1,12 @@
 #requires -Version 5.1
 # Dot-source this script to set tool paths for the current PowerShell only.
 $taskProjectRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
+$taskPrimaryRoot = $taskProjectRoot
+$taskCommonDirectory = & git -C $taskProjectRoot rev-parse --path-format=absolute --git-common-dir
+if ($LASTEXITCODE -eq 0) { $taskPrimaryRoot = Split-Path -Parent $taskCommonDirectory.Trim() }
 $taskConfigPath = Join-Path $taskProjectRoot 'others/config/local.json'
 if (-not (Test-Path -LiteralPath $taskConfigPath)) {
-    $taskCommonDirectory = & git -C $taskProjectRoot rev-parse --path-format=absolute --git-common-dir
-    if ($LASTEXITCODE -eq 0) {
-        $taskPrimaryRoot = Split-Path -Parent $taskCommonDirectory.Trim()
-        $taskConfigPath = Join-Path $taskPrimaryRoot 'others/config/local.json'
-    }
+    $taskConfigPath = Join-Path $taskPrimaryRoot 'others/config/local.json'
 }
 $taskSettings = $null
 if (Test-Path -LiteralPath $taskConfigPath) {
@@ -35,5 +34,7 @@ if ($taskAndroidSdk -and (Test-Path -LiteralPath (Join-Path $taskAndroidSdk 'pla
 } else {
     Write-Warning 'Android SDK path is unverified; set android_sdk_root in local.json.'
 }
-$env:GRADLE_USER_HOME = Join-Path $taskProjectRoot 'android/.gradle-user-home'
+$env:GRADLE_USER_HOME = Join-Path $taskPrimaryRoot 'android/.gradle-user-home'
+$env:UV_CACHE_DIR = Join-Path $taskPrimaryRoot 'others/cache/uv'
+$env:ELECTRON_CACHE = Join-Path $taskPrimaryRoot 'others/cache/electron'
 Write-Output ('GRADLE_USER_HOME=' + $env:GRADLE_USER_HOME)

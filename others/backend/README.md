@@ -4,7 +4,7 @@ A1 实现 FastAPI/SQLModel/Alembic/PostgreSQL 的登录、当前授权、退出�
 
 A 维护总入口、接口契约和数据库迁移；B 维护 core/learning，C 维护内容/助手，E 维护监控。AI worker 使用 ../ai_worker 下独立环境，A1 不安装模型。
 
-在仓库根目录运行以下 PowerShell 命令。先运行 `./others/scripts/Bootstrap.ps1` 准备本地环境；Docker Desktop 须已启动。
+新 B/C/D 工作树先按 [共享环境](../docs/shared-environment.md) 使用主线解释器和配置，不重复 Bootstrap 或建 .venv。以下初始化与迁移仅由 A 在主工作区执行；Docker Desktop 须已启动。
 
 ~~~powershell
 docker compose --env-file .env -f others/deploy/compose.yml up -d --wait db

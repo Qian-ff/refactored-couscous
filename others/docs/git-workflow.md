@@ -4,22 +4,25 @@
 
 ## 分支与工作区
 
-A 使用主目录 main；B–G 由 ownership.json 指定 task 分支，使用忽略的 others/worktrees 下独立副本。工作区之间共享 Git 历史，不共享可写源码。最多同时运行四个聊天。
+A 使用主目录 main；角色分支由 ownership.json 指定。B/C/D 使用用户新建的外部 Codex 工作树及 codex/*-a2 分支，由 A 登记；E/F/G 暂保留 others/worktrees 下的原任务分支。工作区之间共享 Git 历史，各自修改自己的源码。最多同时运行四个聊天。当前基线、顺序见 [A2 开工](a2-start.md)，配置和依赖见 [共享环境](shared-environment.md)。
 
-初始化后的创建命令：
+用户已新建的外部工作树由 A 在干净、已提交规则的主目录执行登记，例如：
 
 ~~~powershell
-python .\others\scripts\workflow.py worktree --role B
-python .\others\scripts\workflow.py worktree --role C
-python .\others\scripts\workflow.py worktree --role D
+python .\others\scripts\workflow.py register --role B --path "实际的B工作树绝对路径" --baseline 825b6e3
+~~~
+
+登记检查同一仓库、干净状态、指定祖先基线和分支占用；仅为 detached 树创建角色分支，不覆盖旧分支历史，不自动合并。A 再将三个新树快进同步到 a2-start。已登记 B/C/D 的 worktree 命令只报告现状；不会重新创建另一份目录。尚未启用的托管工作树可按需创建：
+
+~~~powershell
 python .\others\scripts\workflow.py worktree --role E
 python .\others\scripts\workflow.py worktree --role F
 python .\others\scripts\workflow.py worktree --role G
 ~~~
 
-工具从 main 创建任务分支；已有工作区会报告干净状态、HEAD 和相对基线的同步状态，存在不代表可开工。目录被其他内容占用时保留原状。A 发布基线后，子聊天先保留或提交未完成修改，再在干净的自己的分支执行 git merge 指定的基线SHA。不要重置工作区。
+托管工作树工具从 main 创建任务分支；已有工作区会报告干净状态、HEAD 和相对基线的同步状态，存在不代表可开工。目录被其他内容占用时保留原状。A 发布后续基线后，子聊天先保留或提交未完成修改，再在干净的自己的分支执行 git merge 指定的基线SHA。不要重置工作区。
 
-使用 `python .\others\scripts\workflow.py status --baseline 已发布SHA` 查看所有工作区是否包含基线及各自契约版本；省略参数时以当前 main 为准。任务提交检查从已提交的 main 核对所有权，拒绝本分支的过期规则；`checkpoint --baseline 已发布SHA` 验证分支包含指定基线，省略时须包含当前 main。
+使用 `python .\others\scripts\workflow.py status --baseline a2-start` 查看角色登记、源码同步和各自契约版本；registered、clean、contains_baseline、ownership_current 均满足才 ready。后续使用 A 最新发布 SHA；省略参数时以当前 main 为准。任务提交从已提交的 main 核对所有权，拒绝错误路径和过期规则；`checkpoint --baseline 已发布SHA` 验证指定基线，省略时须包含当前 main。
 
 ## 每轮提交
 
@@ -38,7 +41,7 @@ python .\others\scripts\workflow.py checkpoint --role B --message "feat(core): a
 ## A 合并
 
 1. 检查子分支提交、测试证据及权限/契约影响。
-2. 当前主工作区干净后，运行 git merge --no-ff task/对应分支。
+2. 当前主工作区干净后，运行 git merge --no-ff 角色对应分支，名称以 ownership.json 为准。
 3. 解决冲突并运行相关检查，记录合并提交。更新通用 Open-Web.cmd、Open-Windows.cmd、Open-Android.cmd、Open-A1.cmd 及共用启动器，保持旧入口可用。
 4. 每轮功能集成新增对应入口，例如 Open-A2.cmd、Open-A3.cmd，复用共用启动逻辑，提供本轮角色/搜索/业务演示步骤。尚未集成的轮次不提前提供可用假入口。
 5. 重新构建受影响的网页、Windows和安卓包；实际从入口启动，核对包内源码/契约版本及本轮功能，避免入口仍打开旧包。记录启动、失败、截图及产物版本。
@@ -56,4 +59,4 @@ python .\others\scripts\workflow.py checkpoint --role B --message "feat(core): a
 
 每轮代码修改仍须本地提交；非上述节点不自行额外推送，B–G 仅提交自己的本地任务分支。每次推送记录完整提交 SHA，并用 ls-remote 核对远端 main/标签。推送失败不记作已上传；保留本地提交、准确报告原因，再在同一节点恢复，不改写远端历史。构建包、环境、账号密码、数据库与私密参考文件继续留在忽略区；这次授权是 Git 仓库备份，不含部署或公开发布安装包。
 
-当前后续聊天应同步 checkpoint-1，以包含新增要求和一键工具；a1-0.1.0 仅标记最初已验收底座，不覆盖或重打标签。仅项目级 user.name/user.email 使用用户提供值，不修改全局配置。
+checkpoint-1 是已上传的历史交接；本轮 B/C/D 使用 a2-start 和 A 后续发布的完整 SHA，详见 a2-start.md。历史标签均不覆盖或重打。仅项目级 user.name/user.email 使用用户提供值，不修改全局配置。

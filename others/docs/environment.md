@@ -30,8 +30,8 @@ java -version
 adb version
 ~~~
 
-仅影响当前 PowerShell。Gradle 用户缓存定位到当前工作区 android/.gradle-user-home，不进入 Git。
+仅影响当前 PowerShell。Gradle、uv 和 Electron 下载缓存复用主工作区，不进入 Git。多工作树的 Python、node_modules、配置和账号使用方式见 [共享环境](shared-environment.md)。
 
 preflight.py 本身仅探测工具；应用实际运行证据见 a1-handoff.md 和忽略的 others/reports/a1。本轮验证了 Docker/PostgreSQL、网页、Windows与安卓 APK，未验证麦克风、摄像头、模型与安卓实体机。本项目使用 React/Electron/Capacitor，无需 Flutter。
 
-Git 远端已通过只读 ls-remote 验证可达且尚无 HEAD；本项目作者和 origin 已配置。远端 push 尚未执行。
+本项目作者和 origin 已配置，checkpoint-1 与当时 main 已上传；当前本地进展以 git status 为准。下一次按既有授权在 A2 验收完成后推送 checkpoint-2。

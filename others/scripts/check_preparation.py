@@ -21,6 +21,7 @@ def main() -> int:
         "others/docs/design.md", "others/docs/start-here.md",
         "others/docs/git-workflow.md", "others/docs/licensing.md",
         "others/docs/environment.md", "others/scripts/Use-ProjectEnvironment.ps1",
+        "others/docs/shared-environment.md", "others/docs/a2-start.md", "others/scripts/shared_env.py",
         "others/docs/ai/README.md", "others/deploy/.env.example",
         "others/deploy/README.md", "others/config/local.example.json",
         "others/scripts/workflow.py", "others/scripts/preflight.py",
@@ -39,6 +40,8 @@ def main() -> int:
             failures.append("Roles share a branch")
         scopes = []
         for role, data in rules["roles"].items():
+            if data["worktree"] is not None and not isinstance(data["worktree"], str):
+                failures.append("Invalid worktree location for role " + role)
             prompts = list((ROOT / "others/docs/ai").glob(role + "-*.md"))
             if len(prompts) != 1:
                 failures.append("Expected one task brief for role " + role)

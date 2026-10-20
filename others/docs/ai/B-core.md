@@ -4,9 +4,9 @@
 
 ## 开始前
 
-1. 打开自己的独立工作区 others/worktrees/core，确认当前分支为 task/core。
+1. 打开 A 登记的外部工作树，确认当前分支为 codex/b-core-a2；不使用旧 task/core 工作树。
 2. 读根 AGENTS.md、others/docs/design.md、others/contracts/README.md 和 ownership.json。
-3. 当前基线为 checkpoint-1，包含最新一键工具及三角色/搜索要求；从交接报告核对后，在干净的本分支合并并确认 contains_baseline=true 再开始实现。
+3. 按 others/docs/a2-start.md 核对 a2-start 或 A 后续发布的完整 SHA，确认 registered、clean、contains_baseline、ownership_current。按 shared-environment.md 复用环境；先提交模型/接口提案给 A，再实现依赖新契约的部分。
 
 ## 本角色任务
 
@@ -28,4 +28,4 @@
 
 ## 每轮交付
 
-按根 AGENTS.md 检查并提交本轮文件到 task/core；回报 commit ID、可复现的验证命令/结果及未完成事项。无改动不建空提交。准备文件存在不代表功能已实现；以运行证据和 others/qa/acceptance.md 判断完成。客户端包不包含密钥、真实数据或源码路径依赖。
+按根 AGENTS.md 检查并提交本轮文件到 codex/b-core-a2；回报 commit ID、可复现的验证命令/结果及未完成事项。无改动不建空提交。准备文件存在不代表功能已实现；以运行证据和 others/qa/acceptance.md 判断完成。客户端包不包含密钥、真实数据或源码路径依赖。

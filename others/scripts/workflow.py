@@ -35,6 +35,38 @@ def committed_json(root: Path, reference: str, path: str, optional: bool = False
     return json.loads(result.stdout)
 
 
+def primary_root(root: Path) -> Path:
+    common = git(root, "rev-parse", "--path-format=absolute", "--git-common-dir").stdout.strip()
+    return Path(common).resolve().parent
+
+
+def registered_worktrees(root: Path) -> list[dict[str, str]]:
+    listing = git(root, "-c", "core.quotepath=false", "worktree", "list", "--porcelain").stdout
+    result = []
+    for block in listing.strip().split("\n\n"):
+        fields = dict(line.split(" ", 1) for line in block.splitlines() if " " in line)
+        if "worktree" in fields:
+            result.append(fields)
+    return result
+
+
+def role_location(root: Path, role: str, rules: dict) -> Path | None:
+    owner = rules["roles"][role]
+    if role == "A":
+        return primary_root(root)
+    if owner["worktree"] is None:
+        matches = [row for row in registered_worktrees(root)
+                   if row.get("branch") == "refs/heads/" + owner["branch"]]
+        if len(matches) > 1:
+            raise RuntimeError("Role branch is checked out in multiple worktrees; preserve and inspect them")
+        return Path(matches[0]["worktree"]).resolve() if matches else None
+    parent = (primary_root(root) / rules["worktree_root"]).resolve()
+    target = (parent / owner["worktree"]).resolve()
+    if not target.is_relative_to(parent) or target == parent:
+        raise RuntimeError("Invalid worktree destination")
+    return target
+
+
 def baseline_sha(root: Path, reference: str | None = None) -> str:
     reference = reference or "main"
     result = git(root, "rev-parse", "--verify", "--end-of-options", reference + "^{commit}", check=False)
@@ -51,11 +83,15 @@ def readiness(root: Path, baseline: str) -> dict:
         raise RuntimeError("Cannot compare worktree to baseline")
     counts = git(root, "rev-list", "--left-right", "--count", baseline + "..." + head).stdout.split()
     version = committed_json(root, head, "others/contracts/version.json", optional=True)
+    ownership = committed_json(root, head, "others/contracts/ownership.json", optional=True)
+    published = committed_json(root, "main", "others/contracts/ownership.json")
     return {
         "path": str(root), "head": head, "clean": not changes, "changes": changes,
         "baseline": baseline, "contains_baseline": contains.returncode == 0,
         "behind": int(counts[0]), "ahead": int(counts[1]),
         "contract_version": version.get("version") if version else None,
+        "ownership_version": ownership.get("version") if ownership else None,
+        "ownership_current": ownership == published,
     }
 
 
@@ -100,6 +136,8 @@ def checkpoint(root: Path, role: str, message: str, paths: list[str], note: str,
     branch = git(root, "branch", "--show-current").stdout.strip()
     if branch != owner["branch"]:
         raise RuntimeError(f"Role {role} requires {owner['branch']}; current branch: {branch}")
+    if role_location(root, role, rules) != root.resolve():
+        raise RuntimeError("This is not the registered worktree for role " + role)
     if role != "A":
         if manifest(root) != published:
             raise RuntimeError("Outdated ownership rules; preserve changes and synchronize the published baseline")
@@ -142,17 +180,15 @@ def checkpoint(root: Path, role: str, message: str, paths: list[str], note: str,
 
 
 def new_worktree(root: Path, role: str, baseline: str | None = None) -> dict:
-    common = Path(git(root, "rev-parse", "--path-format=absolute", "--git-common-dir").stdout.strip())
-    main = common.parent.resolve()
+    main = primary_root(root)
     rules = manifest(main)
     owner = rules["roles"][role]
     if role == "A":
         raise RuntimeError("A uses the primary worktree")
     git(main, "rev-parse", "--verify", rules["base_branch"])
-    parent = (main / rules["worktree_root"]).resolve()
-    target = (parent / owner["worktree"]).resolve()
-    if not target.is_relative_to(parent) or target == parent:
-        raise RuntimeError("Invalid worktree destination")
+    target = role_location(main, role, rules)
+    if target is None:
+        raise RuntimeError("Role " + role + " uses an external worktree; A must register an existing Git worktree first")
     if target.exists():
         top = repository(target)
         branch = git(target, "branch", "--show-current").stdout.strip()
@@ -162,7 +198,7 @@ def new_worktree(root: Path, role: str, baseline: str | None = None) -> dict:
         raise RuntimeError(f"Destination is occupied; keep existing files: {target}")
     if git(main, "status", "--porcelain").stdout.strip():
         raise RuntimeError("Commit or separately preserve primary-worktree changes before creating worktrees")
-    parent.mkdir(parents=True, exist_ok=True)
+    target.parent.mkdir(parents=True, exist_ok=True)
     exists = git(main, "show-ref", "--verify", "--quiet", "refs/heads/" + owner["branch"], check=False)
     if exists.returncode == 0:
         git(main, "worktree", "add", str(target), owner["branch"])
@@ -176,16 +212,63 @@ def new_worktree(root: Path, role: str, baseline: str | None = None) -> dict:
     }
 
 
+def register_worktree(root: Path, role: str, path: Path, baseline: str | None = None) -> dict:
+    """A binds an existing, clean worktree without overwriting files or branch history."""
+    main = primary_root(root)
+    if root.resolve() != main or git(root, "branch", "--show-current").stdout.strip() != "main":
+        raise RuntimeError("Only A in the primary main worktree can register task worktrees")
+    rules = committed_json(main, "main", "others/contracts/ownership.json")
+    if manifest(main) != rules or git(main, "status", "--porcelain").stdout.strip():
+        raise RuntimeError("Commit the primary worktree and published ownership before registration")
+    owner = rules["roles"][role]
+    if owner["worktree"] is not None:
+        raise RuntimeError("Role " + role + " has a managed path; use the worktree command")
+    target = path.resolve()
+    entries = registered_worktrees(main)
+    entry = next((row for row in entries if Path(row["worktree"]).resolve() == target), None)
+    if entry is None or target == main:
+        raise RuntimeError("Target is not an existing task worktree of this repository")
+    if repository(target) != target or primary_root(target) != main:
+        raise RuntimeError("Target belongs to a different repository or worktree")
+    before = readiness(target, baseline_sha(main, baseline))
+    if not before["clean"]:
+        raise RuntimeError("Target worktree has changes; preserve and commit them before registration")
+    if not before["contains_baseline"]:
+        raise RuntimeError("Target has not synchronized the requested registration baseline")
+    branch = git(target, "branch", "--show-current").stdout.strip()
+    if branch and branch != owner["branch"]:
+        raise RuntimeError("Target already has a different branch; preserve it: " + branch)
+    occupied = [row for row in entries if row.get("branch") == "refs/heads/" + owner["branch"]
+                and Path(row["worktree"]).resolve() != target]
+    if occupied:
+        raise RuntimeError("Role branch is already used by another worktree; preserve both")
+    if not branch:
+        exists = git(main, "show-ref", "--verify", "--quiet", "refs/heads/" + owner["branch"], check=False)
+        if exists.returncode == 0:
+            if baseline_sha(main, owner["branch"]) != before["head"]:
+                raise RuntimeError("Existing role branch points to a different commit; preserve its history")
+            git(target, "switch", owner["branch"])
+        elif exists.returncode == 1:
+            git(target, "switch", "-c", owner["branch"])
+        else:
+            raise RuntimeError("Unable to inspect the role branch")
+    return {"status": "already_registered" if branch else "registered", "role": role,
+            "branch": owner["branch"], **readiness(target, before["baseline"])}
+
+
 def status(root: Path, baseline: str | None = None) -> dict:
     resolved = baseline_sha(root, baseline)
     rules = committed_json(root, "main", "others/contracts/ownership.json")
     branches = {"refs/heads/" + value["branch"]: role for role, value in rules["roles"].items()}
     worktrees = []
-    for block in git(root, "worktree", "list", "--porcelain").stdout.strip().split("\n\n"):
-        fields = dict(line.split(" ", 1) for line in block.splitlines() if " " in line)
+    for fields in registered_worktrees(root):
         path = Path(fields["worktree"])
-        worktrees.append({"role": branches.get(fields.get("branch")),
-                          "branch": fields.get("branch"), **readiness(path, resolved)})
+        role = branches.get(fields.get("branch"))
+        report = {"role": role, "branch": fields.get("branch"), **readiness(path, resolved)}
+        report["registered"] = bool(role and role_location(root, role, rules) == path.resolve())
+        report["ready"] = bool(report["registered"] and report["clean"]
+                               and report["contains_baseline"] and report["ownership_current"])
+        worktrees.append(report)
     return {
         "root": str(root),
         "branch": git(root, "branch", "--show-current").stdout.strip(),
@@ -207,6 +290,10 @@ def main() -> int:
     choice.add_argument("--role", choices=list("BCDEFG"))
     choice.add_argument("--all", action="store_true")
     work.add_argument("--baseline", help="Baseline used to report existing-worktree readiness")
+    register = commands.add_parser("register", help="A binds an existing clean external Git worktree to a role")
+    register.add_argument("--role", choices=list("BCDEFG"), required=True)
+    register.add_argument("--path", type=Path, required=True)
+    register.add_argument("--baseline", help="Required ancestor; registration does not merge or synchronize files")
     commit = commands.add_parser("checkpoint", help="Commit only the selected role-owned changes")
     commit.add_argument("--role", choices=list("ABCDEFG"), required=True)
     commit.add_argument("--message", required=True)
@@ -222,6 +309,8 @@ def main() -> int:
         elif args.command == "worktree":
             roles = list("BCDEFG") if args.all else [args.role]
             result = [new_worktree(root, role, args.baseline) for role in roles]
+        elif args.command == "register":
+            result = register_worktree(root, args.role, args.path, args.baseline)
         else:
             result = checkpoint(root, args.role, args.message, args.paths, args.check_note, args.wip, args.baseline)
         print(json.dumps(result, ensure_ascii=False, indent=2))
