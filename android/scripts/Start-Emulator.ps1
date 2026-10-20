@@ -33,11 +33,34 @@ while ($timer.Elapsed.TotalSeconds -lt 240) {
     Start-Sleep -Seconds 3
 }
 if (-not $booted) { throw 'Android boot timed out. Inspect the emulator window and retry after it finishes booting.' }
+function Confirm-AndroidUi {
+    for ($attempt = 0; $attempt -lt 3; $attempt++) {
+        & $adb -s $serial shell uiautomator dump /sdcard/labconnect-launch-window.xml | Out-Null
+        if ($LASTEXITCODE -ne 0) { throw 'Cannot inspect the Android screen. Wait for the emulator to settle and retry.' }
+        [xml]$screen = ((& $adb -s $serial shell cat /sdcard/labconnect-launch-window.xml) -join "`n")
+        $titleNode = $screen.SelectSingleNode("//node[@resource-id='android:id/alertTitle']")
+        $waitNode = $screen.SelectSingleNode("//node[@resource-id='android:id/aerr_wait']")
+        if (-not $waitNode) { return }
+        if (-not $titleNode -or $titleNode.text -notmatch '^System UI.+responding$') {
+            throw 'Android shows an application error. Inspect the emulator window; it was not dismissed automatically.'
+        }
+        if ($attempt -eq 2) { throw 'Android System UI has not recovered. Inspect the emulator window and retry later.' }
+        if ($waitNode.bounds -notmatch '^\[(\d+),(\d+)\]\[(\d+),(\d+)\]$') { throw 'Cannot locate the Android Wait button.' }
+        $tapX = [int](([int]$Matches[1] + [int]$Matches[3]) / 2)
+        $tapY = [int](([int]$Matches[2] + [int]$Matches[4]) / 2)
+        Write-Warning 'Android System UI is still starting; selecting its Wait button.'
+        & $adb -s $serial shell input tap $tapX $tapY
+        Start-Sleep -Seconds 3
+    }
+}
+Confirm-AndroidUi
 & $adb -s $serial install -r $apk
 if ($LASTEXITCODE -ne 0) { throw 'APK installation failed.' }
 & $adb -s $serial shell input keyevent KEYCODE_WAKEUP
 & $adb -s $serial shell wm dismiss-keyguard
 & $adb -s $serial shell am start -n 'cn.labconnect.platform/.MainActivity'
 if ($LASTEXITCODE -ne 0) { throw 'Cannot launch LabConnect.' }
+Start-Sleep -Seconds 2
+Confirm-AndroidUi
 Write-Host 'LabConnect is open. School: demo-a. API address: http://10.0.2.2:8000'
 Write-Host 'Demo passwords: others/runtime/demo-accounts.json. Keep the backend running on this computer.'

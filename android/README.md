@@ -16,6 +16,8 @@ Capacitor8.5.3 原生工程位于 native，三项 Capacitor 包同版本。F 接
 
 也可在项目根目录执行 `./android/scripts/Start-Emulator.ps1`。脚本不会重新下载镜像或构建 APK；缺失时会提示先准备。下方 `-no-window` 命令专供无窗口自动化测试；如已有无窗口实例，先按文末命令停止，再双击启动文件显示窗口。
 
+模拟器冷启动偶尔出现 System UI 无响应提示。启动脚本会读取原生界面，只对该系统提示选择 Wait 并有限重试；其他应用错误或持续无法恢复会报错，需检查窗口，不视为启动通过。
+
 已安装并验证 Google 官方 Android16/API36 Google APIs x86_64 **r07**，SHA1 `c6bf44bdcd885bb902b4ba752d111a073ad7a817`。原始来源：https://dl.google.com/android/repository/sys-img/google_apis/x86_64-36_r07.zip 。镜像位于 D:/AndroidSDK/system-images/android-36/google_apis/x86_64，AVD 数据留本端忽略区；均不进入源码包。
 
 在仓库根目录另开 PowerShell，设置仅对当前进程生效的路径。若 AVD 尚不存在，先使用已装 SDK 的 avdmanager 创建；不覆盖现有 AVD：

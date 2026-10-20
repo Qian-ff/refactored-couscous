@@ -10,6 +10,7 @@
 
 ## 从这里开始
 
+- [A1 使用与一键打开](others/docs/a1-usage.md)：双击 Open-Web.cmd、Open-Windows.cmd、Open-Android.cmd，或 Open-A1.cmd 选择三端；包含登录和课程同步体验流程。
 - [设计基线](others/docs/design.md)：本聊天确认的功能、范围、数据和视觉要求。
 - [A1 状态与交接](others/docs/a1-handoff.md)：已验证证据、待完成项目和可发布基线。
 - [开工与交接](others/docs/start-here.md)：先后顺序及当前状态。
