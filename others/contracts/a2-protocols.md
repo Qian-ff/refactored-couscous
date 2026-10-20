@@ -8,6 +8,8 @@ A 维护 web/src/lib/api.ts、extensions.ts、lesson-protocol.ts 及生成 SDK�
 
 D 在登录后调用 confirmSession；切换使用 switchWorkRole 后等待服务端确认，不仅切标签。订阅会话代次清除所有页面请求和查询；退出失败也清理本地并提示远端撤销失败。组件内搜索再处理同身份查询竞态。B/C 不导入 D 的入口或路由实现。
 
+B/C在完整D路由前，用本角色所有权内的开发渲染夹具和独立测试配置验证页面组件，复用公共服务归属辅助并调用真实API，记录测试入口。该夹具不注册产品公共路由，不替代D集成，也不用假成功数据冒充业务。公开入口由D后续统一接入。
+
 ## 内容及关卡
 
 lesson-protocol.ts 的 schema_version=labconnect.lesson/1。StudentLesson 有 lesson_id/version_id/title/short_lesson/required/scene/activities，不含答案。活动用稳定 id，choice（单/多选）、hotspot（0–1归一化矩形、SVG viewBox坐标映射）、order（稳定选项顺序）可组合；发布时验证 ID 唯一、引用有效、坐标合法及安全 SVG，数量不能写死。

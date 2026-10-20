@@ -1,6 +1,6 @@
 # A0 公共底座与阶段交接
 
-本轮角色 A / main，起点 dfd087dabe96f82f9bafccf2497dbb284d715a0e（a2-start）；首批兼容模型/身份提交3dad37a556922d0c71478d5db6fa5c339d9186ba。最终发布以本地a2-ready指向的完整SHA为准，A完成同步检查后在聊天报告。此文为2026-10-21检查记录，标签未创建前不视为已发布。
+本轮角色 A / main，起点 dfd087dabe96f82f9bafccf2497dbb284d715a0e（a2-start）；兼容模型/身份提交3dad37a556922d0c71478d5db6fa5c339d9186ba，完整公共代码与任务书提交c7b858b14088b28639395f530a0791e6197633e6。最终a2-ready为此后仅补充交接记录的发布提交，完整SHA用git rev-parse a2-ready取得并见最终聊天报告。2026-10-21，阶段可交B1，不表示业务/A2完成。
 
 ## 已实现的公共底座
 
@@ -19,13 +19,13 @@
 | 真实PostgreSQL回归 | 33项通过；含旧库迁移同名双班/关联ID、跨校FK、工作身份收窄/多学院/撤权、学生并发互斥、CORS、配置加密隔离 |
 | 演示库升级 | 迁移前已pg_dump备份；12课程/12教师关系/2选课升级前后数量与SHA256一致，others/reports/a0/demo-migration.json；之后浏览器另新建合成课程用于联调 |
 | 业务及worker环境工具 | 24项协作/环境unittest通过，领域根夹具/进程锁及两树模块绑定/拒绝外部模块均检查 |
-| 网页类型/构建 | pnpm check与build:web通过；build-info无本机路径，最终SHA构建仍需在最终提交后记录 |
-| 浏览器 | 7项通过：真实登录新建/另账号同步、390px学生/退出、密码网络失败；会话切换旧请求/401隔离、撤销/新地址/退出失败、错误服务元信息拒绝。状态层测试用合成网络响应，后端权限另有真实数据库检查 |
-| 原一键网页入口 | Start-A1 -Target Web -NoOpen实际启动API+PG+Vite成功，源身份检查正常；最终提交后会重启再次核对 |
+| 网页类型/构建 | 主树pnpm check与build:web通过，B/C/D均类型通过；build-info无本机路径，发布后构建元信息另存忽略证据 |
+| 浏览器 | A/B/C/D各自5173/5174/5175/5176真实运行，每树7项共28项通过；common-root账号与两端源码身份均核实。覆盖登录新建/另账号同步、390px学生/退出、密码网络失败、会话旧请求/401隔离、撤销/新地址/退出失败、错误SHA/树/指纹/契约拒绝。会话单元使用合成网络响应，权限另有真实PG检查 |
+| 原一键网页入口 | Start-A1 -Target Web -NoOpen实际启动API+PG+Vite成功；旧服务故意保留时被拒绝且未擅自停止，launcher-guard.json。随后仅重启本轮进程，已提交源码身份匹配 |
 | Flash | 官方Flash真实2次HTTP200，连接+JSON业务字段校验，共128 token，others/reports/a0/provider.json；计数2/3，未调用Pro、不上传私密/真实数据 |
 | CPU ASR | 真实5.614625秒中文示例通过，CPU识别约1.02秒；报告speech.json确认ORT1.28.2及worker内DLL。已精确补齐core1.13.8，未改系统；模型/代码/原生运行库许可已归档 |
 | 容器 | labconnect-api:a0镜像已构建，实际生产导入0.2.0通过，/api/v1/dev/identity真实请求404；生产启动无需开发Git |
-| SDK/准备与三树同步 | 首批SDK一致检查通过；最终文档/SDK/归属和a2-ready后的三树探测待发布时确认 |
+| SDK/准备与三树同步 | 真实OpenAPI/哈希/SDK一致，准备文件/链接/忽略检查通过。B/C/D干净快进到公共代码提交，版本0.2.0/所有权4、业务与worker源码绑定/类型均通过，依赖离线安装downloaded=0；最终发布记录提交继续快进并复核，状态存others/reports/a0/release.json |
 
 ## 可复现入口
 
@@ -53,3 +53,12 @@ C可用教师完成真实问答/语音，B2状态未有时学生暂停；后续�
 受限进程的路径警告已定位Windows卷路径查询权限，正常授权进程无此警告。只把运行时收回项目缓存，未隐藏stderr或修改系统/外部沙箱，见[共享环境](shared-environment.md)。非阻塞B1业务；需正常授权执行的本机网络/Node检查按环境处理。
 
 A0结束仅本地提交与新a2-ready，不额外push，不移动a2-start/checkpoint-1。后续B1→C→B2→D各次公共集成交A；A2完整验收后才checkpoint-2已授权推送。本轮不自动启动其他聊天。
+
+## 发布与开工核对
+
+~~~powershell
+git rev-parse a2-ready
+python .\others\scripts\workflow.py status --baseline a2-ready
+~~~
+
+A/B/C/D应同一发布HEAD、clean/registered/contains_baseline/ownership_current为true，契约0.2.0、所有权4。旧任务树保留且未被冒称就绪。先复制[B任务书B1 Goal](ai/B-core.md#b1-goal)到原B聊天；本轮不自动启动它。C/B2/D使用各自完整Goal，等待A集成前序交付并公布新完整SHA，不再重复A0模型/加密/依赖工作。
