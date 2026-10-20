@@ -13,8 +13,12 @@
 | Android SDK | D:/AndroidSDK；已有平台和构建组件 |
 | GPU | RTX 5060 Laptop，8151 MiB 显存，驱动 582.05 |
 | Docker 客户端 | 29.8.1 |
-| Docker 引擎 | 此次未连接到运行中的 Linux Engine，应用服务接入前需启动并再检验 |
-| 框架与推理环境 | 尚未安装依赖；worker Python 由 A/C/E 验证后锁定 |
+| Docker 引擎 | Linux Engine29.8.1实际运行，PostgreSQL18健康；API与持久化验证通过 |
+| 业务环境 | Python3.14.6 / uv0.13.1 / 本项目独立.venv，冻结安装与18项真实数据库测试通过 |
+| 前端与客户端 | pnpm冻结安装；React19.2.8 / Vite8.2.0 / Electron44.9.0 / Capacitor8.5.3 实际构建运行通过 |
+| Android 构建 | Gradle8.14.3 / AGP8.13.0 / API36，debug及未签名release实际构建通过 |
+| 模拟器 | Emulator37.1.11 / Google APIs x86_64 r07 / SafeLab_API36 / WHPX实际运行通过 |
+| AI 推理环境 | A1未安装；worker Python由 A/C/E单独验证和锁定 |
 
 ## 当前终端环境
 
@@ -28,6 +32,6 @@ adb version
 
 仅影响当前 PowerShell。Gradle 用户缓存定位到当前工作区 android/.gradle-user-home，不进入 Git。
 
-报告确认的是工具/文件可见性，并未运行 Docker 容器、Flutter、模型、麦克风、摄像头或 APK 构建。SDK 文件存在不等于实际构建已验收。框架接入时先验证依赖、许可证和构建，再补全运行说明。
+preflight.py 本身仅探测工具；应用实际运行证据见 a1-handoff.md 和忽略的 others/reports/a1。本轮验证了 Docker/PostgreSQL、网页、Windows与安卓 APK，未验证麦克风、摄像头、模型与安卓实体机。本项目使用 React/Electron/Capacitor，无需 Flutter。
 
 Git 远端已通过只读 ls-remote 验证可达且尚无 HEAD；本项目作者和 origin 已配置。远端 push 尚未执行。

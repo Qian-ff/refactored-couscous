@@ -6,13 +6,13 @@
 
 1. 打开自己的独立工作区 others/worktrees/clients，确认当前分支为 task/clients。
 2. 读根 AGENTS.md、others/docs/design.md、others/contracts/README.md 和 ownership.json。
-3. 等待 A 发布可运行骨架、迁移和真实 OpenAPI 的基线；在干净的本分支 merge main 后再开始相互依赖实现。
+3. 从 A1 交接报告取得已发布基线；在干净的本分支合并该基线，确认 contains_baseline=true 后开始实现。
 
 ## 本角色任务
 
 1. 接管 A1 已建立的 Electron 与 Capacitor 工程，复用共享网页产物和生成客户端，扩展实际能力。
 2. 实现可配置服务地址、安全凭据、文件选择、麦克风/摄像头及返回键适配。
-3. 建立 Windows 安装包与 Android APK 的真实构建命令。
+3. 维护 A1 已通过的构建命令，扩展 Windows 正式安装器、安卓 release 签名和发布流程。
 4. 实机检查登录、三角色、录音、上传和网络；干净目录运行时不依赖开发路径。
 
 ## 修改范围

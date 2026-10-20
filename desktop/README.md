@@ -9,3 +9,5 @@ Electron44.9.0 共享网页客户端。A1 提供可搬移测试包；F 接管并
 当前不提供正式安装器。渲染进程禁用 Node，启用隔离与沙箱；录音和摄像头暂未接入，默认拒绝权限。F 后续按真实用途扩展。Electron 下载缓存留在项目 others/cache。
 
 默认目标 Windows 10/11 x64；实际支持版本由锁定的 Electron 和安装测试核对。
+
+A1 已从独立复制目录实际运行通过，证据见 others/reports/a1/windows-test.json 与 windows-packaged.png。本轮归档为 desktop/release/LabConnect-0.1.0-a1-win-x64.zip；完整解压后运行。此为基础测试包，默认允许指定本机开发 HTTP；正式安装器、签名和设备能力由 F 扩展。

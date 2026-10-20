@@ -6,7 +6,7 @@
 
 1. 打开自己的独立工作区 others/worktrees/qa，确认当前分支为 task/qa。
 2. 读根 AGENTS.md、others/docs/design.md、others/contracts/README.md 和 ownership.json。
-3. 等待 A 发布可运行骨架、迁移和真实 OpenAPI 的基线；在干净的本分支 merge main 后再开始相互依赖实现。
+3. 从 A1 交接报告取得已发布基线；在干净的本分支合并该基线，确认 contains_baseline=true 后开始实现。
 
 ## 本角色任务
 

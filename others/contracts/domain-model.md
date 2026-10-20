@@ -1,12 +1,13 @@
 # 领域对象与数据边界
 
-本文件记录业务不变量，不代替实际数据库迁移。
+本文件记录业务不变量，不代替实际数据库迁移。A1 已实现 School、College、User、RoleGrant、Course、CourseStaff、Enrollment、LoginSession；其余领域留待后续模块。
 
 | 对象 | 主要关系与规则 |
 |---|---|
 | School | 学校租户，所有学校业务数据受其约束 |
 | College / Major | 学校内组织；学院管理员可授权多个学院 |
 | User / RoleGrant | 学校账号与授权范围；可兼任角色；学号按学校唯一 |
+| LoginSession | 保存服务端JWT会话标识与撤销时间；退出后旧令牌失效 |
 | Course / CourseStaff | 一名主教师，可协作、交接；课程有归属学院 |
 | Enrollment | 学生和课程多对多；加入/退出可按课程审批 |
 | Material / MaterialVersion | 授权范围、来源、提取状态及版本 |
