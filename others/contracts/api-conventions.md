@@ -1,17 +1,26 @@
 # API 约定
 
-实际路由由 A 接入后导出，不在准备阶段伪造完整 OpenAPI。
+## 实际 0.2.0
 
-1. 统一版本化 REST 接口和生成类型；三端通过可配置服务地址访问。
-2. 服务端依据账号、学校、学院授权及资源关系决定权限；客户端传入的 school_id 不是授权凭据。
-3. 题目、考试规则与培训记录记录版本；写操作具备重复提交保护。
-4. 长任务使用 queued、running、succeeded、failed、canceled 状态；返回任务标识，可查询进度和稳定错误类型。
-5. 接口明确区分无权限、未配置、额度不足、网络或模型失败；返回产品可理解信息，日志保存技术细节。
-6. 文件、任务结果和监控证据访问均校验归属；监控原始媒体留本地节点。
-7. 答案在作答前不返回学生；考试判分、资格计算和角色授权只在服务端执行。
-8. API 密钥切换对新任务生效，配置保存版本与审计；学校密钥只影响本校。
-9. 业务、存储与配置接口保持实现可替换，客户端发布包不依赖源码路径。
+唯一版本源为 ../config/application.json。OpenAPI 只导出实际接口；version.json 记录真实导出哈希，web/src/client 由工具生成，不手改。/courses 继续表示教学班，响应新增 catalog_id；旧创建请求兼容。
 
-## 搜索接口的后续约束
+Bearer 凭据只存前端内存。X-Work-Role 取 student/teacher/administrator，由服务端在当前有效授权内确认。未显式选择按会话固定默认；教师兼管理员默认教师，撤权不回退管理员。非法或撤销身份403，停用/会话失效401；普通权限不足403。/auth/me 返回 grants（全部授权）、available_work_roles、active_work_role、effective_grants（当前身份）；业务判权只读 effective_grants。注销仍可在旧身份被撤销后撤销会话。
 
-当前 OpenAPI 尚无课件搜索实现；以下是待实现约束，字段和路由由 C/B/E 提案、A 随真实实现发布。关键词长度、筛选、分页上限、排序白名单及空查询行为须明确，查询使用参数化数据库操作。权限过滤先于结果计数、分页、摘要与建议词；预览和下载再次校验资源授权。三端使用生成客户端，不能仅在前端过滤已返回的越权资源。正文/定位只返回已成功提取且当前角色允许阅读的版本。需求以 ../docs/design.md 第11节为准。
+前端使用 web/src/lib/api.ts 的 configureService、setToken、confirmSession、switchWorkRole、logoutSession、subscribeSession。D 在 switching/closing/anonymous 或代次变更时清理页面、查询与敏感状态；成功确认后挂新页面。共享层取消旧请求，拒绝旧代次响应，过期401不会撤销新会话。搜索同身份下的新旧查询仍由所属组件取消或序号校验。页面没有第二套 token 或密钥参数。
+
+允许的开发前端为 A/B/C/D 的5173/5174/5175/5176，包含 localhost/127.0.0.1；现有原生来源保留。CORS 允许 GET/HEAD/POST/PUT/PATCH/DELETE 和 Authorization、Content-Type、X-Work-Role、Idempotency-Key、If-Match。额外端口由 A 明确配置并验预检；不开放任意来源。
+
+开发 /api/v1/dev/identity 与网页 /__labconnect/identity 提供启动时源码 SHA、工作树哈希、源码内容指纹、契约版本。启动器和浏览器验证全部匹配才复用服务。API 标识端点在 production 不挂载，也不进入 OpenAPI；正式 build-info.json 仅 SHA、内容指纹和契约，不包含本机路径/树标识。
+
+## 未来接口规范（尚未实现）
+
+- 服务端先以当前身份和学校/学院/资源关系授权；客户端 school_id、catalog_id、course_id 不构成授权。
+- 查询参数有长度、分页上限和排序白名单；参数化 PostgreSQL 查询先授权再过滤、计数、稳定分页、片段与建议。文件/预览/下载/任务结果二次鉴权。基础搜索不依赖 AI。
+- 写操作采用 Idempotency-Key；相同主体/工作身份/操作/键重复返回同一结果，载荷不同409。发布/编辑使用 If-Match 或明确 revision，冲突409，提交事务内再次鉴权。具体字段随真实接口导出。
+- 长任务 queued/running/succeeded/failed/canceled，job_id、稳定错误码、进度和取消语义；创建、执行、结果均核验授权/配置快照，重型任务初期串行。
+- 明确未配置、无权限、额度不足、连接/超时/模型结构错误、worker不可用；不得静默换服务商/模型、伪造成功或泄露供应商响应中的秘密。
+- 正式作答和规则版本在服务端；保存返回 answer_revision/saved_at/deadline，使用服务端时间。答案学生 DTO 与教师 DTO 分离，公布策略由服务端执行。
+- 密钥只在服务端 AES-GCM 保存，前端仅掩码/存在状态；测试→启用→新任务生效，失败保留旧启用版，学校只影响本校。
+- 来源引用使用 material_id/version_id/page/paragraph，下载使用有权版本标识，禁止把任意本机路径或未授权 URL 当成资源授权。
+
+具体跨阶段协议见 [a2-protocols.md](a2-protocols.md)。只有实现、迁移和检查到齐后才由 A 发布下一份真实 OpenAPI。

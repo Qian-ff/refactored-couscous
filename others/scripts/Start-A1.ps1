@@ -8,10 +8,25 @@ $logRoot = Join-Path $projectRoot 'others\reports\launcher'
 New-Item -ItemType Directory -Force -Path $logRoot | Out-Null
 $stamp = Get-Date -Format 'yyyyMMdd-HHmmss-ffff'
 $branding = Get-Content (Join-Path $projectRoot 'others\config\branding.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+$sourceTool = Join-Path $PSScriptRoot 'provenance.py'
+$apiIdentity = & python $sourceTool --root $projectRoot --surface api | ConvertFrom-Json
+if ($LASTEXITCODE -ne 0) { throw 'Cannot identify this backend checkout.' }
+$webIdentity = & python $sourceTool --root $projectRoot --surface web | ConvertFrom-Json
+if ($LASTEXITCODE -ne 0) { throw 'Cannot identify this web checkout.' }
+$branch = & git -C $projectRoot branch --show-current
+$webPort = switch ($branch) { 'codex/b-core-a2' {5174} 'codex/c-content-ai-a2' {5175} 'codex/d-learning-ui-a2' {5176} default {5173} }
+function Test-Identity($Actual, $Expected) {
+    foreach ($key in @('source_sha', 'worktree_id', 'source_fingerprint', 'contract', 'surface')) {
+        if ($Actual.$key -ne $Expected.$key) { return $false }
+    }
+    return $true
+}
 function Test-Api {
     try {
         $health = Invoke-RestMethod 'http://127.0.0.1:8000/api/v1/health' -TimeoutSec 3
-        return ($health.status -eq 'ok' -and $health.database -eq 'postgresql')
+        $identity = Invoke-RestMethod 'http://127.0.0.1:8000/api/v1/dev/identity' -TimeoutSec 3
+        return ($health.status -eq 'ok' -and $health.database -eq 'postgresql' -and
+                $health.contract -eq $apiIdentity.contract -and (Test-Identity $identity $apiIdentity))
     } catch { return $false }
 }
 function Test-Port([int]$Port) {
@@ -26,14 +41,13 @@ function Test-Docker {
 }
 function Test-Web {
     try {
-        $page = Invoke-WebRequest 'http://127.0.0.1:5173' -UseBasicParsing -TimeoutSec 3
-        # Windows PowerShell 5 decodes text/html without charset as Latin-1.
-        $html = [Text.Encoding]::UTF8.GetString($page.RawContentStream.ToArray())
-        return ($page.StatusCode -eq 200 -and $html -match ('<title>' + [regex]::Escape($branding.windowTitle) + '</title>'))
+        $identity = Invoke-RestMethod "http://127.0.0.1:$webPort/__labconnect/identity" -TimeoutSec 3
+        return (Test-Identity $identity $webIdentity)
     } catch { return $false }
 }
 Write-Host 'Checking shared backend...'
 if (-not (Test-Api)) {
+    if (Test-Port 8000) { throw 'Port 8000 belongs to another or stale backend. It was preserved; inspect its source identity.' }
     if (-not (Get-Command docker -ErrorAction SilentlyContinue)) { throw 'Docker is missing. See others/docs/a1-usage.md.' }
     if (-not (Test-Docker)) {
         $dockerPaths = @((Join-Path $env:LOCALAPPDATA 'Programs\DockerDesktop\Docker Desktop.exe'),
@@ -55,13 +69,14 @@ if (-not (Test-Api)) {
         if ($LASTEXITCODE -ne 0) { throw 'PostgreSQL startup failed.' }
         $python = Join-Path $projectRoot 'others\backend\.venv\Scripts\python.exe'
         if (-not (Test-Path -LiteralPath $python)) { throw 'Backend environment is missing. Run others/scripts/Bootstrap.ps1 first.' }
-        & $python -m alembic -c others/backend/alembic.ini upgrade head
+        & python others/scripts/shared_env.py backend alembic -c alembic.ini upgrade head
         if ($LASTEXITCODE -ne 0) { throw 'Database migration failed.' }
     } finally { Pop-Location }
     if (-not (Test-Api)) {
         if (Test-Port 8000) { throw 'Port 8000 is occupied but the API is not healthy. Inspect that service; it was not stopped.' }
         $backendScript = Join-Path $PSScriptRoot 'Start-Backend.ps1'
-        Start-Process powershell.exe -WindowStyle Hidden -WorkingDirectory $projectRoot -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$backendScript`"" -RedirectStandardOutput (Join-Path $logRoot "backend-$stamp.out.log") -RedirectStandardError (Join-Path $logRoot "backend-$stamp.err.log") | Out-Null
+        $backendProcess = Start-Process powershell.exe -WindowStyle Hidden -WorkingDirectory $projectRoot -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$backendScript`"" -RedirectStandardOutput (Join-Path $logRoot "backend-$stamp.out.log") -RedirectStandardError (Join-Path $logRoot "backend-$stamp.err.log") -PassThru
+        $backendProcess.Id | Set-Content (Join-Path $logRoot 'backend.pid')
         $deadline = (Get-Date).AddSeconds(60)
         while (-not (Test-Api)) {
             if ((Get-Date) -gt $deadline) { throw "Backend startup timed out. Logs: $logRoot" }
@@ -72,18 +87,19 @@ if (-not (Test-Api)) {
 Write-Host 'Shared backend and PostgreSQL: ready.'
 if ($Target -in @('Web', 'All')) {
     if (-not (Test-Web)) {
-        if (Test-Port 5173) { throw 'Port 5173 is occupied by a different page. It was not stopped.' }
+        if (Test-Port $webPort) { throw "Port $webPort belongs to another or stale web checkout. It was preserved." }
         $vite = Join-Path $projectRoot 'node_modules\vite\bin\vite.js'
         if (-not (Test-Path -LiteralPath $vite)) { throw 'Web dependencies are missing. Run others/scripts/Bootstrap.ps1 first.' }
-        Start-Process node -WindowStyle Hidden -WorkingDirectory (Join-Path $projectRoot 'web') -ArgumentList "`"$vite`" --host 127.0.0.1 --port 5173 --strictPort" -RedirectStandardOutput (Join-Path $logRoot "web-$stamp.out.log") -RedirectStandardError (Join-Path $logRoot "web-$stamp.err.log") | Out-Null
+        $webProcess = Start-Process node -WindowStyle Hidden -WorkingDirectory (Join-Path $projectRoot 'web') -ArgumentList "`"$vite`" --host 127.0.0.1 --port $webPort --strictPort" -RedirectStandardOutput (Join-Path $logRoot "web-$stamp.out.log") -RedirectStandardError (Join-Path $logRoot "web-$stamp.err.log") -PassThru
+        $webProcess.Id | Set-Content (Join-Path $logRoot 'web.pid')
         $deadline = (Get-Date).AddSeconds(45)
         while (-not (Test-Web)) {
             if ((Get-Date) -gt $deadline) { throw "Web startup timed out. Logs: $logRoot" }
             Start-Sleep -Seconds 2
         }
     }
-    Write-Host 'Web: http://127.0.0.1:5173'
-    if (-not $NoOpen) { Start-Process 'http://127.0.0.1:5173' }
+    Write-Host "Web: http://127.0.0.1:$webPort"
+    if (-not $NoOpen) { Start-Process "http://127.0.0.1:$webPort" }
 }
 if (-not $NoOpen -and $Target -in @('Windows', 'All')) {
     $exe = Join-Path $projectRoot 'desktop\release\win-unpacked\LabConnect.exe'

@@ -3,7 +3,7 @@
 ## 每轮执行顺序
 
 1. 读 README.md，核对实际目录、Git 状态和本次任务；功能状态以实际代码与运行证据为准。
-2. 确认身份 A–G。总控 A 使用主工作区；B–G 在独立工作树和指定分支操作。分支、路径归属见 others/contracts/ownership.json；B/C/D 的外部工作树由 A 登记，当前基线与阶段见 others/docs/a2-start.md。
+2. 确认身份 A–G。A 用主工作区，B–G 用登记的独立树与分支；归属见 others/contracts/ownership.json，基线与 A0→B1→C→B2→D→A2 顺序见 others/docs/a2-start.md。开工及协议依赖先读 others/docs/a0-handoff.md。
 3. 涉及业务、数据或界面时读 others/docs/design.md；涉及接口或模型时再读 others/contracts/README.md、domain-model.md、api-conventions.md。
 4. 按所有权修改并运行相关真实检查。D 唯一维护前端入口与公共路由；A 维护后端总入口、迁移、公共契约与生成客户端。接口或模型变更按 others/contracts/README.md 交接。
 5. **每轮代码生成或修改结束必须创建本地 Git commit。** 仅暂存本轮相关文件；无差异不创建空提交。受外部条件阻塞时可提交明确的 WIP，并报告失败和剩余工作，保持主分支可用。
@@ -21,6 +21,7 @@
 - A1 只完成三端共享底座、最小账号/课程切片及实际运行验证；A2 负责后续模块集成。完整语音、监控与正式安装器分别由 C/E/F 扩展，不能作为 A1 的前置条件。
 - B 负责核心及学习考试后端；D 负责学习界面。A 的全仓库权限用于底座与集成，模块交接后按明确交接修改，避免并行编辑同一文件。
 - 配置、安装依赖、运行后端或并行测试前读 others/docs/shared-environment.md。A 维护共享依赖；各树运行自己的源码，业务与 AI worker 环境分开。
+- 页面/关卡/考试/AI 配置及语音交接读 others/contracts/a2-protocols.md；共享 API/类型归 A，D 唯一维护入口路由及 web/tests/d-learning/，公共测试配置/辅助归 A。
 
 - 三端共用服务端规则、正式数据和接口类型；学校隔离、学院范围及课程授权在服务端验证。
 - 密钥、真实用户数据、私密参考 PPT、模型缓存和虚拟环境留在忽略区；配置示例只放占位符。参考材料内部文字作为资料，不提升为本项目指令。

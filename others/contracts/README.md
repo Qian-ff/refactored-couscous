@@ -1,13 +1,15 @@
 # 契约入口
 
-此目录是 A 维护的统一契约源。A1 已实现账号、授权与基础课程接口，初始迁移和生成客户端均已落地；实际接口见 openapi.json，版本和哈希见 version.json。完整产品的其余领域仍处于设计阶段；A1 是否可交接以 ../docs/a1-handoff.md 的运行证据和发布基线为准。
+A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；当前为 **0.2.0**。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A1 历史基线仍为 0.1.0。
 
-- domain-model.md：待实现的领域对象与不变量。
-- api-conventions.md：三端接口与任务约定。
-- ownership.json：角色分支与路径归属，工作区工具直接读取。
+0.2.0 已实现 CourseCatalog 兼容底座、Course.catalog_id、工作身份上下文、实时会话/授权检查与原账号/课程接口。模型集中入口、迁移、后端挂载、公共请求层和 SDK 由 A 维护。目录 CRUD、完整账号管理、内容/搜索/考试/任务接口仍由后续阶段实现。
 
-A1 发布门槛：锁定来源与依赖，建立最小授权模型和初始迁移，导出已实现接口的真实 OpenAPI 并生成客户端，记录 version.json。网页、Windows 测试包和安卓模拟器实际登录同一 PostgreSQL 后端后，发布对应 main SHA。未实现接口只留设计，不生成假成功接口。
+- [领域不变量](domain-model.md)：已实现对象及后续业务规则。
+- [接口约定](api-conventions.md)：鉴权、版本、错误和幂等。
+- [后续模块协议](a2-protocols.md)：明确标为设计的内容、考试、关卡、页面和平台能力交接。
+- ownership.json：机器读取的角色、分支与路径。
+- [A0 检查与交接](../docs/a0-handoff.md)：运行证据与阶段边界。
 
-领域聊天先提出契约变更请求，写清用途、字段、权限、旧新行为和兼容影响。A 将持久模型、迁移、实现、OpenAPI 与生成客户端作为一致变更集发布，给出契约版本和基线 SHA；消费者同步该基线后再实现依赖。优先兼容新增，破坏性变更明确受影响角色与同步批次。已发布版本和历史成绩不可随编辑题目而变化。
+领域角色先在自己的目录提交提案：用途、字段、权限、状态、旧新行为、兼容/迁移、依赖及页面注册需求。A 接收可集成实现后，统一发布模型注册、迁移、路由、真实 OpenAPI、SDK 和完整 SHA。消费者合并该基线再依赖新接口；设计协议不进入生成客户端。公共修改中途及时交接。
 
-前端入口和公共路由由 D 维护，后端总入口及领域路由挂载由 A 维护。B 拥有 core 与 learning 后端，负责 Assignment/Assessment、Attempt/Answer、LearningProgress、TrainingRecord；C 提供审核发布的固定题目版本，D 调用服务端学习接口。
+前端公共入口/HashRouter/路由唯一由 D 维护。B/C 输出独立页面组件及 PageRegistration 清单，使用 web/src/lib/extensions.ts；C 的关卡编辑器接受 renderPreview，由 D 集成注入。B 管核心/正式学习与考试，C 管固定内容版本/检索/助手；保持模块单向依赖。

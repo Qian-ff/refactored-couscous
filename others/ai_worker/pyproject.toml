@@ -1,0 +1,13 @@
+[project]
+name = "labconnect-worker"
+version = "0.2.0"
+description = "Isolated CPU speech environment; C owns content and speech implementation"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+  "sherpa-onnx==1.13.8",
+  "numpy==2.4.4",
+  "sherpa-onnx-core==1.13.8",
+]
+
+[tool.uv]
+package = false

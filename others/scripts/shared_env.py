@@ -16,6 +16,7 @@ from workflow import primary_root, repository
 BACKEND_INPUTS = ("others/backend/pyproject.toml", "others/backend/uv.lock")
 WEB_INPUTS = ("package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml",
               "web/package.json", "desktop/package.json", "android/package.json")
+WORKER_INPUTS = ("others/ai_worker/pyproject.toml", "others/ai_worker/uv.lock", "others/ai_worker/.python-version")
 
 # Execute with the shared interpreter, but bind imports and subprocesses to this checkout.
 BOOTSTRAP = r'''
@@ -25,6 +26,7 @@ from dotenv import load_dotenv
 root, primary, module, *arguments = sys.argv[1:]
 backend = Path(root) / "others/backend"
 load_dotenv(Path(primary) / ".env", override=True)
+os.environ["LABCONNECT_SHARED_ROOT"] = primary
 os.chdir(backend)
 sys.path.insert(0, str(backend))
 os.environ["PYTHONPATH"] = str(backend) + os.pathsep + os.environ.get("PYTHONPATH", "")
@@ -35,6 +37,29 @@ if module == "__probe__":
     print(json.dumps({"python": sys.executable, "app_source": str(source),
         "configuration_loaded": bool(os.environ.get("DATABASE_URL") and os.environ.get("SECRET_KEY"))}))
 else:
+    sys.argv = [module, *arguments]
+    runpy.run_module(module, run_name="__main__", alter_sys=True)
+'''
+
+WORKER_BOOTSTRAP = r'''
+import importlib.metadata, importlib.util, json, os, runpy, sys
+from pathlib import Path
+root, primary, module, *arguments = sys.argv[1:]
+worker = Path(root) / "others/ai_worker"
+os.environ["LABCONNECT_SHARED_ROOT"] = primary
+os.environ["LABCONNECT_MODEL_ROOT"] = str(Path(primary) / "others/models")
+os.chdir(worker)
+sys.path.insert(0, str(worker))
+os.environ["PYTHONPATH"] = str(worker) + os.pathsep + os.environ.get("PYTHONPATH", "")
+if module == "__probe__":
+    print(json.dumps({"python":sys.executable,"source_root":str(worker),
+        "sherpa_onnx":importlib.metadata.version("sherpa-onnx"),
+        "sherpa_onnx_core":importlib.metadata.version("sherpa-onnx-core"),
+        "model_cache":os.environ["LABCONNECT_MODEL_ROOT"]}))
+else:
+    spec = importlib.util.find_spec(module)
+    if not spec or not spec.origin or not Path(spec.origin).resolve().is_relative_to(worker.resolve()):
+        raise RuntimeError("Worker module resolved outside the selected worktree")
     sys.argv = [module, *arguments]
     runpy.run_module(module, run_name="__main__", alter_sys=True)
 '''
@@ -103,12 +128,25 @@ def install_web(root: Path, primary: Path) -> int:
                            str(primary / "others/cache/pnpm-store")], cwd=root).returncode
 
 
+def worker(root: Path, primary: Path, module: str, arguments: list[str]) -> int:
+    require_compatible(root, primary, WORKER_INPUTS)
+    interpreter = primary / "others/ai_worker/.venv/Scripts/python.exe"
+    if not interpreter.is_file():
+        raise RuntimeError("A must prepare the separate speech worker environment first")
+    return subprocess.run([str(interpreter), "-c", WORKER_BOOTSTRAP, str(root), str(primary),
+                           module, *arguments], cwd=root).returncode
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("status")
     commands.add_parser("probe", help="Verify the shared interpreter imports this worktree, without displaying secrets")
     commands.add_parser("install-web", help="Offline hardlink installation using A's existing cache")
+    commands.add_parser("probe-worker", help="Inspect the separate shared worker environment")
+    ai = commands.add_parser("worker", help="Run a worker module from this checkout in the shared worker environment")
+    ai.add_argument("module")
+    ai.add_argument("arguments", nargs=argparse.REMAINDER)
     run = commands.add_parser("backend", help="Run a Python module using A's environment and this tree's code")
     run.add_argument("module", help="e.g. pytest, uvicorn or ruff")
     run.add_argument("arguments", nargs=argparse.REMAINDER)
@@ -120,6 +158,7 @@ def main() -> int:
             print(json.dumps({"worktree": str(root), "shared_root": str(primary),
                 "backend_inputs_match": not different_inputs(root, primary, BACKEND_INPUTS),
                 "web_inputs_match": not different_inputs(root, primary, WEB_INPUTS),
+                "worker_inputs_match": not different_inputs(root, primary, WORKER_INPUTS),
                 "shared_config_present": (primary / ".env").is_file(),
                 "local_settings_present": (primary / "others/config/local.json").is_file(),
                 "demo_accounts_present": (primary / "others/runtime/demo-accounts.json").is_file(),
@@ -127,6 +166,9 @@ def main() -> int:
             return 0
         if args.command == "install-web":
             return install_web(root, primary)
+        if args.command in {"worker", "probe-worker"}:
+            return worker(root, primary, "__probe__" if args.command == "probe-worker" else args.module,
+                          [] if args.command == "probe-worker" else args.arguments)
         return backend(root, primary, "__probe__" if args.command == "probe" else args.module,
                        [] if args.command == "probe" else args.arguments)
     except KeyboardInterrupt:

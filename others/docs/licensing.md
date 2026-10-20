@@ -1,6 +1,6 @@
 # 开源与素材要求
 
-用户允许按适用开源条款交付组件。A1 已导入固定 FastAPI 模板的基础代码及 Electron/Capacitor 依赖；来源与适配见 upstream.md。未引入推理库或模型权重。
+用户允许按适用条款交付组件。A1固定FastAPI模板及Electron/Capacitor来源见upstream.md；A0新增精确React Router、cryptography及独立sherpa-onnx/core CPU语音运行时，锁文件及others/licenses归档许可。模型权重只在忽略缓存，不进入Git或客户端。
 
 others/licenses 保存模板 MIT 原文、实际前端运行依赖的许可文本与版本来源清单；运行 `node others/scripts/licenses.mjs` 从已安装依赖更新。文本随网页 dist/licenses、Windows 资源及安卓网页资源交付。Python 完整依赖由 uv.lock 固定，安装后的发行包保留其自带 dist-info 许可。Electron 包另保留 Chromium 自带许可。
 
@@ -13,4 +13,4 @@ others/licenses 保存模板 MIT 原文、实际前端运行依赖的许可文�
 - https://github.com/SYSTRAN/faster-whisper
 - https://huggingface.co/rabahdev/fire-smoke-yolov8n
 
-上述为已讨论候选，不表示都已采用或已验证。烟火候选与引擎的 AGPL 条件须在实际引入时保留；参考 PPT 和私密内容不放进源代码包。演示视频、课程图片和题目记录来源和审核状态，不虚构指标。
+上述监控/其他ASR为讨论候选，不表示采用。当前ASR选csukuangfj/sherpa-onnx-paraformer-zh-2023-09-14固定提交，来源、Apache-2.0声明及文件哈希见../ai_worker/models.lock.json和../licenses/paraformer，实际示例识别见a0-handoff.md。python_licenses.py从锁定wheel归档cryptography、sherpa-onnx/core、numpy许可及来源；代码许可与模型许可分别记录。烟火候选与引擎AGPL条件引入时另核对；私密PPT不分发，课程图片和题目保留来源审核，不虚构指标。

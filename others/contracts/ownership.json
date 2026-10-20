@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "base_branch": "main",
   "worktree_root": "others/worktrees",
   "max_active_chats": 4,
@@ -46,7 +46,8 @@
         "web/src/routes/",
         "web/src/features/student/",
         "web/src/App.tsx",
-        "web/src/main.tsx"
+        "web/src/main.tsx",
+        "web/tests/d-learning/"
       ]
     },
     "E": {

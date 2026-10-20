@@ -1,29 +1,13 @@
 # 开工与交接
 
-## 当前交付与范围
+A1最初三端共享底座与checkpoint-1保留，历史证据见[a1-handoff](a1-handoff.md)。当前新增公共底座准备和四份阶段Goal见[a0-handoff](a0-handoff.md)，当前基线/分支与顺序见[a2-start](a2-start.md)。
 
-当前 A1 三端共享底座已通过必需验收：固定来源框架、真实 PostgreSQL、账号/授权/基础课程、共享界面、Windows与安卓均已实际运行。固定标签 a1-0.1.0、验证证据与命令见 [A1 交接报告](a1-handoff.md)。完整教学、AI、监控与正式安装器由后续模块实现。
-
-Git 远端指定为 Qian-ff/refactored-couscous；本地提交不等于推送。checkpoint-1 已上传并保留，新 B/C/D 使用 [A2 开工基线](a2-start.md)，配置和依赖按 [共享环境](shared-environment.md) 复用。a1-0.1.0 仅标记最初底座验收。
-
-## 下一步的固定顺序
-
-1. 核对 A1 交接报告与固定基线；已实现底座继续维护，不重复搭建。
-2. B–G 在各自工作区同步已发布基线，再按任务书实现；目录已存在不代表已同步。
-3. 先并行 B/C/D，连同 A 最多四个；D1 先确定三角色首页/导航和搜索入口，B/C 后端并行。接口和模型变更交 A 发布一致变更集，前端入口交 D。
-4. B/C/D 按 a2-start.md 早交契约和模块，A2 集成并接入必要的原生录音权限；E/F 在后续基线与空位可用后扩展监控/完整原生交付。
-5. 每轮检查和本地提交；三端集成后交 G 独立验证，由 A 汇总修复。
-6. 全部产品功能通过后整理比赛演示；已实现、已实测和规划分别陈述。
-
-每轮功能合并提供并验证对应一键入口，重建受影响客户端；A 按 git-workflow.md 的三个已授权节点推送：当前、B/C/D完成后的第二轮、第三轮。
-
-## 给新聊天的入口
-
-复制 others/docs/ai 中对应任务书。主工作区由 A 使用；B–G 打开各自 worktree 路径。先运行：
+固定顺序为A0→B1→C→B2联合验证→D→A2。A0发布a2-ready完整SHA并同步三树后先执行B1；以后以A每阶段真实公共集成SHA为准。任务书见[ai入口](ai/README.md)，配置和依赖按[共享环境](shared-environment.md)复用。每次接口/迁移及时交A，D唯一入口路由；不同时启动所有业务Goal。
 
 ~~~powershell
-python .\others\scripts\workflow.py status
+python .\others\scripts\workflow.py status --baseline a2-ready
 python .\others\scripts\check_preparation.py
+python .\others\scripts\shared_env.py probe
 ~~~
 
-工作区创建、提交和合并命令见 git-workflow.md。准备检查通过只证明准备文件与工具一致，不能当作产品可用的证据。
+准备检查只证明文件、归属和工具一致。业务/网页/原生/语音的已实现、实测、计划分别记录；完整搜索、题库考试、原生录音与A2包尚待后续。每轮相关检查后本地commit，不覆盖他人改动。A0不额外推送，A2重建入口/客户端及九组合真实验收后才按授权checkpoint-2，E/F后续扩展监控和正式发布，G独立验收。

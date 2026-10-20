@@ -83,6 +83,35 @@ class SharedEnvironmentTest(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Backend import resolved outside the selected worktree", result.stderr)
 
+    def test_worker_runs_selected_tree_module_with_shared_model_cache(self):
+        interpreter = ROOT / "others/ai_worker/.venv/Scripts/python.exe"
+        if not interpreter.exists():
+            self.skipTest("Separate worker environment has not been prepared")
+        for name in ("first", "second"):
+            child = self.sandbox / name
+            package = child / "others/ai_worker/speech"
+            package.mkdir(parents=True)
+            (package / "__init__.py").write_text("", encoding="utf-8")
+            (package / "binding_probe.py").write_text(
+                "import json,os; print(json.dumps({'source':__file__,'models':os.environ['LABCONNECT_MODEL_ROOT']}))",
+                encoding="utf-8")
+            result = subprocess.run([str(interpreter), "-c", shared_env.WORKER_BOOTSTRAP,
+                str(child), str(self.primary), "speech.binding_probe"], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            report = json.loads(result.stdout)
+            self.assertEqual(Path(report["source"]), package / "binding_probe.py")
+            self.assertEqual(Path(report["models"]), self.primary / "others/models")
+
+    def test_worker_rejects_module_from_the_interpreter_installation(self):
+        interpreter = ROOT / "others/ai_worker/.venv/Scripts/python.exe"
+        if not interpreter.exists():
+            self.skipTest("Separate worker environment has not been prepared")
+        (self.child / "others/ai_worker").mkdir(parents=True)
+        result = subprocess.run([str(interpreter), "-c", shared_env.WORKER_BOOTSTRAP,
+            str(self.child), str(self.primary), "json"], capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Worker module resolved outside the selected worktree", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

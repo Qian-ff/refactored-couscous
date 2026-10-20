@@ -6,7 +6,7 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：A1 三端共享技术底座验收通过。** 真实 PostgreSQL、账号/授权/基础课程、网页、Windows 测试包与安卓模拟器均已实际运行；固定交接基线 `a1-0.1.0`、命令及证据见 [A1 交接报告](others/docs/a1-handoff.md)。完整教学、语音与监控由后续模块扩展。
+**当前阶段：A0 公共执行基线准备，真实接口已升级0.2.0。** 课程目录兼容、工作身份和共享会话/配置/测试基础的检查见 [A0 交接](others/docs/a0-handoff.md)；完整课程管理、题库、考试、语音与三角色工作台按 B1→C→B2→D 接续，A2 再做最终三端验收。历史 A1 三端共享底座及标签 a1-0.1.0 保留，见 [A1 交接](others/docs/a1-handoff.md)。
 
 ## 从这里开始
 
@@ -15,6 +15,7 @@
 - [A1 状态与交接](others/docs/a1-handoff.md)：已验证证据、待完成项目和可发布基线。
 - [开工与交接](others/docs/start-here.md)：先后顺序及当前状态。
 - [A2 开工](others/docs/a2-start.md)：新 B/C/D 工作树、共同起点及分阶段集成。
+- [四份阶段 Goal](others/docs/ai/README.md)：B1、C、B2、D 完整执行目标。
 - [共用本机环境](others/docs/shared-environment.md)：复用主工作区配置、Python 依赖和下载缓存。
 - [本机环境](others/docs/environment.md)：实际工具检查、会话级 JDK/SDK 设置与未验证项。
 - [七个 AI 聊天任务](others/docs/ai/README.md)：复制对应任务书到聊天。

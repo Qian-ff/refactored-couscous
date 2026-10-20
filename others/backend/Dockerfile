@@ -6,7 +6,9 @@ RUN uv sync --frozen --no-dev --no-install-project
 COPY others/backend/app ./app
 COPY others/backend/alembic.ini ./alembic.ini
 COPY others/config/branding.json /opt/labconnect/others/config/branding.json
+COPY others/config/application.json /opt/labconnect/others/config/application.json
 COPY others/licenses/fastapi-template-MIT.txt /opt/labconnect/licenses/fastapi-template-MIT.txt
 RUN uv sync --frozen --no-dev
+ENV APP_ENV=production
 EXPOSE 8000
 CMD [".venv/bin/python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

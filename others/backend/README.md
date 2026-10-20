@@ -1,6 +1,6 @@
 # Shared backend
 
-A1 实现 FastAPI/SQLModel/Alembic/PostgreSQL 的登录、当前授权、退出、课程列表/详情/创建。完整教学业务由后续模块扩展。来源和改动见 ../docs/upstream.md，真实 API 见 ../contracts/openapi.json。
+A0在A1登录/课程切片上增加兼容CourseCatalog与当前工作身份，真实契约0.2.0；完整教学由后续模块扩展。运行状态见[a0-handoff](../docs/a0-handoff.md)，API见../contracts/openapi.json。版本唯一源../config/application.json；运行时/模型/公共迁移见契约，不另建重复目录。
 
 A 维护总入口、接口契约和数据库迁移；B 维护 core/learning，C 维护内容/助手，E 维护监控。AI worker 使用 ../ai_worker 下独立环境，A1 不安装模型。
 
@@ -21,6 +21,6 @@ Pop-Location
 
 `88888888` 仅为内置演示账号的约定。后续 B 实现正常创建/导入账号及改密功能，自建学生、教师、管理员账号各自设置密码；演示密码重置只匹配固定样例 ID，不按角色批量覆盖其他账号。
 
-权限测试：在本目录运行 `./.venv/Scripts/python.exe -m pytest -q`，使用独立本机 PostgreSQL 数据库 safelab_a1_test，每个用例回滚自己的测试行。它不使用 SQLite，不删除开发数据卷。
+权限测试从根目录用python others/scripts/shared_env.py backend pytest -q --tb=short，共享串行锁，真实独立PG测试库。根conftest.py覆盖tests与app/domains。迁移测试只创建唯一前缀临时库并清理自己的库，不清空演示卷。勿绕过共享入口并行运行同一个测试库。
 
 部署镜像从根目录运行 `docker build -f others/backend/Dockerfile -t safelab-api:0.1.0 .`；通过环境变量提供 DATABASE_URL、SECRET_KEY、APP_ENV=production、CORS_ORIGINS。迁移须先在同一版本镜像中执行。客户端发布包通过配置的服务地址访问，数据库凭据仅在服务端。

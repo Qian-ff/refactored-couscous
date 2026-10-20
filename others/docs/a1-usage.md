@@ -11,7 +11,7 @@
 | Open-Android.cmd | 自动准备后端，显示安卓模拟器并安装、打开安研通 |
 | Open-A1.cmd | 菜单：1网页、2电脑客户端、3安卓模拟器、4同时打开三端、0退出 |
 
-启动器复用健康服务；后端未就绪时启动已有 Docker Desktop、等待 PostgreSQL、执行当前版本迁移并启动 API。网页入口还会启动本机网页服务。不会自动下载依赖、构建包、重置演示密码或清空数据库。失败时窗口保留错误信息；后台服务日志在忽略的 others/reports/launcher。
+启动器仅复用本树SHA、内容指纹、契约版本均匹配的健康服务，忙端口不匹配时保留并拒绝，避免误开旧代码。后端未就绪时启动已有 Docker Desktop、等待 PostgreSQL、兼容迁移并启动 API；网页入口启动对应树页面。不会自动下载依赖、构建包、重置演示密码或清空数据库。失败保留错误；后台日志在忽略others/reports/launcher。A0改动及最终检查见[a0-handoff](a0-handoff.md)，旧A1原生包不代表A2功能已集成。
 
 网页地址为 http://127.0.0.1:5173。网页包 dist/index.html 通过 HTTP/HTTPS 服务加载，直接双击 file:// 文件会被浏览器拦截 ES 模块。日常本机体验直接用 Open-Web.cmd。
 

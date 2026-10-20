@@ -1,0 +1,13 @@
+{
+  "repository": "csukuangfj/sherpa-onnx-paraformer-zh-2023-09-14",
+  "revision": "def027084691107096b5ebba69785756d63de6c5",
+  "license": "Apache-2.0",
+  "files": {
+    "model.int8.onnx": "f36a0433bcf096bd6d6f11b80a3ac8bed110bdca632fe0d731df8d1a84475945",
+    "tokens.txt": "59aba8873a2ed1e122c25fee421e25f283b63290efbde85c1f01a853d83cb6e6",
+    "README.md": "7fa50f584c7f944ce9bf97d53e69050d92dbae745091603fa212f0edd94c7acf",
+    "download-model.py": "7aca12a6511950d7a7cb8ade0a3b267a1afd65e0b51705926171b53b69516be2",
+    "test_wavs/0.wav": "1a6bf94091d9c35e11aea5d494d05e3287b8f5c767f6de3bfd796d91b637500c",
+    "Apache-2.0.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  }
+}

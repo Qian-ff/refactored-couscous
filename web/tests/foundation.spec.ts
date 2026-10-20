@@ -1,10 +1,9 @@
 import { test, expect, type Page } from '@playwright/test'
-import fs from 'node:fs'
 import path from 'node:path'
+import { root, demoAccounts } from '../../others/scripts/web-environment.mjs'
 
-const root = path.resolve(import.meta.dirname, '../..')
-const fixtures = JSON.parse(fs.readFileSync(path.join(root, 'others/runtime/demo-accounts.json'), 'utf8'))
-const report = path.join(root, 'others/reports/a1')
+const fixtures = demoAccounts()
+const report = path.join(root, 'others/reports/a0')
 
 async function login(page: Page, username: string) {
   await page.goto('/')
