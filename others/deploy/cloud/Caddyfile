@@ -1,5 +1,6 @@
 {
 	admin off
+	default_sni {$PUBLIC_HOST}
 	servers {
 		protocols h1 h2
 	}

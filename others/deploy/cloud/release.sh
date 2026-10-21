@@ -33,7 +33,7 @@ import json, subprocess
 from pathlib import Path
 manifest = json.loads(Path('manifest.json').read_text())
 for name, image in [('api', manifest['api_image']), ('web', manifest['web_image']),
-                    ('postgres', manifest['base_images']['postgres'])]:
+                    ('postgres', manifest['image_ids']['postgres'])]:
     actual = json.loads(subprocess.check_output(['docker', 'image', 'inspect', image]))[0]
     if actual['Id'] != manifest['image_ids'][name]:
         raise SystemExit('Loaded image digest mismatch: ' + name)

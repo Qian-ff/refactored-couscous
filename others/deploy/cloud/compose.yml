@@ -1,6 +1,7 @@
 name: labconnect-cloud
 x-api: &api
   image: ${API_IMAGE:?Set API_IMAGE in release.env}
+  pull_policy: never
   env_file: /opt/labconnect/shared/api.env
   restart: unless-stopped
   read_only: true
@@ -16,6 +17,7 @@ x-api: &api
 services:
   db:
     image: ${POSTGRES_IMAGE:?Set POSTGRES_IMAGE in release.env}
+    pull_policy: never
     env_file: /opt/labconnect/shared/db.env
     restart: unless-stopped
     mem_limit: 768m
@@ -59,6 +61,7 @@ services:
     command: [.venv/bin/python, -m, app.cloud_bootstrap]
   web:
     image: ${WEB_IMAGE:?Set WEB_IMAGE in release.env}
+    pull_policy: never
     environment:
       PUBLIC_HOST: ${PUBLIC_HOST:?Set PUBLIC_HOST in shared/cloud.env}
     restart: unless-stopped

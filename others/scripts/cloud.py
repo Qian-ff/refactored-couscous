@@ -164,7 +164,8 @@ def build():
             raise RuntimeError("Docker image export failed")
     (target / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     (target / "release.env").write_text(
-        f"API_IMAGE={api_image}\nWEB_IMAGE={web_image}\nPOSTGRES_IMAGE={lock['postgres']}\n", encoding="ascii", newline="\n")
+        f"API_IMAGE={api_image}\nWEB_IMAGE={web_image}\nPOSTGRES_IMAGE={manifest['image_ids']['postgres']}\n",
+        encoding="ascii", newline="\n")
     for name in ("compose.yml", "release.sh"):
         shutil.copy2(CLOUD / name, target / name)
     names = ["images.tar.gz", "manifest.json", "release.env", "compose.yml", "release.sh"]
