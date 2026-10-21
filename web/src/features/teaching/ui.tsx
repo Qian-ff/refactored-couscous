@@ -41,6 +41,7 @@ export function useNarrowRecords() { return useSyncExternalStore(narrowSubscribe
 
 export function FilterFields({ children }: { children: ReactNode }) {
   const narrow = useNarrowRecords()
+  if (Children.count(Children.toArray(children)) === 0) return null
   return narrow ? <details className="b1-filter-options"><summary>展开筛选条件</summary><div className="b1-filter-fields">{children}</div></details> : <>{children}</>
 }
 

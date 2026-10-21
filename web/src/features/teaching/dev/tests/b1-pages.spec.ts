@@ -2,6 +2,9 @@ import path from "node:path"
 import { randomUUID } from "node:crypto"
 import { expect, test, type Page } from "@playwright/test"
 import { demoAccounts, root } from "../../../../../../others/scripts/web-environment.mjs"
+import { auditApiOrigins } from "./api-audit"
+
+auditApiOrigins()
 
 const api = process.env.LABCONNECT_API_URL || "http://127.0.0.1:8001"
 const entry = `/src/features/teaching/dev/index.html?api=${encodeURIComponent(api)}`
