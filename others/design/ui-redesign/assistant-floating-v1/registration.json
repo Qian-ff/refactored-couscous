@@ -9,9 +9,31 @@
   ],
   "registration_commit": "df29c4e0d73ecdefeafdbab47174926cc27e125b",
   "baseline_commit": "2b5907d65730ff70d07373ee22dc18cd8d4d590f",
-  "images_status": "awaiting_user_approval",
-  "approval": null,
-  "handoff_status": "not_ready",
+  "images_status": "approved",
+  "approval": {
+    "version": "UI-ASSISTANT-2026.10-v1.1",
+    "images_status": "approved",
+    "approved_commit": "7a678db1d3eee3055e0b369bb18952abf1d79676",
+    "reference_screens": 48,
+    "evidence": {
+      "source": "explicit human answer in this design chat",
+      "thread_id": "01a15e27-4a94-79f0-9a2b-37b3fcee6334",
+      "turn_id": "01a15fb5-60ae-7451-a5d5-8df427c809fd",
+      "question_item_id": "[\"request_user_input_async\",\"call_540ea4383fa7468f9f9e039e50fec5ca\",0]",
+      "answer": "批准 v1.1，继续规范与 A 交接",
+      "date": "2026-10-22",
+      "timezone": "Asia/Shanghai"
+    },
+    "edge_revision": {
+      "capsule_width": 128,
+      "hidden_width": 80,
+      "visible_width": 48,
+      "height": 56
+    },
+    "product_implementation_accepted": false,
+    "native_acceptance": false
+  },
+  "handoff_status": "ready_for_A",
   "product_code_changed": false,
   "product_implementation_allowed": false,
   "old_ui_v1_frozen_commit": "d17b342c53fc054bd298bee356143d3b3ab77af6",
@@ -20,7 +42,7 @@
     "execution_target": "xhigh",
     "observed_model": "gpt-6.1-sol",
     "observed_effort": "xhigh",
-    "observed_turn_id": "01a15fac-d83d-7562-91b0-3c8fd02c60ff",
+    "observed_turn_id": "01a15fb5-60ae-7451-a5d5-8df427c809fd",
     "verification": "current turn_context, not inferred from task text",
     "A_execution_target": "max",
     "B_to_F_execution_target": "xhigh",
@@ -34,6 +56,6 @@
     "hidden_width": 80,
     "visible_width": 48,
     "height": 56,
-    "images_status": "awaiting_user_approval"
+    "images_status_at_revision_capture": "awaiting_user_approval"
   }
 }

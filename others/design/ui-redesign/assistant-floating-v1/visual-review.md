@@ -1,3 +1,5 @@
+> 本文保留出图时记录。当前图片已批准，最终要求见[acceptance.md](acceptance.md)及[批准证据](approval.json)。
+
 # 悬浮助手候选 v1.1：图片与静态检查记录
 
 2026-10-22 · **候选未批准** · UI-ASSISTANT-2026.10-v1.1。

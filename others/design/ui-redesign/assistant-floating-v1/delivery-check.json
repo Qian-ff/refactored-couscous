@@ -1,6 +1,6 @@
 {
   "version": "UI-ASSISTANT-2026.10-v1.1",
-  "status": "revised_candidate_awaiting_user_approval",
+  "status": "approved_design_ready_for_A",
   "images": 48,
   "image_hashes_and_dimensions": "passed",
   "current_source_hashes": "passed",
@@ -24,5 +24,16 @@
   "scope": "registered design subdirectory only",
   "product_code_changed": false,
   "native_tests_performed": false,
-  "approval": null
+  "approval": "approval.json",
+  "images_status": "approved",
+  "approved_commit": "7a678db1d3eee3055e0b369bb18952abf1d79676",
+  "formal_specs": [
+    "design-spec.md",
+    "state-spec.md",
+    "platform-spec.md",
+    "functional-map.md",
+    "handoff.md",
+    "acceptance.md",
+    "tokens.json"
+  ]
 }
