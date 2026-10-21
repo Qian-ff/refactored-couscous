@@ -35,6 +35,8 @@ worker命令只接受当前树others/ai_worker内的实际模块，C交付前只
 
 所有共享pytest入口使用同一个本机专用测试库且加跨进程锁，冲突明确拒绝，稍后重试；不并行互删表，不用演示库测试。根others/backend/conftest.py覆盖tests及app/domains，领域夹具已以真实PG验证。测试命令用--tb=short避免驱动栈局部变量暴露配置；报告也不保存密钥。需要独立并行测试库先由A分配。
 
+contracts.py的OpenAPI导出复用共享解释器并显式绑定当前工作树，先核对后台依赖锁，不要求本树.venv。B合并公共0.3.0基线后可执行python others/scripts/contracts.py check；未同步时若领域源码与旧契约不一致会如实失败，不以A的导出冒充B结果。
+
 ## 端口与来源
 
 A/B/C/D前端分别5173/5174/5175/5176，Vite按分支选择、strictPort。D通常连接A的8000 API；B/C分支API可选空闲8001等并先协调迁移，不能拿A已发布服务冒称分支新接口。

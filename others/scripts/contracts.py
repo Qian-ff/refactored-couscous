@@ -10,15 +10,19 @@ import shutil
 import subprocess
 import tempfile
 
+from shared_env import BACKEND_INPUTS, BOOTSTRAP, require_compatible
+from workflow import primary_root
+
 ROOT = Path(__file__).resolve().parents[2]
-BACKEND = ROOT / "others/backend"
-PYTHON = BACKEND / (".venv/Scripts/python.exe" if os.name == "nt" else ".venv/bin/python")
 SCHEMA = ROOT / "others/contracts/openapi.json"
 
 
 def export_schema() -> str:
-    process = subprocess.run([str(PYTHON), "-c", "import json; from app.main import app; print(json.dumps(app.openapi(), ensure_ascii=True))"],
-                             cwd=BACKEND, capture_output=True, text=True, encoding="utf-8", check=True)
+    primary = primary_root(ROOT)
+    require_compatible(ROOT, primary, BACKEND_INPUTS)
+    interpreter = primary / "others/backend" / (".venv/Scripts/python.exe" if os.name == "nt" else ".venv/bin/python")
+    process = subprocess.run([str(interpreter), "-c", BOOTSTRAP, str(ROOT), str(primary), "__openapi__"],
+                             cwd=ROOT, capture_output=True, text=True, encoding="utf-8", check=True)
     return json.dumps(json.loads(process.stdout), ensure_ascii=False, sort_keys=True, indent=2) + "\n"
 
 

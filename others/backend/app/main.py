@@ -1,6 +1,10 @@
 """FastAPI template application/operation-ID pattern; frontend served independently."""
 from fastapi import FastAPI
+from fastapi.exceptions import RequestValidationError
+from fastapi.encoders import jsonable_encoder
 from fastapi.routing import APIRoute
+from alembic.config import Config
+from alembic.script import ScriptDirectory
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError, TimeoutError as DatabaseTimeout
 from starlette.responses import JSONResponse
@@ -8,8 +12,11 @@ from starlette.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.db import engine
-from app.core.release import BUILD, VERSION
+from app.core.release import BUILD, ROOT, VERSION
 from app.domains.core.routes import router
+from app.domains.core.class_routes import router as class_router
+from app.domains.core.import_routes import router as import_router
+from app.domains.core.management_routes import router as management_router
 
 
 def custom_generate_unique_id(route: APIRoute) -> str:
@@ -22,6 +29,18 @@ app.add_middleware(CORSMiddleware, allow_origins=settings.CORS_ORIGINS.split(","
                    allow_credentials=True, allow_methods=["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE"],
                    allow_headers=["Authorization", "Content-Type", "X-Work-Role", "Idempotency-Key", "If-Match"])
 app.include_router(router, prefix="/api/v1")
+app.include_router(management_router, prefix="/api/v1")
+app.include_router(class_router, prefix="/api/v1")
+app.include_router(import_router, prefix="/api/v1")
+MIGRATION_HEAD = ScriptDirectory.from_config(Config(str(ROOT / "others/backend/alembic.ini"))).get_current_head()
+
+
+@app.exception_handler(RequestValidationError)
+async def invalid_request(_request, exception):
+    # Pydantic's raw errors may include passwords or a whole CSV in input/context.
+    details = [{key: value for key, value in error.items() if key in {"type", "loc", "msg"}}
+               for error in exception.errors()]
+    return JSONResponse(status_code=422, content={"detail": jsonable_encoder(details)})
 
 
 @app.exception_handler(OperationalError)
@@ -34,7 +53,11 @@ async def database_unavailable(_request, _exception):
 def health() -> dict[str, str]:
     with engine.connect() as connection:
         connection.execute(text("SELECT 1"))
-    return {"status": "ok", "database": "postgresql", "contract": VERSION}
+        exists = connection.execute(text("SELECT to_regclass('public.alembic_version')")).scalar_one()
+        installed = connection.execute(text("SELECT version_num FROM alembic_version")).scalar_one_or_none() if exists else None
+    if installed != MIGRATION_HEAD:
+        return JSONResponse(status_code=503, content={"detail": "数据库版本未就绪，请先完成迁移"})
+    return {"status": "ok", "database": "postgresql", "contract": VERSION, "migration": installed}
 
 
 if settings.APP_ENV != "production":

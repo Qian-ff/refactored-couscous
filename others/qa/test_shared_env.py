@@ -62,9 +62,15 @@ class SharedEnvironmentTest(unittest.TestCase):
                                str(child), str(self.primary), "__probe__"],
                               capture_output=True, text=True, encoding="utf-8")
 
+    def fixture_configuration(self, directory: Path, content: str):
+        target = (directory / ".env").resolve()
+        assert self.sandbox.is_relative_to((ROOT / "others/.tmp").resolve())
+        assert target.is_relative_to(self.sandbox) and target != (ROOT / ".env").resolve()
+        target.write_text(content, encoding="utf-8")
+
     def test_shared_interpreter_selects_each_checkout_and_keeps_secrets_out_of_report(self):
         secret = "fixture-secret-must-not-appear"
-        (self.primary / ".env").write_text("DATABASE_URL=fixture\nSECRET_KEY=" + secret, encoding="utf-8")
+        self.fixture_configuration(self.primary, "DATABASE_URL=fixture\nSECRET_KEY=" + secret)
         for name in ("first", "second"):
             child = self.sandbox / name
             package = child / "others/backend/app"
@@ -82,6 +88,27 @@ class SharedEnvironmentTest(unittest.TestCase):
         result = self.bootstrap(self.child)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("Backend import resolved outside the selected worktree", result.stderr)
+
+    def test_schema_export_uses_selected_tree_even_with_shared_interpreter(self):
+        interpreter = ROOT / "others/backend/.venv/Scripts/python.exe"
+        if not interpreter.exists():
+            self.skipTest("Shared backend is not configured")
+        fixture_shared = self.sandbox / "schema-fixture-only"
+        fixture_shared.mkdir()
+        self.fixture_configuration(fixture_shared, "DATABASE_URL=fixture\nSECRET_KEY=private-fixture")
+        for name in ("first", "second"):
+            child = self.sandbox / (name + "-schema")
+            package = child / "others/backend/app"
+            package.mkdir(parents=True)
+            (package / "__init__.py").write_text("", encoding="utf-8")
+            (package / "main.py").write_text(
+                "from types import SimpleNamespace\napp=SimpleNamespace(openapi=lambda: "
+                + repr({"info":{"version":name}}) + ")\n", encoding="utf-8")
+            result = subprocess.run([str(interpreter),"-c",shared_env.BOOTSTRAP,
+                str(child),str(fixture_shared),"__openapi__"], capture_output=True,text=True,encoding="utf-8")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(json.loads(result.stdout)["info"]["version"], name)
+            self.assertNotIn("private-fixture", result.stdout)
 
     def test_worker_runs_selected_tree_module_with_shared_model_cache(self):
         interpreter = ROOT / "others/ai_worker/.venv/Scripts/python.exe"
