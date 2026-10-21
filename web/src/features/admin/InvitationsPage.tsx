@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import { ManagementService, type InvitationCreate, type InvitationIssued } from "../../client"
 import type { PageProps } from "../../lib/extensions"
-import { Button, ActionFeedback, Badge, BusinessPage, commandHeaders, Empty, Field, formatTime, futureLocalDate, input, Loading, Notice, Pager, Section, SessionPage, useBusinessAction, useBusinessQuery, utcDate } from "../teaching/ui"
+import { CopyCode, BusinessRecords, Button, ActionFeedback, Badge, BusinessPage, commandHeaders, Empty, Field, formatTime, futureLocalDate, input, Loading, Notice, Pager, Section, SessionPage, useBusinessAction, useBusinessQuery, utcDate } from "../teaching/ui"
 import { Options } from "./forms"
 import { useOrganizationChoices } from "./scope"
 
@@ -32,14 +32,14 @@ function InvitationsBody(page: PageProps) {
         <Field label="有效期至（本机时区）"><input name="expires_at" type="datetime-local" required defaultValue={futureLocalDate()} /></Field>
         <div className="b1-actions"><Button type="submit"  disabled={action.pending || !choices.collegeId}>{action.pending ? "正在生成…" : "生成学生账号邀请"}</Button></div>
       </form>
-      {issued && <Notice kind="success"><strong>本次生成的邀请码</strong><code className="b1-code">{issued.code}</code><span>学校代码：{choices.schools.data?.data.find(value => value.id === issued.school_id)?.code ?? "请使用本校登录代码"}；有效期至 {formatTime(issued.expires_at)}。请交给对应学生，完整注册入口由学习端接入。</span></Notice>}
+      {issued && <Notice kind="success"><strong>本次生成的邀请码</strong><code className="b1-code">{issued.code}</code><CopyCode value={issued.code} /><span>学校代码：{choices.schools.data?.data.find(value => value.id === issued.school_id)?.code ?? "请使用本校登录代码"}；有效期至 {formatTime(issued.expires_at)}。请交给对应学生，完整注册入口由学习端接入。</span></Notice>}
     </Section>
     <Section title="授权范围内的邀请" description="列表不返回邀请码明文；需要新邀请时重新生成，可随时撤销未使用的邀请。">
       {rows.loading ? <Loading /> : rows.error ? <Notice kind="error" retry={rows.reload}>{rows.error}</Notice> : rows.data?.count === 0 ? <Empty>尚未创建账号邀请。</Empty> : rows.data && <>
-        <div className="b1-table-wrap"><table className="b1-table"><thead><tr><th>学院 / 专业</th><th>使用情况</th><th>有效期</th><th>状态与操作</th></tr></thead><tbody>{rows.data.data.map(row => <tr key={row.id}><td>{choices.colleges.data?.data.find(value => value.id === row.college_id)?.name ?? "已授权学院"}<small>{row.major_id ? "已限定专业" : "学生选择学院内专业"}</small></td><td>{row.used_count} / {row.max_uses}</td><td>{formatTime(row.expires_at)}</td><td><Badge muted={row.revoked || row.used_count >= row.max_uses || utcDate(row.expires_at).getTime() <= Date.now()}>{row.revoked ? "已撤销" : row.used_count >= row.max_uses ? "次数已满" : utcDate(row.expires_at).getTime() <= Date.now() ? "已到期" : "有效"}</Badge><Button variant="danger" type="button" disabled={action.pending || row.revoked} onClick={() => {
+        <BusinessRecords items={rows.data.data} itemKey={row => String(row.id)} titleLabel="学院 / 专业" title={row => <>{choices.colleges.data?.data.find(value => value.id === row.college_id)?.name ?? "已授权学院"}<small>{row.major_id ? "已限定专业" : "学生选择学院内专业"}</small></>} fields={[{ label: "使用情况", value: row => <>{row.used_count} / {row.max_uses}</> }, { label: "有效期", value: row => <>{formatTime(row.expires_at)}</> }]} actionLabel="状态与操作" actions={row => <><Badge muted={row.revoked || row.used_count >= row.max_uses || utcDate(row.expires_at).getTime() <= Date.now()}>{row.revoked ? "已撤销" : row.used_count >= row.max_uses ? "次数已满" : utcDate(row.expires_at).getTime() <= Date.now() ? "已到期" : "有效"}</Badge><Button variant="danger" type="button" disabled={action.pending || row.revoked} onClick={() => {
           void action.run(async key => (await ManagementService.revokeInvitation({ path: { invitation_id: row.id }, headers: commandHeaders(key) })).data,
             () => { if (issued?.id === row.id) setIssued(null); rows.reload() }, "邀请已撤销", JSON.stringify(["invitation-revoke", row.id]))
-        }}>撤销邀请</Button></td></tr>)}</tbody></table></div><Pager offset={offset} count={rows.data.count} change={setOffset} />
+        }}>撤销邀请</Button></>} /><Pager offset={offset} count={rows.data.count} change={setOffset} />
       </>}
     </Section>
   </BusinessPage>

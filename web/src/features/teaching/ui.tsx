@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react"
+import { Children, useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react"
 import axios from "axios"
 import { isStaleRequest, message, sessionSnapshot, subscribeSession, type SessionSnapshot } from "../../lib/api"
 import type { PageProps } from "../../lib/extensions"
@@ -20,12 +20,13 @@ export function BusinessPage({ page, title, description, children }: { page: Pag
   return <div className="b1-ui"><PageContainer title={title} description={description}>{children}</PageContainer></div>
 }
 
-export function Section({ title, description, actions, children }: { title: string; description?: string; actions?: ReactNode; children: ReactNode }) {
-  return <Panel title={title} actions={actions}>{description && <p className="b1-description">{description}</p>}{children}</Panel>
+export function Section({ title, description, actions, children, id }: { title: string; description?: string; actions?: ReactNode; children: ReactNode; id?: string }) {
+  const panel = <Panel title={title} actions={actions}>{description && <p className="b1-description">{description}</p>}{children}</Panel>
+  return id ? <div id={id} className="b1-section-anchor">{panel}</div> : panel
 }
 
 export const Notice = PublicNotice
-export function Empty({ children }: { children: ReactNode }) { return <StatePanel kind="empty" description={typeof children === "string" ? children : undefined} /> }
+export function Empty({ children }: { children: ReactNode }) { return <StatePanel kind="empty" description={Children.toArray(children).map(child => typeof child === "string" || typeof child === "number" ? String(child) : "").join("")} /> }
 export function Loading() { return <StatePanel kind="loading" title="正在读取授权范围内的数据…" /> }
 export function Badge({ children, muted = false }: { children: ReactNode; muted?: boolean }) {
   return <span className={`b1-badge ${muted ? "b1-badge-muted" : ""}`}>{children}</span>
@@ -38,13 +39,18 @@ const narrowQuery = () => window.matchMedia("(max-width: 700px)")
 const narrowSubscribe = (notify: () => void) => { const query = narrowQuery(); query.addEventListener("change", notify); return () => query.removeEventListener("change", notify) }
 export function useNarrowRecords() { return useSyncExternalStore(narrowSubscribe, () => narrowQuery().matches, () => false) }
 
+export function FilterFields({ children }: { children: ReactNode }) {
+  const narrow = useNarrowRecords()
+  return narrow ? <details className="b1-filter-options"><summary>展开筛选条件</summary><div className="b1-filter-fields">{children}</div></details> : <>{children}</>
+}
+
 /** Domain column mapping: semantic table on desktop, D RecordList on mobile. */
 export function BusinessRecords<T>({ items, itemKey, title, fields, actions, titleLabel = "名称", actionLabel = "操作" }: {
   items: readonly T[]; itemKey: (item: T) => string; title: (item: T) => ReactNode;
   fields: readonly { label: string; value: (item: T) => ReactNode }[]; actions?: (item: T) => ReactNode; titleLabel?: string; actionLabel?: string
 }) {
   const narrow = useNarrowRecords()
-  if (narrow) return <RecordList items={items} itemKey={itemKey} title={title} fields={fields} actions={actions} />
+  if (narrow) return <RecordList items={items} itemKey={itemKey} title={item => <span className="b1-record-title">{title(item)}</span>} fields={fields} actions={actions} />
   return <div className="b1-table-wrap"><table className="b1-table"><thead><tr><th>{titleLabel}</th>{fields.map(field => <th key={field.label}>{field.label}</th>)}{actions && <th>{actionLabel}</th>}</tr></thead>
     <tbody>{items.map(item => <tr key={itemKey(item)}><td>{title(item)}</td>{fields.map(field => <td key={field.label}>{field.value(item)}</td>)}{actions && <td><div className="b1-actions">{actions(item)}</div></td>}</tr>)}</tbody></table></div>
 }
@@ -57,6 +63,25 @@ export function EditorDialog({ title, children, onClose, pending = false, savedV
   return <><Dialog title={title} long busy={pending} onClose={() => { if (dirty) setDiscard(true); else onClose() }}>
     <div className="b1-editor-body" onInputCapture={() => setDirty(true)} onChangeCapture={() => setDirty(true)}>{children}</div>
   </Dialog>{discard && <Dialog title="放弃未保存的修改？" onClose={() => setDiscard(false)} busy={pending}><p>当前输入尚未保存。若操作结果尚未确认，请返回原表单先用原请求重试。</p><div className="b1-actions"><Button variant="secondary" onClick={() => setDiscard(false)}>继续编辑</Button><Button variant="danger" onClick={onClose}>放弃并关闭</Button></div></Dialog>}</>
+}
+
+export type ConfirmationCommand = { title: string; description: string; action: () => Promise<unknown> }
+export function ConfirmCommand({ command, onClose, action }: { command: ConfirmationCommand | null; onClose: () => void; action: { pending: boolean; error: string; success: string } }) {
+  if (!command) return null
+  return <Dialog title={command.title} busy={action.pending} onClose={onClose}><p>{command.description}</p><ActionFeedback action={action} />
+    {action.error && <Notice kind="warning">结果尚未确认时，请使用当前请求重试。关闭此窗口不会撤销已经送达服务器的操作。</Notice>}
+    <div className="b1-actions"><Button variant="secondary" disabled={action.pending} onClick={onClose}>取消</Button><Button variant="danger" pending={action.pending} onClick={async () => { const result = await command.action(); if (result !== undefined) onClose() }}>确认{command.title}</Button></div>
+  </Dialog>
+}
+
+export function CopyCode({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false)
+  const [error, setError] = useState(false)
+  useEffect(() => { setCopied(false); setError(false) }, [value])
+  return <><Button variant="secondary" onClick={async () => {
+    setCopied(false); setError(false)
+    try { await navigator.clipboard.writeText(value); setCopied(true) } catch { setError(true) }
+  }}>{copied ? "已复制邀请码" : "复制邀请码"}</Button>{error && <Notice kind="error">无法复制，请选择邀请码并手动复制。</Notice>}</>
 }
 
 /** Both the global session generation and same-session query order are checked. */
