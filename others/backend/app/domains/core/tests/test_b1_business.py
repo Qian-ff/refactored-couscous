@@ -200,6 +200,10 @@ def test_collaborator_can_change_roster_but_cannot_transfer_or_archive(client, a
     added = command(client, "post", f"/courses/{course_id}/staff", teacher,
                     {"revision": state["revision"], "teacher_id": str(fixture_id("user-teacher_eng"))})
     assert added.status_code == 200
+    assert client.get(f"/api/v1/courses/{course_id}/teacher-options?q=teacher", headers=collaborator).status_code == 403
+    options = client.get(f"/api/v1/courses/{course_id}/teacher-options?q=teacher_eng", headers=teacher).json()
+    assert options["count"] == 1
+    assert set(options["data"][0]) == {"id", "username", "display_name", "college_id"}
     assert command(client, "post", f"/courses/{course_id}/members", collaborator, {"username": "student"}).status_code == 200
     assert command(client, "post", f"/courses/{course_id}/archive", collaborator, {"revision": added.json()["revision"]}).status_code == 403
     assert command(client, "post", f"/courses/{course_id}/transfer", collaborator,

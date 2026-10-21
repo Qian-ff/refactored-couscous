@@ -9,11 +9,11 @@ from app.domains.core.auth import CurrentIdentity, Db
 from app.domains.core.business_schemas import (
     CatalogInput, CatalogPatch, CatalogView, ClassManagementView, CommandKey, CourseSettings,
     EnrollmentResult, InviteInput, JoinCodeIssued, JoinInput, MemberInput, MemberView, Page,
-    RequestDecision, RequestView, RevisionInput, StaffInput, StaffView,
+    RequestDecision, RequestView, RevisionInput, StaffInput, StaffView, TeacherOption,
 )
 from app.domains.core.commands import check_revision, code_hash, execute_command, issued_code, touch
 from app.domains.core.management_routes import keyword, page
-from app.domains.core.models import College, Course, CourseCatalog, CourseStaff, Enrollment, EnrollmentRequest, Role, User
+from app.domains.core.models import College, Course, CourseCatalog, CourseStaff, Enrollment, EnrollmentRequest, Role, RoleGrant, User
 from app.domains.core.policy import (
     can_manage_class, require, require_active_organization, require_catalog,
     require_class, require_student, require_teacher, school_manager, visible_catalog_query,
@@ -207,6 +207,16 @@ def add_staff(course_id: UUID, body: StaffInput, identity: CurrentIdentity, db: 
         return management_view(db, identity, record)
     return execute_command(db, identity, class_scope(db, course_id), f"courses.staff.add.{course_id}", key,
                            body.model_dump(), action, authorize)
+
+
+@router.get("/courses/{course_id}/teacher-options", response_model=Page[TeacherOption])
+def teacher_options(course_id: UUID, identity: CurrentIdentity, db: Db, q: str = Query(min_length=2, max_length=100),
+                    offset: int = Query(default=0, ge=0), limit: int = Query(default=10, ge=1, le=20)):
+    course = require_class(db, identity, course_id, primary=True, write=True)
+    query = select(User).where(User.school_id == course.school_id, User.is_active.is_(True),
+        User.id.in_(select(RoleGrant.user_id).where(RoleGrant.role == Role.TEACHER)),
+        or_(User.username.ilike(keyword(q)), User.display_name.ilike(keyword(q)))).order_by(User.username, User.id)
+    return page(db, query, offset, limit)
 
 
 @router.post("/courses/{course_id}/remove-staff", response_model=ClassManagementView)

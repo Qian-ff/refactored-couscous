@@ -225,6 +225,13 @@ class StaffView(BaseModel):
     is_active: bool
 
 
+class TeacherOption(BaseModel):
+    id: UUID
+    username: str
+    display_name: str
+    college_id: UUID | None
+
+
 class RequestView(BaseModel):
     id: UUID
     course_id: UUID
