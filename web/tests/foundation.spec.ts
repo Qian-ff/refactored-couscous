@@ -1,9 +1,9 @@
 import { test, expect, type Page } from '@playwright/test'
 import path from 'node:path'
-import { root, demoAccounts } from '../../others/scripts/web-environment.mjs'
+import { reportDirectory, demoAccounts } from '../../others/scripts/web-environment.mjs'
 
 const fixtures = demoAccounts()
-const report = path.join(root, 'others/reports/a0')
+const report = reportDirectory
 
 async function login(page: Page, username: string) {
   await page.goto('/')

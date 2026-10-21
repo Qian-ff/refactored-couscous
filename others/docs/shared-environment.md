@@ -49,6 +49,8 @@ pnpm run test:web
 
 Playwright从common-root读合成账号；globalSetup检查网页为本树、API默认主树，各自SHA/树哈希/源码内容指纹/契约必须匹配。其他真实API可设置LABCONNECT_API_ROOT和LABCONNECT_API_URL，额外前端端口LABCONNECT_WEB_PORT须先由A配置CORS并检查。不能只因端口响应或标题相同复用。元信息捕获于启动；提交/代码改变后旧服务可能失效，先核对并重启自己拥有的服务，不停别人的进程。正式包只记录SHA/指纹/契约，无本机路径；API生产环境不挂dev/identity。
 
+浏览器验收可设置LABCONNECT_REPORT_STAGE=b1-public等阶段名称，将报告和截图保存到当前树others/reports/对应阶段，避免覆盖历史证据；不设置仍写a0。名称只允许字母、数字、下划线和连字符，不接受路径。
+
 启动网页使用原Open-Web.cmd或Start-A1.ps1 -Target Web。它检查API/网页归属，遇忙端口且版本不匹配会保留服务并拒绝。主树迁移从共享入口运行，不偷偷重置账号或数据库。各树共用演示数据会互相可见，只用合成账号。
 
 ## A维护与重新建立
