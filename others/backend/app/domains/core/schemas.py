@@ -42,6 +42,12 @@ class UserPublic(BaseModel):
     available_work_roles: list[Literal["student", "teacher", "administrator"]]
     active_work_role: Literal["student", "teacher", "administrator"] | None
     effective_grants: list[GrantPublic]
+    student_no: str | None = None
+    major_id: UUID | None = None
+    gender: str | None = None
+    contact: str | None = None
+    must_change_password: bool = False
+    revision: int = 1
 
 
 class CourseCreate(BaseModel):
@@ -49,6 +55,7 @@ class CourseCreate(BaseModel):
     teacher_id: UUID
     code: str = Field(min_length=1, max_length=40, pattern=r"^[A-Za-z0-9_-]+$")
     title: str = Field(min_length=1, max_length=120)
+    catalog_id: UUID | None = None
 
 
 class CoursePublic(BaseModel):

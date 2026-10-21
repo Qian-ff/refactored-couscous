@@ -68,3 +68,11 @@ A 负责实际 Alembic 迁移及新模型集中导出。为现有字段采用保
 按 a2-protocols 在 B 目录内建开发渲染夹具与独立 Playwright 配置，复用公共来源检查与真实API；不改公共路由/测试配置，测试1440/390布局及真实创建/变更/失败。页面仅在A真实SDK发布后消费。
 
 测试覆盖真实PG、角色族并发、唯一主教师交接、密码/会话、CSV失败回滚/并发冲突/幂等、双班/跨校/跨院/撤权权限及计数。A0既有回归必须继续通过。B1完成不是B2或A2完成。
+
+## A 审查结论落实（2026-10-21）
+
+A 已确认可继续B1，并要求：改密不阻断/auth/me；事务内不用会提交的身份解析；停用/撤销在用主教师前先交接；重放先鉴权；保留platform代码；给C提供SQL范围与单资源校验；B2占位不发布HTTP/SDK。
+
+据此上表中的两条 `/learning/*` 接口提案撤回：仅保留内部availability协议及本人历史授权服务，B2实现真实状态/记录后再发布HTTP。新组织对象也有revision；所有组织编辑按revision校验。学生邀请具备受邀请码保护的组织/专业上下文读取。课程及账号邀请码只保存散列，授权重试时从服务端HMAC重建返回值，不保存明文回执。
+
+首批领域实现导出三个独立router：core.management_routes.router、core.class_routes.router、core.import_routes.router。A负责在app/main.py挂载到/api/v1并统一生成SDK，B未修改公共挂载。
