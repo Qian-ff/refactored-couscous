@@ -1,13 +1,13 @@
 # AI 聊天分工与阶段Goal
 
-唯一A负责集成，最多四聊天并行容量。B1已完成；当前先完成网页图片批准、规范冻结、D牵头既有UI改版和A验收，再进入C/B2。完整顺序以[阶段入口](../a2-start.md)为准，容量不意味着同时启动全部角色。
+唯一A负责集成，最多四聊天并行容量。B1已完成；UI网页批准与冻结设计已接收，当前[D-UI执行](../ui-redesign-execution.md)由原D先做公共组件，再由B迁移所属展示层、F配合原生，A验收后才进入C/B2。完整顺序以[阶段入口](../a2-start.md)为准，容量不意味着同时启动全部角色。
 
 | 角色 | 任务与完整可复制Goal | 分支 |
 |---|---|---|
 | A | [公共底座及集成](A-integration.md) | main |
-| B | [B1、C后B2两份Goal](B-core.md) | codex/b-core-a2 |
+| B | [B-UI配合、历史B1及后续B2 Goal](B-core.md) | codex/b-core-a2 |
 | C | [内容题库与助手Goal](C-content-ai.md) | codex/c-content-ai-a2 |
-| D | [批准后D-UI及C/B2后的完整D Goal](D-learning-ui.md) | codex/d-learning-ui-a2 |
+| D | [当前D-UI及C/B2后的完整D Goal](D-learning-ui.md) | codex/d-learning-ui-a2 |
 | E | [完整监控](E-monitoring.md) | task/monitoring |
 | F | [原生适配与发布](F-clients.md) | task/clients |
 | G | [独立验收](G-qa.md) | task/qa |

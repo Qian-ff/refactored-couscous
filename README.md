@@ -6,18 +6,19 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：B1 已集成，真实契约0.3.1；独立设计支线的网页候选等待用户批准。** 先完成既有UI改版并经A验收，再进入C；当前顺序及门禁见 [UI改版协作](others/docs/ui-redesign-coordination.md) 与 [阶段入口](others/docs/a2-start.md)。[B1集成交接](others/docs/b1-handoff.md)、历史 [A0基线](others/docs/a0-handoff.md) / a2-ready 与 [A1交接](others/docs/a1-handoff.md) 保留；本次图片不代表产品已改版或三端已验收。
+**当前阶段：UI v1 网页方向已获用户批准，冻结设计已接收；进入D-UI公共组件与既有界面迁移。** 真实契约仍为0.3.1；D/B/F按[执行交接](others/docs/ui-redesign-execution.md)接续，既有UI经A验收后再进入C/B2。[B1集成交接](others/docs/b1-handoff.md)、历史 [A0基线](others/docs/a0-handoff.md) / a2-ready 与 [A1交接](others/docs/a1-handoff.md) 保留；设计交付不表示产品已改版或三端已验收。
 
 ## 从这里开始
 
 - [A1 使用与一键打开](others/docs/a1-usage.md)：双击 Open-Web.cmd、Open-Windows.cmd、Open-Android.cmd，或 Open-A1.cmd 选择三端；包含登录和课程同步体验流程。
 - [B1 阶段验收](others/docs/b1-handoff.md)：Open-B1.cmd 打开内部业务组件预览；Open-B1-API.cmd 打开真实后端联调入口。正式导航由 D 接入。
-- [UI改版协作与批准](others/docs/ui-redesign-coordination.md)：设计任务登记、网页候选状态、原D/B/F迁移分工和后续frontend-design规则。
+- [D-UI执行交接](others/docs/ui-redesign-execution.md)：已批准桌面与冻结SHA、D/B/F唯一文件分工、公共组件先行和C/B2验收门禁。
+- [UI网页图册](others/design/ui-redesign/index.html)、[390px移动图册](others/design/ui-redesign/mobile-gallery.html)：已接收的设计参考，非产品运行证据；持续规则见[UI改版协作](others/docs/ui-redesign-coordination.md)。
 - [设计基线](others/docs/design.md)：本聊天确认的功能、范围、数据和视觉要求。
 - [A1 状态与交接](others/docs/a1-handoff.md)：已验证证据、待完成项目和可发布基线。
 - [开工与交接](others/docs/start-here.md)：先后顺序及当前状态。
 - [A2 开工](others/docs/a2-start.md)：新 B/C/D 工作树、共同起点及分阶段集成。
-- [阶段Goal](others/docs/ai/README.md)：已交付B1、待批准后执行的D-UI，以及后续C/B2/完整D目标。
+- [阶段Goal](others/docs/ai/README.md)：已交付B1、当前D-UI和依赖公共组件的B-UI，以及后续C/B2/完整D目标。
 - [共用本机环境](others/docs/shared-environment.md)：复用主工作区配置、Python 依赖和下载缓存。
 - [本机环境](others/docs/environment.md)：实际工具检查、会话级 JDK/SDK 设置与未验证项。
 - [七个 AI 聊天任务](others/docs/ai/README.md)：复制对应任务书到聊天。

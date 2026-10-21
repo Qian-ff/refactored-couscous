@@ -1,0 +1,612 @@
+{
+  "version": "UI-2026.10-v1",
+  "rendered_at": "2026-10-21T12:55:52.513Z",
+  "width": 390,
+  "viewport_height": 844,
+  "browser": "155.0.4283.62",
+  "desktop_approval": {
+    "version": "UI-2026.10-v1",
+    "desktop_status": "approved",
+    "desktop_commit": "b67ad77cd49c2b5f99d2037e5828c29433ea66a6",
+    "evidence": {
+      "source": "explicit human answer in design chat",
+      "question_item_id": "[\"request_user_input_async\",\"call_a05aa6522036453eacd29a12596a67d1\",0]",
+      "answer": "批准 v1，继续移动稿与规范",
+      "date": "2026-10-21"
+    },
+    "authorized_next_step": "complete 390px references, freeze specifications, hand off to A and original D",
+    "production_migration_performed_in_design_chat": false
+  },
+  "frozen_desktop": {
+    "desktop_commit": "b67ad77cd49c2b5f99d2037e5828c29433ea66a6",
+    "desktop_images": 55,
+    "approved_sources_unchanged": true,
+    "approved_images_unchanged": true
+  },
+  "input_sha256": {
+    "mobile.html": "f5f7948da0b2d2b12911c18a63b02b92c61f6ad2eb8c0ab419e6b4a05b65d5a0",
+    "mobile.css": "701cdcb604391b4c9df9d35970254e04e93c11184a05132b4800b7aa66aff347",
+    "mobile.js": "a362ec0d7619fca6ec2fcfe004babdde7f0ba85371d6b065b14b819c0e0c165b",
+    "prototype.html": "e623a6ddc4d5f514f22c8bba5e6bef54b08d66e7c4e225224b7be0e3ebdc8dd7",
+    "prototype.css": "e3cf4067c83fd9df766af81fedeb402d8818db6c90434bb117d83b6359290c5d",
+    "prototype.js": "7ea93c23535c3b1457858dea5d022d9ad688d67fce4a8f2dc749b2fb4a970c3f",
+    "assets/fonts/NotoSansSC-VF.ttf": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+    "assets/fonts/source.json": "c12755c2d9ef78ebefaaad058fd8e3c58819acfd09a2c9058f8cc56130024627",
+    "render-mobile.cjs": "3e8f22c0658fb259b6ea50f1d4fa2eb999f189927ae3e5800a57f3f5bd4165c6"
+  },
+  "input_fingerprint": "cdbfba922bed05a013a35eed13211b9965f171a18a73396d292e44e4b966a5f9",
+  "screens": [
+    {
+      "id": "m-login",
+      "title": "登录",
+      "screen": "login",
+      "mode": "",
+      "role": "公共入口",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 859,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 859,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-login.png",
+      "sha256": "df3cfdbac50b3ebb25fe315e8823fda963d096cc58e3e1f882bc436960070879",
+      "first": {
+        "filename": "m-login-first.png",
+        "sha256": "7720bbf4d1f6ebe83ed3dcc927611b844e247a79520797ccbfa52f159118e534"
+      }
+    },
+    {
+      "id": "m-first-password",
+      "title": "首次修改密码",
+      "screen": "first-password",
+      "mode": "",
+      "role": "公共入口",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-first-password.png",
+      "sha256": "2ffe532adac49a053c3632997dd390ad7d95893b5bad4024576b4f26471ea92e",
+      "first": {
+        "filename": "m-first-password-first.png",
+        "sha256": "2ffe532adac49a053c3632997dd390ad7d95893b5bad4024576b4f26471ea92e"
+      }
+    },
+    {
+      "id": "m-student",
+      "title": "学生课程",
+      "screen": "student-courses",
+      "mode": "",
+      "role": "学生",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 1233,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1233,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": {
+          "top": 774,
+          "bottom": 844
+        },
+        "missing_fields": []
+      },
+      "filename": "m-student.png",
+      "sha256": "f93616047cec83a7d254a795c140345c0de51fed6029bbbbc33c9d4d043609e4",
+      "first": {
+        "filename": "m-student-first.png",
+        "sha256": "554cb0334d6f615a23bf026708d23627c26f74ae90d18a560ecc675bce294c1b"
+      }
+    },
+    {
+      "id": "m-student-menu",
+      "title": "学生导航",
+      "screen": "student-courses",
+      "mode": "nav",
+      "role": "学生",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": {
+          "top": 0,
+          "bottom": 0
+        },
+        "missing_fields": []
+      },
+      "filename": "m-student-menu.png",
+      "sha256": "608c90968bb4ca78622453b4a8496e56893dc2e8694d38f3386d692329e2e783",
+      "first": {
+        "filename": "m-student-menu-first.png",
+        "sha256": "608c90968bb4ca78622453b4a8496e56893dc2e8694d38f3386d692329e2e783"
+      }
+    },
+    {
+      "id": "m-accounts",
+      "title": "账号列表",
+      "screen": "accounts",
+      "mode": "",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 1695,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1695,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-accounts.png",
+      "sha256": "2241f1e23cc877f649e79eb2c0698cdb29217f66d4e7c281841851cf3db746a5",
+      "first": {
+        "filename": "m-accounts-first.png",
+        "sha256": "f35aba89d7825f10a7a670309ba5077c862d0b8d74db83ddd48da1a19648e0c8"
+      }
+    },
+    {
+      "id": "m-account-filters",
+      "title": "账号筛选",
+      "screen": "accounts",
+      "mode": "filters",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 1947,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1947,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-account-filters.png",
+      "sha256": "6631cfb528df271677c5459b591de795f83cbf630c0d75b79a20b3a000399721",
+      "first": {
+        "filename": "m-account-filters-first.png",
+        "sha256": "0ec9aea7e361a19693ffe74d4ccf898a4bee6575d60d80f4744536224b3e050d"
+      }
+    },
+    {
+      "id": "m-account-menu",
+      "title": "管理导航",
+      "screen": "accounts",
+      "mode": "nav",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-account-menu.png",
+      "sha256": "9d0534bf14250b8f05f20ad07ec022d4acbd21f71f8c8b0681e4d4096318243a",
+      "first": {
+        "filename": "m-account-menu-first.png",
+        "sha256": "9d0534bf14250b8f05f20ad07ec022d4acbd21f71f8c8b0681e4d4096318243a"
+      }
+    },
+    {
+      "id": "m-account-new",
+      "title": "新建学生账号",
+      "screen": "account-new-student",
+      "mode": "",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".drawer-body",
+          "overflow": 721
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-account-new.png",
+      "sha256": "f4d031f6ac558fcd6ffccf7da3c9cf6482800f679ea139e8eebb943b41391164",
+      "first": {
+        "filename": "m-account-new-first.png",
+        "sha256": "f4d031f6ac558fcd6ffccf7da3c9cf6482800f679ea139e8eebb943b41391164"
+      },
+      "continued": {
+        "filename": "m-account-new-continued.png",
+        "sha256": "5e9ecba0f47a3352c3f05e5fbd74c2cc788632001a3195d877e0f39b5733d7df"
+      },
+      "small_viewport": {
+        "height": 520,
+        "footer_bottom": 520,
+        "footer_top": 423,
+        "input_bottom": 371.59375,
+        "safe_area_simulated": 24
+      }
+    },
+    {
+      "id": "m-account-grant",
+      "title": "账号授权",
+      "screen": "account-grant",
+      "mode": "",
+      "role": "学校管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用编辑",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".drawer-body",
+          "overflow": 54
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-account-grant.png",
+      "sha256": "65d9480606dd76cbdcb34ecc93dfd0f22f7a974007cbba5bdbb440369e9f4b0b",
+      "first": {
+        "filename": "m-account-grant-first.png",
+        "sha256": "65d9480606dd76cbdcb34ecc93dfd0f22f7a974007cbba5bdbb440369e9f4b0b"
+      },
+      "continued": {
+        "filename": "m-account-grant-continued.png",
+        "sha256": "5efcc93b78544ce6ae63c56f932ce700b958f80d815620d0f3b3561d1260d9e6"
+      }
+    },
+    {
+      "id": "m-role-switch",
+      "title": "切换已授权身份",
+      "screen": "role-switch",
+      "mode": "",
+      "role": "教师兼管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "2026级安全基础一班LAB-101-A·化学学院授课教师陈陈老师主讲教师状态开放管理班级",
+          "2026级安全基础二班LAB-101-B·化学学院授课教师许许老师主讲教师状态开放管理班级"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-role-switch.png",
+      "sha256": "6e3082132422c16a59ec0ead6f1ec1148fa15c87f59db506ecaf9f2b4e6b476b",
+      "first": {
+        "filename": "m-role-switch-first.png",
+        "sha256": "6e3082132422c16a59ec0ead6f1ec1148fa15c87f59db506ecaf9f2b4e6b476b"
+      }
+    },
+    {
+      "id": "m-teacher",
+      "title": "课程目录与班级",
+      "screen": "teacher-courses",
+      "mode": "",
+      "role": "教师",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 1362,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1362,
+        "records": [
+          "2026级安全基础一班LAB-101-A·化学学院授课教师陈陈老师主讲教师状态开放管理班级",
+          "2026级安全基础二班LAB-101-B·化学学院授课教师许许老师主讲教师状态开放管理班级"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-teacher.png",
+      "sha256": "681abe6b6f7ce8a5271bf68b2d94ef131de945f684356dda5fc0084e979f8fbc",
+      "first": {
+        "filename": "m-teacher-first.png",
+        "sha256": "5825ed5dcb0734812bd81a5d4080000fff09f9688eb3758d8ff09c689eed4b8e"
+      }
+    },
+    {
+      "id": "m-class-roster",
+      "title": "班级学生名单",
+      "screen": "class-roster",
+      "mode": "",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 1798,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1798,
+        "records": [
+          "林同学账号student.demo学号2026001001成员状态在班移出",
+          "郑同学账号student.zheng学号2026001002成员状态在班移出",
+          "何同学账号student.he学号2026001003成员状态在班移出",
+          "周同学账号student.zhou学号2025001028成员状态已退出重新加入"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-class-roster.png",
+      "sha256": "ef0d856799899fad97f91219afe3544ee5425e9707ae1b907e81f52817c21dd0",
+      "first": {
+        "filename": "m-class-roster-first.png",
+        "sha256": "f322cfdd2601b9cafc268213c78daf4b8723b9eed74bec1b0f35d2be6e5fe043"
+      }
+    },
+    {
+      "id": "m-csv-preview",
+      "title": "CSV整批确认",
+      "screen": "csv-preview",
+      "mode": "",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码",
+          "CSV第2行姓名林同学账号student.demo学号2026001001专业应用化学临时密码••••••••",
+          "CSV第3行姓名郑同学账号student.zheng学号2026001002专业应用化学临时密码••••••••",
+          "CSV第4行姓名何同学账号student.he学号2026001003专业应用化学临时密码••••••••"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 500
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-csv-preview.png",
+      "sha256": "a1fcbf55691c549b8df9ece0675160c87efb05fc10b6483d8632d80a6510806d",
+      "first": {
+        "filename": "m-csv-preview-first.png",
+        "sha256": "a1fcbf55691c549b8df9ece0675160c87efb05fc10b6483d8632d80a6510806d"
+      },
+      "continued": {
+        "filename": "m-csv-preview-continued.png",
+        "sha256": "22063707fb90af1bdab34bb9d8323dacd86458006ddf9b781e355d7b531efff9"
+      }
+    },
+    {
+      "id": "m-csv-errors",
+      "title": "CSV错误定位",
+      "screen": "csv-errors",
+      "mode": "",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码",
+          "CSV第第2行行字段student_no问题必填学号为空请补充学生学号",
+          "CSV第第3行行字段major_id问题专业不在当前学院范围选择化学学院内有效专业"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 119
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-csv-errors.png",
+      "sha256": "202d41c45a6ebaeb27bc9990fe1c81f13964d6dba3ce39f5bbc55e8cc5adfbb8",
+      "first": {
+        "filename": "m-csv-errors-first.png",
+        "sha256": "202d41c45a6ebaeb27bc9990fe1c81f13964d6dba3ce39f5bbc55e8cc5adfbb8"
+      },
+      "continued": {
+        "filename": "m-csv-errors-continued.png",
+        "sha256": "9af5272dc20397b72d0a3e2adf4fd95939a6a4cd6a0deb7b4b63b5c256ae3c7a"
+      }
+    },
+    {
+      "id": "m-archive",
+      "title": "归档确认",
+      "screen": "class-archive",
+      "mode": "",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-archive.png",
+      "sha256": "0198a7d6109ad583d34de3c18d758d17423c4c9838f4342ca7d895f934b6f44e",
+      "first": {
+        "filename": "m-archive-first.png",
+        "sha256": "0198a7d6109ad583d34de3c18d758d17423c4c9838f4342ca7d895f934b6f44e"
+      }
+    },
+    {
+      "id": "m-states",
+      "title": "全部通用状态",
+      "screen": "states-sheet",
+      "mode": "",
+      "role": "状态参考",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true,
+      "height": 1846,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1846,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      },
+      "filename": "m-states.png",
+      "sha256": "bc4378ec91ae9217d5c1e479c8138b2f084205777e1b12f2c320aa76b2c848c7",
+      "first": {
+        "filename": "m-states-first.png",
+        "sha256": "7624beffef25ce26f76bfad0a7ed8bbc5aafdfb3a33716f1fdbb70adf06f5f6b"
+      }
+    }
+  ],
+  "errors": [],
+  "blocked_requests": [],
+  "checks": {
+    "font": true,
+    "no_page_horizontal_overflow": true,
+    "no_work_surface_clipping": true,
+    "no_missing_table_fields": true,
+    "touch_targets_44px": true,
+    "no_browser_errors": true,
+    "no_business_requests": true,
+    "desktop_unchanged": true
+  },
+  "native_tests_performed": false
+}

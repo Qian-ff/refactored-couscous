@@ -1,0 +1,181 @@
+{
+  "version": "UI-2026.10-v1",
+  "screens": [
+    {
+      "id": "m-login",
+      "title": "登录",
+      "screen": "login",
+      "mode": "",
+      "role": "公共入口",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-first-password",
+      "title": "首次修改密码",
+      "screen": "first-password",
+      "mode": "",
+      "role": "公共入口",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-student",
+      "title": "学生课程",
+      "screen": "student-courses",
+      "mode": "",
+      "role": "学生",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-student-menu",
+      "title": "学生导航",
+      "screen": "student-courses",
+      "mode": "nav",
+      "role": "学生",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-accounts",
+      "title": "账号列表",
+      "screen": "accounts",
+      "mode": "",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-account-filters",
+      "title": "账号筛选",
+      "screen": "accounts",
+      "mode": "filters",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-account-menu",
+      "title": "管理导航",
+      "screen": "accounts",
+      "mode": "nav",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-account-new",
+      "title": "新建学生账号",
+      "screen": "account-new-student",
+      "mode": "",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-account-grant",
+      "title": "账号授权",
+      "screen": "account-grant",
+      "mode": "",
+      "role": "学校管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-role-switch",
+      "title": "切换已授权身份",
+      "screen": "role-switch",
+      "mode": "",
+      "role": "教师兼管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-teacher",
+      "title": "课程目录与班级",
+      "screen": "teacher-courses",
+      "mode": "",
+      "role": "教师",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-class-roster",
+      "title": "班级学生名单",
+      "screen": "class-roster",
+      "mode": "",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-csv-preview",
+      "title": "CSV整批确认",
+      "screen": "csv-preview",
+      "mode": "",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-csv-errors",
+      "title": "CSV错误定位",
+      "screen": "csv-errors",
+      "mode": "",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-archive",
+      "title": "归档确认",
+      "screen": "class-archive",
+      "mode": "",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    },
+    {
+      "id": "m-states",
+      "title": "全部通用状态",
+      "screen": "states-sheet",
+      "mode": "",
+      "role": "状态参考",
+      "width": 390,
+      "viewport_height": 844,
+      "version": "UI-2026.10-v1",
+      "synthetic_data": true
+    }
+  ]
+}

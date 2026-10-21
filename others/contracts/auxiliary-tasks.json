@@ -10,7 +10,7 @@
       "baseline_sha": "1e1011b4ff2e3c5a66b22492fb87a671e9699584",
       "owned_paths": ["others/design/ui-redesign/"],
       "reasoning_effort_target": "xhigh",
-      "status": "awaiting_desktop_approval",
+      "status": "design_received",
       "candidate": {
         "version": "UI-2026.10-v1",
         "commit": "b67ad77cd49c2b5f99d2037e5828c29433ea66a6",
@@ -19,13 +19,31 @@
         "supplemental_images": 2
       },
       "approval": {
-        "desktop_status": "awaiting_user_approval",
-        "desktop_commit": null,
-        "evidence": null
+        "desktop_status": "approved",
+        "desktop_commit": "b67ad77cd49c2b5f99d2037e5828c29433ea66a6",
+        "evidence": {
+          "source": "explicit human answer verified in design chat",
+          "thread_id": "01a15e27-4a94-79f0-9a2b-37b3fcee6334",
+          "turn_id": "01a15e71-0a09-7092-ae93-16ee182b741b",
+          "question_item_id": "[\"request_user_input_async\",\"call_a05aa6522036453eacd29a12596a67d1\",0]",
+          "answer": "批准 v1，继续移动稿与规范",
+          "date": "2026-10-21"
+        }
       },
       "handoff": {
-        "status": "not_ready",
-        "frozen_commit": null
+        "status": "received",
+        "frozen_commit": "d17b342c53fc054bd298bee356143d3b3ab77af6",
+        "manifest": "others/design/ui-redesign/freeze-manifest.json",
+        "manifest_files_verified": 141,
+        "mobile_reference_screens": 16,
+        "mobile_images": 36,
+        "audited_mobile_canvases": 53,
+        "execution_baseline_ref": "ui-redesign-ready"
+      },
+      "product_migration": {
+        "status": "ready_for_d_foundation",
+        "existing_ui_accepted_by_A": false,
+        "C_B2_new_features_allowed": false
       }
     }
   }

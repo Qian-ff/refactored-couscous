@@ -1,0 +1,1098 @@
+{
+  "version": "UI-2026.10-v1",
+  "baseline": "1e1011b4ff2e3c5a66b22492fb87a671e9699584",
+  "rendered_at": "2026-10-21T12:21:52.436Z",
+  "desktop_approval": false,
+  "production_code_changed": false,
+  "width": 1440,
+  "viewport_height": 1000,
+  "browser": "155.0.4283.62",
+  "input_sha256": {
+    "prototype.html": "e623a6ddc4d5f514f22c8bba5e6bef54b08d66e7c4e225224b7be0e3ebdc8dd7",
+    "prototype.css": "e3cf4067c83fd9df766af81fedeb402d8818db6c90434bb117d83b6359290c5d",
+    "prototype.js": "7ea93c23535c3b1457858dea5d022d9ad688d67fce4a8f2dc749b2fb4a970c3f",
+    "assets/fonts/NotoSansSC-VF.ttf": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+    "assets/fonts/source.json": "c12755c2d9ef78ebefaaad058fd8e3c58819acfd09a2c9058f8cc56130024627"
+  },
+  "input_fingerprint": "46af9eaf508ba26bde2109b96e720cb9d06abe90669e6346d71634fcc3cef5f5",
+  "screens": [
+    {
+      "id": "login",
+      "title": "登录",
+      "role": "公共入口",
+      "filename": "login.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "7277c897f09c6252869bf2b545fd6c7238d7b6ddad176267eeea3ae1280bdb89",
+      "metrics": {
+        "font": true,
+        "title": "登录 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "每一次实验，从安全与协作开始。",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "login-error",
+      "title": "登录失败反馈",
+      "role": "公共入口",
+      "filename": "login-error.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "6e850989ca6a642d082d1ae4aed9c7752f2f667d87289757b752163a2a1221c5",
+      "metrics": {
+        "font": true,
+        "title": "登录失败反馈 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "每一次实验，从安全与协作开始。",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "service-settings",
+      "title": "服务连接设置",
+      "role": "公共入口",
+      "filename": "service-settings.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "08d47e4b8ff7dee60d443f892ee81ab55ea5888196b3d95ef3450088ec0a9e80",
+      "metrics": {
+        "font": true,
+        "title": "服务连接设置 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "每一次实验，从安全与协作开始。",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "first-password",
+      "title": "首次修改密码",
+      "role": "公共入口",
+      "filename": "first-password.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "af44c352c0c04dd7ec78c7cbb4db93ff4831880e436dd467fc8f604fcb126f56",
+      "metrics": {
+        "font": true,
+        "title": "首次修改密码 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "每一次实验，从安全与协作开始。",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "student-courses",
+      "title": "我的课程",
+      "role": "学生",
+      "filename": "student-courses.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "c65fb5e00e3dc6842820aa7507524ad0fcc92fd1d0130971ed9ead2fa3c1e109",
+      "metrics": {
+        "font": true,
+        "title": "我的课程 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "我的课程",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "teacher-courses",
+      "title": "课程与教学班",
+      "role": "教师",
+      "filename": "teacher-courses.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "ffa1989ff25598a77d9a5564a12f6d50f909825bd1e5461c5a9b1a088c886ec7",
+      "metrics": {
+        "font": true,
+        "title": "课程与教学班 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "课程与教学班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "courses-history",
+      "title": "历史教学班",
+      "role": "教师",
+      "filename": "courses-history.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "f2f4b348235a511171b7b55783a976e38fab25b2a67119f4daf761cb10191e36",
+      "metrics": {
+        "font": true,
+        "title": "历史教学班 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "课程与教学班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "admin-courses",
+      "title": "课程管理",
+      "role": "学院管理员",
+      "filename": "admin-courses.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "3d72426d4d907653aabf82035ab7b2fd40877fd695690bbfd5e5beb6beeb6991",
+      "metrics": {
+        "font": true,
+        "title": "课程管理 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "课程管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "organizations-school",
+      "title": "学校管理",
+      "role": "平台运维",
+      "filename": "organizations-school.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "ea4855823f614ec57f7bcc9716b6c9dbf62f25449cfff75d59dac299e18e6ed5",
+      "metrics": {
+        "font": true,
+        "title": "学校管理 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "学校管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "organizations-college",
+      "title": "学院管理",
+      "role": "学校管理员",
+      "filename": "organizations-college.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "c520061ed96c6da3b94b32390f0ea156c1088649c063d0f23857617e66456135",
+      "metrics": {
+        "font": true,
+        "title": "学院管理 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "学院管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "organizations-major",
+      "title": "专业管理",
+      "role": "学院管理员",
+      "filename": "organizations-major.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "b7d350797970ae14b1d859c1b365919023bfcf57d977c252727570b1470258c7",
+      "metrics": {
+        "font": true,
+        "title": "专业管理 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "专业管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "accounts",
+      "title": "账号与授权",
+      "role": "学院管理员",
+      "filename": "accounts.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "e53e13f16e3526d1cb06fc78dc2aa199111203a68ce7727868587829e828657f",
+      "metrics": {
+        "font": true,
+        "title": "账号与授权 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "account-new-student",
+      "title": "新建学生账号",
+      "role": "学院管理员",
+      "filename": "account-new-student.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "63709c85c7c489e9d2c3664d7285370b070d454eb617182ae0db16445dea3c1b",
+      "metrics": {
+        "font": true,
+        "title": "新建学生账号 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 101
+      },
+      "continued": {
+        "filename": "account-new-student-continued.png",
+        "sha256": "9d8f6edc28a1920a80748c7a4f34b39b3d8de3dc56ccdb644e8fbe3eb402ea2e"
+      }
+    },
+    {
+      "id": "account-edit-student",
+      "title": "编辑学生账号",
+      "role": "学院管理员",
+      "filename": "account-edit-student.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "f79d10d82f86389d000e1444f2bff6b2d4a2f3d2ba782d53981dd2f4d8f4f2c1",
+      "metrics": {
+        "font": true,
+        "title": "编辑学生账号 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "account-new-teacher",
+      "title": "新建教职账号",
+      "role": "学校管理员",
+      "filename": "account-new-teacher.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "76d274a26604ed4a2a74d4a4135fbe040f6e1fe854c0639981d6ebc98c58b4b5",
+      "metrics": {
+        "font": true,
+        "title": "新建教职账号 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 101
+      },
+      "continued": {
+        "filename": "account-new-teacher-continued.png",
+        "sha256": "41a4385848153a8df010ff16d0716916de4d39110466fa853c19dc05a63509e6"
+      }
+    },
+    {
+      "id": "account-edit-teacher",
+      "title": "教师身份与授权",
+      "role": "学校管理员",
+      "filename": "account-edit-teacher.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "a43d2eab001e5150198528ebd5a5479daade352a9a905ffe3e52d70281a95096",
+      "metrics": {
+        "font": true,
+        "title": "教师身份与授权 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "account-reset",
+      "title": "重置密码确认",
+      "role": "学院管理员",
+      "filename": "account-reset.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "66d06a754e0a25cceaa0a9bb6e9c8c5d7b77a608e08fa9b08dd945b16c6d3ea6",
+      "metrics": {
+        "font": true,
+        "title": "重置密码确认 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "account-grant",
+      "title": "新增角色授权",
+      "role": "学校管理员",
+      "filename": "account-grant.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "d93fd5c30bffdaae3a5b78c2e1ab3dfb23e78edcbf6531f14103b2805e17f535",
+      "metrics": {
+        "font": true,
+        "title": "新增角色授权 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "account-status",
+      "title": "停用账号确认",
+      "role": "学院管理员",
+      "filename": "account-status.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "7dafcf1e11d1c35af71b65489f021b6a5654cfea53470fdea802e6c0f8a3a55b",
+      "metrics": {
+        "font": true,
+        "title": "停用账号确认 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "invitations",
+      "title": "学生账号邀请",
+      "role": "学院管理员",
+      "filename": "invitations.png",
+      "width": 1440,
+      "height": 1106,
+      "sha256": "7b45a339a87474e56fb1243d2a7205bc7eb798b8200a14a526214c5c62683c5f",
+      "metrics": {
+        "font": true,
+        "title": "学生账号邀请 · 安研通 · UI-2026.10-v1",
+        "height": 1106,
+        "width": 1440,
+        "h1": "学生账号邀请",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "invite-issued",
+      "title": "新邀请凭据",
+      "role": "学院管理员",
+      "filename": "invite-issued.png",
+      "width": 1440,
+      "height": 1106,
+      "sha256": "7b0c45fb3315206ec1910f5015f65a2e87e5ae1d247603105510096e22eacba0",
+      "metrics": {
+        "font": true,
+        "title": "新邀请凭据 · 安研通 · UI-2026.10-v1",
+        "height": 1106,
+        "width": 1440,
+        "h1": "学生账号邀请",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-overview",
+      "title": "教学班概览",
+      "role": "主讲教师",
+      "filename": "class-overview.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "df2ddfc0a284c89d07dbedbb580ff635966fae9cc91465d1e08a5ec570c520ad",
+      "metrics": {
+        "font": true,
+        "title": "教学班概览 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-roster",
+      "title": "学生名单",
+      "role": "主讲教师",
+      "filename": "class-roster.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "5ffb5fc75945b564b290aef2c13c651edcbb42b6252d8efa3763814d74b1e878",
+      "metrics": {
+        "font": true,
+        "title": "学生名单 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-requests",
+      "title": "加入与退出审批",
+      "role": "协作教师",
+      "filename": "class-requests.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "91b7183358ea18ed455e8cdce89fdeb209119139f391cc9caa2980239975ad49",
+      "metrics": {
+        "font": true,
+        "title": "加入与退出审批 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-staff",
+      "title": "教师协作",
+      "role": "主讲教师",
+      "filename": "class-staff.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "80f2e0f5f1a73c2331b29b64fabea8f0bb7176fff788d7bd98509e5b6b36a6d1",
+      "metrics": {
+        "font": true,
+        "title": "教师协作 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-collaborator",
+      "title": "协作教师视角",
+      "role": "协作教师",
+      "filename": "class-collaborator.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "15668c6bc2e6a85cf5fd9e036e06e0b1c6b3ad135a41d7fafa225c1408442371",
+      "metrics": {
+        "font": true,
+        "title": "协作教师视角 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-staff-readonly",
+      "title": "协作教师查看关系",
+      "role": "协作教师",
+      "filename": "class-staff-readonly.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "c6e32e98d18357666a272756b9c69b82d84844c62c66dff0f0fd082df5643712",
+      "metrics": {
+        "font": true,
+        "title": "协作教师查看关系 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-admin",
+      "title": "管理员班级视角",
+      "role": "学院管理员",
+      "filename": "class-admin.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "1d606339b308dfd06665cd3c10b63e2417e90adb1135ab756e0b068fdf7a77c7",
+      "metrics": {
+        "font": true,
+        "title": "管理员班级视角 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-archived",
+      "title": "已归档教学班",
+      "role": "主讲教师",
+      "filename": "class-archived.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "bd4d5ebf4cbefb3628e481b6eddb4dcd5b7f28e77f43a3feb9b006154f51a91d",
+      "metrics": {
+        "font": true,
+        "title": "已归档教学班 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2025 级安全基础班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-edit",
+      "title": "班级名称与审批设置",
+      "role": "主讲教师",
+      "filename": "class-edit.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "5125ad380ae9e8112470282f247d40981078066f11ce202f909f01ca3aa5886a",
+      "metrics": {
+        "font": true,
+        "title": "班级名称与审批设置 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-add-member",
+      "title": "拉入学生",
+      "role": "主讲教师",
+      "filename": "class-add-member.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "7388b9d2c83811ec723dca4834799e8e50fce74e933e62a6f8aad1c436ca19a4",
+      "metrics": {
+        "font": true,
+        "title": "拉入学生 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-add-staff",
+      "title": "添加协作教师",
+      "role": "主讲教师",
+      "filename": "class-add-staff.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "66c60a83ff66fe823483df3f455e1ef2fdb47658fa43acab848595a50837a5b3",
+      "metrics": {
+        "font": true,
+        "title": "添加协作教师 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-joincode",
+      "title": "生成班级邀请码",
+      "role": "主讲教师",
+      "filename": "class-joincode.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "ac511e8eb00212a27cf4287944340fca847be234e84f8c8495912fdca51a642c",
+      "metrics": {
+        "font": true,
+        "title": "生成班级邀请码 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-transfer",
+      "title": "转交主讲教师",
+      "role": "主讲教师",
+      "filename": "class-transfer.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "1ec8d7592789c3df485627c7fba126a220ddc842651b1d9d4c8f2c4cf79e66a7",
+      "metrics": {
+        "font": true,
+        "title": "转交主讲教师 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "class-archive",
+      "title": "归档确认",
+      "role": "主讲教师",
+      "filename": "class-archive.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "8cbd3ba7120bf71ae4207cfdc562d8a1b1b43e6eb420bec2513904f6b137eace",
+      "metrics": {
+        "font": true,
+        "title": "归档确认 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "csv-input",
+      "title": "CSV内容编辑",
+      "role": "学院管理员",
+      "filename": "csv-input.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "a53ed0d97a44206e5a8c71ea5adceaccee904f04733ea1b2d78056941e14d9a0",
+      "metrics": {
+        "font": true,
+        "title": "CSV内容编辑 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "csv-input-roster",
+      "title": "CSV班级名单编辑",
+      "role": "主讲教师",
+      "filename": "csv-input-roster.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "3da12dbacdad5ed6e5c559c22862b05445432a11454623e0c01ea0f41711f940",
+      "metrics": {
+        "font": true,
+        "title": "CSV班级名单编辑 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "csv-preview",
+      "title": "CSV预检通过",
+      "role": "学院管理员",
+      "filename": "csv-preview.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "237c820f046186922be2b293733a20da406324e23df04d9208090e33ed307c8c",
+      "metrics": {
+        "font": true,
+        "title": "CSV预检通过 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "csv-roster",
+      "title": "批量加入班级",
+      "role": "主讲教师",
+      "filename": "csv-roster.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "9c2ada71d5b632a428ea1382a005d244767fda4cccb68b5fd6fdfea404216c06",
+      "metrics": {
+        "font": true,
+        "title": "批量加入班级 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "2026 级安全基础一班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "csv-errors",
+      "title": "CSV预检错误",
+      "role": "学院管理员",
+      "filename": "csv-errors.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "1e525cdc6e858ad20e7e5eff30407543e53b91bbfbc10e1f9fa818cd1cc40696",
+      "metrics": {
+        "font": true,
+        "title": "CSV预检错误 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "csv-uncertain",
+      "title": "提交结果待确认",
+      "role": "学院管理员",
+      "filename": "csv-uncertain.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "05eed8e5720ecd5d971845662fe91897b1f82484670d0c275c06682abaf47eeb",
+      "metrics": {
+        "font": true,
+        "title": "提交结果待确认 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "账号与授权",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "new-course-teacher",
+      "title": "教师新建课程",
+      "role": "教师",
+      "filename": "new-course-teacher.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "e9019e08ca6a6080007f14cfb277709d95b08a6fbbb51518377b5b9afbd070c3",
+      "metrics": {
+        "font": true,
+        "title": "教师新建课程 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "课程与教学班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "new-course-admin",
+      "title": "管理员新建课程",
+      "role": "学校管理员",
+      "filename": "new-course-admin.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "57477ae38b770604e25422d845121d1958710da721e9e7cc9d11b8af981dd4ab",
+      "metrics": {
+        "font": true,
+        "title": "管理员新建课程 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "课程管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "existing-catalog-new-class",
+      "title": "已有课程目录开班",
+      "role": "课程目录所有者",
+      "filename": "existing-catalog-new-class.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "19531afd6dbbafd0033915870da9c652b2cbac5fe47137fd5e26833da33adefb",
+      "metrics": {
+        "font": true,
+        "title": "已有课程目录开班 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "课程与教学班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "edit-catalog",
+      "title": "编辑课程目录",
+      "role": "学院管理员",
+      "filename": "edit-catalog.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "cce6ac9c8a77f6e00b64505659cde3f0b0c58595a2c6be30a65ae13fc7e80219",
+      "metrics": {
+        "font": true,
+        "title": "编辑课程目录 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "课程管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "organization-edit",
+      "title": "编辑与停用组织",
+      "role": "学校管理员",
+      "filename": "organization-edit.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "ad9bd6899efee62b1c96d00d912db03a3cc11d352e571d658c25c04e407c8e63",
+      "metrics": {
+        "font": true,
+        "title": "编辑与停用组织 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "学院管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "organization-edit-school",
+      "title": "编辑与停用学校",
+      "role": "平台运维",
+      "filename": "organization-edit-school.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "911fc2ad72fc1713d74bac02682777490afeeebe1b73691b74eb3665d0fa87ac",
+      "metrics": {
+        "font": true,
+        "title": "编辑与停用学校 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "学校管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "organization-edit-major",
+      "title": "编辑与停用专业",
+      "role": "学院管理员",
+      "filename": "organization-edit-major.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "18ea368b7b10153e5cc9a69ce1def81d190b9f333d153d85da415c50ed1eacd5",
+      "metrics": {
+        "font": true,
+        "title": "编辑与停用专业 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "专业管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "organization-new",
+      "title": "新建组织",
+      "role": "平台运维",
+      "filename": "organization-new.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "7d0995bc2416fe7f3f92d0a4c859c32987d1000e0db385c3575f5cdf818b7381",
+      "metrics": {
+        "font": true,
+        "title": "新建组织 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "学校管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "organization-new-college",
+      "title": "新建学院",
+      "role": "学校管理员",
+      "filename": "organization-new-college.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "4c339e17951c63306ae8ac2c94731f78c5e3b05168ee69ed039d402d4e2dd232",
+      "metrics": {
+        "font": true,
+        "title": "新建学院 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "学院管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "organization-new-major",
+      "title": "新建专业",
+      "role": "学院管理员",
+      "filename": "organization-new-major.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "90f9f23aabb334cdd2b532c0bd123f1214d9692f1f658e8edcce6fa0fc3a87e6",
+      "metrics": {
+        "font": true,
+        "title": "新建专业 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "专业管理",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "role-switch",
+      "title": "切换已授权身份",
+      "role": "教师兼学院管理员",
+      "filename": "role-switch.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "e828334f9be79d608e2fdd35cfe04cebc99d50acfa795823b804c8965a202bad",
+      "metrics": {
+        "font": true,
+        "title": "切换已授权身份 · 安研通 · UI-2026.10-v1",
+        "height": 1000,
+        "width": 1440,
+        "h1": "课程与教学班",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    },
+    {
+      "id": "states-sheet",
+      "title": "状态样式总览",
+      "role": "状态规范草案",
+      "filename": "states-sheet.png",
+      "width": 1440,
+      "height": 1063,
+      "sha256": "c34e83be0a80423b1d7e0bddec7f6b0036d7a4107a921cf1aaeb2dc357c416c8",
+      "metrics": {
+        "font": true,
+        "title": "状态样式总览 · 安研通 · UI-2026.10-v1",
+        "height": 1063,
+        "width": 1440,
+        "h1": "交互状态",
+        "unknown": false,
+        "clipped": [],
+        "broken_links": [],
+        "drawerScroll": 0
+      }
+    }
+  ],
+  "blocked_requests": [],
+  "browser_errors": [],
+  "checks": {
+    "font": true,
+    "no_horizontal_overflow": true,
+    "no_clipped_work_surfaces": true,
+    "no_business_requests": true,
+    "all_screens_rendered": true,
+    "no_browser_errors": true
+  }
+}

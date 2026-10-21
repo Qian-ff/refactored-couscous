@@ -1,10 +1,16 @@
 # B：分阶段任务书
 
-当前B1已完成并由A集成；阶段顺序以[a2-start](../a2-start.md)为准。先等待网页图片批准与完整规范冻结，再按A交接配合原D迁移B所属教师/管理页面展示层；既有UI通过A验收后才进入C，C经A集成后另启B2。公共协议见[模块协议](../../contracts/a2-protocols.md)，历史检查见[A0](../a0-handoff.md)。
+当前B1已完成；UI-2026.10-v1网页批准和冻结设计已接收，阶段顺序以[a2-start](../a2-start.md)为准。B先核对[执行交接](../ui-redesign-execution.md)，待D真实公共组件由A集成发布后，合并该新SHA再迁移自身展示层。既有UI通过A验收后才进入C，C经A集成后另启B2。公共协议见[模块协议](../../contracts/a2-protocols.md)，历史检查见[A0](../a0-handoff.md)。
 
-## 当前UI协作（等待批准）
+## B-UI Goal（等待D公共组件交接后实施）
 
-使用frontend-design并读取[UI门禁](../ui-redesign-coordination.md)及A发布的批准/冻结SHA。B只修改本角色的features/admin、features/teaching及必要本范围测试，复用D设计系统，不改公共入口、不另建会话或第二套视觉实现。保留首次改密、身份收窄、CSV预检/同键重试、查询竞态、审批/协作/交接/归档的真实行为；真实接口及1440/390检查后本地提交交A。跨范围修改交A明确文件交接。后续常规新页按批准风格自主设计/截图自查；B目标xhigh，开工核验实际当次设置。未获批准前不启动展示层迁移或B2。
+~~~text
+/goal 作为安研通B，按UI-2026.10-v1已批准冻结规范及A发布的D公共组件实际基线，完成B所属教师/管理员既有页面展示迁移，交A/D整合。先读AGENTS、阶段入口、UI执行交接及迁移清单；桌面批准b67ad77cd49c2b5f99d2037e5828c29433ea66a6，冻结d17b342c53fc054bd298bee356143d3b3ab77af6。使用frontend-design，目标xhigh并核验当次实际设置。保留本树提交后先合并ui-redesign-ready，再等待并合并A发布的真实D组件SHA；组件未交付时先核对映射/回归，不另造假公共组件或宣称完成迁移。
+
+只改web/src/features/admin/、teaching/及本范围测试。B唯一维护teaching/ui.tsx、business.css和业务页面，改为消费D公共组件，保留useBusinessAction/useBusinessQuery/SessionPage的请求、内存会话、身份代次和重试行为，处理双main/双padding；不改公共入口或另建视觉/会话体系。按migration-checklist完整保留目录/班级、组织/账号/角色/邀请、名单/审批/协作/交接/归档、CSV字段及真实revision/幂等/权限，不把样图示例数据写死。
+
+使用真实接口验证首次改密/身份收窄、范围搜索与同身份竞态、CSV预检/原子提交/丢响应同键重试、审批协作交接归档，检查1440/390、表格记录字段/动作完整、44px触控、长表单及失败/离线/无权/归档只读。只提交本轮B文件到自己的分支，报告完整SHA、功能映射和真实证据交A；公共需求或跨文件修改先由A明确交接，不自行推送。不启动C依赖的B2，既有UI仍等A/F三端真实验收。
+~~~
 
 ## B1 Goal（已完成，保留历史）
 

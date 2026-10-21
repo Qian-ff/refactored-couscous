@@ -1,0 +1,732 @@
+{
+  "version": "UI-2026.10-v1",
+  "frozen_at_utc": "2026-10-21T13:05:04.733Z",
+  "desktop_approval": {
+    "version": "UI-2026.10-v1",
+    "desktop_status": "approved",
+    "desktop_commit": "b67ad77cd49c2b5f99d2037e5828c29433ea66a6",
+    "evidence": {
+      "source": "explicit human answer in design chat",
+      "question_item_id": "[\"request_user_input_async\",\"call_a05aa6522036453eacd29a12596a67d1\",0]",
+      "answer": "批准 v1，继续移动稿与规范",
+      "date": "2026-10-21"
+    },
+    "authorized_next_step": "complete 390px references, freeze specifications, hand off to A and original D",
+    "production_migration_performed_in_design_chat": false
+  },
+  "desktop_reference_screens": 53,
+  "desktop_images": 55,
+  "mobile_reference_screens": 16,
+  "mobile_images": 36,
+  "audited_mobile_canvases": 53,
+  "native_tests_performed": false,
+  "production_code_changed": false,
+  "files": [
+    {
+      "file": ".gitignore",
+      "bytes": 58,
+      "sha256": "268c98923b18fc38320c58792eaacabc5ad4be1dc9751678a9e1889349409fab"
+    },
+    {
+      "file": "README.md",
+      "bytes": 4331,
+      "sha256": "2e7ae5b4def88a069b3acd2bf68852891e1794264dd16f928cda44cf423bc583"
+    },
+    {
+      "file": "SOURCES.md",
+      "bytes": 2063,
+      "sha256": "ba1f853925c3c453a40ab9752a2c841b19855fb88dd0cba674003373beccf9a2"
+    },
+    {
+      "file": "approval.json",
+      "bytes": 551,
+      "sha256": "72e214ed4b26a4501e78017a5dd387587d3096721004eff26370a69cc3af2bf2"
+    },
+    {
+      "file": "assets/fonts/NotoSansSC-VF.ttf",
+      "bytes": 17772300,
+      "sha256": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da"
+    },
+    {
+      "file": "assets/fonts/OFL.txt",
+      "bytes": 4388,
+      "sha256": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9"
+    },
+    {
+      "file": "assets/fonts/source.json",
+      "bytes": 683,
+      "sha256": "c12755c2d9ef78ebefaaad058fd8e3c58819acfd09a2c9058f8cc56130024627"
+    },
+    {
+      "file": "assets/icons.svg",
+      "bytes": 8045,
+      "sha256": "ff7590436e9ea3b102a61f77b40cb7a1461576b9cd67f938f5901519519b0d2a"
+    },
+    {
+      "file": "assets/illustrations/chemistry.svg",
+      "bytes": 2584,
+      "sha256": "1b026b83099577c225557d621bc6ef758a65908d1f2734d54cc3b6e1ce05ec1d"
+    },
+    {
+      "file": "assets/illustrations/electrical.svg",
+      "bytes": 2213,
+      "sha256": "0f8e11b02fb60b019f395886bfae860e039d94b2681f5786efc7737b0f759ddc"
+    },
+    {
+      "file": "assets/illustrations/lab-bench.svg",
+      "bytes": 3391,
+      "sha256": "c820399cf1f00c5f2cf2b814b20fb1a3018086c08dcfe76f87f353f8f250112e"
+    },
+    {
+      "file": "assets/illustrations/personal-protection.svg",
+      "bytes": 2019,
+      "sha256": "bac8666513db002a59ffa74a2f1c76e0d15cea2aa7d1f509f86cbf8da07ca306"
+    },
+    {
+      "file": "design-plan.md",
+      "bytes": 3889,
+      "sha256": "9a0baae5108e7f537511ad340d8c77936e5fb3225dbed3fa638de19b5d3a059b"
+    },
+    {
+      "file": "design-spec.md",
+      "bytes": 10487,
+      "sha256": "ed3abfb33a6521830fa07578f38e98880b41e5ec971022f70c33f58c5dc9ab60"
+    },
+    {
+      "file": "extract-assets.cjs",
+      "bytes": 1300,
+      "sha256": "aaa1010d444f74ee9f23dc1704f4b407eb73f21abf73c9ff1c2eab31806a81db"
+    },
+    {
+      "file": "freeze.cjs",
+      "bytes": 3953,
+      "sha256": "4534174fe2c27d7e81ea7e427bd4e89a6d1aaf9d7bfdade82013944b176a1ff0"
+    },
+    {
+      "file": "functional-map.md",
+      "bytes": 9724,
+      "sha256": "539a8e12a6f9efe0e82851daf8e1f893b69b7913a82e2c18116cc2e78c6777e2"
+    },
+    {
+      "file": "gallery.css",
+      "bytes": 2676,
+      "sha256": "7a3dc6502bcdcec11474306134f2753d239a5f5569cb8dcdc41dc0c3663d565d"
+    },
+    {
+      "file": "handoff.md",
+      "bytes": 6235,
+      "sha256": "dc07eacebc60a327b333b3c612f671160828f14eabe395eb935985a2abb41af4"
+    },
+    {
+      "file": "images-mobile/m-account-filters-first.png",
+      "bytes": 45159,
+      "sha256": "0ec9aea7e361a19693ffe74d4ccf898a4bee6575d60d80f4744536224b3e050d"
+    },
+    {
+      "file": "images-mobile/m-account-filters.png",
+      "bytes": 96232,
+      "sha256": "6631cfb528df271677c5459b591de795f83cbf630c0d75b79a20b3a000399721"
+    },
+    {
+      "file": "images-mobile/m-account-grant-continued.png",
+      "bytes": 43006,
+      "sha256": "5efcc93b78544ce6ae63c56f932ce700b958f80d815620d0f3b3561d1260d9e6"
+    },
+    {
+      "file": "images-mobile/m-account-grant-first.png",
+      "bytes": 44986,
+      "sha256": "65d9480606dd76cbdcb34ecc93dfd0f22f7a974007cbba5bdbb440369e9f4b0b"
+    },
+    {
+      "file": "images-mobile/m-account-grant.png",
+      "bytes": 44986,
+      "sha256": "65d9480606dd76cbdcb34ecc93dfd0f22f7a974007cbba5bdbb440369e9f4b0b"
+    },
+    {
+      "file": "images-mobile/m-account-menu-first.png",
+      "bytes": 26831,
+      "sha256": "9d0534bf14250b8f05f20ad07ec022d4acbd21f71f8c8b0681e4d4096318243a"
+    },
+    {
+      "file": "images-mobile/m-account-menu.png",
+      "bytes": 26831,
+      "sha256": "9d0534bf14250b8f05f20ad07ec022d4acbd21f71f8c8b0681e4d4096318243a"
+    },
+    {
+      "file": "images-mobile/m-account-new-continued.png",
+      "bytes": 39638,
+      "sha256": "5e9ecba0f47a3352c3f05e5fbd74c2cc788632001a3195d877e0f39b5733d7df"
+    },
+    {
+      "file": "images-mobile/m-account-new-first.png",
+      "bytes": 37546,
+      "sha256": "f4d031f6ac558fcd6ffccf7da3c9cf6482800f679ea139e8eebb943b41391164"
+    },
+    {
+      "file": "images-mobile/m-account-new.png",
+      "bytes": 37546,
+      "sha256": "f4d031f6ac558fcd6ffccf7da3c9cf6482800f679ea139e8eebb943b41391164"
+    },
+    {
+      "file": "images-mobile/m-accounts-first.png",
+      "bytes": 48296,
+      "sha256": "f35aba89d7825f10a7a670309ba5077c862d0b8d74db83ddd48da1a19648e0c8"
+    },
+    {
+      "file": "images-mobile/m-accounts.png",
+      "bytes": 87840,
+      "sha256": "2241f1e23cc877f649e79eb2c0698cdb29217f66d4e7c281841851cf3db746a5"
+    },
+    {
+      "file": "images-mobile/m-archive-first.png",
+      "bytes": 68560,
+      "sha256": "0198a7d6109ad583d34de3c18d758d17423c4c9838f4342ca7d895f934b6f44e"
+    },
+    {
+      "file": "images-mobile/m-archive.png",
+      "bytes": 68560,
+      "sha256": "0198a7d6109ad583d34de3c18d758d17423c4c9838f4342ca7d895f934b6f44e"
+    },
+    {
+      "file": "images-mobile/m-class-roster-first.png",
+      "bytes": 44692,
+      "sha256": "f322cfdd2601b9cafc268213c78daf4b8723b9eed74bec1b0f35d2be6e5fe043"
+    },
+    {
+      "file": "images-mobile/m-class-roster.png",
+      "bytes": 82530,
+      "sha256": "ef0d856799899fad97f91219afe3544ee5425e9707ae1b907e81f52817c21dd0"
+    },
+    {
+      "file": "images-mobile/m-csv-errors-continued.png",
+      "bytes": 49775,
+      "sha256": "9af5272dc20397b72d0a3e2adf4fd95939a6a4cd6a0deb7b4b63b5c256ae3c7a"
+    },
+    {
+      "file": "images-mobile/m-csv-errors-first.png",
+      "bytes": 49101,
+      "sha256": "202d41c45a6ebaeb27bc9990fe1c81f13964d6dba3ce39f5bbc55e8cc5adfbb8"
+    },
+    {
+      "file": "images-mobile/m-csv-errors.png",
+      "bytes": 49101,
+      "sha256": "202d41c45a6ebaeb27bc9990fe1c81f13964d6dba3ce39f5bbc55e8cc5adfbb8"
+    },
+    {
+      "file": "images-mobile/m-csv-preview-continued.png",
+      "bytes": 43576,
+      "sha256": "22063707fb90af1bdab34bb9d8323dacd86458006ddf9b781e355d7b531efff9"
+    },
+    {
+      "file": "images-mobile/m-csv-preview-first.png",
+      "bytes": 50434,
+      "sha256": "a1fcbf55691c549b8df9ece0675160c87efb05fc10b6483d8632d80a6510806d"
+    },
+    {
+      "file": "images-mobile/m-csv-preview.png",
+      "bytes": 50434,
+      "sha256": "a1fcbf55691c549b8df9ece0675160c87efb05fc10b6483d8632d80a6510806d"
+    },
+    {
+      "file": "images-mobile/m-first-password-first.png",
+      "bytes": 39622,
+      "sha256": "2ffe532adac49a053c3632997dd390ad7d95893b5bad4024576b4f26471ea92e"
+    },
+    {
+      "file": "images-mobile/m-first-password.png",
+      "bytes": 39622,
+      "sha256": "2ffe532adac49a053c3632997dd390ad7d95893b5bad4024576b4f26471ea92e"
+    },
+    {
+      "file": "images-mobile/m-login-first.png",
+      "bytes": 46846,
+      "sha256": "7720bbf4d1f6ebe83ed3dcc927611b844e247a79520797ccbfa52f159118e534"
+    },
+    {
+      "file": "images-mobile/m-login.png",
+      "bytes": 46927,
+      "sha256": "df3cfdbac50b3ebb25fe315e8823fda963d096cc58e3e1f882bc436960070879"
+    },
+    {
+      "file": "images-mobile/m-role-switch-first.png",
+      "bytes": 64919,
+      "sha256": "6e3082132422c16a59ec0ead6f1ec1148fa15c87f59db506ecaf9f2b4e6b476b"
+    },
+    {
+      "file": "images-mobile/m-role-switch.png",
+      "bytes": 64919,
+      "sha256": "6e3082132422c16a59ec0ead6f1ec1148fa15c87f59db506ecaf9f2b4e6b476b"
+    },
+    {
+      "file": "images-mobile/m-states-first.png",
+      "bytes": 45713,
+      "sha256": "7624beffef25ce26f76bfad0a7ed8bbc5aafdfb3a33716f1fdbb70adf06f5f6b"
+    },
+    {
+      "file": "images-mobile/m-states.png",
+      "bytes": 101294,
+      "sha256": "bc4378ec91ae9217d5c1e479c8138b2f084205777e1b12f2c320aa76b2c848c7"
+    },
+    {
+      "file": "images-mobile/m-student-first.png",
+      "bytes": 72696,
+      "sha256": "554cb0334d6f615a23bf026708d23627c26f74ae90d18a560ecc675bce294c1b"
+    },
+    {
+      "file": "images-mobile/m-student-menu-first.png",
+      "bytes": 27310,
+      "sha256": "608c90968bb4ca78622453b4a8496e56893dc2e8694d38f3386d692329e2e783"
+    },
+    {
+      "file": "images-mobile/m-student-menu.png",
+      "bytes": 27310,
+      "sha256": "608c90968bb4ca78622453b4a8496e56893dc2e8694d38f3386d692329e2e783"
+    },
+    {
+      "file": "images-mobile/m-student.png",
+      "bytes": 103028,
+      "sha256": "f93616047cec83a7d254a795c140345c0de51fed6029bbbbc33c9d4d043609e4"
+    },
+    {
+      "file": "images-mobile/m-teacher-first.png",
+      "bytes": 56407,
+      "sha256": "5825ed5dcb0734812bd81a5d4080000fff09f9688eb3758d8ff09c689eed4b8e"
+    },
+    {
+      "file": "images-mobile/m-teacher.png",
+      "bytes": 86578,
+      "sha256": "681abe6b6f7ce8a5271bf68b2d94ef131de945f684356dda5fc0084e979f8fbc"
+    },
+    {
+      "file": "images/account-edit-student.png",
+      "bytes": 195255,
+      "sha256": "f79d10d82f86389d000e1444f2bff6b2d4a2f3d2ba782d53981dd2f4d8f4f2c1"
+    },
+    {
+      "file": "images/account-edit-teacher.png",
+      "bytes": 196814,
+      "sha256": "a43d2eab001e5150198528ebd5a5479daade352a9a905ffe3e52d70281a95096"
+    },
+    {
+      "file": "images/account-grant.png",
+      "bytes": 186026,
+      "sha256": "d93fd5c30bffdaae3a5b78c2e1ab3dfb23e78edcbf6531f14103b2805e17f535"
+    },
+    {
+      "file": "images/account-new-student-continued.png",
+      "bytes": 195130,
+      "sha256": "9d8f6edc28a1920a80748c7a4f34b39b3d8de3dc56ccdb644e8fbe3eb402ea2e"
+    },
+    {
+      "file": "images/account-new-student.png",
+      "bytes": 194181,
+      "sha256": "63709c85c7c489e9d2c3664d7285370b070d454eb617182ae0db16445dea3c1b"
+    },
+    {
+      "file": "images/account-new-teacher-continued.png",
+      "bytes": 201000,
+      "sha256": "41a4385848153a8df010ff16d0716916de4d39110466fa853c19dc05a63509e6"
+    },
+    {
+      "file": "images/account-new-teacher.png",
+      "bytes": 199956,
+      "sha256": "76d274a26604ed4a2a74d4a4135fbe040f6e1fe854c0639981d6ebc98c58b4b5"
+    },
+    {
+      "file": "images/account-reset.png",
+      "bytes": 196925,
+      "sha256": "66d06a754e0a25cceaa0a9bb6e9c8c5d7b77a608e08fa9b08dd945b16c6d3ea6"
+    },
+    {
+      "file": "images/account-status.png",
+      "bytes": 193253,
+      "sha256": "7dafcf1e11d1c35af71b65489f021b6a5654cfea53470fdea802e6c0f8a3a55b"
+    },
+    {
+      "file": "images/accounts.png",
+      "bytes": 121614,
+      "sha256": "e53e13f16e3526d1cb06fc78dc2aa199111203a68ce7727868587829e828657f"
+    },
+    {
+      "file": "images/admin-courses.png",
+      "bytes": 150420,
+      "sha256": "3d72426d4d907653aabf82035ab7b2fd40877fd695690bbfd5e5beb6beeb6991"
+    },
+    {
+      "file": "images/class-add-member.png",
+      "bytes": 181807,
+      "sha256": "7388b9d2c83811ec723dca4834799e8e50fce74e933e62a6f8aad1c436ca19a4"
+    },
+    {
+      "file": "images/class-add-staff.png",
+      "bytes": 177284,
+      "sha256": "66c60a83ff66fe823483df3f455e1ef2fdb47658fa43acab848595a50837a5b3"
+    },
+    {
+      "file": "images/class-admin.png",
+      "bytes": 138151,
+      "sha256": "1d606339b308dfd06665cd3c10b63e2417e90adb1135ab756e0b068fdf7a77c7"
+    },
+    {
+      "file": "images/class-archive.png",
+      "bytes": 198449,
+      "sha256": "8cbd3ba7120bf71ae4207cfdc562d8a1b1b43e6eb420bec2513904f6b137eace"
+    },
+    {
+      "file": "images/class-archived.png",
+      "bytes": 115822,
+      "sha256": "bd4d5ebf4cbefb3628e481b6eddb4dcd5b7f28e77f43a3feb9b006154f51a91d"
+    },
+    {
+      "file": "images/class-collaborator.png",
+      "bytes": 118500,
+      "sha256": "15668c6bc2e6a85cf5fd9e036e06e0b1c6b3ad135a41d7fafa225c1408442371"
+    },
+    {
+      "file": "images/class-edit.png",
+      "bytes": 194455,
+      "sha256": "5125ad380ae9e8112470282f247d40981078066f11ce202f909f01ca3aa5886a"
+    },
+    {
+      "file": "images/class-joincode.png",
+      "bytes": 195775,
+      "sha256": "ac511e8eb00212a27cf4287944340fca847be234e84f8c8495912fdca51a642c"
+    },
+    {
+      "file": "images/class-overview.png",
+      "bytes": 125505,
+      "sha256": "df2ddfc0a284c89d07dbedbb580ff635966fae9cc91465d1e08a5ec570c520ad"
+    },
+    {
+      "file": "images/class-requests.png",
+      "bytes": 109007,
+      "sha256": "91b7183358ea18ed455e8cdce89fdeb209119139f391cc9caa2980239975ad49"
+    },
+    {
+      "file": "images/class-roster.png",
+      "bytes": 106638,
+      "sha256": "5ffb5fc75945b564b290aef2c13c651edcbb42b6252d8efa3763814d74b1e878"
+    },
+    {
+      "file": "images/class-staff-readonly.png",
+      "bytes": 116168,
+      "sha256": "c6e32e98d18357666a272756b9c69b82d84844c62c66dff0f0fd082df5643712"
+    },
+    {
+      "file": "images/class-staff.png",
+      "bytes": 109931,
+      "sha256": "80f2e0f5f1a73c2331b29b64fabea8f0bb7176fff788d7bd98509e5b6b36a6d1"
+    },
+    {
+      "file": "images/class-transfer.png",
+      "bytes": 198910,
+      "sha256": "1ec8d7592789c3df485627c7fba126a220ddc842651b1d9d4c8f2c4cf79e66a7"
+    },
+    {
+      "file": "images/courses-history.png",
+      "bytes": 123421,
+      "sha256": "f2f4b348235a511171b7b55783a976e38fab25b2a67119f4daf761cb10191e36"
+    },
+    {
+      "file": "images/csv-errors.png",
+      "bytes": 179844,
+      "sha256": "1e525cdc6e858ad20e7e5eff30407543e53b91bbfbc10e1f9fa818cd1cc40696"
+    },
+    {
+      "file": "images/csv-input-roster.png",
+      "bytes": 166934,
+      "sha256": "3da12dbacdad5ed6e5c559c22862b05445432a11454623e0c01ea0f41711f940"
+    },
+    {
+      "file": "images/csv-input.png",
+      "bytes": 174239,
+      "sha256": "a53ed0d97a44206e5a8c71ea5adceaccee904f04733ea1b2d78056941e14d9a0"
+    },
+    {
+      "file": "images/csv-preview.png",
+      "bytes": 183210,
+      "sha256": "237c820f046186922be2b293733a20da406324e23df04d9208090e33ed307c8c"
+    },
+    {
+      "file": "images/csv-roster.png",
+      "bytes": 161520,
+      "sha256": "9c2ada71d5b632a428ea1382a005d244767fda4cccb68b5fd6fdfea404216c06"
+    },
+    {
+      "file": "images/csv-uncertain.png",
+      "bytes": 195116,
+      "sha256": "05eed8e5720ecd5d971845662fe91897b1f82484670d0c275c06682abaf47eeb"
+    },
+    {
+      "file": "images/edit-catalog.png",
+      "bytes": 203252,
+      "sha256": "cce6ac9c8a77f6e00b64505659cde3f0b0c58595a2c6be30a65ae13fc7e80219"
+    },
+    {
+      "file": "images/existing-catalog-new-class.png",
+      "bytes": 166880,
+      "sha256": "19531afd6dbbafd0033915870da9c652b2cbac5fe47137fd5e26833da33adefb"
+    },
+    {
+      "file": "images/first-password.png",
+      "bytes": 124401,
+      "sha256": "af44c352c0c04dd7ec78c7cbb4db93ff4831880e436dd467fc8f604fcb126f56"
+    },
+    {
+      "file": "images/invitations.png",
+      "bytes": 119316,
+      "sha256": "7b45a339a87474e56fb1243d2a7205bc7eb798b8200a14a526214c5c62683c5f"
+    },
+    {
+      "file": "images/invite-issued.png",
+      "bytes": 200117,
+      "sha256": "7b0c45fb3315206ec1910f5015f65a2e87e5ae1d247603105510096e22eacba0"
+    },
+    {
+      "file": "images/login-error.png",
+      "bytes": 126239,
+      "sha256": "6e850989ca6a642d082d1ae4aed9c7752f2f667d87289757b752163a2a1221c5"
+    },
+    {
+      "file": "images/login.png",
+      "bytes": 120943,
+      "sha256": "7277c897f09c6252869bf2b545fd6c7238d7b6ddad176267eeea3ae1280bdb89"
+    },
+    {
+      "file": "images/new-course-admin.png",
+      "bytes": 175533,
+      "sha256": "57477ae38b770604e25422d845121d1958710da721e9e7cc9d11b8af981dd4ab"
+    },
+    {
+      "file": "images/new-course-teacher.png",
+      "bytes": 177717,
+      "sha256": "e9019e08ca6a6080007f14cfb277709d95b08a6fbbb51518377b5b9afbd070c3"
+    },
+    {
+      "file": "images/organization-edit-major.png",
+      "bytes": 166115,
+      "sha256": "18ea368b7b10153e5cc9a69ce1def81d190b9f333d153d85da415c50ed1eacd5"
+    },
+    {
+      "file": "images/organization-edit-school.png",
+      "bytes": 153065,
+      "sha256": "911fc2ad72fc1713d74bac02682777490afeeebe1b73691b74eb3665d0fa87ac"
+    },
+    {
+      "file": "images/organization-edit.png",
+      "bytes": 168800,
+      "sha256": "ad9bd6899efee62b1c96d00d912db03a3cc11d352e571d658c25c04e407c8e63"
+    },
+    {
+      "file": "images/organization-new-college.png",
+      "bytes": 161610,
+      "sha256": "4c339e17951c63306ae8ac2c94731f78c5e3b05168ee69ed039d402d4e2dd232"
+    },
+    {
+      "file": "images/organization-new-major.png",
+      "bytes": 165745,
+      "sha256": "90f9f23aabb334cdd2b532c0bd123f1214d9692f1f658e8edcce6fa0fc3a87e6"
+    },
+    {
+      "file": "images/organization-new.png",
+      "bytes": 155618,
+      "sha256": "7d0995bc2416fe7f3f92d0a4c859c32987d1000e0db385c3575f5cdf818b7381"
+    },
+    {
+      "file": "images/organizations-college.png",
+      "bytes": 94964,
+      "sha256": "c520061ed96c6da3b94b32390f0ea156c1088649c063d0f23857617e66456135"
+    },
+    {
+      "file": "images/organizations-major.png",
+      "bytes": 92134,
+      "sha256": "b7d350797970ae14b1d859c1b365919023bfcf57d977c252727570b1470258c7"
+    },
+    {
+      "file": "images/organizations-school.png",
+      "bytes": 85991,
+      "sha256": "ea4855823f614ec57f7bcc9716b6c9dbf62f25449cfff75d59dac299e18e6ed5"
+    },
+    {
+      "file": "images/role-switch.png",
+      "bytes": 165211,
+      "sha256": "e828334f9be79d608e2fdd35cfe04cebc99d50acfa795823b804c8965a202bad"
+    },
+    {
+      "file": "images/service-settings.png",
+      "bytes": 205158,
+      "sha256": "08d47e4b8ff7dee60d443f892ee81ab55ea5888196b3d95ef3450088ec0a9e80"
+    },
+    {
+      "file": "images/states-sheet.png",
+      "bytes": 128129,
+      "sha256": "c34e83be0a80423b1d7e0bddec7f6b0036d7a4107a921cf1aaeb2dc357c416c8"
+    },
+    {
+      "file": "images/student-courses.png",
+      "bytes": 154638,
+      "sha256": "c65fb5e00e3dc6842820aa7507524ad0fcc92fd1d0130971ed9ead2fa3c1e109"
+    },
+    {
+      "file": "images/teacher-courses.png",
+      "bytes": 147096,
+      "sha256": "ffa1989ff25598a77d9a5564a12f6d50f909825bd1e5461c5a9b1a088c886ec7"
+    },
+    {
+      "file": "index.html",
+      "bytes": 24500,
+      "sha256": "386b3ed9d0f52cd02c96b6a0693c63b36dcef0511ca7b5529e65b8a5cb97a197"
+    },
+    {
+      "file": "inventory.json",
+      "bytes": 18143,
+      "sha256": "d8e87b9bf5e7fe4c02ae1366860a6e4dd20b1c889bada1fbb1a1d29bf425d60c"
+    },
+    {
+      "file": "migration-checklist.md",
+      "bytes": 8361,
+      "sha256": "cdc9113843653a3ba5bb3079af3effcd1d1b89536b5e226ed04049d181eed1a3"
+    },
+    {
+      "file": "migration-notes-draft.md",
+      "bytes": 5306,
+      "sha256": "c1a0089730cf4ee9901a188b2b52bc0cacf6396e7ea965b237fea4858b183a6e"
+    },
+    {
+      "file": "mobile-gallery.css",
+      "bytes": 953,
+      "sha256": "dcf920452f2d7e4a143dffc7fc28719075f12e48698ea7c80b691d0b27fba74b"
+    },
+    {
+      "file": "mobile-gallery.html",
+      "bytes": 8743,
+      "sha256": "dc9fb1c9e08c5155d7487cbfd0a0aab2b059b48f524d557d43920994add2d0fd"
+    },
+    {
+      "file": "mobile-inventory.json",
+      "bytes": 4354,
+      "sha256": "aeaf01dc733e9f93b1f6bbc3bbe12f41dea6dbbaa0650743c299c42f8ed20396"
+    },
+    {
+      "file": "mobile-plan.md",
+      "bytes": 3339,
+      "sha256": "0b095a4f5360a1aa15812ab8588db8a307c0e1f188c076ca42e04d31f35cb71f"
+    },
+    {
+      "file": "mobile-review.md",
+      "bytes": 2906,
+      "sha256": "f5249e131292f10f0c09e9ff588393c74bb5c5b14c755f68f227e137068eacbf"
+    },
+    {
+      "file": "mobile.css",
+      "bytes": 17693,
+      "sha256": "701cdcb604391b4c9df9d35970254e04e93c11184a05132b4800b7aa66aff347"
+    },
+    {
+      "file": "mobile.html",
+      "bytes": 640,
+      "sha256": "f5f7948da0b2d2b12911c18a63b02b92c61f6ad2eb8c0ab419e6b4a05b65d5a0"
+    },
+    {
+      "file": "mobile.js",
+      "bytes": 9957,
+      "sha256": "a362ec0d7619fca6ec2fcfe004babdde7f0ba85371d6b065b14b819c0e0c165b"
+    },
+    {
+      "file": "platform-spec.md",
+      "bytes": 5526,
+      "sha256": "186d5c4d2e9a2ef6ddedd9c80bb8ab1642d1e689b779d5cf2c148681fdcacc3b"
+    },
+    {
+      "file": "prototype.css",
+      "bytes": 26819,
+      "sha256": "e3cf4067c83fd9df766af81fedeb402d8818db6c90434bb117d83b6359290c5d"
+    },
+    {
+      "file": "prototype.html",
+      "bytes": 539,
+      "sha256": "e623a6ddc4d5f514f22c8bba5e6bef54b08d66e7c4e225224b7be0e3ebdc8dd7"
+    },
+    {
+      "file": "prototype.js",
+      "bytes": 65288,
+      "sha256": "7ea93c23535c3b1457858dea5d022d9ad688d67fce4a8f2dc749b2fb4a970c3f"
+    },
+    {
+      "file": "qa-desktop.json",
+      "bytes": 32484,
+      "sha256": "205625e6305f363a63052eefb0c8325fe559f0c4c828fce3c02390952ac56ed1"
+    },
+    {
+      "file": "qa-mobile.json",
+      "bytes": 21864,
+      "sha256": "ff09f3e164858d86d47aff66856d05fc6b1e2ade95bb8a07cef87b8c92bae5ee"
+    },
+    {
+      "file": "qa/contact-01.png",
+      "bytes": 342634,
+      "sha256": "b942242069503abefdb908d3a42a39e17efe9a62e239747d5381b1e440745552"
+    },
+    {
+      "file": "qa/contact-02.png",
+      "bytes": 281850,
+      "sha256": "cc605abe1c7395686d580c769c8cb9d6ad19e52ba0626f258ebb10e077b75130"
+    },
+    {
+      "file": "qa/contact-03.png",
+      "bytes": 304074,
+      "sha256": "8d7c305453a8e94e1f8850a562ee3caafa12e95c94e81737c1b63562352da984"
+    },
+    {
+      "file": "qa/contact-04.png",
+      "bytes": 347047,
+      "sha256": "5b92a62864edd16ce6656854160ad7d8a4430ae8990d5091c871a7b4ef30714e"
+    },
+    {
+      "file": "qa/contact-05.png",
+      "bytes": 336932,
+      "sha256": "82de464a2e6a3b54410187f243d1bb46d53ae5d6b4b95bfa9dac94a4738c9b63"
+    },
+    {
+      "file": "qa/contact-06.png",
+      "bytes": 280592,
+      "sha256": "d9c4e4403c985debe14c16845f40406790ec7aec134ea631181cea6f4bba4b24"
+    },
+    {
+      "file": "registration.json",
+      "bytes": 1165,
+      "sha256": "9e76e8c8f9ab34404216e214de8c17cb6ed413b5628e422d8a81ea521f5849e8"
+    },
+    {
+      "file": "render-mobile.cjs",
+      "bytes": 12227,
+      "sha256": "3e8f22c0658fb259b6ea50f1d4fa2eb999f189927ae3e5800a57f3f5bd4165c6"
+    },
+    {
+      "file": "render.cjs",
+      "bytes": 12574,
+      "sha256": "c077ef3ae3cd93d9837e6d6a82ec43e44b2d6465c2e1dafa0109158985fd75c0"
+    },
+    {
+      "file": "responsive-audit.json",
+      "bytes": 44872,
+      "sha256": "5fad73a160fdf1f7bd06f557a6d4c3c548a00ace1ea1d18f2bee4865475a3f42"
+    },
+    {
+      "file": "state-spec.md",
+      "bytes": 5772,
+      "sha256": "81794a2dd50b2b38005b275a633d5a3b93711da58a70879d02beb24d946adae9"
+    },
+    {
+      "file": "tokens.json",
+      "bytes": 2524,
+      "sha256": "ffa986a81ff15e37fe24ef0cc6f8f67e20cf6d7e0c9ab1251efe4d6fe160f548"
+    },
+    {
+      "file": "visual-review.md",
+      "bytes": 3192,
+      "sha256": "fef027daf1afdcf59905689260f7ad267341267f8b6e15092fe7cd49b401bdb2"
+    }
+  ],
+  "self_hash_excluded": true
+}
