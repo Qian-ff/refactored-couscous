@@ -37,7 +37,7 @@ function CsvFlow({ session, kind, schoolId, courseId, imported, close }: ImportP
         return file.text()
       }, value => { setCsv(value); setChecked(null) }, "文件已读取，请先预检")
     }} /></Field>
-    <Field label="CSV 内容" hint="每批最多 500 行；账号模板中为每个账号填写临时密码。内容仅保留在当前页面内存。">
+    <Field label="CSV 内容" hint={kind === "accounts" ? "每批最多 500 行；账号模板中为每个账号填写临时密码。内容仅保留在当前页面内存。" : "每批最多 500 行；名单模板只填写已开通学生的登录账号，不填写密码。内容仅保留在当前页面内存。"}>
       <textarea value={csv} disabled={action.pending} onChange={event => { setCsv(event.target.value); setChecked(null) }} spellCheck={false} />
     </Field>
     {!schoolId && <Notice>请先选择学校。</Notice>}
