@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react"
-import { AlertCircle, CheckCircle2, LoaderCircle, RefreshCw, ShieldCheck } from "lucide-react"
+import { Children, useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react"
 import axios from "axios"
 import { isStaleRequest, message, sessionSnapshot, subscribeSession, type SessionSnapshot } from "../../lib/api"
 import type { PageProps } from "../../lib/extensions"
+import { Button, Dialog, Notice as PublicNotice, PageContainer, Pagination, Panel, RecordList, StatePanel } from "../../components/labconnect"
+export { Button, Dialog, Field, RecordList, SearchFilters, StatePanel } from "../../components/labconnect"
 import "./business.css"
 
 export function SessionPage({ page, children }: { page: PageProps; children: ReactNode }) {
@@ -14,44 +15,74 @@ export function SessionPage({ page, children }: { page: PageProps; children: Rea
 }
 
 export function BusinessPage({ page, title, description, children }: { page: PageProps; title: string; description: string; children: ReactNode }) {
-  if (page.session.phase !== "ready" || page.session.user?.id !== page.user.id) {
-    return <div className="b1-ui"><Notice>正在确认工作身份，请稍候。</Notice></div>
-  }
-  if (!["teacher", "administrator"].includes(page.session.workRole ?? "")) {
-    return <div className="b1-ui"><Notice kind="error">当前工作身份无权打开教学管理页面。</Notice></div>
-  }
-  return <main className="b1-ui">
-    <header className="b1-page-header"><div><span className="b1-eyebrow"><ShieldCheck size={16} /> 安研通 · 教学协同</span>
-      <h1>{title}</h1><p>{description}</p></div>
-      <span className="b1-scope">{page.user.school?.name ?? "平台运维"}<br />{page.session.workRole === "teacher" ? "教师工作身份" : "管理员工作身份"}</span>
-    </header>{children}
-  </main>
+  if (page.session.phase !== "ready" || page.session.user?.id !== page.user.id) return <StatePanel kind="loading" title="正在确认工作身份" />
+  if (!["teacher", "administrator"].includes(page.session.workRole ?? "")) return <StatePanel kind="forbidden" description="当前工作身份无权打开教学管理页面。" />
+  return <div className="b1-ui"><PageContainer title={title} description={description}>{children}</PageContainer></div>
 }
 
-export function Section({ title, description, actions, children }: { title: string; description?: string; actions?: ReactNode; children: ReactNode }) {
-  return <section className="b1-section"><header><div><h2>{title}</h2>{description && <p>{description}</p>}</div>{actions}</header>{children}</section>
+export function Section({ title, description, actions, children, id }: { title: string; description?: string; actions?: ReactNode; children: ReactNode; id?: string }) {
+  const panel = <Panel title={title} actions={actions}>{description && <p className="b1-description">{description}</p>}{children}</Panel>
+  return id ? <div id={id} className="b1-section-anchor">{panel}</div> : panel
 }
 
-export function Notice({ kind = "info", children, retry }: { kind?: "info" | "error" | "success"; children: ReactNode; retry?: () => void }) {
-  return <div className={`b1-notice b1-${kind}`} role={kind === "error" ? "alert" : "status"}>
-    {kind === "success" ? <CheckCircle2 size={19} /> : <AlertCircle size={19} />}<span>{children}</span>
-    {retry && <button type="button" className="b1-button b1-secondary" onClick={retry}><RefreshCw size={16} />重试</button>}
-  </div>
-}
-
-export function Empty({ children }: { children: ReactNode }) { return <div className="b1-empty">{children}</div> }
-export function Loading() { return <div className="b1-loading" role="status"><LoaderCircle size={20} className="b1-spin" />正在读取授权范围内的数据…</div> }
-export function Field({ label, children, hint }: { label: string; children: ReactNode; hint?: string }) {
-  return <label className="b1-field"><span>{label}</span>{children}{hint && <small>{hint}</small>}</label>
-}
+export const Notice = PublicNotice
+export function Empty({ children }: { children: ReactNode }) { return <StatePanel kind="empty" description={Children.toArray(children).map(child => typeof child === "string" || typeof child === "number" ? String(child) : "").join("")} /> }
+export function Loading() { return <StatePanel kind="loading" title="正在读取授权范围内的数据…" /> }
 export function Badge({ children, muted = false }: { children: ReactNode; muted?: boolean }) {
   return <span className={`b1-badge ${muted ? "b1-badge-muted" : ""}`}>{children}</span>
 }
 export function Pager({ offset, count, size = 20, change }: { offset: number; count: number; size?: number; change: (value: number) => void }) {
-  return <div className="b1-pager"><span>共 {count} 项 · 第 {Math.floor(offset / size) + 1} 页</span><div className="b1-actions">
-    <button type="button" className="b1-button b1-secondary" disabled={offset === 0} onClick={() => change(Math.max(0, offset - size))}>上一页</button>
-    <button type="button" className="b1-button b1-secondary" disabled={offset + size >= count} onClick={() => change(offset + size)}>下一页</button>
-  </div></div>
+  return <Pagination total={count} offset={offset} pageSize={size} onChange={change} />
+}
+
+const narrowQuery = () => window.matchMedia("(max-width: 700px)")
+const narrowSubscribe = (notify: () => void) => { const query = narrowQuery(); query.addEventListener("change", notify); return () => query.removeEventListener("change", notify) }
+export function useNarrowRecords() { return useSyncExternalStore(narrowSubscribe, () => narrowQuery().matches, () => false) }
+
+export function FilterFields({ children }: { children: ReactNode }) {
+  const narrow = useNarrowRecords()
+  if (Children.count(Children.toArray(children)) === 0) return null
+  return narrow ? <details className="b1-filter-options"><summary>展开筛选条件</summary><div className="b1-filter-fields">{children}</div></details> : <>{children}</>
+}
+
+/** Domain column mapping: semantic table on desktop, D RecordList on mobile. */
+export function BusinessRecords<T>({ items, itemKey, title, fields, actions, titleLabel = "名称", actionLabel = "操作" }: {
+  items: readonly T[]; itemKey: (item: T) => string; title: (item: T) => ReactNode;
+  fields: readonly { label: string; value: (item: T) => ReactNode }[]; actions?: (item: T) => ReactNode; titleLabel?: string; actionLabel?: string
+}) {
+  const narrow = useNarrowRecords()
+  if (narrow) return <RecordList items={items} itemKey={itemKey} title={item => <span className="b1-record-title">{title(item)}</span>} fields={fields} actions={actions} />
+  return <div className="b1-table-wrap"><table className="b1-table"><thead><tr><th>{titleLabel}</th>{fields.map(field => <th key={field.label}>{field.label}</th>)}{actions && <th>{actionLabel}</th>}</tr></thead>
+    <tbody>{items.map(item => <tr key={itemKey(item)}><td>{title(item)}</td>{fields.map(field => <td key={field.label}>{field.value(item)}</td>)}{actions && <td><div className="b1-actions">{actions(item)}</div></td>}</tr>)}</tbody></table></div>
+}
+
+/** A business editor consumes D Dialog; unconfirmed local input never persists. */
+export function EditorDialog({ title, children, onClose, pending = false, savedVersion }: { title: string; children: ReactNode; onClose: () => void; pending?: boolean; savedVersion?: string | number }) {
+  const [dirty, setDirty] = useState(false)
+  const [discard, setDiscard] = useState(false)
+  useEffect(() => { setDirty(false) }, [savedVersion])
+  return <><Dialog title={title} long busy={pending} onClose={() => { if (dirty) setDiscard(true); else onClose() }}>
+    <div className="b1-editor-body" onInputCapture={() => setDirty(true)} onChangeCapture={() => setDirty(true)}>{children}</div>
+  </Dialog>{discard && <Dialog title="放弃未保存的修改？" onClose={() => setDiscard(false)} busy={pending}><p>当前输入尚未保存。若操作结果尚未确认，请返回原表单先用原请求重试。</p><div className="b1-actions"><Button variant="secondary" onClick={() => setDiscard(false)}>继续编辑</Button><Button variant="danger" onClick={onClose}>放弃并关闭</Button></div></Dialog>}</>
+}
+
+export type ConfirmationCommand = { title: string; description: string; action: () => Promise<unknown> }
+export function ConfirmCommand({ command, onClose, action }: { command: ConfirmationCommand | null; onClose: () => void; action: { pending: boolean; error: string; success: string } }) {
+  if (!command) return null
+  return <Dialog title={command.title} busy={action.pending} onClose={onClose}><p>{command.description}</p><ActionFeedback action={action} />
+    {action.error && <Notice kind="warning">结果尚未确认时，请使用当前请求重试。关闭此窗口不会撤销已经送达服务器的操作。</Notice>}
+    <div className="b1-actions"><Button variant="secondary" disabled={action.pending} onClick={onClose}>取消</Button><Button variant="danger" pending={action.pending} onClick={async () => { const result = await command.action(); if (result !== undefined) onClose() }}>确认{command.title}</Button></div>
+  </Dialog>
+}
+
+export function CopyCode({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false)
+  const [error, setError] = useState(false)
+  useEffect(() => { setCopied(false); setError(false) }, [value])
+  return <><Button variant="secondary" onClick={async () => {
+    setCopied(false); setError(false)
+    try { await navigator.clipboard.writeText(value); setCopied(true) } catch { setError(true) }
+  }}>{copied ? "已复制邀请码" : "复制邀请码"}</Button>{error && <Notice kind="error">无法复制，请选择邀请码并手动复制。</Notice>}</>
 }
 
 /** Both the global session generation and same-session query order are checked. */

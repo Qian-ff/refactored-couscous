@@ -25,7 +25,7 @@
 
 ## 接续顺序
 
-D第一批已交A接收，使用新组件基线d-ui-components-ready；B从[第一批交接](d-ui-foundation-handoff.md)继续展示迁移。原D-UI宽范围目标分批完成，当前仅公共组件/壳/账号/学生课程已交付，B展示、D加退班等二次整合及A/F完整验收尚未完成。
+B展示迁移6682ec37a2543e9e50a1bf400a8d70057351c807已交A接收，使用新基线b-ui-integrated；原D从[B-UI交接](b-ui-integration-handoff.md)继续二次整合。公共组件/壳/账号/学生课程及B教师管理展示已交付，D学生加退班/申请/撤销和A/F完整既有UI验收尚未完成。原d-ui-components-ready及冻结标签保留。
 
 1. 原D保留本树提交后合并ui-redesign-ready或A公布的等价完整SHA，核对实际D分支、共享依赖、冻结文件及当次xhigh，执行[D任务书中的D-UI Goal](ai/D-learning-ui.md)。当前可以开始D公共组件和壳，完整D学习/考试Goal仍等待C/B2。
 2. D先交付真实公共组件、布局和组件属性说明，在D所属目录记录导出/使用方式及检查并提交给A。A集成后发布新公共SHA；B保留提交后合并该SHA，再执行[B-UI Goal](ai/B-core.md)迁移教师/管理展示层。B在此前可核对功能映射和现有回归，不以假组件先完成迁移。

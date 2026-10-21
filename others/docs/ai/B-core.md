@@ -1,8 +1,8 @@
 # B：分阶段任务书
 
-当前B1已完成；UI-2026.10-v1网页批准和冻结设计已接收，阶段顺序以[a2-start](../a2-start.md)为准。B先核对[执行交接](../ui-redesign-execution.md)，待D真实公共组件由A集成发布后，合并该新SHA再迁移自身展示层。既有UI通过A验收后才进入C，C经A集成后另启B2。公共协议见[模块协议](../../contracts/a2-protocols.md)，历史检查见[A0](../a0-handoff.md)。
+当前B1及B-UI展示迁移已交A接收；最终B提交6682ec37a2543e9e50a1bf400a8d70057351c807，接续以[b-ui-integrated交接](../b-ui-integration-handoff.md)为准。B保留业务文件所有权，配合后续具体问题，不重复执行下面历史迁移目标。D二次整合、A/F既有UI验收后才进入C，C经A集成后另启B2。公共协议见[模块协议](../../contracts/a2-protocols.md)，历史检查见[A0](../a0-handoff.md)。
 
-## B-UI Goal（组件基线已接收，可以接续）
+## B-UI Goal（已交付，保留历史）
 
 A已接收D第一批，现使用本地d-ui-components-ready组件基线，完整SHA用git rev-parse获取，见[接续交接](../d-ui-foundation-handoff.md)。本阶段可开始B展示迁移；C/B2门禁未放行。先保存本树工作并合并该基线，不只合并旧ui-redesign-ready。公共导出及布局契约见web/src/components/labconnect/README.md，保持B唯一维护ui.tsx/business.css及业务钩子。
 

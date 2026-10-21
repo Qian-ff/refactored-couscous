@@ -6,7 +6,7 @@
 
 ## 固定顺序
 
-当前接续更新：D第一批b61626a36caca964bff83142424833e1b0eafea5已由A接收，组件基线为本地d-ui-components-ready，见[实际交接与一键体验](d-ui-foundation-handoff.md)。B现可消费真实组件迁移展示，随后D二次整合；旧标签保留，C/B2仍等待A/F既有UI验收。下列“D-UI→A验收”指完整专项，不因第一批交付而提前完成。
+当前接续更新：B展示迁移6682ec37a2543e9e50a1bf400a8d70057351c807已由A接收，新本地基线b-ui-integrated，见[实际交接与一键体验](b-ui-integration-handoff.md)。原D合并后补学生加退班、申请和撤销等既有入口，再交A/F完整既有UI验收。d-ui-components-ready及旧标签保留，C/B2仍未放行。下列“D-UI→A验收”指完整专项，不因B或D单批交付而提前完成。
 
 当前[B1最终集成交接](b1-handoff.md)已完成，真实契约0.3.1；UI-2026.10-v1网页方向已获用户明确批准，冻结d17b342c53fc054bd298bee356143d3b3ab77af6已接收。原D可合并ui-redesign-ready并先执行D-UI公共组件，B/F按[执行交接](ui-redesign-execution.md)接续；登记见[辅助任务](../contracts/auxiliary-tasks.json)。C/B2新增功能仍等待既有UI经A真实验收。a2-ready和b1-ready均保留历史位置。
 

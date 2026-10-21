@@ -1,8 +1,10 @@
 # D-UI 第一批：A 集成与 B 组件基线
 
+本页保留第一批历史交接。B已完成展示迁移并交A接收，当前D二次整合以[B-UI新交接](b-ui-integration-handoff.md)和b-ui-integrated为准；d-ui-components-ready原标签保留。
+
 D交付 `b61626a36caca964bff83142424833e1b0eafea5`，起点为 `98dace30e7786a6466cbf264996627097afffcde`。A接收公共组件、正式身份壳、账号注册/资料/改密和学生课程入口，发布本地 `d-ui-components-ready`；完整SHA用 git rev-parse d-ui-components-ready 获取。真实契约仍0.3.1，迁移仍b1c0e0a00001，无后端或SDK变更。
 
-## B 现在接续
+## B 接续（第一批历史）
 
 保留B本树工作后合并本标签；执行[B-UI目标](ai/B-core.md)。统一组件从 `web/src/components/labconnect/index.tsx` 导入，属性与示例见[组件契约](../../web/src/components/labconnect/README.md)。B唯一修改admin/teaching展示层，保留请求、会话代次、查询取消、幂等、revision、CSV和授权逻辑。壳提供一次工作区间距，PageContainer提供唯一main和标题；迁移时消除旧BusinessPage重复main/标题，不建立第二套身份壳。
 

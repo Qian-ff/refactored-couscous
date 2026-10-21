@@ -1,6 +1,6 @@
 # AI 聊天分工与阶段Goal
 
-唯一A负责集成，最多四聊天并行容量。B1和D-UI第一批公共组件已接收，当前B从[d-ui-components-ready组件基线](../d-ui-foundation-handoff.md)迁移所属展示层，随后D二次整合、A/F既有UI验收，再进入C/B2。完整顺序以[阶段入口](../a2-start.md)为准，容量不意味着同时启动全部角色。
+唯一A负责集成，最多四聊天并行容量。B1、D-UI第一批及B展示迁移已接收，当前原D从[b-ui-integrated新基线](../b-ui-integration-handoff.md)完成学生既有入口二次整合，随后A/F既有UI验收，再进入C/B2。完整顺序以[阶段入口](../a2-start.md)为准，容量不意味着同时启动全部角色。
 
 | 角色 | 任务与完整可复制Goal | 分支 |
 |---|---|---|

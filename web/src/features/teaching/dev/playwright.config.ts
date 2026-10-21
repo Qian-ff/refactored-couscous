@@ -7,11 +7,11 @@ process.env.LABCONNECT_API_ROOT ||= root
 process.env.LABCONNECT_API_URL ||= "http://127.0.0.1:8001"
 export default defineConfig({
   testDir: "./tests", workers: 1, timeout: 60_000, retries: 0,
-  globalSetup: "./verify-services.ts", outputDir: path.join(root, "others/reports/b1-components/test-results"),
-  reporter: [["list"], ["json", { outputFile: path.join(root, "others/reports/b1-components/results.json") }]],
+  globalSetup: "./verify-services.ts", outputDir: path.join(root, "others/reports/b-ui/test-results"),
+  reporter: [["list"], ["json", { outputFile: path.join(root, "others/reports/b-ui/results.json") }]],
   use: { baseURL: `http://127.0.0.1:${webPort}`, viewport: { width: 1440, height: 1000 }, actionTimeout: 10_000, navigationTimeout: 15_000,
     channel: process.platform === "win32" && existsSync("C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe") ? "msedge" : undefined,
-    trace: "retain-on-failure" },
+    trace: "off" },
   webServer: { command: `node ../node_modules/vite/bin/vite.js --host 127.0.0.1 --port ${webPort}`,
     cwd: path.join(root, "web"), url: `http://127.0.0.1:${webPort}`, reuseExistingServer: true, timeout: 60_000 },
 })

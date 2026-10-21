@@ -1,10 +1,10 @@
-# B1 教师与管理员页面交接
+# B 教师与管理员页面交接：UI-2026.10-v1
 
-消费 A 已发布的 `0.3.1` 真实契约和生成 SDK。页面组件已在本树独立开发夹具中连接真实 API 验证；产品公共路由、三角色工作台和原生包仍由 D/A 接入。
+消费 A 已发布的 `0.3.1` 真实契约和生成 SDK；组件基线为 `d-ui-components-ready` / `27c1e385d2e0b97ce5880e0230bae2be7aa1a5c1`。D 已挂载下表七条正式 HashRouter 页面，B 在此基础上迁移展示；完整学生加退班整合和原生验收仍待 D/A/F 接续。
 
 ## D 接入页面
 
-从 `../admin/pages.ts` 导入 `adminPages`，从 `./pages.ts` 导入 `teachingPages`，合并到公共 `PageRegistration[]`。D 唯一维护入口、HashRouter 和路由权限。不要导入 `dev/harness.tsx`。
+从 `../admin/pages.ts` 导入 `adminPages`，从 `./pages.ts` 导入 `teachingPages`，目前已由 D 合并到公共 `PageRegistration[]`；路径、params、工作身份和接口保持原样。D 唯一维护入口、HashRouter 和路由权限。不要导入 `dev/harness.tsx`。
 
 | 路径 | 当前工作身份 | 页面 |
 | --- | --- | --- |
@@ -20,7 +20,7 @@
 
 组件复用 `lib/api.ts` 的会话和 SDK，不收 token。页面经 `SessionPage` 在身份代次变化时卸载；查询另用 AbortController 和序号防同身份乱序覆盖。退出、切身份、切服务时不保留原结果或 CSV 原文。命令使用 Idempotency-Key；同会话同载荷的网络失败 / 5xx 保留不确定请求键，重试不重复创建；载荷或身份变化不复用。
 
-`business.css` 仅使用 `.b1-*`，蓝绿配色，390 宽度改为单列；表格在自身容器内横向滚动，不撑开整页。后续 D 可统一视觉系统，保留现有加载、空、失败重试、无权限、归档只读及功能未开放反馈。
+`business.css` 只适配 B 领域展示及含 `.b1-editor-body` 的公共 Dialog。公共壳提供一次边距，BusinessPage 消费 PageContainer 提供唯一 main/h1；Section 消费 Panel，字段、按钮、状态、分页和搜索均使用公共导出。桌面语义表格与手机 RecordList 使用同一份列/动作映射；手机筛选可展开，条件不丢失。EditorDialog 消费公共 Dialog，桌面侧置、390 全屏，标题固定、正文滚动；未保存关闭须确认。危险确认只包装原 action.run，未另造请求或幂等机制。
 
 ## 登录、首次改密与个人资料交 D
 
@@ -43,6 +43,15 @@ pnpm --filter @safelab/web exec playwright test --config src/features/teaching/d
 
 夹具 URL 为 `/src/features/teaching/dev/index.html?api=http%3A%2F%2F127.0.0.1%3A8001`。它只渲染注册组件，复用真实登录和公共会话；没有替代公共产品路由。`dev/` 不应成为发布入口。
 
-证据写入本树忽略的 `others/reports/b1-components/`：`services.json`、`results.json`、失败 trace、组织 / 账号 / 首次改密 / 课程 / 班级 / 邀请的 1440、390 PNG。输出放在源码目录外，避免报告改变服务源码指纹。测试只创建合成账号和班级，不重置演示库；新建测试班最终归档。
+证据写入本树忽略的 `others/reports/b-ui/`：`services.json`、`results.json`、hook-preservation.json，以及正式页面 / 独立夹具的 1440、390 PNG；长抽屉另存底部截图。密码、CSV和完整邀请码遮蔽；认证 trace 关闭。输出放在源码目录外，避免报告改变服务源码指纹。测试只创建合成账号和班级，不重置演示库；新建测试班最终归档。
 
-现有网页构建验证兼容性和类型；公共产品入口尚未挂载这些页面，不能据此声称 B1 页面已进入正式三端包。最终证据与提交对应关系见后端 `core/handoff/b1-completion.md`。
+网页构建包含正式入口和这些 B 页面；网页实测不替代 A/F 重新构建 Windows / Android 和原生运行。B1 历史记录仍在 core/handoff/b1-completion.md，本轮 UI 映射、来源与证据见 handoff/b-ui-completion.md。后续顺序保持 B → A集成 → D二次整合学生既有入口 → A/F既有UI验收 → A明确发布C开工基线。
+
+## 公共组件使用与页面衔接
+
+- 公共组件只从 components/labconnect 导入，B 的 ui.tsx 是领域展示适配层。SessionPage / useBusinessQuery / useBusinessAction 与组件基线函数文本一致，原会话、取消、幂等和 revision 行为不变。
+- 课程目录与教学班现在各有搜索和分页；保留全部授权班级、目录筛选、当前 / 归档条件。主讲教师、目录所有者是展示术语，现有接口字段 is_primary / owner_id 不改名。
+- CSV 从“批量导入账号 / 名单”进入对应公共长弹窗；模板、文件 / 文本、逐行预检、整批提交与原请求重试全部保留。关闭确认后卸载流程，清理敏感内存；未确认结果关闭不会撤销服务器已收到的命令。
+- 组织 / 账号编辑保留完整字段、只读编码、角色授权 / 撤销、启停和重置。冲突不覆盖输入，提供明确读取最新入口。转交和归档使用短确认，归档代码只作客户端保护，不追加 API 字段。
+- 班级分区导航只滚动到现有面板，不卸载未提交表单。D 后续学生加退班、申请和撤销继续使用现有接口，不能引入第二个业务身份壳或另造班级 ID。
+- 助手、考试、题库、记录和监控保持真实未开放状态；D 仍是唯一悬浮助手宿主，后续 C / F / B2 按已批准分工接续。
