@@ -29,7 +29,9 @@ test('真实网页登录、写课程及另一账号同步读取', async ({ page,
   const admin = await adminContext.newPage()
   await login(admin, 'admin')
   await admin.getByLabel('名称或代码', { exact: true }).fill(code)
-  await admin.getByRole('button', { name: '查询课程', exact: true }).click()
+  const classSearch = admin.locator('form').filter({ has: admin.getByLabel('名称或代码', { exact: true }) })
+  // Scope the class query while both the current UI and B's shared search are published.
+  await classSearch.getByRole('button', { name: /^(查询课程|搜索)$/ }).click()
   await expect(admin.getByText(title, { exact: true }).first()).toBeVisible()
   await adminContext.close()
 })
