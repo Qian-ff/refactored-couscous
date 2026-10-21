@@ -1,0 +1,13 @@
+{
+  "version": "UI-2026.10-v1",
+  "desktop_status": "approved",
+  "desktop_commit": "b67ad77cd49c2b5f99d2037e5828c29433ea66a6",
+  "evidence": {
+    "source": "explicit human answer in design chat",
+    "question_item_id": "[\"request_user_input_async\",\"call_a05aa6522036453eacd29a12596a67d1\",0]",
+    "answer": "批准 v1，继续移动稿与规范",
+    "date": "2026-10-21"
+  },
+  "authorized_next_step": "complete 390px references, freeze specifications, hand off to A and original D",
+  "production_migration_performed_in_design_chat": false
+}

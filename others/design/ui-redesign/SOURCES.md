@@ -17,3 +17,5 @@
 - [字体原许可](https://raw.githubusercontent.com/google/fonts/a85815a42757630ce188fdad368c2dfc444d4773/ofl/notosanssc/OFL.txt)
 
 本目录不包含私密参考PPT、API密钥、真实账号、监控资料、虚拟环境或第三方产品截图。字体保留完整原文件用于离线审阅；正式前端是否子集化与最终包大小由 D/F 在实施时评估，不在图片阶段擅改共享依赖。
+
+原创插图现已由extract-assets.cjs从已批准的prototype.js导出到assets/illustrations/（4个SVG），图标导出为assets/icons.svg；这些是同版SVG代码的独立文件，不是新来源或外部图片。移动稿沿用同一字体、图形与合成内容，来源和许可不变。

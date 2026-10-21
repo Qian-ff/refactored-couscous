@@ -1,0 +1,1380 @@
+{
+  "version": "UI-2026.10-v1",
+  "rendered_at": "2026-10-21T12:56:16.554Z",
+  "width": 390,
+  "viewport_height": 844,
+  "browser": "155.0.4283.62",
+  "desktop_approval": {
+    "version": "UI-2026.10-v1",
+    "desktop_status": "approved",
+    "desktop_commit": "b67ad77cd49c2b5f99d2037e5828c29433ea66a6",
+    "evidence": {
+      "source": "explicit human answer in design chat",
+      "question_item_id": "[\"request_user_input_async\",\"call_a05aa6522036453eacd29a12596a67d1\",0]",
+      "answer": "批准 v1，继续移动稿与规范",
+      "date": "2026-10-21"
+    },
+    "authorized_next_step": "complete 390px references, freeze specifications, hand off to A and original D",
+    "production_migration_performed_in_design_chat": false
+  },
+  "frozen_desktop": {
+    "desktop_commit": "b67ad77cd49c2b5f99d2037e5828c29433ea66a6",
+    "desktop_images": 55,
+    "approved_sources_unchanged": true,
+    "approved_images_unchanged": true
+  },
+  "input_sha256": {
+    "mobile.html": "f5f7948da0b2d2b12911c18a63b02b92c61f6ad2eb8c0ab419e6b4a05b65d5a0",
+    "mobile.css": "701cdcb604391b4c9df9d35970254e04e93c11184a05132b4800b7aa66aff347",
+    "mobile.js": "a362ec0d7619fca6ec2fcfe004babdde7f0ba85371d6b065b14b819c0e0c165b",
+    "prototype.html": "e623a6ddc4d5f514f22c8bba5e6bef54b08d66e7c4e225224b7be0e3ebdc8dd7",
+    "prototype.css": "e3cf4067c83fd9df766af81fedeb402d8818db6c90434bb117d83b6359290c5d",
+    "prototype.js": "7ea93c23535c3b1457858dea5d022d9ad688d67fce4a8f2dc749b2fb4a970c3f",
+    "assets/fonts/NotoSansSC-VF.ttf": "a3041811a78c361b1de50f953c805e0244951c21c5bd412f7232ef0d899af0da",
+    "assets/fonts/source.json": "c12755c2d9ef78ebefaaad058fd8e3c58819acfd09a2c9058f8cc56130024627",
+    "render-mobile.cjs": "3e8f22c0658fb259b6ea50f1d4fa2eb999f189927ae3e5800a57f3f5bd4165c6"
+  },
+  "input_fingerprint": "cdbfba922bed05a013a35eed13211b9965f171a18a73396d292e44e4b966a5f9",
+  "screens": [
+    {
+      "id": "audit-login",
+      "screen": "login",
+      "title": "登录",
+      "role": "公共入口",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 859,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 859,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-login-error",
+      "screen": "login-error",
+      "title": "登录失败反馈",
+      "role": "公共入口",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 934,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 934,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-service-settings",
+      "screen": "service-settings",
+      "title": "服务连接设置",
+      "role": "公共入口",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 859,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 859,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-first-password",
+      "screen": "first-password",
+      "title": "首次修改密码",
+      "role": "公共入口",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-student-courses",
+      "screen": "student-courses",
+      "title": "我的课程",
+      "role": "学生",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1233,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1233,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": {
+          "top": 774,
+          "bottom": 844
+        },
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-teacher-courses",
+      "screen": "teacher-courses",
+      "title": "课程与教学班",
+      "role": "教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1362,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1362,
+        "records": [
+          "2026级安全基础一班LAB-101-A·化学学院授课教师陈陈老师主讲教师状态开放管理班级",
+          "2026级安全基础二班LAB-101-B·化学学院授课教师许许老师主讲教师状态开放管理班级"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-courses-history",
+      "screen": "courses-history",
+      "title": "历史教学班",
+      "role": "教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1133,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1133,
+        "records": [
+          "2025级安全基础班LAB-101-2025·化学学院授课教师陈陈老师主讲教师状态已归档查看历史"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-admin-courses",
+      "screen": "admin-courses",
+      "title": "课程管理",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1362,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1362,
+        "records": [
+          "2026级安全基础一班LAB-101-A·化学学院授课教师陈陈老师主讲教师状态开放管理班级",
+          "2026级安全基础二班LAB-101-B·化学学院授课教师许许老师主讲教师状态开放管理班级"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-organizations-school",
+      "screen": "organizations-school",
+      "title": "学校管理",
+      "role": "平台运维",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1132,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1132,
+        "records": [
+          "示范大学编码DEMO所属层级学校状态在用编辑",
+          "北辰示范学院编码BC-DEMO所属层级学校状态在用编辑"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-organizations-college",
+      "screen": "organizations-college",
+      "title": "学院管理",
+      "role": "学校管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1442,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1442,
+        "records": [
+          "化学学院编码CHEM所属学校示范大学状态在用编辑",
+          "工程学院编码ENG所属学校示范大学状态在用编辑",
+          "生命科学学院编码BIO所属学校示范大学状态已停用编辑"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-organizations-major",
+      "screen": "organizations-major",
+      "title": "专业管理",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1419,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1419,
+        "records": [
+          "应用化学编码APPCHEM所属学院化学学院状态在用编辑",
+          "材料化学编码MATCHEM所属学院化学学院状态在用编辑",
+          "化学工程与工艺编码CHE-ENG所属学院化学学院状态已停用编辑"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-accounts",
+      "screen": "accounts",
+      "title": "账号与授权",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1695,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1695,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-account-new-student",
+      "screen": "account-new-student",
+      "title": "新建学生账号",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".drawer-body",
+          "overflow": 721
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-account-edit-student",
+      "screen": "account-edit-student",
+      "title": "编辑学生账号",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".drawer-body",
+          "overflow": 516
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-account-new-teacher",
+      "screen": "account-new-teacher",
+      "title": "新建教职账号",
+      "role": "学校管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用编辑",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".drawer-body",
+          "overflow": 721
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-account-edit-teacher",
+      "screen": "account-edit-teacher",
+      "title": "教师身份与授权",
+      "role": "学校管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用编辑",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".drawer-body",
+          "overflow": 487
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-account-reset",
+      "screen": "account-reset",
+      "title": "重置密码确认",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-account-grant",
+      "screen": "account-grant",
+      "title": "新增角色授权",
+      "role": "学校管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用编辑",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".drawer-body",
+          "overflow": 54
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-account-status",
+      "screen": "account-status",
+      "title": "停用账号确认",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用编辑",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-invitations",
+      "screen": "invitations",
+      "title": "学生账号邀请",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1773,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1773,
+        "records": [
+          "化学学院/应用化学状态有效已使用/上限1/30到期时间2026-11-2118:00撤销",
+          "化学学院/材料化学状态有效已使用/上限0/20到期时间2026-11-1818:00撤销",
+          "化学学院/应用化学状态已撤销已使用/上限2/10到期时间2026-10-3018:00已失效"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-invite-issued",
+      "screen": "invite-issued",
+      "title": "新邀请凭据",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "化学学院/应用化学状态有效已使用/上限1/30到期时间2026-11-2118:00撤销",
+          "化学学院/材料化学状态有效已使用/上限0/20到期时间2026-11-1818:00撤销",
+          "化学学院/应用化学状态已撤销已使用/上限2/10到期时间2026-10-3018:00已失效"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-overview",
+      "screen": "class-overview",
+      "title": "教学班概览",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1344,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1344,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-roster",
+      "screen": "class-roster",
+      "title": "学生名单",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1798,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1798,
+        "records": [
+          "林同学账号student.demo学号2026001001成员状态在班移出",
+          "郑同学账号student.zheng学号2026001002成员状态在班移出",
+          "何同学账号student.he学号2026001003成员状态在班移出",
+          "周同学账号student.zhou学号2025001028成员状态已退出重新加入"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-requests",
+      "screen": "class-requests",
+      "title": "加入与退出审批",
+      "role": "协作教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1648,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1648,
+        "records": [
+          "孙同学申请类型申请加入申请时间2026-10-2109:20状态待审批同意拒绝",
+          "赵同学申请类型申请退出申请时间2026-10-2108:45状态待审批同意拒绝",
+          "钱同学申请类型申请加入申请时间2026-10-2015:10状态已通过已处理"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-staff",
+      "screen": "class-staff",
+      "title": "教师协作",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1505,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1505,
+        "records": [
+          "陈陈老师teacher.chen授课身份主讲教师授权状态有效可操作范围班级设置、名单与审批、教师协作通过转交变更主讲",
+          "许许老师teacher.xu授课身份协作教师授权状态有效可操作范围学生名单与申请审批移除协作",
+          "吴吴老师teacher.wu授课身份协作教师授权状态已移除可操作范围历史关系保留恢复协作"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-collaborator",
+      "screen": "class-collaborator",
+      "title": "协作教师视角",
+      "role": "协作教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1257,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1257,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-staff-readonly",
+      "screen": "class-staff-readonly",
+      "title": "协作教师查看关系",
+      "role": "协作教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1487,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1487,
+        "records": [
+          "陈陈老师teacher.chen授课身份主讲教师授权状态有效可操作范围班级设置、名单与审批、教师协作通过转交变更主讲",
+          "许许老师teacher.xu授课身份协作教师授权状态有效可操作范围学生名单与申请审批主讲教师维护",
+          "吴吴老师teacher.wu授课身份协作教师授权状态已移除可操作范围历史关系保留主讲教师维护"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-admin",
+      "screen": "class-admin",
+      "title": "管理员班级视角",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1432,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1432,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-archived",
+      "screen": "class-archived",
+      "title": "已归档教学班",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1257,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1257,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-edit",
+      "screen": "class-edit",
+      "title": "班级名称与审批设置",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-add-member",
+      "screen": "class-add-member",
+      "title": "拉入学生",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林同学账号student.demo学号2026001001成员状态在班移出",
+          "郑同学账号student.zheng学号2026001002成员状态在班移出",
+          "何同学账号student.he学号2026001003成员状态在班移出",
+          "周同学账号student.zhou学号2025001028成员状态已退出重新加入"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-add-staff",
+      "screen": "class-add-staff",
+      "title": "添加协作教师",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "陈陈老师teacher.chen授课身份主讲教师授权状态有效可操作范围班级设置、名单与审批、教师协作通过转交变更主讲",
+          "许许老师teacher.xu授课身份协作教师授权状态有效可操作范围学生名单与申请审批移除协作",
+          "吴吴老师teacher.wu授课身份协作教师授权状态已移除可操作范围历史关系保留恢复协作"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-joincode",
+      "screen": "class-joincode",
+      "title": "生成班级邀请码",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-transfer",
+      "screen": "class-transfer",
+      "title": "转交主讲教师",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-class-archive",
+      "screen": "class-archive",
+      "title": "归档确认",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-csv-input",
+      "screen": "csv-input",
+      "title": "CSV内容编辑",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-csv-input-roster",
+      "screen": "csv-input-roster",
+      "title": "CSV班级名单编辑",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林同学账号student.demo学号2026001001成员状态在班移出",
+          "郑同学账号student.zheng学号2026001002成员状态在班移出",
+          "何同学账号student.he学号2026001003成员状态在班移出",
+          "周同学账号student.zhou学号2025001028成员状态已退出重新加入"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-csv-preview",
+      "screen": "csv-preview",
+      "title": "CSV预检通过",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码",
+          "CSV第2行姓名林同学账号student.demo学号2026001001专业应用化学临时密码••••••••",
+          "CSV第3行姓名郑同学账号student.zheng学号2026001002专业应用化学临时密码••••••••",
+          "CSV第4行姓名何同学账号student.he学号2026001003专业应用化学临时密码••••••••"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 500
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-csv-roster",
+      "screen": "csv-roster",
+      "title": "批量加入班级",
+      "role": "主讲教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林同学账号student.demo学号2026001001成员状态在班移出",
+          "郑同学账号student.zheng学号2026001002成员状态在班移出",
+          "何同学账号student.he学号2026001003成员状态在班移出",
+          "周同学账号student.zhou学号2025001028成员状态已退出重新加入",
+          "CSV第2行已开通学生账号student.demo加入本班",
+          "CSV第3行已开通学生账号student.zheng加入本班",
+          "CSV第4行已开通学生账号student.he加入本班"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 17
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-csv-errors",
+      "screen": "csv-errors",
+      "title": "CSV预检错误",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码",
+          "CSV第第2行行字段student_no问题必填学号为空请补充学生学号",
+          "CSV第第3行行字段major_id问题专业不在当前学院范围选择化学学院内有效专业"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 119
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-csv-uncertain",
+      "screen": "csv-uncertain",
+      "title": "提交结果待确认",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "林林同学student.demo学号/专业2026001001应用化学学院化学学院身份学生状态启用编辑重置密码",
+          "陈陈老师teacher.chen学号/专业—学院化学学院身份教师学院管理员状态启用当前身份仅可查看",
+          "许许老师teacher.xu学号/专业—学院化学学院身份教师状态启用编辑重置密码",
+          "周周同学student.zhou学号/专业2025001028材料化学学院化学学院身份学生状态停用编辑重置密码",
+          "CSV第2行姓名林同学账号student.demo学号2026001001专业应用化学临时密码••••••••",
+          "CSV第3行姓名郑同学账号student.zheng学号2026001002专业应用化学临时密码••••••••",
+          "CSV第4行姓名何同学账号student.he学号2026001003专业应用化学临时密码••••••••"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 618
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-new-course-teacher",
+      "screen": "new-course-teacher",
+      "title": "教师新建课程",
+      "role": "教师",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "2026级安全基础一班LAB-101-A·化学学院授课教师陈陈老师主讲教师状态开放管理班级",
+          "2026级安全基础二班LAB-101-B·化学学院授课教师许许老师主讲教师状态开放管理班级"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-new-course-admin",
+      "screen": "new-course-admin",
+      "title": "管理员新建课程",
+      "role": "学校管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "2026级安全基础一班LAB-101-A·化学学院授课教师陈陈老师主讲教师状态开放管理班级",
+          "2026级安全基础二班LAB-101-B·化学学院授课教师许许老师主讲教师状态开放管理班级"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 104
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-existing-catalog-new-class",
+      "screen": "existing-catalog-new-class",
+      "title": "已有课程目录开班",
+      "role": "课程目录所有者",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "2026级安全基础一班LAB-101-A·化学学院授课教师陈陈老师主讲教师状态开放管理班级",
+          "2026级安全基础二班LAB-101-B·化学学院授课教师许许老师主讲教师状态开放管理班级"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 104
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-edit-catalog",
+      "screen": "edit-catalog",
+      "title": "编辑课程目录",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "2026级安全基础一班LAB-101-A·化学学院授课教师陈陈老师主讲教师状态开放管理班级",
+          "2026级安全基础二班LAB-101-B·化学学院授课教师许许老师主讲教师状态开放管理班级"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 136
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-organization-edit",
+      "screen": "organization-edit",
+      "title": "编辑与停用组织",
+      "role": "学校管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "化学学院编码CHEM所属学校示范大学状态在用编辑",
+          "工程学院编码ENG所属学校示范大学状态在用编辑",
+          "生命科学学院编码BIO所属学校示范大学状态已停用编辑"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-organization-edit-school",
+      "screen": "organization-edit-school",
+      "title": "编辑与停用学校",
+      "role": "平台运维",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "示范大学编码DEMO所属层级学校状态在用编辑",
+          "北辰示范学院编码BC-DEMO所属层级学校状态在用编辑"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-organization-edit-major",
+      "screen": "organization-edit-major",
+      "title": "编辑与停用专业",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "应用化学编码APPCHEM所属学院化学学院状态在用编辑",
+          "材料化学编码MATCHEM所属学院化学学院状态在用编辑",
+          "化学工程与工艺编码CHE-ENG所属学院化学学院状态已停用编辑"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-organization-new",
+      "screen": "organization-new",
+      "title": "新建组织",
+      "role": "平台运维",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "示范大学编码DEMO所属层级学校状态在用编辑",
+          "北辰示范学院编码BC-DEMO所属层级学校状态在用编辑"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-organization-new-college",
+      "screen": "organization-new-college",
+      "title": "新建学院",
+      "role": "学校管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "化学学院编码CHEM所属学校示范大学状态在用编辑",
+          "工程学院编码ENG所属学校示范大学状态在用编辑",
+          "生命科学学院编码BIO所属学校示范大学状态已停用编辑"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-organization-new-major",
+      "screen": "organization-new-major",
+      "title": "新建专业",
+      "role": "学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "应用化学编码APPCHEM所属学院化学学院状态在用编辑",
+          "材料化学编码MATCHEM所属学院化学学院状态在用编辑",
+          "化学工程与工艺编码CHE-ENG所属学院化学学院状态已停用编辑"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": {
+          "selector": ".dialog-body",
+          "overflow": 0
+        },
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-role-switch",
+      "screen": "role-switch",
+      "title": "切换已授权身份",
+      "role": "教师兼学院管理员",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 844,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 844,
+        "records": [
+          "2026级安全基础一班LAB-101-A·化学学院授课教师陈陈老师主讲教师状态开放管理班级",
+          "2026级安全基础二班LAB-101-B·化学学院授课教师许许老师主讲教师状态开放管理班级"
+        ],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    },
+    {
+      "id": "audit-states-sheet",
+      "screen": "states-sheet",
+      "title": "状态样式总览",
+      "role": "状态规范草案",
+      "width": 390,
+      "viewport_height": 844,
+      "height": 1846,
+      "metrics": {
+        "font": true,
+        "width": 390,
+        "height": 1846,
+        "records": [],
+        "clipped": [],
+        "small_targets": [],
+        "scroll_region": null,
+        "bottom_nav": null,
+        "missing_fields": []
+      }
+    }
+  ],
+  "errors": [],
+  "blocked_requests": [],
+  "checks": {
+    "font": true,
+    "no_page_horizontal_overflow": true,
+    "no_work_surface_clipping": true,
+    "no_missing_table_fields": true,
+    "touch_targets_44px": true,
+    "no_browser_errors": true,
+    "no_business_requests": true,
+    "desktop_unchanged": true
+  },
+  "native_tests_performed": false
+}

@@ -15,12 +15,17 @@
   "per_thread_change_verified": true,
   "reasoning_verification": {
     "source": "Codex turn_context",
-    "turn_id": "01a15e6c-887d-7121-9de9-40888790ec62",
-    "timestamp_utc": "2026-10-21T12:25:33.679Z",
+    "turn_id": "01a15e71-0a09-7092-ae93-16ee182b741b",
+    "timestamp_utc": "2026-10-21T12:30:28.934Z",
     "model": "gpt-6.1-sol",
     "effort": "xhigh"
   },
   "global_configuration_changed": false,
-  "user_approved": false,
-  "production_code_changed": false
+  "user_approved": true,
+  "production_code_changed": false,
+  "approval_record": "approval.json",
+  "handoff_status": "ready_for_A",
+  "frozen_design_version": "UI-2026.10-v1",
+  "mobile_reference_screens": 16,
+  "mobile_audited_existing_screens": 53
 }
