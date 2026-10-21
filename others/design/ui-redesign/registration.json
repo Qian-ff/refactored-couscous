@@ -1,0 +1,18 @@
+{
+  "role": "independent-ui-design",
+  "branch": "codex/ui-design-v1",
+  "baseline_tag": "b1-ready",
+  "baseline_sha": "1e1011b4ff2e3c5a66b22492fb87a671e9699584",
+  "allowed_path": "others/design/ui-redesign/",
+  "design_version": "UI-2026.10-v1",
+  "main_thread": "01a1544b-7eb1-77f1-9f83-52fa8510503c",
+  "design_thread": "01a15e27-4a94-79f0-9a2b-37b3fcee6334",
+  "main_registration_message_sent": true,
+  "requested_reasoning_effort": "xhigh",
+  "observed_reasoning_effort_at_start": "max",
+  "per_thread_change_requested": true,
+  "per_thread_change_verified": false,
+  "global_configuration_changed": false,
+  "user_approved": false,
+  "production_code_changed": false
+}

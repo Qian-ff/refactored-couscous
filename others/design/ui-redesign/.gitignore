@@ -1,0 +1,4 @@
+.runtime/
+.cache/
+
+qa-partial.json
