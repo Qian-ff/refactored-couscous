@@ -29,7 +29,12 @@ others/scripts/migrate_database.py 在待升级时先 pg_dump、检查归档可�
 - Ruff、前端类型检查、实际 OpenAPI/哈希/生成客户端一致检查通过。
 - 演示库 Alembic check 未发现元数据漂移。
 - 25项协作/环境检查通过。contracts.py已复用共享解释器并绑定当前树源码，实际从尚未同步的B树导出0.2.0，而非误读A的0.3.0，无需B自己的.venv。
-- Windows 测试包首轮构建通过；固定提交后的网页、Windows、安卓构建与入口检查记录到本目录后续验收附录及忽略报告，不把构建通过写成业务页面完成。
+- 固定提交后的网页、Windows、安卓均重新构建，实际APK及Windows包内的build-info与网页一致：源码feb081c6152e75d002febea348d2bc0ede0f2ada、契约0.3.0。产物大小及SHA256见忽略报告others/reports/b1-public/builds.json；壳包版本仍为0.1.0，Windows为未签名测试目录、安卓为debug APK。
+- Open-B1-API实际启动通过；主树API与Vite的SHA、工作树、源码指纹及契约核对通过。网页7项兼容检查通过，报告/截图单独写入b1-public，A0证据保留。
+- Windows包复制到独立运行目录后，真实登录、新建课程、另一网页账号同步读取及renderer关闭Node访问均通过；报告windows-test.json。隐藏窗口的Playwright截图曾超时，改用当前Electron自带capturePage保持隐藏完成截图，失败和测试适配记录在native-harness.json；未修改F的客户端源码。
+- 安卓API36模拟器实际安装/启动本次APK，读取Windows新建课程、与网页双向新建/同步课程、原生触摸退出及学生范围/移动布局均通过，报告android-test.json及截图。首轮被模拟器System UI无响应对话框遮挡；只读确认焦点及实际Wait按钮后，复用已有恢复脚本，再完整重测通过，保留android-obstruction.png。本轮未测试实体设备、麦克风或语音业务。
+
+B分支在固定6d863e8之后的邀请时区、异常CSV和页面增量尚未包含在本次主树集成中；B已保留这些提交并合并401f0ac，报告其最新代码64项真实PG/API及真实契约检查通过。这是B分支的结果，不替代主树62项的记录；后续完整B1交付仍需A审查集成。
 
 ## 一键入口与消费
 
@@ -46,3 +51,5 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\others\scripts\Start-B1Api
 B 先提交自己的未完成改动，再合并 A 公布的完整公共提交 SHA。依赖锁未变，不需要重建 Python 或另装依赖。沿用 B 所有权内的组件夹具与真实 API 联调，公共入口/路由交 D。发现业务问题由 B 修正提交，A 接后续增量；本次不覆盖 B 工作树或自动同步其未提交文件。
 
 后续仍为 B1 完整交付 → C → B2 联合验证 → D → A2。公共代码标签为本地 b1-api-0.3.0；最终 SHA 见 A 发布消息，历史 a2-ready 不移动。
+
+可重跑网页兼容检查：PowerShell先执行`$env:LABCONNECT_REPORT_STAGE='b1-public'`，再执行`pnpm run test:web`。原生测试复用现有测试脚本，只在忽略目录绑定本树根目录及本阶段报告位置；业务断言未删除。三端构建/运行证据属于兼容账号课程切片，不代表B1新管理页面、C/D模块或A2九组合验收完成。后续仅文档提交不改客户端代码，产物仍以builds.json记录的feb081c为准。

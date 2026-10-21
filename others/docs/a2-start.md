@@ -28,4 +28,4 @@ python .\others\scripts\shared_env.py probe
 
 registered/clean/contains_baseline/ownership_current以及依赖锁一致才就绪。主树配置/依赖共用、源码各树绑定，见[共享环境](shared-environment.md)。角色只能提交本分支本范围，不自行推送，保护已有提交。
 
-A0不是B1或A2完成。当前真实API0.2.0仍没有资料搜索、考试或管理全业务；未来协议只在[a2-protocols](../contracts/a2-protocols.md)和TS声明。完整监控交E、签名/正式安装器交F。Windows/Android麦克风与采集、中文确认问答播报和文件适配在C/D交付后由A/F真实测试，不以worker示例代替。最终包必须对应A2源码及契约，准备阶段不额外推送。
+A0不是B1或A2完成。A0历史契约为0.2.0；当前B1公共契约0.3.0已接入组织、账号及班级管理后端，完整管理页面仍由B接续。资料搜索、考试等后续协议只在[a2-protocols](../contracts/a2-protocols.md)和TS声明，尚未冒充真实接口。完整监控交E、签名/正式安装器交F。Windows/Android麦克风与采集、中文确认问答播报和文件适配在C/D交付后由A/F真实测试，不以worker示例代替。最终包必须对应A2源码及契约，准备阶段不额外推送。
