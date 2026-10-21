@@ -6,6 +6,8 @@
 
 A 使用主目录 main；角色分支由 ownership.json 指定。B/C/D 使用用户新建的外部 Codex 工作树及 codex/*-a2 分支，由 A 登记；E/F/G 暂保留 others/worktrees 下的原任务分支。工作区之间共享 Git 历史，各自修改自己的源码。最多同时运行四个聊天。当前基线、顺序见 [A2 开工](a2-start.md)，配置和依赖见 [共享环境](shared-environment.md)。
 
+临时设计任务由A记录在[auxiliary-tasks.json](../contracts/auxiliary-tasks.json)，不放入七角色所有权。ui-design-v1已使用codex/ui-design-v1和others/worktrees/ui-design，只可提交others/design/ui-redesign/。每轮在该树核对实际目录、分支和暂存范围，显式逐文件git add后commit，不借用workflow.py的A/D身份。A按main...候选SHA核对差异；用户网页批准及完整规范冻结后才接收设计提交，详见[批准门禁](ui-redesign-coordination.md)。
+
 用户已新建的外部工作树由 A 在干净、已提交规则的主目录执行登记，例如：
 
 ~~~powershell

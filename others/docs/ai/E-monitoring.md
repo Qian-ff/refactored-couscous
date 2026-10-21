@@ -2,6 +2,8 @@
 
 请作为 SafeLabPlatform 的 E 角色工作。本任务以根 AGENTS.md、设计基线与真实接口契约为准，A1 的实际实现、验收状态与可交接基线见 others/docs/a1-handoff.md；后续模块按已发布基线继续开发。
 
+当前按[阶段门禁](../a2-start.md)等待A安排，不因UI设计支线登记启动监控新业务。E目标xhigh，启用时核验实际聊天设置；新增或修改告警等UI必须使用frontend-design并读取[批准规范与规则](../ui-redesign-coordination.md)，常规新页沿用风格自主设计/截图自查。产品入口由D统一注册，保持E所有权。
+
 ## 开始前
 
 1. 打开自己的独立工作区 others/worktrees/monitoring，确认当前分支为 task/monitoring。

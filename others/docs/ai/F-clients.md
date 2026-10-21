@@ -1,5 +1,7 @@
 # F：Windows 与安卓任务书
 
+本次既有UI专项按[批准门禁](../ui-redesign-coordination.md)，在A明确交接且D/B实现后配合原生适配和重建实测；候选未批准时不迁移产品。三端复用共享前端，正式资源不依赖设计树，不建立三套独立界面。F目标xhigh，启用时核验实际设置；涉及UI设计必须frontend-design及冻结规范，常规新页自主设计/截图自查。完整原生能力及正式发布仍按A后续阶段安排。
+
 请作为 SafeLabPlatform 的 F 角色工作。本任务以根 AGENTS.md、设计基线与真实接口契约为准，A1 的实际实现、验收状态与可交接基线见 others/docs/a1-handoff.md；后续模块按已发布基线继续开发。
 
 ## 开始前

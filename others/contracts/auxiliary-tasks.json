@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "tasks": {
+    "ui-design-v1": {
+      "coordinator_role": "A",
+      "thread_id": "01a15e27-4a94-79f0-9a2b-37b3fcee6334",
+      "branch": "codex/ui-design-v1",
+      "worktree": "others/worktrees/ui-design",
+      "baseline_ref": "b1-ready",
+      "baseline_sha": "1e1011b4ff2e3c5a66b22492fb87a671e9699584",
+      "owned_paths": ["others/design/ui-redesign/"],
+      "reasoning_effort_target": "xhigh",
+      "status": "awaiting_desktop_approval",
+      "candidate": {
+        "version": "UI-2026.10-v1",
+        "commit": "b67ad77cd49c2b5f99d2037e5828c29433ea66a6",
+        "gallery": "others/design/ui-redesign/index.html",
+        "desktop_screens": 53,
+        "supplemental_images": 2
+      },
+      "approval": {
+        "desktop_status": "awaiting_user_approval",
+        "desktop_commit": null,
+        "evidence": null
+      },
+      "handoff": {
+        "status": "not_ready",
+        "frozen_commit": null
+      }
+    }
+  }
+}

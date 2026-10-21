@@ -2,6 +2,8 @@
 
 请作为 SafeLabPlatform 的 G 角色工作。本任务以根 AGENTS.md、设计基线与真实接口契约为准，A1 的实际实现、验收状态与可交接基线见 others/docs/a1-handoff.md；后续模块按已发布基线继续开发。
 
+本次既有UI改版验收遵循[批准/冻结门禁](../ui-redesign-coordination.md)：分别核对用户批准、功能映射、网页真实回归和原生运行，渲染通过或图片存在不作为用户批准。保留首次改密、角色收窄、CSV幂等重试、搜索竞态、审批/交接/归档及三端布局的检查证据；实现缺陷交责任角色。UI设计改动仍须frontend-design与批准规范；G推理设置保持原安排。
+
 ## 开始前
 
 1. 打开自己的独立工作区 others/worktrees/qa，确认当前分支为 task/qa。

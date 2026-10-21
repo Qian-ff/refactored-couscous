@@ -1,5 +1,7 @@
 # B1 集成交接：组织账号与课程班级
 
+后续顺序已由用户调整：当前先完成[网页图片批准、既有UI改版和A验收](ui-redesign-coordination.md)，再进入C。本报告和b1-ready保留B1已验收事实，不替代当前开工门禁。
+
 2026-10-21，A / main 接收B最终完整提交b6bf07f81aa64c17dc90e841d895fe260217aa90；B独立验收源码f10b7a140b22311e3075580001b1759058b5b7ba，最后一笔只补交接文档。真实契约继续为0.3.1，模型、OpenAPI形状和SDK未变，迁移头仍为b1c0e0a00001，不追加空迁移。
 
 ## 本阶段范围
@@ -28,7 +30,7 @@ A合并后真实PostgreSQL/API全套68项通过（33.68秒），Ruff、TypeScrip
 
 ## C / D 接收
 
-C保留自己的改动后合并A最终公布的完整SHA（本地b1-ready），核对当前树、契约0.3.1、所有权4和共享依赖，再使用[完整C任务](ai/C-content-ai.md)。本轮不自动启动或覆盖C工作树。
+C等待既有UI经A验收，并由A发布允许C开工的新完整SHA后，保留自己的改动并合并，核对当前树、契约、所有权和共享依赖，再使用[完整C任务](ai/C-content-ai.md)。旧b1-ready只作为B1历史底座，不单独触发C开工。
 
 - [C授权服务与合成样例](../backend/app/domains/core/handoff/b1-content-access.md)：SQL先授权后计数/分页/检索；详情、下载和任务结果二次鉴权。复用学校/学院/目录/班级规则，不能共享兄弟班私有数据。
 - [教师与管理页面注册](../../web/src/features/teaching/README.md)：adminPages / teachingPages，当前工作身份、courseId及登录/改密/个人资料交接。D唯一维护正式入口，禁止导入开发夹具。

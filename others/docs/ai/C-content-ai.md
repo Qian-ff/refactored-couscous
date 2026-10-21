@@ -1,13 +1,13 @@
 # C：内容、题库与助手任务书
 
-B1经A集成后执行。A0提供加密原语、独立ASR环境和协议；C负责学校配置业务、内容和助手。后续B2考试联合检查不构成C完成的循环依赖。来源/许可边界见[模块协议](../../contracts/a2-protocols.md)。
+C须等既有UI改版通过A验收、A发布允许C开工的最新完整SHA后执行，当前保持新增业务待启动。A0提供加密原语、独立ASR环境和协议；C负责学校配置业务、内容和助手。后续B2考试联合检查不构成C完成的循环依赖。来源/许可边界见[模块协议](../../contracts/a2-protocols.md)。
 
-当前接收[B1最终集成基线](../b1-handoff.md)：等待A公布完整SHA/本地b1-ready，保留C本树改动后合并，不能只停在旧a2-ready。真实契约0.3.1、迁移b1c0e0a00001；先读B的core/handoff/b1-content-access.md，复用授权SQL、对象二次校验和合成双班样例。以下完整Goal继续有效，不重复A0或B1工作。
+[B1最终集成基线](../b1-handoff.md)保留底座事实：真实契约0.3.1、迁移b1c0e0a00001；先读B的core/handoff/b1-content-access.md，复用授权SQL、对象二次校验和合成双班样例。当前[UI前置门禁](../ui-redesign-coordination.md)优先，不能仅凭b1-ready启动C。UI验收后保留C本树改动并合并A新SHA，以下完整Goal继续有效，不重复A0/B1。C目标xhigh，恢复时核验实际轮次；涉及UI设计必须frontend-design并沿用冻结风格，常规新页自主设计/截图自查。
 
 ## C Goal
 
 ~~~text
-/goal 作为安研通（LabConnect）的 C，在 A 集成 B1 的执行基线上完成授权资料、分层题库、AI建题、检索和资料语音助手，交 B2、D、A 接续。
+/goal 作为安研通（LabConnect）的 C，在既有UI改版已通过A验收、A明确允许C开工并发布最新完整基线后，完成授权资料、分层题库、AI建题、检索和资料语音助手，交 B2、D、A 接续。先核对当前阶段门禁，未放行时不启动新增业务；涉及UI必须使用frontend-design并沿用冻结规范，C目标xhigh且核验当次实际设置。
 
 一、结果
 1. 在Git登记C树/codex/c-content-ai-a2。重读README、AGENTS、C任务、design、ownership、契约、a2-start、shared-environment、a0-handoff。保留本树提交，合并A最新完整SHA，核对登记/分支/清洁/基线/所有权和共享依赖源码。B1须已提供真实课程目录/教学班/组织及授权服务；以course_id为班、catalog_id为目录，复用B授权，不另建人员/课程体系。
