@@ -2,6 +2,8 @@
 
 B1经A集成后执行。A0提供加密原语、独立ASR环境和协议；C负责学校配置业务、内容和助手。后续B2考试联合检查不构成C完成的循环依赖。来源/许可边界见[模块协议](../../contracts/a2-protocols.md)。
 
+当前接收[B1最终集成基线](../b1-handoff.md)：等待A公布完整SHA/本地b1-ready，保留C本树改动后合并，不能只停在旧a2-ready。真实契约0.3.1、迁移b1c0e0a00001；先读B的core/handoff/b1-content-access.md，复用授权SQL、对象二次校验和合成双班样例。以下完整Goal继续有效，不重复A0或B1工作。
+
 ## C Goal
 
 ~~~text

@@ -1,8 +1,8 @@
 # 开工与交接
 
-A1最初三端共享底座与checkpoint-1保留，历史证据见[a1-handoff](a1-handoff.md)。当前新增公共底座准备和四份阶段Goal见[a0-handoff](a0-handoff.md)，当前基线/分支与顺序见[a2-start](a2-start.md)。
+A1最初三端共享底座与checkpoint-1保留，历史证据见[a1-handoff](a1-handoff.md)。当前为[B1集成交接](b1-handoff.md)，真实契约0.3.1，后续接C；A0历史证据见[a0-handoff](a0-handoff.md)，当前基线/分支与顺序见[a2-start](a2-start.md)。
 
-固定顺序为A0→B1→C→B2联合验证→D→A2。A0发布a2-ready完整SHA并同步三树后先执行B1；以后以A每阶段真实公共集成SHA为准。任务书见[ai入口](ai/README.md)，配置和依赖按[共享环境](shared-environment.md)复用。每次接口/迁移及时交A，D唯一入口路由；不同时启动所有业务Goal。
+固定顺序为A0→B1→C→B2联合验证→D→A2。a2-ready保留A0历史；C在A发布b1-ready后保留自己的改动并合并该完整SHA，以后继续按A每阶段真实公共集成SHA接续。任务书见[ai入口](ai/README.md)，配置和依赖按[共享环境](shared-environment.md)复用。每次接口/迁移及时交A，D唯一正式入口路由；不同时启动所有业务Goal。
 
 ~~~powershell
 python .\others\scripts\workflow.py status --baseline a2-ready

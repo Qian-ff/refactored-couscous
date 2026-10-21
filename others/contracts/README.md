@@ -2,7 +2,7 @@
 
 A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；当前为 **0.3.1**。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A0历史基线0.2.0及B1首次基线0.3.0保留。
 
-0.3.0 在A0底座上增加真实组织/专业/账号/授权/改密、目录与班级管理/审批/交接、CSV导入等B1路由。模型注册、兼容迁移和生成SDK已交接，见[B1公共交接](../docs/b1-public-handoff.md)。B1完整界面仍在B交付范围；内容/助手/考试/记录接口未发布。
+0.3.0 在A0底座上增加真实组织/专业/账号/授权/改密、目录与班级管理/审批/交接、CSV导入等B1路由。模型注册、兼容迁移和生成SDK已交接，历史见[B1公共交接](../docs/b1-public-handoff.md)。B1最终领域及独立业务组件见[B1集成交接](../docs/b1-handoff.md)，正式导航由D接入；内容/助手/考试/记录接口未发布。
 
 0.3.1 增加真实GET /catalogs/{catalog_id}/teacher-options及生成方法TeachingService.catalogTeacherOptions。已有目录的负责人可指定本校主教师开班，仍无该班私有数据权限；无catalog_id的旧请求保持本人首班限制。无新模型或迁移。
 

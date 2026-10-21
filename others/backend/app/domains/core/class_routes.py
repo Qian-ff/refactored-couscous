@@ -95,7 +95,8 @@ def create_catalog(body: CatalogInput, identity: CurrentIdentity, db: Db, key: C
         db.add(record)
         db.flush()
         return catalog_view(record)
-    return execute_command(db, identity, college.school_id, "catalogs.create", key, body.model_dump(), action, authorize)
+    return execute_command(db, identity, college.school_id, "catalogs.create", key, body.model_dump(), action, authorize,
+                           lambda result: require_catalog(db, identity, UUID(result["id"])))
 
 
 @router.patch("/catalogs/{catalog_id}", response_model=CatalogView)
@@ -139,8 +140,7 @@ def create_class(body: CourseCreate, identity, db, key, public_serializer):
             if catalog.college_id != college.id:
                 require(school_manager(identity, college.school_id), "跨学院开班须由校管理员协调")
             require(identity.manages(college.id, college.school_id) or (
-                catalog.owner_id == identity.user.id and identity.has(Role.TEACHER)
-                and identity.user.college_id == college.id))
+                catalog.owner_id == identity.user.id and identity.has(Role.TEACHER)))
         else:
             require(identity.can_create(college.id, college.school_id), "无权在该学院创建课程")
         if not body.catalog_id and not identity.manages(college.id, college.school_id):
@@ -162,7 +162,19 @@ def create_class(body: CourseCreate, identity, db, key, public_serializer):
         db.add(CourseStaff(school_id=course.school_id, course_id=course.id, user_id=body.teacher_id, is_primary=True))
         db.flush()
         return public_serializer(course, db)
-    return execute_command(db, identity, college.school_id, "courses.create", key, body.model_dump(), action, authorize)
+    def replay(result):
+        if body.catalog_id and body.teacher_id != identity.user.id:
+            # A current directory manager may acknowledge their own delegated creation.
+            # This returns the original submitted metadata, never a fresh class/private DTO.
+            # authorize() has already rechecked the exact directory/college authority.
+            record = db.get(Course, UUID(result["id"]))
+            require(record is not None and record.catalog_id == body.catalog_id
+                    and record.school_id == college.school_id and record.college_id == college.id,
+                    "原创建对象已不在授权目录范围", 404)
+        else:
+            require_class(db, identity, UUID(result["id"]), history=True)
+    return execute_command(db, identity, college.school_id, "courses.create", key, body.model_dump(), action, authorize,
+                           replay)
 
 
 @router.get("/courses/{course_id}/management", response_model=ClassManagementView)

@@ -37,7 +37,7 @@ export function AccountForm({ schools, colleges, majors, schoolId, collegeId, se
       <Field label="初始临时密码" hint="首次登录必须修改；本页不会显示已保存的密码。"><input name="temporary_password" type="password" required minLength={8} maxLength={256} autoComplete="new-password" /></Field>
       <fieldset className="b1-role-fields"><legend>初始角色</legend>{allowedRoles.map(role => <label key={role} className="b1-checkbox"><input type="checkbox" name="grant_role" value={role} checked={roles.includes(role)} onChange={event => toggle(role, event.target.checked)} />{roleName[role] ?? role}</label>)}<small>学生账号独立；教师可兼任管理员。学院管理员初始范围为所选学院。</small></fieldset>
     </>}
-    <div className="b1-wide b1-actions"><button className="b1-button" disabled={pending || (!existing && !roles.length)}>{pending ? "正在保存…" : existing ? "保存账号资料" : "创建账号"}</button></div>
+    <div className="b1-wide b1-actions"><button className="b1-button" disabled={pending || !colleges.some(value => value.id === collegeId) || (!existing && (!roles.length || !schools.some(value => value.id === schoolId)))}>{pending ? "正在保存…" : existing ? "保存账号资料" : "创建账号"}</button></div>
   </form>
 }
 
@@ -50,6 +50,6 @@ export function OrganizationForm({ schools, colleges, schoolId, collegeId, kind,
     {kind === "major" && <Field label="所属学院"><select name="college_id" value={collegeId} required onChange={event => selectCollege(event.target.value)}><Options values={colleges} /></select></Field>}
     <Field label="代码" hint="使用英文字母、数字、下划线或短横线。"><input name="code" required maxLength={40} pattern="[A-Za-z0-9_\-]+" /></Field>
     <Field label={kind === "school" ? "学校名称" : kind === "college" ? "学院名称" : "专业名称"}><input name="name" required maxLength={120} /></Field>
-    <div className="b1-actions"><button className="b1-button" disabled={pending}>{pending ? "正在创建…" : "确认创建"}</button></div>
+    <div className="b1-actions"><button className="b1-button" disabled={pending || (kind !== "school" && !schools.some(value => value.id === schoolId)) || (kind === "major" && !colleges.some(value => value.id === collegeId))}>{pending ? "正在创建…" : "确认创建"}</button></div>
   </form>
 }

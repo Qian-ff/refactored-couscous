@@ -10,5 +10,5 @@ if (-not $schema.paths.'/api/v1/admin/accounts' -or -not $schema.paths.'/api/v1/
 Write-Host 'B1 API: http://127.0.0.1:8000/docs'
 Write-Host "API contract: $($schema.info.version)"
 Write-Host 'Existing account/course UI: http://127.0.0.1:5173'
-Write-Host 'Full B1 workspaces are awaiting B/D interface delivery. This entry verifies the actual backend.'
+Write-Host 'B1 business components are available through Open-B1.cmd for internal review. Product navigation awaits D.'
 if (-not $NoOpen) { Start-Process 'http://127.0.0.1:8000/docs' }

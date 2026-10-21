@@ -11,7 +11,7 @@ from app.domains.core.commands import execute_command
 from app.domains.core.csv_tools import csv_template, fingerprint, parse_csv
 from app.domains.core.management_routes import insert_account, validate_new_account
 from app.domains.core.models import College, Major, Role, User
-from app.domains.core.policy import require, require_active_organization, require_class, require_grant_authority, require_student
+from app.domains.core.policy import require, require_account, require_active_organization, require_class, require_grant_authority, require_student
 
 router = APIRouter(tags=["imports"])
 
@@ -120,4 +120,8 @@ def commit_import(body: CsvCommit, identity: CurrentIdentity, db: Db, key: Comma
             else:
                 ids.append(pull_member(db, course, row.values["username"]).user_id)
         return CsvResult(count=len(ids), ids=ids)
-    return execute_command(db, identity, body.school_id, f"imports.{body.kind}", key, body.model_dump(), action, authorize)
+    def replay(result):
+        if body.kind == "accounts":
+            for user_id in result["ids"]:
+                require_account(db, identity, UUID(user_id))
+    return execute_command(db, identity, body.school_id, f"imports.{body.kind}", key, body.model_dump(), action, authorize, replay)

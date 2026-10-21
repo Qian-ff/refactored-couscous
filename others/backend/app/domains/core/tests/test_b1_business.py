@@ -284,12 +284,51 @@ def test_catalog_owner_can_designate_class_teacher_without_getting_class_access(
     candidates = client.get(f"/api/v1/catalogs/{catalog_id}/teacher-options?q=teacher_eng", headers=owner)
     assert candidates.status_code == 200 and candidates.json()["count"] == 1
     assert client.get(f"/api/v1/catalogs/{catalog_id}/teacher-options?q=teacher", headers=auth("student")).status_code == 403
-    result = command(client, "post", "/courses", owner, {"catalog_id": catalog_id,
+    body = {"catalog_id": catalog_id,
         "college_id": str(fixture_id("a-chem")), "teacher_id": str(fixture_id("user-teacher_eng")),
-        "code": "OWNER-DELEGATED", "title": "负责人指定教师班"})
+        "code": "OWNER-DELEGATED", "title": "负责人指定教师班"}
+    key = uuid4().hex
+    result = command(client, "post", "/courses", owner, body, key=key)
     assert result.status_code == 201
+    retry = command(client, "post", "/courses", owner, body, key=key)
+    assert retry.status_code == 201 and retry.json() == result.json()
     assert client.get(f"/api/v1/courses/{result.json()['id']}", headers=owner).status_code == 404
     assert client.get(f"/api/v1/courses/{result.json()['id']}", headers=auth("teacher_eng")).status_code == 200
+
+
+def test_explicit_foreign_college_catalog_owner_can_open_in_catalog_college_only(client, auth):
+    admin, teacher = auth("admin"), auth("teacher_eng")
+    original = client.get(f"/api/v1/courses/{fixture_id('course-general')}", headers=admin).json()
+    catalog_id = original["catalog_id"]
+    catalog = client.get(f"/api/v1/catalogs/{catalog_id}", headers=admin).json()
+    assert command(client, "patch", f"/catalogs/{catalog_id}", admin, {
+        "revision": catalog["revision"], "owner_id": str(fixture_id("user-teacher_eng"))}).status_code == 200
+    body = {"catalog_id": catalog_id, "college_id": str(fixture_id("a-chem")),
+            "teacher_id": str(fixture_id("user-teacher_eng")), "code": "EXPLICIT-OWNER", "title": "显式负责人开班"}
+    assert command(client, "post", "/courses", teacher, body).status_code == 201
+    assert command(client, "post", "/courses", teacher, {**body, "college_id": str(fixture_id("a-eng")), "code": "NO-CROSS"}).status_code == 403
+
+
+def test_creation_receipt_replay_cannot_reveal_transferred_or_out_of_scope_objects(client, auth):
+    admin, college, teacher = auth("admin"), auth("college"), auth()
+    body = account_body(major(client, admin)["id"], username="later-moved")
+    body.update({"major_id": None, "student_no": None, "grants": [{"role": "teacher"}]})
+    key = uuid4().hex
+    result = command(client, "post", "/admin/accounts", college, body, key=key)
+    assert result.status_code == 201
+    assert command(client, "patch", f"/admin/accounts/{result.json()['id']}", admin,
+                   {"revision": result.json()["revision"], "college_id": str(fixture_id("a-eng")), "major_id": None}).status_code == 200
+    assert command(client, "post", "/admin/accounts", college, body, key=key).status_code == 404
+    class_body = {"college_id": str(fixture_id("a-chem")), "teacher_id": str(fixture_id("user-teacher")),
+                  "code": "TRANSFER-RECEIPT", "title": "交接回执权限"}
+    class_key = uuid4().hex
+    created = command(client, "post", "/courses", teacher, class_body, key=class_key)
+    assert created.status_code == 201
+    class_id = created.json()["id"]
+    revision = class_management(client, teacher, class_id)["revision"]
+    assert command(client, "post", f"/courses/{class_id}/transfer", admin,
+                   {"revision": revision, "teacher_id": str(fixture_id("user-teacher_eng"))}).status_code == 200
+    assert command(client, "post", "/courses", teacher, class_body, key=class_key).status_code == 404
 
 
 def test_content_point_and_sql_scopes_agree_on_sharing_and_no_answer_leak(client, auth, db):

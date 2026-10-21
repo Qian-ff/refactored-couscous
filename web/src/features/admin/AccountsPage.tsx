@@ -38,7 +38,10 @@ function AccountsBody(page: PageProps) {
       const body: AccountCreateWritable = { ...common, school_id: choices.schoolId, username: input(form, "username"),
         temporary_password: String(new FormData(form).get("temporary_password") ?? ""),
         grants: selected.map(value => ({ role: value, ...(value === "college_admin" ? { college_id: choices.collegeId } : {}) })) }
-      void action.run(async key => (await ManagementService.createAccount({ body, headers: commandHeaders(key) })).data,
+      void action.run(async key => {
+        const created = (await ManagementService.createAccount({ body, headers: commandHeaders(key) })).data
+        return (await ManagementService.getAccount({ path: { user_id: created.id } })).data
+      },
         result => { form.reset(); setCreateVisible(false); setEditing(result); rows.reload() }, "账号已开通，首次登录须修改临时密码", JSON.stringify(["account-create", body]))
     }
   }
