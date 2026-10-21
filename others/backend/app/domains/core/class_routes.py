@@ -67,6 +67,18 @@ def catalog(catalog_id: UUID, identity: CurrentIdentity, db: Db):
     return require_catalog(db, identity, catalog_id)
 
 
+@router.get("/catalogs/{catalog_id}/teacher-options", response_model=Page[TeacherOption])
+def catalog_teacher_options(catalog_id: UUID, identity: CurrentIdentity, db: Db,
+                            q: str = Query(min_length=2, max_length=100),
+                            offset: int = Query(default=0, ge=0), limit: int = Query(default=10, ge=1, le=20)):
+    catalog = require_catalog(db, identity, catalog_id, manage=True)
+    require(not catalog.archived, "目录已归档", 409)
+    query = select(User).where(User.school_id == catalog.school_id, User.is_active.is_(True),
+        User.id.in_(select(RoleGrant.user_id).where(RoleGrant.role == Role.TEACHER)),
+        or_(User.username.ilike(keyword(q)), User.display_name.ilike(keyword(q)))).order_by(User.username, User.id)
+    return page(db, query, offset, limit)
+
+
 @router.post("/catalogs", response_model=CatalogView, status_code=201)
 def create_catalog(body: CatalogInput, identity: CurrentIdentity, db: Db, key: CommandKey):
     college = db.get(College, body.college_id)
@@ -131,7 +143,7 @@ def create_class(body: CourseCreate, identity, db, key, public_serializer):
                 and identity.user.college_id == college.id))
         else:
             require(identity.can_create(college.id, college.school_id), "无权在该学院创建课程")
-        if not identity.manages(college.id, college.school_id):
+        if not body.catalog_id and not identity.manages(college.id, college.school_id):
             require(teacher.id == identity.user.id, "教师只能创建由本人负责的教学班")
     def action():
         title = body.title.strip()

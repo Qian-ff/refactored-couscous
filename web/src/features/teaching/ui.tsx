@@ -126,3 +126,6 @@ export function input(form: HTMLFormElement, name: string) { return String(new F
 export function nullable(value: string) { return value || null }
 export function commandHeaders(key: string) { return { "Idempotency-Key": key } }
 export const roleName: Record<string, string> = { student: "学生", teacher: "教师", college_admin: "学院管理员", school_admin: "学校管理员", platform_admin: "平台运维" }
+export function utcDate(value: string) { return new Date(/[zZ]$|[+-]\d{2}:\d{2}$/.test(value) ? value : `${value}Z`) }
+export function formatTime(value: string) { const date = utcDate(value); return Number.isNaN(date.getTime()) ? "时间不可用" : date.toLocaleString("zh-CN", { hour12: false }) }
+export function futureLocalDate(days = 1) { const date = new Date(Date.now() + days * 86_400_000); return new Date(date.getTime() - date.getTimezoneOffset() * 60_000).toISOString().slice(0, 16) }

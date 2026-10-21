@@ -278,6 +278,20 @@ def test_catalog_owner_and_cross_college_admin_do_not_gain_sibling_roster(client
         "teacher_id": str(fixture_id("user-teacher")), "code": "NO-CROSS", "title": "越权", "catalog_id": twin["catalog_id"]}).status_code == 403
 
 
+def test_catalog_owner_can_designate_class_teacher_without_getting_class_access(client, auth):
+    owner = auth()
+    catalog_id = client.get(f"/api/v1/courses/{fixture_id('course-general')}", headers=owner).json()["catalog_id"]
+    candidates = client.get(f"/api/v1/catalogs/{catalog_id}/teacher-options?q=teacher_eng", headers=owner)
+    assert candidates.status_code == 200 and candidates.json()["count"] == 1
+    assert client.get(f"/api/v1/catalogs/{catalog_id}/teacher-options?q=teacher", headers=auth("student")).status_code == 403
+    result = command(client, "post", "/courses", owner, {"catalog_id": catalog_id,
+        "college_id": str(fixture_id("a-chem")), "teacher_id": str(fixture_id("user-teacher_eng")),
+        "code": "OWNER-DELEGATED", "title": "负责人指定教师班"})
+    assert result.status_code == 201
+    assert client.get(f"/api/v1/courses/{result.json()['id']}", headers=owner).status_code == 404
+    assert client.get(f"/api/v1/courses/{result.json()['id']}", headers=auth("teacher_eng")).status_code == 200
+
+
 def test_content_point_and_sql_scopes_agree_on_sharing_and_no_answer_leak(client, auth, db):
     twin = twin_class(client, auth("admin"))
     student = identity(db, "student", "student")
