@@ -12,6 +12,7 @@ from app.core.db import engine
 from app.core.grants import add_role_grant
 from app.core.security import get_password_hash
 from app.domains.core.models import College, Course, CourseCatalog, CourseStaff, Enrollment, Major, Role, School, User
+from app.domains.core.policy import require_teacher
 from app.seed import fixture_id
 
 
@@ -24,6 +25,8 @@ def seed_b1_examples(db: Session, password: str):
     chemistry, engineering = (db.get(College, fixture_id(name)) for name in ("a-chem", "a-eng"))
     if school is None or chemistry is None or engineering is None:
         raise ValueError("Seed A0 synthetic organizations first")
+    for name in ("teacher", "teacher_eng"):
+        require_teacher(db, fixture_id("user-" + name), school.id)
 
     def existing_or_add(model, key, **fields):
         record_id = fixture_id("b1-demo-" + key)

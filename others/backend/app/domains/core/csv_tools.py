@@ -43,7 +43,11 @@ def csv_template(kind: str) -> str:
 def parse_csv(text: str, kind: str) -> tuple[list[CsvRow], list[dict]]:
     if kind not in {"accounts", "roster"}:
         return [], [{"line": 1, "field": "kind", "message": "不支持的导入类型"}]
-    if len(text.encode("utf-8")) > MAX_BYTES:
+    try:
+        size = len(text.encode("utf-8"))
+    except UnicodeError:
+        return [], [{"line": 1, "field": "csv", "message": "CSV 包含无效 Unicode 字符"}]
+    if size > MAX_BYTES:
         return [], [{"line": 1, "field": "csv", "message": "CSV 不得超过 1 MiB"}]
     allowed = ACCOUNT_COLUMNS if kind == "accounts" else ROSTER_COLUMNS
     required = {"username", "display_name", "college_code", "role", "temporary_password"} if kind == "accounts" else {"username"}
