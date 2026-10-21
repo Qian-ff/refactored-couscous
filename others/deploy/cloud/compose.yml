@@ -1,0 +1,82 @@
+name: labconnect-cloud
+x-api: &api
+  image: ${API_IMAGE:?Set API_IMAGE in release.env}
+  env_file: /opt/labconnect/shared/api.env
+  restart: unless-stopped
+  read_only: true
+  tmpfs: [/tmp]
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  mem_limit: 1024m
+  cpus: 1.3
+  networks: [private, edge]
+  logging:
+    driver: json-file
+    options: {max-size: "10m", max-file: "3"}
+services:
+  db:
+    image: ${POSTGRES_IMAGE:?Set POSTGRES_IMAGE in release.env}
+    env_file: /opt/labconnect/shared/db.env
+    restart: unless-stopped
+    mem_limit: 768m
+    cpus: 0.7
+    shm_size: 128m
+    command: [postgres, -c, shared_buffers=128MB, -c, max_connections=40]
+    volumes: [database:/var/lib/postgresql]
+    networks: [private]
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+  api:
+    <<: *api
+    command: [.venv/bin/python, -m, uvicorn, "app.main:app", --host, 0.0.0.0, --port, "8000", --proxy-headers, --forwarded-allow-ips, "*", --limit-concurrency, "12"]
+    volumes:
+      - files:/opt/labconnect/others/runtime/files
+      - /opt/labconnect/shared/ai-master.key:/opt/labconnect/others/runtime/ai-master.key:ro
+    depends_on:
+      db: {condition: service_healthy}
+    healthcheck:
+      test: [CMD, .venv/bin/python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=4).read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+  migrate:
+    <<: *api
+    profiles: [tools]
+    restart: "no"
+    command: [.venv/bin/python, -m, alembic, -c, alembic.ini, upgrade, head]
+  bootstrap:
+    <<: *api
+    profiles: [tools]
+    restart: "no"
+    env_file: [/opt/labconnect/shared/api.env, /opt/labconnect/shared/bootstrap.env]
+    command: [.venv/bin/python, -m, app.cloud_bootstrap]
+  web:
+    image: ${WEB_IMAGE:?Set WEB_IMAGE in release.env}
+    environment:
+      PUBLIC_HOST: ${PUBLIC_HOST:?Set PUBLIC_HOST in shared/cloud.env}
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    mem_limit: 256m
+    cpus: 0.5
+    networks: [edge]
+    volumes: [certificates:/data, caddy_config:/config]
+    depends_on:
+      api: {condition: service_healthy}
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+networks:
+  private: {internal: true}
+  edge: {}
+volumes:
+  database: {name: labconnect_cloud_pg18}
+  files: {name: labconnect_cloud_files}
+  certificates: {name: labconnect_cloud_certificates}
+  caddy_config: {name: labconnect_cloud_caddy_config}

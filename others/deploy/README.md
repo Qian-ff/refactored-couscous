@@ -2,7 +2,7 @@
 
 A1 提供 compose.yml 的真实 PostgreSQL18 服务，镜像固定摘要、仅暴露本机55432端口，使用 safelab-a1 专属命名卷。根目录执行 `docker compose --env-file .env -f others/deploy/compose.yml up -d --wait db`，默认配置由 setup_local.py 生成。停止容器保留卷，勿用删卷命令代替重启。
 
-后端容器构建和启动见 ../backend/README.md。A2 后续完成 HTTPS 部署、数据库/文件备份恢复和同引擎迁移工具；当前不声称这些运维功能已经实现。AI工作进程在独立环境配置。
+后端容器构建和启动见 ../backend/README.md。本机 compose 保持原用途；另有[ECS 云端联调流程](cloud/README.md)，由A从干净main构建并部署独立数据库、生产API和HTTPS网页，保留本地环境。云端真实状态以忽略区部署报告及公网核验为准。完整文件迁移、灾难恢复与AI工作进程仍按后续阶段扩展。
 
 本地手机联调使用受信任的本地 HTTPS；云端使用正式域名证书。主密钥在服务端独立保存，不写入数据库备份或客户端。学校 AI 配置单独加密与授权。
 

@@ -9,6 +9,7 @@
 !others/backend/alembic.ini
 !others/config/
 !others/config/branding.json
+!others/config/application.json
 !others/licenses/
 !others/licenses/fastapi-template-MIT.txt
 **/__pycache__/

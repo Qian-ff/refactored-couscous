@@ -20,6 +20,7 @@
 - [A2 开工](others/docs/a2-start.md)：新 B/C/D 工作树、共同起点及分阶段集成。
 - [阶段Goal](others/docs/ai/README.md)：已交付B1、当前D-UI和依赖公共组件的B-UI，以及后续C/B2/完整D目标。
 - [共用本机环境](others/docs/shared-environment.md)：复用主工作区配置、Python 依赖和下载缓存。
+- [ECS 云端联调部署](others/deploy/cloud/README.md)：从干净主线打包、独立凭据、HTTPS、数据库备份与迁移；部署证据与 UI 验收分别记录。
 - [本机环境](others/docs/environment.md)：实际工具检查、会话级 JDK/SDK 设置与未验证项。
 - [七个 AI 聊天任务](others/docs/ai/README.md)：复制对应任务书到聊天。
 - [Git 与分支协作](others/docs/git-workflow.md)：每轮提交、独立工作区和合并。

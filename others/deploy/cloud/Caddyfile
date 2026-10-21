@@ -1,0 +1,40 @@
+{
+	admin off
+	servers {
+		protocols h1 h2
+	}
+}
+
+{$PUBLIC_HOST} {
+	tls {
+		issuer acme {
+			profile shortlived
+		}
+	}
+	encode zstd gzip
+	header {
+		X-Content-Type-Options nosniff
+		X-Frame-Options DENY
+		Referrer-Policy same-origin
+		-Server
+		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
+	}
+	request_body {
+		max_size 2MB
+	}
+	handle /api/* {
+		reverse_proxy api:8000
+	}
+	handle /docs* {
+		respond 404
+	}
+	handle /redoc* {
+		respond 404
+	}
+	handle {
+		root * /srv
+		@fresh path / /index.html /build-info.json
+		header @fresh Cache-Control "no-store"
+		file_server
+	}
+}
