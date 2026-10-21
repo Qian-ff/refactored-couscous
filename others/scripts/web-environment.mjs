@@ -8,6 +8,9 @@ const git = (...args) => execFileSync("git", ["-C", root, ...args], { encoding: 
 export const primaryRoot = path.dirname(path.resolve(root, git("rev-parse", "--git-common-dir")))
 const ports = { main: 5173, "codex/b-core-a2": 5174, "codex/c-content-ai-a2": 5175, "codex/d-learning-ui-a2": 5176 }
 export const webPort = Number(process.env.LABCONNECT_WEB_PORT || ports[git("branch", "--show-current")] || 5173)
+const reportStage = process.env.LABCONNECT_REPORT_STAGE || "a0"
+if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$/.test(reportStage)) throw new Error("Invalid LABCONNECT_REPORT_STAGE")
+export const reportDirectory = path.join(root, "others/reports", reportStage)
 export function sourceIdentity(surface, selectedRoot = root) {
   return JSON.parse(execFileSync("python", [path.join(selectedRoot, "others/scripts/provenance.py"),
     "--root", selectedRoot, "--surface", surface], { encoding: "utf8" }))

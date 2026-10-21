@@ -6,7 +6,7 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：B1 公共后端与 SDK 已集成，真实契约0.3.0，B 继续页面联调。** 见 [B1 公共交接](others/docs/b1-public-handoff.md)。历史 [A0 基线](others/docs/a0-handoff.md) 与 a2-ready 保留；完整 B1、题库、考试、语音及三角色工作台按 B1→C→B2→D 接续，A2 再做最终三端验收。历史 A1 底座见 [A1 交接](others/docs/a1-handoff.md)。
+**当前阶段：B1 公共后端与 SDK 已集成，真实契约0.3.1，B 继续页面联调。** 见 [B1 公共交接](others/docs/b1-public-handoff.md)。历史 [A0 基线](others/docs/a0-handoff.md) 与 a2-ready 保留；完整 B1、题库、考试、语音及三角色工作台按 B1→C→B2→D 接续，A2 再做最终三端验收。历史 A1 底座见 [A1 交接](others/docs/a1-handoff.md)。
 
 ## 从这里开始
 

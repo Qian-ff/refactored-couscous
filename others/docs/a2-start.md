@@ -6,7 +6,7 @@
 
 ## 固定顺序
 
-当前新增[B1公共后端/SDK基线](b1-public-handoff.md)，版本0.3.0；B保留本地提交后合并A公布的完整SHA，继续B1页面。a2-ready固定在A0历史，不移动。C/D仍等待前序完整交付。
+当前新增[B1公共后端/SDK基线](b1-public-handoff.md)，版本0.3.1（含目录负责人指定主教师增量）；B保留本地提交后合并A公布的完整SHA，继续B1页面。a2-ready固定在A0历史，不移动。C/D仍等待前序完整交付。
 
 1. **A0公共执行基线**：兼容CourseCatalog/教学班、工作身份/学生互斥、前端会话和页面/预览协议、真实0.2.0 SDK、CORS、共享依赖/ASR与测试归属。实际检查见[a0-handoff.md](a0-handoff.md)。
 2. **B1**：组织账号、目录班级、名单/审批/协作/交接/归档、授权服务和教师/管理页面组件；A及时集成迁移/真实接口/SDK，再交C。
@@ -28,4 +28,4 @@ python .\others\scripts\shared_env.py probe
 
 registered/clean/contains_baseline/ownership_current以及依赖锁一致才就绪。主树配置/依赖共用、源码各树绑定，见[共享环境](shared-environment.md)。角色只能提交本分支本范围，不自行推送，保护已有提交。
 
-A0不是B1或A2完成。当前真实API0.2.0仍没有资料搜索、考试或管理全业务；未来协议只在[a2-protocols](../contracts/a2-protocols.md)和TS声明。完整监控交E、签名/正式安装器交F。Windows/Android麦克风与采集、中文确认问答播报和文件适配在C/D交付后由A/F真实测试，不以worker示例代替。最终包必须对应A2源码及契约，准备阶段不额外推送。
+A0不是B1或A2完成。A0历史契约为0.2.0；当前B1公共契约0.3.1已接入组织、账号及班级管理后端，完整管理页面仍由B接续。资料搜索、考试等后续协议只在[a2-protocols](../contracts/a2-protocols.md)和TS声明，尚未冒充真实接口。完整监控交E、签名/正式安装器交F。Windows/Android麦克风与采集、中文确认问答播报和文件适配在C/D交付后由A/F真实测试，不以worker示例代替。最终包必须对应A2源码及契约，准备阶段不额外推送。
