@@ -4,11 +4,27 @@
 
 ## 页面、身份及导航
 
-A 维护 web/src/lib/api.ts、extensions.ts、lesson-protocol.ts 及生成 SDK。D 使用已锁定的 react-router 8.5.0 HashRouter，唯一维护 App/main/routes。B/C 页面导出 PageRegistration[]：id/path/title/workRoles/component/navGroup。PageProps 只有服务器用户/当前 SessionSnapshot、路由参数、navigate 和 PlatformBridge，不含 token、数据库或 AI 密钥。校验合法目的地和资源授权后导航；未知/无权限页面有独立状态。
+A 维护 web/src/lib/api.ts、extensions.ts、lesson-protocol.ts 及生成 SDK。D 使用已锁定的 react-router 8.5.0 HashRouter，唯一维护 App/main/routes。B/C普通业务页面导出 PageRegistration[]：id/path/title/workRoles/component/navGroup；助手采用下述单例宿主适配，不导出独立聊天PageRegistration。PageProps 只有服务器用户/当前 SessionSnapshot、路由参数、navigate 和 PlatformBridge，不含 token、数据库或 AI 密钥。校验合法目的地和资源授权后导航；未知/无权限页面有独立状态。
 
 D 在登录后调用 confirmSession；切换使用 switchWorkRole 后等待服务端确认，不仅切标签。订阅会话代次清除所有页面请求和查询；退出失败也清理本地并提示远端撤销失败。组件内搜索再处理同身份查询竞态。B/C 不导入 D 的入口或路由实现。
 
 B/C在完整D路由前，用本角色所有权内的开发渲染夹具和独立测试配置验证页面组件，复用公共服务归属辅助并调用真实API，记录测试入口。该夹具不注册产品公共路由，不替代D集成，也不用假成功数据冒充业务。公开入口由D后续统一接入。
+
+## 悬浮助手：已批准语义，待真实实现
+
+本节依[UI-ASSISTANT-2026.10-v1.1交接](../docs/assistant-floating-handoff.md)补充既有协议。以下是行为语义，A在对应实现阶段统一正式公共类型和导出名；本次未发布占位HTTP或修改生成SDK。
+
+D维护应用内唯一宿主/框架和个人设置；C提供助手内容、状态及动作，F提供PlatformBridge。展示状态 hidden/capsule/panel/fullscreen/docked_left/right 与业务 allowed/paused/unavailable/unconfigured 分开，个人enabled不授予服务端能力。导航唤起同一实例；关闭状态引导设置，手机全屏是布局变化，不创建独立对话路由。
+
+D向C提供已确认SessionSnapshot/代次、当前有权教学班上下文、PlatformBridge及本设备播报偏好、请求展开/收起/完成提示回调；不传token或密钥。C向D提供内容视图、业务可用性、音频/任务状态、历史/新建、内部返回消费和停止/取消/清理回调，不创建第二fixed容器。返回先由C处理内部临时视图，再由D按全屏→小窗→胶囊，最后交F/路由；业务阻塞弹窗高于助手且焦点不穿透。
+
+打开意图为text/voice，可带当前授权course_id及显式conversation_id。新对话继承当前有权班，无班先选择；已有对话course_id固定，页面换班不改旧范围，引用固定资料版本和页段。C提供本人列表、读取、新建、继续、删除、清空，三端共用服务端文字历史；管理员不因此得到任意读他人私聊的权限。服务端每次按学校、本人账号、当前身份、教学班/资料授权和学生考试gate重新判定。退出后保留有权服务器历史，客户端清内容/草稿/缓存，撤权后不能继续读取旧私有信息。
+
+收起/吸边停录音与TTS并保留已识别草稿，文字问答可继续，仅提示完成，不自动展开或播报；设置关闭则取消/失效本地请求并尽力取消远端。退出/切学校、服务或身份立即推进代次并清理，不等待远端取消。C所有晚到正文/音频、D完成提示都核对有效会话/请求代次；删除或清空后旧任务不能复活对话。
+
+个人UI偏好只按本设备profile、规范化服务origin、school_id、user_id保存开关/外壳/位置/播报；本地不持久化消息、录音、Bearer或密钥。刷新从胶囊开始，不恢复活动音频；存储失败明确说明仅本次有效。录音显式开始→真实ASR→可编辑文字确认→问答；文字手动播报，语音自动播报须窗口展开、应用前台、偏好开启、会话/请求有效且gate仍allowed。收起/后台/考试暂停/身份变化立即停音频，恢复不自动续播。
+
+学生账号任一有效正式考试暂停问答、历史、引用、旧会话和所有任务阶段；未知状态同样暂停。D移除当前渲染树中的历史/回答并使缓存失效，C在服务端及结果返回再次验证；恢复须服务端确认allowed后重新读取，不直接展示旧缓存。C阶段B2未就绪仍以教师验证，学生不可用，既有UI验收门禁保持不变。
 
 ## 内容及关卡
 
@@ -26,7 +42,7 @@ B2 实现 Assignment/Assessment、Attempt/Answer、自动保存/续答、超时�
 
 开始接口复用当前有效 attempt，不因重复请求/刷新/重登占次；事务/锁阻止并发超次。保存使用 answer_revision，返回 saved_at/deadline/server_time；过期/冲突明确拒绝。页面关闭不暂停；超时按服务端已保存答案结算，断网只留当前页内存、不伪称保存。历史内容和评分不被新版本改写。
 
-B2 给 C 提供 account-level tutoring gate，语义为 allowed/paused/unavailable、as_of、有效进行中作答；学生任一有效正式考试即暂停该账号全部平台 AI 辅导。C 在文字、语音识别后问答、旧对话续问、跨班请求、任务开始/执行/返回都验证。状态不可核实暂停学生辅导；其他账号不受影响。提交/到期/教师合法中止重算，其他考试仍在则继续暂停。C 阶段 B2 未实现时教师账号完成真实验收，学生明确不可用；B2 再联合验收，不把后续依赖设成 C 完成的循环前置条件。
+B2 给 C 提供 account-level tutoring gate，语义为 allowed/paused/unavailable、as_of、有效进行中作答；学生任一有效正式考试即暂停该账号全部平台 AI 辅导。C 在文字、语音识别后问答、旧对话续问、历史/引用读取、跨班请求、任务开始/执行/返回都验证。状态不可核实暂停学生辅导；其他账号不受影响。提交/到期/教师合法中止重算，其他考试仍在则继续暂停。C 阶段 B2 未实现时教师账号完成真实验收，学生明确不可用；B2 再联合验收，不把后续依赖设成 C 完成的循环前置条件。
 
 ## 服务端 AI 配置
 

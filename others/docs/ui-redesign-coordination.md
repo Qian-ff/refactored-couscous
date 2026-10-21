@@ -21,13 +21,15 @@
 
 设计聊天每轮写入前显式指定设计工作树，核对git rev-parse --show-toplevel、当前分支、暂存区及本轮文件。聊天显示的工作目录仍可能是主树，不能据聊天名称推断隔离。只逐文件暂存上述前缀并本地提交；现有workflow.py的业务角色命令仍仅面向A–G，设计任务不用A或D身份绕过分支校验。A接收前按Git登记及main...候选提交的差异核对范围，不覆盖设计树未提交改动。
 
-## 悬浮助手专项：仅静态设计
+## 悬浮助手专项：静态规范已接收
 
-2026-10-22，A核对设计聊天的人类请求后登记ui-assistant-floating-v1。它复用原聊天、codex/ui-design-v1及others/worktrees/ui-design，不增加业务角色或活跃聊天；源基线为ui-redesign-ready = 2b5907d65730ff70d07373ee22dc18cd8d4d590f。设计树先保存改动并合并A本次登记提交（完整SHA由A发布），再以此任务身份制作三端应用内悬浮助手图片。
+2026-10-22，A核对设计聊天的人类请求后登记ui-assistant-floating-v1；设计树已完成图片批准和规范冻结。它复用原聊天、codex/ui-design-v1及others/worktrees/ui-design，不增加业务角色或活跃聊天；源基线为ui-redesign-ready = 2b5907d65730ff70d07373ee22dc18cd8d4d590f。
 
 唯一新增范围为others/design/ui-redesign/assistant-floating-v1/；已接收UI-v1及其清单、55张桌面图和其他原文件保持原始字节，不重写旧freeze-manifest.json或原批准记录。原ui-design-v1的宽目录登记是历史接收范围，不作为本专项越过新子目录的授权。
 
-当前悬浮助手图片尚未批准，仅可制作合成资料的静态方案与图册。用户批准具体图片版本后，再补完整规范交A核对并分发产品任务；本次不删除或接入产品页面，不更改D/B既有UI执行条件，不放行C/B2，不唤醒业务角色，不推送。计划目标max、设计执行目标xhigh，A执行保持max；每轮核验实际设置，不改其他聊天或全局默认。
+用户明确批准“v1.1，继续规范与 A 交接”，A已独立核对对应人类答复和问题ID，绑定图片7a678db1d3eee3055e0b369bb18952abf1d79676、冻结78cdeb677ed1f302f1a3ecb68bfbd834aa4b85d1。A在设计树及主树核验94清单文件/95Git文件、48主图/59PNG、20项静态交互记录及355链接，原UI-v1保持原始字节；发布本地ui-assistant-design-ready。规范及D宿主/C内容历史/F原生/B2考试限制的唯一分工见[助手实施交接](assistant-floating-handoff.md)，公共行为语义见[a2-protocols](../contracts/a2-protocols.md)。
+
+本次只接收资料与更新后续任务，不删除或接入产品页面，不改变D/B既有UI条件，不放行C/B2、不唤醒业务角色、不推送。所有计划目标max，执行A=max、B–F及设计=xhigh、G保持原安排；实际设置逐轮核验，不改其他聊天或全局默认。
 
 ## UI v1 批准与冻结
 
@@ -47,7 +49,7 @@
 
 ## 推理强度与核验
 
-目标为A=max，B–F及临时设计聊天=xhigh；G保持原安排，模型名称保持现有选择。每个聊天开工时核对当次实际设置，不能仅在任务书写入档位就宣称已生效，也不通过全局默认改变A。支持级别依模型与客户端而定，参见[官方配置参考](https://learn.chatgpt.com/docs/config-file/config-reference)。
+用户2026-10-22在悬浮助手请求中补充：计划阶段目标max；执行A=max、B–F及临时设计聊天=xhigh；G保持原安排，模型名称保持现有选择。每个聊天开工时核对当次实际设置，不能仅在任务书写入档位就宣称已生效，也不通过全局默认改变A。支持级别依模型与客户端而定，参见[官方配置参考](https://learn.chatgpt.com/docs/config-file/config-reference)。
 
 2026-10-21的只读核对显示：A最近实际轮次为max；设计聊天在2026-10-21T12:25:33.679Z的turn_context为gpt-6.1-sol/xhigh，已核实。B/C/D最近已执行轮次仍为max，不代表用户尚未运行的新设置；这些角色恢复时须核实新轮次为xhigh。E/F尚无本次可核实的已启用聊天记录，启用时再核对。实际记录保存于主树忽略的others/reports/ui-coordination/runtime-settings.json；不修改Codex全局配置，也不为切档位提前唤醒受门禁限制的角色。
 

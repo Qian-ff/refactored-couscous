@@ -1,0 +1,18 @@
+{
+  "version": "UI-ASSISTANT-2026.10-v1.1",
+  "images_status": "approved",
+  "approved_commit": "7a678db1d3eee3055e0b369bb18952abf1d79676",
+  "reference_screens": 48,
+  "evidence": {
+    "source": "explicit human answer in this design chat",
+    "thread_id": "01a15e27-4a94-79f0-9a2b-37b3fcee6334",
+    "turn_id": "01a15fb5-60ae-7451-a5d5-8df427c809fd",
+    "question_item_id": "[\"request_user_input_async\",\"call_540ea4383fa7468f9f9e039e50fec5ca\",0]",
+    "answer": "批准 v1.1，继续规范与 A 交接",
+    "date": "2026-10-22",
+    "timezone": "Asia/Shanghai"
+  },
+  "edge_revision": {"capsule_width":128,"hidden_width":80,"visible_width":48,"height":56},
+  "product_implementation_accepted": false,
+  "native_acceptance": false
+}

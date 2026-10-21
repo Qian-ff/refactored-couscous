@@ -1,0 +1,39 @@
+{
+  "version": "UI-ASSISTANT-2026.10-v1.1",
+  "status": "approved_design_ready_for_A",
+  "images": 48,
+  "image_hashes_and_dimensions": "passed",
+  "current_source_hashes": "passed",
+  "static_interactions": 20,
+  "local_links_checked": 281,
+  "broken_links": 0,
+  "gallery_ids_unique": true,
+  "original_v1_manifest_files_unchanged": 141,
+  "changed_primary_images": [
+    "web-dock-left",
+    "web-dock-right",
+    "mobile-dock-left",
+    "mobile-dock-right"
+  ],
+  "unchanged_primary_images": 44,
+  "dock_hidden_width": 80,
+  "dock_visible_target": [
+    48,
+    56
+  ],
+  "scope": "registered design subdirectory only",
+  "product_code_changed": false,
+  "native_tests_performed": false,
+  "approval": "approval.json",
+  "images_status": "approved",
+  "approved_commit": "7a678db1d3eee3055e0b369bb18952abf1d79676",
+  "formal_specs": [
+    "design-spec.md",
+    "state-spec.md",
+    "platform-spec.md",
+    "functional-map.md",
+    "handoff.md",
+    "acceptance.md",
+    "tokens.json"
+  ]
+}

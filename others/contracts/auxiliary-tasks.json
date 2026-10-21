@@ -56,20 +56,37 @@
       "owned_paths": ["others/design/ui-redesign/assistant-floating-v1/"],
       "planning_reasoning_effort_target": "max",
       "reasoning_effort_target": "xhigh",
-      "status": "registered_static_design",
+      "status": "design_received",
       "request_evidence": {
         "source": "human request verified in design chat",
         "thread_id": "01a15e27-4a94-79f0-9a2b-37b3fcee6334",
         "turn_id": "01a15f7d-b0a4-7960-b040-3d23bc566bff"
       },
       "approval": {
-        "images_status": "awaiting_user_approval",
-        "approved_commit": null,
-        "evidence": null
+        "version": "UI-ASSISTANT-2026.10-v1.1",
+        "images_status": "approved",
+        "approved_commit": "7a678db1d3eee3055e0b369bb18952abf1d79676",
+        "evidence": {
+          "source": "explicit human answer independently verified by A in design chat",
+          "thread_id": "01a15e27-4a94-79f0-9a2b-37b3fcee6334",
+          "turn_id": "01a15fb5-60ae-7451-a5d5-8df427c809fd",
+          "question_item_id": "[\"request_user_input_async\",\"call_540ea4383fa7468f9f9e039e50fec5ca\",0]",
+          "answer": "批准 v1.1，继续规范与 A 交接",
+          "date": "2026-10-22"
+        }
       },
       "handoff": {
-        "status": "not_ready",
-        "frozen_commit": null
+        "status": "received",
+        "frozen_commit": "78cdeb677ed1f302f1a3ecb68bfbd834aa4b85d1",
+        "manifest": "others/design/ui-redesign/assistant-floating-v1/freeze-manifest.json",
+        "manifest_files_verified": 94,
+        "git_files_verified": 95,
+        "primary_images": 48,
+        "png_files": 59,
+        "static_interactions": 20,
+        "local_links_checked": 355,
+        "execution_baseline_ref": "ui-assistant-design-ready",
+        "implementation_handoff": "others/docs/assistant-floating-handoff.md"
       },
       "preserve_frozen_design": {
         "commit": "d17b342c53fc054bd298bee356143d3b3ab77af6",

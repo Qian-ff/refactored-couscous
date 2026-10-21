@@ -15,4 +15,4 @@ A 维护统一契约。实际接口以 openapi.json、version.json 和生成客�
 
 领域角色先在自己的目录提交提案：用途、字段、权限、状态、旧新行为、兼容/迁移、依赖及页面注册需求。A 接收可集成实现后，统一发布模型注册、迁移、路由、真实 OpenAPI、SDK 和完整 SHA。消费者合并该基线再依赖新接口；设计协议不进入生成客户端。公共修改中途及时交接。
 
-前端公共入口/HashRouter/路由唯一由 D 维护。B/C 输出独立页面组件及 PageRegistration 清单，使用 web/src/lib/extensions.ts；C 的关卡编辑器接受 renderPreview，由 D 集成注入。B 管核心/正式学习与考试，C 管固定内容版本/检索/助手；保持模块单向依赖。
+前端公共入口/HashRouter/路由唯一由 D 维护。B/C 的普通业务页输出独立组件及 PageRegistration 清单，使用 web/src/lib/extensions.ts；C 的关卡编辑器接受 renderPreview，由 D 集成注入。助手例外：C提供内容与生命周期适配器，由D唯一悬浮宿主承载，不注册独立聊天页，见[已批准交接](../docs/assistant-floating-handoff.md)。B 管核心/正式学习与考试，C 管固定内容版本/检索/助手；保持模块单向依赖。

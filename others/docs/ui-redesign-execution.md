@@ -33,6 +33,8 @@
 
 ## 可复核命令
 
+悬浮助手v1.1规范另已接收，见[后续助手交接](assistant-floating-handoff.md)和本地ui-assistant-design-ready。该标签供保存本树工作后合并新规则，原UI-v1标签及上述已有页面迁移责任不变。当前D-UI继续保留助手未开放状态；后续由D唯一宿主承载C内容，不新建独立助手对话页。
+
 ```powershell
 git rev-parse ui-redesign-ready
 node .\others\design\ui-redesign\freeze.cjs --check

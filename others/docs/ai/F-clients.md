@@ -8,6 +8,8 @@
 
 ## 开始前
 
+助手后续原生适配以[已批准v1.1交接](../assistant-floating-handoff.md)和platform-spec为准，等C/D经A集成后再开始。F通过现有桥接验证真实麦克风/TTS、后台停止、键盘、安全区、返回优先级及Windows缩放；复用D唯一应用内宿主，不增加跨软件系统悬浮权限或另一套状态。计划max、执行xhigh，开工核验实际设置，本次不自动唤醒或放行新增功能。
+
 1. 打开自己的独立工作区 others/worktrees/clients，确认当前分支为 task/clients。
 2. 读根 AGENTS.md、others/docs/design.md、others/contracts/README.md 和 ownership.json。
 3. 当前基线为 checkpoint-1，包含最新一键工具及三角色/搜索要求；从交接报告核对后，在干净的本分支合并并确认 contains_baseline=true 再开始实现。

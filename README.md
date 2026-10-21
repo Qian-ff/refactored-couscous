@@ -13,6 +13,7 @@
 - [A1 使用与一键打开](others/docs/a1-usage.md)：双击 Open-Web.cmd、Open-Windows.cmd、Open-Android.cmd，或 Open-A1.cmd 选择三端；包含登录和课程同步体验流程。
 - [B1 阶段验收](others/docs/b1-handoff.md)：Open-B1.cmd 打开内部业务组件预览；Open-B1-API.cmd 打开真实后端联调入口。正式导航由 D 接入。
 - [D-UI执行交接](others/docs/ui-redesign-execution.md)：已批准桌面与冻结SHA、D/B/F唯一文件分工、公共组件先行和C/B2验收门禁。
+- [悬浮助手 v1.1 接收交接](others/docs/assistant-floating-handoff.md)：已批准的三端应用内单例规范、D/C/F/B2职责和后续目标；仍待产品实施。
 - [UI网页图册](others/design/ui-redesign/index.html)、[390px移动图册](others/design/ui-redesign/mobile-gallery.html)：已接收的设计参考，非产品运行证据；持续规则见[UI改版协作](others/docs/ui-redesign-coordination.md)。
 - [设计基线](others/docs/design.md)：本聊天确认的功能、范围、数据和视觉要求。
 - [A1 状态与交接](others/docs/a1-handoff.md)：已验证证据、待完成项目和可发布基线。
