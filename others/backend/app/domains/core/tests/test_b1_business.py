@@ -11,6 +11,7 @@ import pytest
 
 from app.domains.core.auth import Identity
 from app.domains.core.csv_tools import ACCOUNT_COLUMNS
+from app.domains.core.demo_b1 import seed_b1_examples
 from app.domains.core.models import (
     AccountInvitation, Course, CourseStaff, Enrollment, LoginSession, Major, RoleGrant, User,
 )
@@ -354,3 +355,17 @@ def test_db_primary_teacher_unique_index_blocks_direct_duplicate(db):
         db.add(CourseStaff(school_id=fixture_id("school-a"), course_id=fixture_id("course-general"),
                            user_id=fixture_id("user-teacher_eng"), is_primary=True))
         db.flush()
+
+
+def test_b1_synthetic_examples_keep_ids_passwords_and_class_isolation(db):
+    first = seed_b1_examples(db, PASSWORD)
+    student = db.get(User, fixture_id("b1-demo-student-cross"))
+    old_hash = student.hashed_password
+    enrollment = db.exec(select(Enrollment).where(Enrollment.user_id == student.id)).one()
+    enrollment_id = enrollment.id
+    second = seed_b1_examples(db, PASSWORD + "-different")
+    assert first == second
+    db.refresh(student)
+    assert student.hashed_password == old_hash
+    assert db.get(Enrollment, enrollment_id).course_id == UUID_value(first["course_ids"][0])
+    assert db.exec(select(Enrollment).where(Enrollment.user_id == student.id)).all() == [enrollment]
