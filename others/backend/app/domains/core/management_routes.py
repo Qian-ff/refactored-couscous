@@ -248,7 +248,8 @@ def create_account(body: AccountCreate, identity: CurrentIdentity, db: Db, key: 
     def action():
         validate_new_account(db, identity, body)
         return account_view(db, insert_account(db, body))
-    return execute_command(db, identity, body.school_id, "accounts.create", key, body.model_dump(), action, authorize)
+    return execute_command(db, identity, body.school_id, "accounts.create", key, body.model_dump(), action, authorize,
+                           lambda result: require_account(db, identity, UUID(result["id"])))
 
 
 @router.patch("/admin/accounts/{user_id}", response_model=AccountView)

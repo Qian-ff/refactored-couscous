@@ -43,7 +43,8 @@ def refresh_identity(db: Session, identity: Identity):
 
 def execute_command(db: Session, identity: Identity, school_id: UUID | None, operation: str,
                     key: str | None, payload: object, action: Callable[[], object],
-                    authorize: Callable[[], None] | None = None) -> dict:
+                    authorize: Callable[[], None] | None = None,
+                    authorize_replay: Callable[[dict], None] | None = None) -> dict:
     try:
         tenant_write_lock(db, school_id)
         refresh_identity(db, identity)
@@ -59,6 +60,8 @@ def execute_command(db: Session, identity: Identity, school_id: UUID | None, ope
             if not hmac.compare_digest(receipt.request_hash, digest):
                 raise HTTPException(409, "同一幂等键的请求内容不同，请核对后使用新键")
             result = receipt.result
+            if authorize_replay:
+                authorize_replay(result)
         else:
             result = jsonable_encoder(action())
             if key:

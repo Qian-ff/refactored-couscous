@@ -90,7 +90,6 @@ function Fixture() {
     <button className="b1-button b1-secondary" onClick={() => { void logoutSession().catch(error => setFeedback(message(error))) }}>退出登录</button>
   </header><nav className="b1-dev-nav" aria-label="B1 组件选择">
     {registrations.filter(value => value.navGroup && value.workRoles.includes(session.workRole!)).map(value => <button key={value.id} type="button" className={`b1-button ${selected === value.path ? "" : "b1-secondary"}`} onClick={() => navigate(value.path)}>{value.title}</button>)}
-    <button type="button" className="b1-button b1-secondary" onClick={() => navigate(session.workRole === "administrator" ? "/administration/courses" : "/teaching/courses")}>课程与教学班</button>
   </nav>{feedback && <div className="b1-ui"><Notice>{feedback}</Notice></div>}{body}</div>
 }
 
