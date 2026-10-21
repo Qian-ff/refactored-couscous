@@ -82,7 +82,11 @@ transport.interceptors.response.use((response) => {
 })
 
 export function serviceUrl() {
-  return localStorage.getItem("safelab.service") || defaultServiceUrl()
+  const configured = localStorage.getItem("safelab.service") || defaultServiceUrl()
+  if (configured) return configured
+  // Public production web shares the HTTPS gateway with its API. Packaged clients still select a service.
+  const localHost = ["localhost", "127.0.0.1", "[::1]"].includes(window.location.hostname)
+  return window.location.protocol === "https:" && !localHost ? window.location.origin : ""
 }
 
 export function configureService(value: string) {
