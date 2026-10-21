@@ -1,0 +1,16 @@
+{
+  "version": "UI-ASSISTANT-2026.10-v1",
+  "status": "candidate_verified_awaiting_user_approval",
+  "images": 48,
+  "image_hashes_and_dimensions": "passed",
+  "current_source_hashes": "passed",
+  "static_interactions": 16,
+  "local_links_checked": 274,
+  "broken_links": 0,
+  "gallery_ids_unique": true,
+  "original_v1_manifest_files_unchanged": 141,
+  "scope": "new design subdirectory only",
+  "product_code_changed": false,
+  "native_tests_performed": false,
+  "approval": null
+}
