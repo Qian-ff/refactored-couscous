@@ -1,8 +1,17 @@
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react"
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react"
 import { AlertCircle, CheckCircle2, LoaderCircle, RefreshCw, ShieldCheck } from "lucide-react"
+import axios from "axios"
 import { isStaleRequest, message, sessionSnapshot, subscribeSession, type SessionSnapshot } from "../../lib/api"
 import type { PageProps } from "../../lib/extensions"
 import "./business.css"
+
+export function SessionPage({ page, children }: { page: PageProps; children: ReactNode }) {
+  const current = useSyncExternalStore(subscribeSession, sessionSnapshot)
+  if (current.phase !== "ready" || current.generation !== page.session.generation || current.user?.id !== page.user.id) {
+    return <div className="b1-ui"><Notice>工作身份已改变，正在重新确认页面。</Notice></div>
+  }
+  return <div key={`${current.generation}:${current.workRole}`}>{children}</div>
+}
 
 export function BusinessPage({ page, title, description, children }: { page: PageProps; title: string; description: string; children: ReactNode }) {
   if (page.session.phase !== "ready" || page.session.user?.id !== page.user.id) {
@@ -46,7 +55,7 @@ export function Pager({ offset, count, size = 20, change }: { offset: number; co
 }
 
 /** Both the global session generation and same-session query order are checked. */
-export function useBusinessQuery<T>(session: SessionSnapshot, load: (signal: AbortSignal) => Promise<T>) {
+export function useBusinessQuery<T>(session: SessionSnapshot, load: (signal: AbortSignal) => Promise<T>, enabled = true) {
   const [data, setData] = useState<T | null>(null)
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
@@ -62,15 +71,15 @@ export function useBusinessQuery<T>(session: SessionSnapshot, load: (signal: Abo
         controller.abort(); setData(null); setError(""); setLoading(false)
       }
     })
-    setData(null); setError("")
-    if (session.phase !== "ready" || generation !== sessionSnapshot().generation) return () => { controller.abort(); unsubscribe() }
+    setData(null); setError(""); setLoading(false)
+    if (!enabled || session.phase !== "ready" || generation !== sessionSnapshot().generation) return () => { controller.abort(); unsubscribe() }
     setLoading(true)
     const valid = () => !controller.signal.aborted && current === sequence.current && sessionSnapshot().generation === generation
     load(controller.signal).then(value => { if (valid()) setData(value) }).catch(reason => {
       if (valid() && !isStaleRequest(reason)) setError(message(reason))
     }).finally(() => { if (valid()) setLoading(false) })
     return () => { controller.abort(); unsubscribe() }
-  }, [session.generation, session.phase, load, revision])
+  }, [session.generation, session.phase, load, revision, enabled])
   return { data, error, loading, reload }
 }
 
@@ -79,20 +88,30 @@ export function useBusinessAction(session: SessionSnapshot) {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
   const busy = useRef(false)
+  const uncertainCommand = useRef<{ signature: string; key: string; generation: number } | undefined>(undefined)
   useEffect(() => subscribeSession(value => {
-    if (value.generation !== session.generation || value.phase !== "ready") { setError(""); setSuccess(""); setPending(false) }
+    if (value.generation !== session.generation || value.phase !== "ready") {
+      uncertainCommand.current = undefined; setError(""); setSuccess(""); setPending(false)
+    }
   }), [session.generation])
-  const run = async <T,>(action: (key: string) => Promise<T>, onSuccess?: (value: T) => void, confirmation = "操作已保存") => {
+  const run = async <T,>(action: (key: string) => Promise<T>, onSuccess?: (value: T) => void,
+    confirmation = "操作已保存", signature?: string) => {
     if (busy.current || session.phase !== "ready" || sessionSnapshot().generation !== session.generation) return
     busy.current = true; setPending(true); setError(""); setSuccess("")
     const generation = session.generation
+    const previous = uncertainCommand.current
+    const key = signature && previous?.signature === signature && previous.generation === generation ? previous.key : crypto.randomUUID()
+    uncertainCommand.current = signature ? { signature, key, generation } : undefined
     try {
-      const result = await action(crypto.randomUUID())
+      const result = await action(key)
       if (sessionSnapshot().generation === generation && sessionSnapshot().phase === "ready") {
+        uncertainCommand.current = undefined
         setSuccess(confirmation); onSuccess?.(result)
         return result
       }
     } catch (reason) {
+      if (isStaleRequest(reason) || (axios.isAxiosError(reason) && reason.response
+        && reason.response.status >= 400 && reason.response.status < 500)) uncertainCommand.current = undefined
       if (sessionSnapshot().generation === generation && !isStaleRequest(reason)) setError(message(reason))
     } finally { busy.current = false; if (sessionSnapshot().generation === generation) setPending(false) }
   }

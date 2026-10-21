@@ -262,6 +262,12 @@ def update_account(user_id: UUID, body: AccountPatch, identity: CurrentIdentity,
         require_account(db, identity, user_id, write=True)
         check_revision(user, body.revision)
         values = body.model_dump(exclude_unset=True, exclude={"revision"})
+        student = db.exec(select(RoleGrant.id).where(RoleGrant.user_id == user_id, RoleGrant.role == Role.STUDENT)).first()
+        if student:
+            # Legacy missing fields stay compatible; established student identity fields cannot be erased.
+            for field in ("student_no", "major_id"):
+                if getattr(user, field) is not None and field in values:
+                    require(values[field] is not None, "学生学号和专业不可清空；更正时请选择有效值", 422)
         college_id = values.get("college_id", user.college_id)
         require(college_id is not None, "学校账号须保留学院", 422)
         require(identity.manages(college_id, user.school_id))

@@ -82,6 +82,9 @@ def test_account_independent_student_number_first_change_and_session_revocation(
     value = created.json()
     assert value["username"] != value["student_no"] and value["must_change_password"]
     assert "hashed_password" not in value and PASSWORD not in created.text
+    for field in ("student_no", "major_id"):
+        assert command(client, "patch", f"/admin/accounts/{value['id']}", admin,
+                       {"revision": value["revision"], field: None}).status_code == 422
     student = login(client, body["username"])
     assert client.get("/api/v1/auth/me", headers=student).json()["must_change_password"]
     assert client.get("/api/v1/profile", headers=student).status_code == 200
