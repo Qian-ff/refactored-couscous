@@ -2499,6 +2499,55 @@ export type teachingUpdateCatalogResponses = {
 
 export type teachingUpdateCatalogResponse = teachingUpdateCatalogResponses[keyof teachingUpdateCatalogResponses];
 
+export type teachingCatalogTeacherOptionsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Catalog Id
+         */
+        catalog_id: string;
+    };
+    query: {
+        /**
+         * Q
+         */
+        q: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/catalogs/{catalog_id}/teacher-options';
+};
+
+export type teachingCatalogTeacherOptionsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingCatalogTeacherOptionsError = teachingCatalogTeacherOptionsErrors[keyof teachingCatalogTeacherOptionsErrors];
+
+export type teachingCatalogTeacherOptionsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_TeacherOption_;
+};
+
+export type teachingCatalogTeacherOptionsResponse = teachingCatalogTeacherOptionsResponses[keyof teachingCatalogTeacherOptionsResponses];
+
 export type coursesCoursesData = {
     body?: never;
     headers?: {

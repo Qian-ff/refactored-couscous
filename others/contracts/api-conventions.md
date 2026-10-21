@@ -1,10 +1,12 @@
 # API 约定
 
-## 实际 0.3.0（兼容A0的0.2.0）
+## 实际 0.3.1（兼容0.3.0及A0的0.2.0）
 
 唯一版本源为 ../config/application.json。OpenAPI 只导出实际接口；version.json 记录真实导出哈希，web/src/client 由工具生成，不手改。/courses 继续表示教学班，响应新增 catalog_id；旧创建请求兼容。
 
 B1真实组织/账号/目录/班级/CSV操作见[b1-public-handoff](../docs/b1-public-handoff.md)。新写入要求幂等键，修改带revision；输入校验错误不包含input/context。health增加migration并核验实际库头版本，未迁移返回503。B2等未来接口继续只保留设计，不生成占位SDK。
+
+0.3.1目录教师选择接口要求目录负责人或有范围管理员，查询至少2字符、每页最多20项，只返回id/username/display_name/college_id。本校有效教师可跨学院任教，目录负责人不会因此获得所开班级的名单/私有资料权限；跨学院开班仍由校管理员协调。
 
 Bearer 凭据只存前端内存。X-Work-Role 取 student/teacher/administrator，由服务端在当前有效授权内确认。未显式选择按会话固定默认；教师兼管理员默认教师，撤权不回退管理员。非法或撤销身份403，停用/会话失效401；普通权限不足403。/auth/me 返回 grants（全部授权）、available_work_roles、active_work_role、effective_grants（当前身份）；业务判权只读 effective_grants。注销仍可在旧身份被撤销后撤销会话。
 

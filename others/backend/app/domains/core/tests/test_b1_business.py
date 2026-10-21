@@ -11,6 +11,7 @@ import pytest
 
 from app.domains.core.auth import Identity
 from app.domains.core.csv_tools import ACCOUNT_COLUMNS
+from app.domains.core.demo_b1 import seed_b1_examples
 from app.domains.core.models import (
     AccountInvitation, Course, CourseStaff, Enrollment, LoginSession, Major, RoleGrant, User,
 )
@@ -81,6 +82,9 @@ def test_account_independent_student_number_first_change_and_session_revocation(
     value = created.json()
     assert value["username"] != value["student_no"] and value["must_change_password"]
     assert "hashed_password" not in value and PASSWORD not in created.text
+    for field in ("student_no", "major_id"):
+        assert command(client, "patch", f"/admin/accounts/{value['id']}", admin,
+                       {"revision": value["revision"], field: None}).status_code == 422
     student = login(client, body["username"])
     assert client.get("/api/v1/auth/me", headers=student).json()["must_change_password"]
     assert client.get("/api/v1/profile", headers=student).status_code == 200
@@ -274,6 +278,20 @@ def test_catalog_owner_and_cross_college_admin_do_not_gain_sibling_roster(client
         "teacher_id": str(fixture_id("user-teacher")), "code": "NO-CROSS", "title": "越权", "catalog_id": twin["catalog_id"]}).status_code == 403
 
 
+def test_catalog_owner_can_designate_class_teacher_without_getting_class_access(client, auth):
+    owner = auth()
+    catalog_id = client.get(f"/api/v1/courses/{fixture_id('course-general')}", headers=owner).json()["catalog_id"]
+    candidates = client.get(f"/api/v1/catalogs/{catalog_id}/teacher-options?q=teacher_eng", headers=owner)
+    assert candidates.status_code == 200 and candidates.json()["count"] == 1
+    assert client.get(f"/api/v1/catalogs/{catalog_id}/teacher-options?q=teacher", headers=auth("student")).status_code == 403
+    result = command(client, "post", "/courses", owner, {"catalog_id": catalog_id,
+        "college_id": str(fixture_id("a-chem")), "teacher_id": str(fixture_id("user-teacher_eng")),
+        "code": "OWNER-DELEGATED", "title": "负责人指定教师班"})
+    assert result.status_code == 201
+    assert client.get(f"/api/v1/courses/{result.json()['id']}", headers=owner).status_code == 404
+    assert client.get(f"/api/v1/courses/{result.json()['id']}", headers=auth("teacher_eng")).status_code == 200
+
+
 def test_content_point_and_sql_scopes_agree_on_sharing_and_no_answer_leak(client, auth, db):
     twin = twin_class(client, auth("admin"))
     student = identity(db, "student", "student")
@@ -354,3 +372,17 @@ def test_db_primary_teacher_unique_index_blocks_direct_duplicate(db):
         db.add(CourseStaff(school_id=fixture_id("school-a"), course_id=fixture_id("course-general"),
                            user_id=fixture_id("user-teacher_eng"), is_primary=True))
         db.flush()
+
+
+def test_b1_synthetic_examples_keep_ids_passwords_and_class_isolation(db):
+    first = seed_b1_examples(db, PASSWORD)
+    student = db.get(User, fixture_id("b1-demo-student-cross"))
+    old_hash = student.hashed_password
+    enrollment = db.exec(select(Enrollment).where(Enrollment.user_id == student.id)).one()
+    enrollment_id = enrollment.id
+    second = seed_b1_examples(db, PASSWORD + "-different")
+    assert first == second
+    db.refresh(student)
+    assert student.hashed_password == old_hash
+    assert db.get(Enrollment, enrollment_id).course_id == UUID_value(first["course_ids"][0])
+    assert db.exec(select(Enrollment).where(Enrollment.user_id == student.id)).all() == [enrollment]

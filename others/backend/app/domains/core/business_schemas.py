@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Annotated, Literal
 from uuid import UUID
 
@@ -21,6 +21,8 @@ class Input(BaseModel):
     def reject_blank(cls, value):
         if isinstance(value, str) and not value.strip():
             raise ValueError("内容不能仅包含空格")
+        if isinstance(value, datetime):
+            return value.astimezone(UTC) if value.tzinfo else value.replace(tzinfo=UTC)
         return value
 
 

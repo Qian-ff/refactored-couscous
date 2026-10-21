@@ -2,7 +2,7 @@
 import subprocess
 import sys
 from pathlib import Path
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 import pytest
 from sqlalchemy import inspect, text
@@ -75,9 +75,33 @@ def test_b1_migration_enforces_major_tenant_and_nullable_parent_constraint():
 def test_public_routers_export_typed_business_and_keep_learning_unpublished(client):
     schema = client.get("/api/v1/openapi.json").json()
     assert {"/api/v1/admin/accounts", "/api/v1/imports/commit", "/api/v1/catalogs",
+            "/api/v1/catalogs/{catalog_id}/teacher-options",
             "/api/v1/courses/{course_id}/transfer", "/api/v1/auth/change-password"} <= set(schema["paths"])
     assert not any("tutoring-status" in path or "training-records" in path for path in schema["paths"])
     assert client.get("/api/v1/learning/training-records").status_code == 404
+
+
+def test_catalog_teacher_picker_public_query_bounds_tenant_and_minimal_fields(client, auth, db):
+    from app.domains.core.models import CourseCatalog
+    from app.seed import fixture_id
+
+    owner = auth()
+    catalog_id = client.get(f"/api/v1/courses/{fixture_id('course-general')}", headers=owner).json()["catalog_id"]
+    path = f"/api/v1/catalogs/{catalog_id}/teacher-options"
+    response = client.get(path, headers=owner, params={"q": "teacher_eng", "limit": 1})
+    assert response.status_code == 200
+    assert response.json()["count"] == 1
+    assert set(response.json()["data"][0]) == {"id", "username", "display_name", "college_id"}
+    assert client.get(path, headers=owner, params={"q": "teacher%"}).json()["count"] == 0
+    assert client.get(path, headers=owner, params={"q": "t"}).status_code == 422
+    assert client.get(path, headers=owner, params={"q": "teacher", "limit": 21}).status_code == 422
+    assert client.get(path, headers=auth("student"), params={"q": "teacher"}).status_code == 403
+    assert client.get(path, headers=auth("teacher_b", "demo-b"), params={"q": "teacher"}).status_code == 404
+    catalog = db.get(CourseCatalog, UUID(catalog_id))
+    catalog.archived = True
+    db.add(catalog)
+    db.commit()
+    assert client.get(path, headers=owner, params={"q": "teacher"}).status_code == 409
 
 
 def test_invalid_secret_input_is_not_echoed_by_public_validation_handler(client, auth):

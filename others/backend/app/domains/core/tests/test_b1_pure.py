@@ -1,11 +1,13 @@
 """Checks runnable without a DB using --confcutdir=app/domains/core/tests for this file only."""
 import json
+from datetime import UTC, datetime
 from uuid import uuid4
 
 from fastapi import FastAPI
 from pydantic import SecretStr
 
 from app.domains.core.class_routes import router as classes
+from app.domains.core.business_schemas import InvitationCreate
 from app.domains.core.csv_tools import csv_template, fingerprint, parse_csv
 from app.domains.core.import_routes import router as imports
 from app.domains.core.management_routes import router as management
@@ -51,3 +53,9 @@ def test_new_domain_routes_export_actual_typed_operations():
 def test_unimplemented_exam_gate_never_allows_students():
     gate = tutoring_status(uuid4())
     assert gate.state == "unavailable" and not gate.implemented
+
+
+def test_invitation_expiry_normalizes_timezone_and_bad_unicode_is_reported():
+    invitation = InvitationCreate(school_id=uuid4(), college_id=uuid4(), expires_at="2026-10-25T08:00:00+08:00")
+    assert invitation.expires_at == datetime(2026, 10, 25, 0, 0, tzinfo=UTC)
+    assert parse_csv("username\n\ud800", "roster")[1][0]["field"] == "csv"
