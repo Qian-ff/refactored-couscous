@@ -6,11 +6,12 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：A0 公共执行基线 a2-ready，真实接口0.2.0，可交 B1。** 课程目录兼容、工作身份和共享会话/配置/测试基础的检查见 [A0 交接](others/docs/a0-handoff.md)；完整课程管理、题库、考试、语音与三角色工作台按 B1→C→B2→D 接续，A2 再做最终三端验收。历史 A1 三端共享底座及标签 a1-0.1.0 保留，见 [A1 交接](others/docs/a1-handoff.md)。
+**当前阶段：B1 公共后端与 SDK 已集成，真实契约0.3.0，B 继续页面联调。** 见 [B1 公共交接](others/docs/b1-public-handoff.md)。历史 [A0 基线](others/docs/a0-handoff.md) 与 a2-ready 保留；完整 B1、题库、考试、语音及三角色工作台按 B1→C→B2→D 接续，A2 再做最终三端验收。历史 A1 底座见 [A1 交接](others/docs/a1-handoff.md)。
 
 ## 从这里开始
 
 - [A1 使用与一键打开](others/docs/a1-usage.md)：双击 Open-Web.cmd、Open-Windows.cmd、Open-Android.cmd，或 Open-A1.cmd 选择三端；包含登录和课程同步体验流程。
+- [B1 API 入口](others/docs/b1-public-handoff.md)：Open-B1-API.cmd 打开真实后端联调入口；完整工作台待 B/D 接续。
 - [设计基线](others/docs/design.md)：本聊天确认的功能、范围、数据和视觉要求。
 - [A1 状态与交接](others/docs/a1-handoff.md)：已验证证据、待完成项目和可发布基线。
 - [开工与交接](others/docs/start-here.md)：先后顺序及当前状态。

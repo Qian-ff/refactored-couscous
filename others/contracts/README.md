@@ -1,8 +1,8 @@
 # 契约入口
 
-A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；当前为 **0.2.0**。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A1 历史基线仍为 0.1.0。
+A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；当前为 **0.3.0**。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A0历史基线0.2.0保留。
 
-0.2.0 已实现 CourseCatalog 兼容底座、Course.catalog_id、工作身份上下文、实时会话/授权检查与原账号/课程接口。模型集中入口、迁移、后端挂载、公共请求层和 SDK 由 A 维护。目录 CRUD、完整账号管理、内容/搜索/考试/任务接口仍由后续阶段实现。
+0.3.0 在A0底座上增加真实组织/专业/账号/授权/改密、目录与班级管理/审批/交接、CSV导入等B1路由。模型注册、兼容迁移和生成SDK已交接，见[B1公共交接](../docs/b1-public-handoff.md)。B1完整界面仍在B交付范围；内容/助手/考试/记录接口未发布。
 
 - [领域不变量](domain-model.md)：已实现对象及后续业务规则。
 - [接口约定](api-conventions.md)：鉴权、版本、错误和幂等。

@@ -11,7 +11,7 @@ from sqlmodel import Session, select
 from app.core.config import settings
 from app.core.db import get_db
 from app.core.grants import validate_role_family
-from app.domains.core.models import LoginSession, Role, RoleGrant, User
+from app.domains.core.models import LoginSession, Role, RoleGrant, School, User
 
 Db = Annotated[Session, Depends(get_db)]
 bearer = HTTPBearer(auto_error=False)
@@ -82,6 +82,10 @@ def get_account(db: Db, credential: Annotated[HTTPAuthorizationCredentials | Non
     if (login is None or login.revoked or login.user_id != user_id or user is None or not user.is_active
             or login.expires_at.replace(tzinfo=UTC) <= datetime.now(UTC)):
         raise denied
+    if user.school_id:
+        school = db.get(School, user.school_id)
+        if school is None or not school.is_active:
+            raise denied
     # Grants are fetched on every request: token claims never freeze an old role.
     grants = list(db.exec(select(RoleGrant).where(RoleGrant.user_id == user.id)).all())
     return Account(user, grants, login)
@@ -106,4 +110,13 @@ def get_identity(account: CurrentAccount, db: Db,
     return Identity(account.user, account.all_grants, account.login, selected)
 
 
-CurrentIdentity = Annotated[Identity, Depends(get_identity)]
+AccountIdentity = Annotated[Identity, Depends(get_identity)]
+
+
+def get_business_identity(identity: AccountIdentity) -> Identity:
+    if identity.user.must_change_password:
+        raise HTTPException(status_code=403, detail="请先修改临时密码")
+    return identity
+
+
+CurrentIdentity = Annotated[Identity, Depends(get_business_identity)]

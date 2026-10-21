@@ -36,6 +36,9 @@ if source != (backend / "app/__init__.py").resolve():
 if module == "__probe__":
     print(json.dumps({"python": sys.executable, "app_source": str(source),
         "configuration_loaded": bool(os.environ.get("DATABASE_URL") and os.environ.get("SECRET_KEY"))}))
+elif module == "__openapi__":
+    from app.main import app
+    print(json.dumps(app.openapi(), ensure_ascii=True))
 else:
     sys.argv = [module, *arguments]
     runpy.run_module(module, run_name="__main__", alter_sys=True)

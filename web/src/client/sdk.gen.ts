@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { authLoginData, authLoginErrors, authLoginResponses, authLogoutData, authLogoutResponses, authMeData, authMeErrors, authMeResponses, coursesContextData, coursesContextErrors, coursesContextResponses, coursesCourseData, coursesCourseErrors, coursesCourseResponses, coursesCoursesData, coursesCoursesErrors, coursesCoursesResponses, coursesCreateCourseData, coursesCreateCourseErrors, coursesCreateCourseResponses, systemHealthData, systemHealthResponses } from './types.gen';
+import type { authLoginData, authLoginErrors, authLoginResponses, authLogoutData, authLogoutResponses, authMeData, authMeErrors, authMeResponses, coursesContextData, coursesContextErrors, coursesContextResponses, coursesCourseData, coursesCourseErrors, coursesCourseResponses, coursesCoursesData, coursesCoursesErrors, coursesCoursesResponses, coursesCreateCourseData, coursesCreateCourseErrors, coursesCreateCourseResponses, importsCommitImportData, importsCommitImportErrors, importsCommitImportResponses, importsPreviewImportData, importsPreviewImportErrors, importsPreviewImportResponses, importsTemplateData, importsTemplateErrors, importsTemplateResponses, managementChangePasswordData, managementChangePasswordErrors, managementChangePasswordResponses, managementCreateAccountData, managementCreateAccountErrors, managementCreateAccountResponses, managementCreateCollegeData, managementCreateCollegeErrors, managementCreateCollegeResponses, managementCreateInvitationData, managementCreateInvitationErrors, managementCreateInvitationResponses, managementCreateMajorData, managementCreateMajorErrors, managementCreateMajorResponses, managementCreateSchoolData, managementCreateSchoolErrors, managementCreateSchoolResponses, managementGetAccountData, managementGetAccountErrors, managementGetAccountResponses, managementGetProfileData, managementGetProfileErrors, managementGetProfileResponses, managementGrantRoleData, managementGrantRoleErrors, managementGrantRoleResponses, managementInvitationContextData, managementInvitationContextErrors, managementInvitationContextResponses, managementListAccountsData, managementListAccountsErrors, managementListAccountsResponses, managementListCollegesData, managementListCollegesErrors, managementListCollegesResponses, managementListInvitationsData, managementListInvitationsErrors, managementListInvitationsResponses, managementListMajorsData, managementListMajorsErrors, managementListMajorsResponses, managementListSchoolsData, managementListSchoolsErrors, managementListSchoolsResponses, managementRegisterAccountData, managementRegisterAccountErrors, managementRegisterAccountResponses, managementResetPasswordData, managementResetPasswordErrors, managementResetPasswordResponses, managementRevokeInvitationData, managementRevokeInvitationErrors, managementRevokeInvitationResponses, managementRevokeRoleData, managementRevokeRoleErrors, managementRevokeRoleResponses, managementUpdateAccountData, managementUpdateAccountErrors, managementUpdateAccountResponses, managementUpdateCollegeData, managementUpdateCollegeErrors, managementUpdateCollegeResponses, managementUpdateMajorData, managementUpdateMajorErrors, managementUpdateMajorResponses, managementUpdateProfileData, managementUpdateProfileErrors, managementUpdateProfileResponses, managementUpdateSchoolData, managementUpdateSchoolErrors, managementUpdateSchoolResponses, systemHealthData, systemHealthResponses, teachingAddMemberData, teachingAddMemberErrors, teachingAddMemberResponses, teachingAddStaffData, teachingAddStaffErrors, teachingAddStaffResponses, teachingArchiveClassData, teachingArchiveClassErrors, teachingArchiveClassResponses, teachingCancelMyRequestData, teachingCancelMyRequestErrors, teachingCancelMyRequestResponses, teachingCatalogData, teachingCatalogErrors, teachingCatalogResponses, teachingCatalogsData, teachingCatalogsErrors, teachingCatalogsResponses, teachingClassManagementData, teachingClassManagementErrors, teachingClassManagementResponses, teachingCreateCatalogData, teachingCreateCatalogErrors, teachingCreateCatalogResponses, teachingDecideRequestData, teachingDecideRequestErrors, teachingDecideRequestResponses, teachingJoinClassData, teachingJoinClassErrors, teachingJoinClassResponses, teachingLeaveClassData, teachingLeaveClassErrors, teachingLeaveClassResponses, teachingListStaffData, teachingListStaffErrors, teachingListStaffResponses, teachingMembersData, teachingMembersErrors, teachingMembersResponses, teachingMyRequestsData, teachingMyRequestsErrors, teachingMyRequestsResponses, teachingRemoveMemberData, teachingRemoveMemberErrors, teachingRemoveMemberResponses, teachingRemoveStaffData, teachingRemoveStaffErrors, teachingRemoveStaffResponses, teachingRequestsData, teachingRequestsErrors, teachingRequestsResponses, teachingRotateJoinCodeData, teachingRotateJoinCodeErrors, teachingRotateJoinCodeResponses, teachingTeacherOptionsData, teachingTeacherOptionsErrors, teachingTeacherOptionsResponses, teachingTransferClassData, teachingTransferClassErrors, teachingTransferClassResponses, teachingUpdateCatalogData, teachingUpdateCatalogErrors, teachingUpdateCatalogResponses, teachingUpdateSettingsData, teachingUpdateSettingsErrors, teachingUpdateSettingsResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -18,7 +18,382 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
     meta?: Record<string, unknown>;
 };
 
+export class ManagementService {
+    /**
+     * List Invitations
+     */
+    public static listInvitations<ThrowOnError extends boolean = true>(options?: Options<managementListInvitationsData, ThrowOnError>) {
+        return (options?.client ?? client).get<managementListInvitationsResponses, managementListInvitationsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/account-invitations',
+            ...options
+        });
+    }
+
+    /**
+     * Create Invitation
+     */
+    public static createInvitation<ThrowOnError extends boolean = true>(options: Options<managementCreateInvitationData, ThrowOnError>) {
+        return (options.client ?? client).post<managementCreateInvitationResponses, managementCreateInvitationErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/account-invitations',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Revoke Invitation
+     */
+    public static revokeInvitation<ThrowOnError extends boolean = true>(options: Options<managementRevokeInvitationData, ThrowOnError>) {
+        return (options.client ?? client).post<managementRevokeInvitationResponses, managementRevokeInvitationErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/account-invitations/{invitation_id}/revoke',
+            ...options
+        });
+    }
+
+    /**
+     * List Accounts
+     */
+    public static listAccounts<ThrowOnError extends boolean = true>(options?: Options<managementListAccountsData, ThrowOnError>) {
+        return (options?.client ?? client).get<managementListAccountsResponses, managementListAccountsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/accounts',
+            ...options
+        });
+    }
+
+    /**
+     * Create Account
+     */
+    public static createAccount<ThrowOnError extends boolean = true>(options: Options<managementCreateAccountData, ThrowOnError>) {
+        return (options.client ?? client).post<managementCreateAccountResponses, managementCreateAccountErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/accounts',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Get Account
+     */
+    public static getAccount<ThrowOnError extends boolean = true>(options: Options<managementGetAccountData, ThrowOnError>) {
+        return (options.client ?? client).get<managementGetAccountResponses, managementGetAccountErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/accounts/{user_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Update Account
+     */
+    public static updateAccount<ThrowOnError extends boolean = true>(options: Options<managementUpdateAccountData, ThrowOnError>) {
+        return (options.client ?? client).patch<managementUpdateAccountResponses, managementUpdateAccountErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/accounts/{user_id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Grant Role
+     */
+    public static grantRole<ThrowOnError extends boolean = true>(options: Options<managementGrantRoleData, ThrowOnError>) {
+        return (options.client ?? client).post<managementGrantRoleResponses, managementGrantRoleErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/accounts/{user_id}/grants',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Reset Password
+     */
+    public static resetPassword<ThrowOnError extends boolean = true>(options: Options<managementResetPasswordData, ThrowOnError>) {
+        return (options.client ?? client).post<managementResetPasswordResponses, managementResetPasswordErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/accounts/{user_id}/reset-password',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Revoke Role
+     */
+    public static revokeRole<ThrowOnError extends boolean = true>(options: Options<managementRevokeRoleData, ThrowOnError>) {
+        return (options.client ?? client).post<managementRevokeRoleResponses, managementRevokeRoleErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/accounts/{user_id}/revoke-grant',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * List Colleges
+     */
+    public static listColleges<ThrowOnError extends boolean = true>(options?: Options<managementListCollegesData, ThrowOnError>) {
+        return (options?.client ?? client).get<managementListCollegesResponses, managementListCollegesErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/colleges',
+            ...options
+        });
+    }
+
+    /**
+     * Create College
+     */
+    public static createCollege<ThrowOnError extends boolean = true>(options: Options<managementCreateCollegeData, ThrowOnError>) {
+        return (options.client ?? client).post<managementCreateCollegeResponses, managementCreateCollegeErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/colleges',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Update College
+     */
+    public static updateCollege<ThrowOnError extends boolean = true>(options: Options<managementUpdateCollegeData, ThrowOnError>) {
+        return (options.client ?? client).patch<managementUpdateCollegeResponses, managementUpdateCollegeErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/colleges/{record_id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * List Majors
+     */
+    public static listMajors<ThrowOnError extends boolean = true>(options?: Options<managementListMajorsData, ThrowOnError>) {
+        return (options?.client ?? client).get<managementListMajorsResponses, managementListMajorsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/majors',
+            ...options
+        });
+    }
+
+    /**
+     * Create Major
+     */
+    public static createMajor<ThrowOnError extends boolean = true>(options: Options<managementCreateMajorData, ThrowOnError>) {
+        return (options.client ?? client).post<managementCreateMajorResponses, managementCreateMajorErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/majors',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Update Major
+     */
+    public static updateMajor<ThrowOnError extends boolean = true>(options: Options<managementUpdateMajorData, ThrowOnError>) {
+        return (options.client ?? client).patch<managementUpdateMajorResponses, managementUpdateMajorErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/majors/{record_id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * List Schools
+     */
+    public static listSchools<ThrowOnError extends boolean = true>(options?: Options<managementListSchoolsData, ThrowOnError>) {
+        return (options?.client ?? client).get<managementListSchoolsResponses, managementListSchoolsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/schools',
+            ...options
+        });
+    }
+
+    /**
+     * Create School
+     */
+    public static createSchool<ThrowOnError extends boolean = true>(options: Options<managementCreateSchoolData, ThrowOnError>) {
+        return (options.client ?? client).post<managementCreateSchoolResponses, managementCreateSchoolErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/schools',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Update School
+     */
+    public static updateSchool<ThrowOnError extends boolean = true>(options: Options<managementUpdateSchoolData, ThrowOnError>) {
+        return (options.client ?? client).patch<managementUpdateSchoolResponses, managementUpdateSchoolErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/admin/schools/{record_id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Change Password
+     */
+    public static changePassword<ThrowOnError extends boolean = true>(options: Options<managementChangePasswordData, ThrowOnError>) {
+        return (options.client ?? client).post<managementChangePasswordResponses, managementChangePasswordErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/auth/change-password',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Invitation Context
+     */
+    public static invitationContext<ThrowOnError extends boolean = true>(options: Options<managementInvitationContextData, ThrowOnError>) {
+        return (options.client ?? client).get<managementInvitationContextResponses, managementInvitationContextErrors, ThrowOnError>({
+            responseType: 'json',
+            url: '/api/v1/auth/invitations/{code}',
+            ...options
+        });
+    }
+
+    /**
+     * Register Account
+     */
+    public static registerAccount<ThrowOnError extends boolean = true>(options: Options<managementRegisterAccountData, ThrowOnError>) {
+        return (options.client ?? client).post<managementRegisterAccountResponses, managementRegisterAccountErrors, ThrowOnError>({
+            responseType: 'json',
+            url: '/api/v1/auth/register',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Get Profile
+     */
+    public static getProfile<ThrowOnError extends boolean = true>(options?: Options<managementGetProfileData, ThrowOnError>) {
+        return (options?.client ?? client).get<managementGetProfileResponses, managementGetProfileErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/profile',
+            ...options
+        });
+    }
+
+    /**
+     * Update Profile
+     */
+    public static updateProfile<ThrowOnError extends boolean = true>(options: Options<managementUpdateProfileData, ThrowOnError>) {
+        return (options.client ?? client).patch<managementUpdateProfileResponses, managementUpdateProfileErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/profile',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+}
+
 export class AuthService {
+    /**
+     * Change Password
+     */
+    public static changePassword<ThrowOnError extends boolean = true>(options: Options<managementChangePasswordData, ThrowOnError>) {
+        return (options.client ?? client).post<managementChangePasswordResponses, managementChangePasswordErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/auth/change-password',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Invitation Context
+     */
+    public static invitationContext<ThrowOnError extends boolean = true>(options: Options<managementInvitationContextData, ThrowOnError>) {
+        return (options.client ?? client).get<managementInvitationContextResponses, managementInvitationContextErrors, ThrowOnError>({
+            responseType: 'json',
+            url: '/api/v1/auth/invitations/{code}',
+            ...options
+        });
+    }
+
     /**
      * Login
      */
@@ -54,6 +429,335 @@ export class AuthService {
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
             url: '/api/v1/auth/me',
+            ...options
+        });
+    }
+
+    /**
+     * Register Account
+     */
+    public static registerAccount<ThrowOnError extends boolean = true>(options: Options<managementRegisterAccountData, ThrowOnError>) {
+        return (options.client ?? client).post<managementRegisterAccountResponses, managementRegisterAccountErrors, ThrowOnError>({
+            responseType: 'json',
+            url: '/api/v1/auth/register',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+}
+
+export class TeachingService {
+    /**
+     * Catalogs
+     */
+    public static catalogs<ThrowOnError extends boolean = true>(options?: Options<teachingCatalogsData, ThrowOnError>) {
+        return (options?.client ?? client).get<teachingCatalogsResponses, teachingCatalogsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/catalogs',
+            ...options
+        });
+    }
+
+    /**
+     * Create Catalog
+     */
+    public static createCatalog<ThrowOnError extends boolean = true>(options: Options<teachingCreateCatalogData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingCreateCatalogResponses, teachingCreateCatalogErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/catalogs',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Catalog
+     */
+    public static catalog<ThrowOnError extends boolean = true>(options: Options<teachingCatalogData, ThrowOnError>) {
+        return (options.client ?? client).get<teachingCatalogResponses, teachingCatalogErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/catalogs/{catalog_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Update Catalog
+     */
+    public static updateCatalog<ThrowOnError extends boolean = true>(options: Options<teachingUpdateCatalogData, ThrowOnError>) {
+        return (options.client ?? client).patch<teachingUpdateCatalogResponses, teachingUpdateCatalogErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/catalogs/{catalog_id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Archive Class
+     */
+    public static archiveClass<ThrowOnError extends boolean = true>(options: Options<teachingArchiveClassData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingArchiveClassResponses, teachingArchiveClassErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/archive',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Rotate Join Code
+     */
+    public static rotateJoinCode<ThrowOnError extends boolean = true>(options: Options<teachingRotateJoinCodeData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingRotateJoinCodeResponses, teachingRotateJoinCodeErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/invite',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Leave Class
+     */
+    public static leaveClass<ThrowOnError extends boolean = true>(options: Options<teachingLeaveClassData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingLeaveClassResponses, teachingLeaveClassErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/leave',
+            ...options
+        });
+    }
+
+    /**
+     * Class Management
+     */
+    public static classManagement<ThrowOnError extends boolean = true>(options: Options<teachingClassManagementData, ThrowOnError>) {
+        return (options.client ?? client).get<teachingClassManagementResponses, teachingClassManagementErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/management',
+            ...options
+        });
+    }
+
+    /**
+     * Members
+     */
+    public static members<ThrowOnError extends boolean = true>(options: Options<teachingMembersData, ThrowOnError>) {
+        return (options.client ?? client).get<teachingMembersResponses, teachingMembersErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/members',
+            ...options
+        });
+    }
+
+    /**
+     * Add Member
+     */
+    public static addMember<ThrowOnError extends boolean = true>(options: Options<teachingAddMemberData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingAddMemberResponses, teachingAddMemberErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/members',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Remove Member
+     */
+    public static removeMember<ThrowOnError extends boolean = true>(options: Options<teachingRemoveMemberData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingRemoveMemberResponses, teachingRemoveMemberErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/remove-member',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Remove Staff
+     */
+    public static removeStaff<ThrowOnError extends boolean = true>(options: Options<teachingRemoveStaffData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingRemoveStaffResponses, teachingRemoveStaffErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/remove-staff',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Requests
+     */
+    public static requests<ThrowOnError extends boolean = true>(options: Options<teachingRequestsData, ThrowOnError>) {
+        return (options.client ?? client).get<teachingRequestsResponses, teachingRequestsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/requests',
+            ...options
+        });
+    }
+
+    /**
+     * Decide Request
+     */
+    public static decideRequest<ThrowOnError extends boolean = true>(options: Options<teachingDecideRequestData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingDecideRequestResponses, teachingDecideRequestErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/requests/{request_id}/decide',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Update Settings
+     */
+    public static updateSettings<ThrowOnError extends boolean = true>(options: Options<teachingUpdateSettingsData, ThrowOnError>) {
+        return (options.client ?? client).patch<teachingUpdateSettingsResponses, teachingUpdateSettingsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/settings',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * List Staff
+     */
+    public static listStaff<ThrowOnError extends boolean = true>(options: Options<teachingListStaffData, ThrowOnError>) {
+        return (options.client ?? client).get<teachingListStaffResponses, teachingListStaffErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/staff',
+            ...options
+        });
+    }
+
+    /**
+     * Add Staff
+     */
+    public static addStaff<ThrowOnError extends boolean = true>(options: Options<teachingAddStaffData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingAddStaffResponses, teachingAddStaffErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/staff',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Teacher Options
+     */
+    public static teacherOptions<ThrowOnError extends boolean = true>(options: Options<teachingTeacherOptionsData, ThrowOnError>) {
+        return (options.client ?? client).get<teachingTeacherOptionsResponses, teachingTeacherOptionsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/teacher-options',
+            ...options
+        });
+    }
+
+    /**
+     * Transfer Class
+     */
+    public static transferClass<ThrowOnError extends boolean = true>(options: Options<teachingTransferClassData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingTransferClassResponses, teachingTransferClassErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/courses/{course_id}/transfer',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Join Class
+     */
+    public static joinClass<ThrowOnError extends boolean = true>(options: Options<teachingJoinClassData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingJoinClassResponses, teachingJoinClassErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/enrollments/join',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * My Requests
+     */
+    public static myRequests<ThrowOnError extends boolean = true>(options?: Options<teachingMyRequestsData, ThrowOnError>) {
+        return (options?.client ?? client).get<teachingMyRequestsResponses, teachingMyRequestsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/enrollments/requests',
+            ...options
+        });
+    }
+
+    /**
+     * Cancel My Request
+     */
+    public static cancelMyRequest<ThrowOnError extends boolean = true>(options: Options<teachingCancelMyRequestData, ThrowOnError>) {
+        return (options.client ?? client).post<teachingCancelMyRequestResponses, teachingCancelMyRequestErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/enrollments/requests/{request_id}/cancel',
             ...options
         });
     }
@@ -121,6 +825,52 @@ export class SystemService {
         return (options?.client ?? client).get<systemHealthResponses, unknown, ThrowOnError>({
             responseType: 'json',
             url: '/api/v1/health',
+            ...options
+        });
+    }
+}
+
+export class ImportsService {
+    /**
+     * Commit Import
+     */
+    public static commitImport<ThrowOnError extends boolean = true>(options: Options<importsCommitImportData, ThrowOnError>) {
+        return (options.client ?? client).post<importsCommitImportResponses, importsCommitImportErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/imports/commit',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Preview Import
+     */
+    public static previewImport<ThrowOnError extends boolean = true>(options: Options<importsPreviewImportData, ThrowOnError>) {
+        return (options.client ?? client).post<importsPreviewImportResponses, importsPreviewImportErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/imports/preview',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Template
+     */
+    public static template<ThrowOnError extends boolean = true>(options: Options<importsTemplateData, ThrowOnError>) {
+        return (options.client ?? client).get<importsTemplateResponses, importsTemplateErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/imports/template',
             ...options
         });
     }

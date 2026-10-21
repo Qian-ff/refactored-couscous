@@ -69,7 +69,7 @@ if (-not (Test-Api)) {
         if ($LASTEXITCODE -ne 0) { throw 'PostgreSQL startup failed.' }
         $python = Join-Path $projectRoot 'others\backend\.venv\Scripts\python.exe'
         if (-not (Test-Path -LiteralPath $python)) { throw 'Backend environment is missing. Run others/scripts/Bootstrap.ps1 first.' }
-        & python others/scripts/shared_env.py backend alembic -c alembic.ini upgrade head
+        & python others/scripts/migrate_database.py
         if ($LASTEXITCODE -ne 0) { throw 'Database migration failed.' }
     } finally { Pop-Location }
     if (-not (Test-Api)) {

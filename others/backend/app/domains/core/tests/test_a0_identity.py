@@ -4,6 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlmodel import select
 
 from app.core.grants import add_role_grant
+from app.core.release import VERSION
 from app.models import Course, CourseCatalog, Enrollment, Role, RoleGrant
 from app.seed import fixture_id
 
@@ -80,4 +81,4 @@ def test_cors_work_identity_write_headers_and_version(client):
         "Access-Control-Request-Headers": "authorization,x-work-role,idempotency-key,if-match"})
     assert response.status_code == 200
     assert response.headers["access-control-allow-origin"] == "http://127.0.0.1:5176"
-    assert client.get("/api/v1/health").json()["contract"] == "0.2.0"
+    assert client.get("/api/v1/health").json()["contract"] == VERSION

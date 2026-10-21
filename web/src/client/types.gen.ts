@@ -5,6 +5,280 @@ export type ClientOptions = {
 };
 
 /**
+ * AccountCreate
+ */
+export type AccountCreate = {
+    /**
+     * College Id
+     */
+    college_id: string;
+    /**
+     * Contact
+     */
+    contact?: string | null;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Gender
+     */
+    gender?: 'male' | 'female' | 'other' | 'unspecified' | null;
+    /**
+     * Grants
+     */
+    grants: Array<GrantInput>;
+    /**
+     * Major Id
+     */
+    major_id?: string | null;
+    /**
+     * School Id
+     */
+    school_id: string;
+    /**
+     * Student No
+     */
+    student_no?: string | null;
+    /**
+     * Username
+     */
+    username: string;
+};
+
+/**
+ * AccountPatch
+ */
+export type AccountPatch = {
+    /**
+     * College Id
+     */
+    college_id?: string | null;
+    /**
+     * Contact
+     */
+    contact?: string | null;
+    /**
+     * Display Name
+     */
+    display_name?: string | null;
+    /**
+     * Gender
+     */
+    gender?: 'male' | 'female' | 'other' | 'unspecified' | null;
+    /**
+     * Is Active
+     */
+    is_active?: boolean | null;
+    /**
+     * Major Id
+     */
+    major_id?: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Student No
+     */
+    student_no?: string | null;
+};
+
+/**
+ * AccountView
+ */
+export type AccountView = {
+    /**
+     * College Id
+     */
+    college_id: string | null;
+    /**
+     * Contact
+     */
+    contact: string | null;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Gender
+     */
+    gender: string | null;
+    /**
+     * Grants
+     */
+    grants: Array<GrantInput>;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Is Active
+     */
+    is_active: boolean;
+    /**
+     * Major Id
+     */
+    major_id: string | null;
+    /**
+     * Must Change Password
+     */
+    must_change_password: boolean;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * School Id
+     */
+    school_id: string | null;
+    /**
+     * Student No
+     */
+    student_no: string | null;
+    /**
+     * Username
+     */
+    username: string;
+};
+
+/**
+ * CatalogInput
+ */
+export type CatalogInput = {
+    /**
+     * Code
+     */
+    code: string;
+    /**
+     * College Id
+     */
+    college_id: string;
+    /**
+     * Owner Id
+     */
+    owner_id: string;
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
+ * CatalogPatch
+ */
+export type CatalogPatch = {
+    /**
+     * Archived
+     */
+    archived?: boolean | null;
+    /**
+     * Owner Id
+     */
+    owner_id?: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Title
+     */
+    title?: string | null;
+};
+
+/**
+ * CatalogView
+ */
+export type CatalogView = {
+    /**
+     * Archived
+     */
+    archived: boolean;
+    /**
+     * Code
+     */
+    code: string;
+    /**
+     * College Id
+     */
+    college_id: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Owner Id
+     */
+    owner_id: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * School Id
+     */
+    school_id: string;
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
+ * ClassManagementView
+ */
+export type ClassManagementView = {
+    /**
+     * Archived
+     */
+    archived: boolean;
+    /**
+     * Can Manage Members
+     */
+    can_manage_members: boolean;
+    /**
+     * Can Manage Staff
+     */
+    can_manage_staff: boolean;
+    /**
+     * Catalog Id
+     */
+    catalog_id: string;
+    /**
+     * Code
+     */
+    code: string;
+    /**
+     * College Id
+     */
+    college_id: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Join Approval
+     */
+    join_approval: boolean;
+    /**
+     * Leave Approval
+     */
+    leave_approval: boolean;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * School Id
+     */
+    school_id: string;
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
  * CourseContext
  */
 export type CourseContext = {
@@ -26,6 +300,10 @@ export type CourseContext = {
  * CourseCreate
  */
 export type CourseCreate = {
+    /**
+     * Catalog Id
+     */
+    catalog_id?: string | null;
     /**
      * Code
      */
@@ -83,6 +361,28 @@ export type CoursePublic = {
 };
 
 /**
+ * CourseSettings
+ */
+export type CourseSettings = {
+    /**
+     * Join Approval
+     */
+    join_approval?: boolean | null;
+    /**
+     * Leave Approval
+     */
+    leave_approval?: boolean | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Title
+     */
+    title?: string | null;
+};
+
+/**
  * CoursesPublic
  */
 export type CoursesPublic = {
@@ -94,6 +394,143 @@ export type CoursesPublic = {
      * Data
      */
     data: Array<CoursePublic>;
+};
+
+/**
+ * CsvCommit
+ */
+export type CsvCommit = {
+    /**
+     * Course Id
+     */
+    course_id?: string | null;
+    /**
+     * Csv
+     */
+    csv: string;
+    /**
+     * Kind
+     */
+    kind: 'accounts' | 'roster';
+    /**
+     * Preview Digest
+     */
+    preview_digest: string;
+    /**
+     * School Id
+     */
+    school_id: string;
+};
+
+/**
+ * CsvInput
+ */
+export type CsvInput = {
+    /**
+     * Course Id
+     */
+    course_id?: string | null;
+    /**
+     * Csv
+     */
+    csv: string;
+    /**
+     * Kind
+     */
+    kind: 'accounts' | 'roster';
+    /**
+     * School Id
+     */
+    school_id: string;
+};
+
+/**
+ * CsvPreview
+ */
+export type CsvPreview = {
+    /**
+     * Digest
+     */
+    digest: string;
+    /**
+     * Errors
+     */
+    errors: Array<{
+        [key: string]: unknown;
+    }>;
+    /**
+     * Row Count
+     */
+    row_count: number;
+    /**
+     * Valid
+     */
+    valid: boolean;
+};
+
+/**
+ * CsvResult
+ */
+export type CsvResult = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Ids
+     */
+    ids: Array<string>;
+};
+
+/**
+ * CsvTemplateView
+ */
+export type CsvTemplateView = {
+    /**
+     * Csv
+     */
+    csv: string;
+    /**
+     * Encoding
+     */
+    encoding: string;
+    /**
+     * Instructions
+     */
+    instructions: string;
+    /**
+     * Kind
+     */
+    kind: string;
+};
+
+/**
+ * EnrollmentResult
+ */
+export type EnrollmentResult = {
+    /**
+     * Course Id
+     */
+    course_id: string;
+    /**
+     * Request Id
+     */
+    request_id?: string | null;
+    /**
+     * Status
+     */
+    status: string;
+};
+
+/**
+ * GrantInput
+ */
+export type GrantInput = {
+    /**
+     * College Id
+     */
+    college_id?: string | null;
+    role: Role;
 };
 
 /**
@@ -121,6 +558,184 @@ export type HTTPValidationError = {
 };
 
 /**
+ * InvitationContextView
+ */
+export type InvitationContextView = {
+    /**
+     * College Id
+     */
+    college_id: string;
+    /**
+     * College Name
+     */
+    college_name: string;
+    /**
+     * Majors
+     */
+    majors: Array<OrganizationView>;
+    /**
+     * School Id
+     */
+    school_id: string;
+    /**
+     * School Name
+     */
+    school_name: string;
+};
+
+/**
+ * InvitationCreate
+ */
+export type InvitationCreate = {
+    /**
+     * College Id
+     */
+    college_id: string;
+    /**
+     * Expires At
+     */
+    expires_at: string;
+    /**
+     * Major Id
+     */
+    major_id?: string | null;
+    /**
+     * Max Uses
+     */
+    max_uses?: number;
+    /**
+     * School Id
+     */
+    school_id: string;
+};
+
+/**
+ * InvitationIssued
+ */
+export type InvitationIssued = {
+    /**
+     * Code
+     */
+    code: string;
+    /**
+     * College Id
+     */
+    college_id: string;
+    /**
+     * Expires At
+     */
+    expires_at: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Major Id
+     */
+    major_id: string | null;
+    /**
+     * Max Uses
+     */
+    max_uses: number;
+    /**
+     * Revoked
+     */
+    revoked: boolean;
+    /**
+     * School Id
+     */
+    school_id: string;
+    /**
+     * Used Count
+     */
+    used_count: number;
+};
+
+/**
+ * InvitationView
+ */
+export type InvitationView = {
+    /**
+     * College Id
+     */
+    college_id: string;
+    /**
+     * Expires At
+     */
+    expires_at: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Major Id
+     */
+    major_id: string | null;
+    /**
+     * Max Uses
+     */
+    max_uses: number;
+    /**
+     * Revoked
+     */
+    revoked: boolean;
+    /**
+     * School Id
+     */
+    school_id: string;
+    /**
+     * Used Count
+     */
+    used_count: number;
+};
+
+/**
+ * InviteInput
+ */
+export type InviteInput = {
+    /**
+     * Expires At
+     */
+    expires_at: string;
+    /**
+     * Revision
+     */
+    revision: number;
+};
+
+/**
+ * JoinCodeIssued
+ */
+export type JoinCodeIssued = {
+    /**
+     * Code
+     */
+    code: string;
+    /**
+     * Course Id
+     */
+    course_id: string;
+    /**
+     * Expires At
+     */
+    expires_at: string;
+    /**
+     * Revision
+     */
+    revision: number;
+};
+
+/**
+ * JoinInput
+ */
+export type JoinInput = {
+    /**
+     * Invitation Code
+     */
+    invitation_code: string;
+};
+
+/**
  * LoginInput
  */
 export type LoginInput = {
@@ -139,6 +754,46 @@ export type LoginInput = {
 };
 
 /**
+ * MemberInput
+ */
+export type MemberInput = {
+    /**
+     * Username
+     */
+    username: string;
+};
+
+/**
+ * MemberView
+ */
+export type MemberView = {
+    /**
+     * College Id
+     */
+    college_id: string | null;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Status
+     */
+    status: string;
+    /**
+     * Student No
+     */
+    student_no: string | null;
+    /**
+     * Username
+     */
+    username: string;
+};
+
+/**
  * Message
  */
 export type Message = {
@@ -146,6 +801,46 @@ export type Message = {
      * Message
      */
     message: string;
+};
+
+/**
+ * OrganizationInput
+ */
+export type OrganizationInput = {
+    /**
+     * Code
+     */
+    code: string;
+    /**
+     * College Id
+     */
+    college_id?: string | null;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * School Id
+     */
+    school_id?: string | null;
+};
+
+/**
+ * OrganizationPatch
+ */
+export type OrganizationPatch = {
+    /**
+     * Is Active
+     */
+    is_active?: boolean | null;
+    /**
+     * Name
+     */
+    name?: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
 };
 
 /**
@@ -164,6 +859,353 @@ export type OrganizationPublic = {
      * School Id
      */
     school_id?: string | null;
+};
+
+/**
+ * OrganizationView
+ */
+export type OrganizationView = {
+    /**
+     * Code
+     */
+    code: string;
+    /**
+     * College Id
+     */
+    college_id?: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Is Active
+     */
+    is_active: boolean;
+    /**
+     * Name
+     */
+    name: string;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * School Id
+     */
+    school_id?: string | null;
+};
+
+/**
+ * Page[AccountView]
+ */
+export type Page_AccountView_ = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Data
+     */
+    data: Array<AccountView>;
+};
+
+/**
+ * Page[CatalogView]
+ */
+export type Page_CatalogView_ = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Data
+     */
+    data: Array<CatalogView>;
+};
+
+/**
+ * Page[InvitationView]
+ */
+export type Page_InvitationView_ = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Data
+     */
+    data: Array<InvitationView>;
+};
+
+/**
+ * Page[MemberView]
+ */
+export type Page_MemberView_ = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Data
+     */
+    data: Array<MemberView>;
+};
+
+/**
+ * Page[OrganizationView]
+ */
+export type Page_OrganizationView_ = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Data
+     */
+    data: Array<OrganizationView>;
+};
+
+/**
+ * Page[RequestView]
+ */
+export type Page_RequestView_ = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Data
+     */
+    data: Array<RequestView>;
+};
+
+/**
+ * Page[StaffView]
+ */
+export type Page_StaffView_ = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Data
+     */
+    data: Array<StaffView>;
+};
+
+/**
+ * Page[TeacherOption]
+ */
+export type Page_TeacherOption_ = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Data
+     */
+    data: Array<TeacherOption>;
+};
+
+/**
+ * PasswordChange
+ */
+export type PasswordChange = {
+    /**
+     * New Password
+     */
+    new_password: string;
+    /**
+     * Old Password
+     */
+    old_password: string;
+};
+
+/**
+ * PasswordReset
+ */
+export type PasswordReset = {
+    /**
+     * Temporary Password
+     */
+    temporary_password: string;
+};
+
+/**
+ * ProfilePatch
+ */
+export type ProfilePatch = {
+    /**
+     * Contact
+     */
+    contact?: string | null;
+    /**
+     * Gender
+     */
+    gender?: 'male' | 'female' | 'other' | 'unspecified' | null;
+    /**
+     * Revision
+     */
+    revision: number;
+};
+
+/**
+ * Registration
+ */
+export type Registration = {
+    /**
+     * Contact
+     */
+    contact?: string | null;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Gender
+     */
+    gender?: 'male' | 'female' | 'other' | 'unspecified' | null;
+    /**
+     * Invitation Code
+     */
+    invitation_code: string;
+    /**
+     * Major Id
+     */
+    major_id?: string | null;
+    /**
+     * School Code
+     */
+    school_code: string;
+    /**
+     * Student No
+     */
+    student_no: string;
+    /**
+     * Username
+     */
+    username: string;
+};
+
+/**
+ * RequestDecision
+ */
+export type RequestDecision = {
+    /**
+     * Approve
+     */
+    approve: boolean;
+};
+
+/**
+ * RequestView
+ */
+export type RequestView = {
+    /**
+     * Course Id
+     */
+    course_id: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Decided At
+     */
+    decided_at: string | null;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: string;
+    /**
+     * Status
+     */
+    status: string;
+    /**
+     * User Id
+     */
+    user_id: string;
+};
+
+/**
+ * RevisionInput
+ */
+export type RevisionInput = {
+    /**
+     * Revision
+     */
+    revision: number;
+};
+
+/**
+ * Role
+ */
+export type Role = 'platform_admin' | 'school_admin' | 'college_admin' | 'teacher' | 'student';
+
+/**
+ * StaffInput
+ */
+export type StaffInput = {
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Teacher Id
+     */
+    teacher_id: string;
+};
+
+/**
+ * StaffView
+ */
+export type StaffView = {
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Is Active
+     */
+    is_active: boolean;
+    /**
+     * Is Primary
+     */
+    is_primary: boolean;
+    /**
+     * User Id
+     */
+    user_id: string;
+};
+
+/**
+ * TeacherOption
+ */
+export type TeacherOption = {
+    /**
+     * College Id
+     */
+    college_id: string | null;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Username
+     */
+    username: string;
 };
 
 /**
@@ -198,6 +1240,10 @@ export type UserPublic = {
     available_work_roles: Array<'student' | 'teacher' | 'administrator'>;
     college: OrganizationPublic | null;
     /**
+     * Contact
+     */
+    contact?: string | null;
+    /**
      * Display Name
      */
     display_name: string;
@@ -205,6 +1251,10 @@ export type UserPublic = {
      * Effective Grants
      */
     effective_grants: Array<GrantPublic>;
+    /**
+     * Gender
+     */
+    gender?: string | null;
     /**
      * Grants
      */
@@ -214,10 +1264,26 @@ export type UserPublic = {
      */
     id: string;
     /**
+     * Major Id
+     */
+    major_id?: string | null;
+    /**
+     * Must Change Password
+     */
+    must_change_password?: boolean;
+    /**
      * Permissions
      */
     permissions: Array<string>;
+    /**
+     * Revision
+     */
+    revision?: number;
     school: OrganizationPublic | null;
+    /**
+     * Student No
+     */
+    student_no?: string | null;
     /**
      * Username
      */
@@ -251,6 +1317,921 @@ export type ValidationError = {
      */
     type: string;
 };
+
+/**
+ * AccountCreate
+ */
+export type AccountCreateWritable = {
+    /**
+     * College Id
+     */
+    college_id: string;
+    /**
+     * Contact
+     */
+    contact?: string | null;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Gender
+     */
+    gender?: 'male' | 'female' | 'other' | 'unspecified' | null;
+    /**
+     * Grants
+     */
+    grants: Array<GrantInput>;
+    /**
+     * Major Id
+     */
+    major_id?: string | null;
+    /**
+     * School Id
+     */
+    school_id: string;
+    /**
+     * Student No
+     */
+    student_no?: string | null;
+    /**
+     * Temporary Password
+     */
+    temporary_password: string;
+    /**
+     * Username
+     */
+    username: string;
+};
+
+/**
+ * Registration
+ */
+export type RegistrationWritable = {
+    /**
+     * Contact
+     */
+    contact?: string | null;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Gender
+     */
+    gender?: 'male' | 'female' | 'other' | 'unspecified' | null;
+    /**
+     * Invitation Code
+     */
+    invitation_code: string;
+    /**
+     * Major Id
+     */
+    major_id?: string | null;
+    /**
+     * Password
+     */
+    password: string;
+    /**
+     * School Code
+     */
+    school_code: string;
+    /**
+     * Student No
+     */
+    student_no: string;
+    /**
+     * Username
+     */
+    username: string;
+};
+
+export type managementListInvitationsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/admin/account-invitations';
+};
+
+export type managementListInvitationsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementListInvitationsError = managementListInvitationsErrors[keyof managementListInvitationsErrors];
+
+export type managementListInvitationsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_InvitationView_;
+};
+
+export type managementListInvitationsResponse = managementListInvitationsResponses[keyof managementListInvitationsResponses];
+
+export type managementCreateInvitationData = {
+    body: InvitationCreate;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/account-invitations';
+};
+
+export type managementCreateInvitationErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementCreateInvitationError = managementCreateInvitationErrors[keyof managementCreateInvitationErrors];
+
+export type managementCreateInvitationResponses = {
+    /**
+     * Successful Response
+     */
+    201: InvitationIssued;
+};
+
+export type managementCreateInvitationResponse = managementCreateInvitationResponses[keyof managementCreateInvitationResponses];
+
+export type managementRevokeInvitationData = {
+    body?: never;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Invitation Id
+         */
+        invitation_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/account-invitations/{invitation_id}/revoke';
+};
+
+export type managementRevokeInvitationErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementRevokeInvitationError = managementRevokeInvitationErrors[keyof managementRevokeInvitationErrors];
+
+export type managementRevokeInvitationResponses = {
+    /**
+     * Successful Response
+     */
+    200: Message;
+};
+
+export type managementRevokeInvitationResponse = managementRevokeInvitationResponses[keyof managementRevokeInvitationResponses];
+
+export type managementListAccountsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * School Id
+         */
+        school_id?: string | null;
+        /**
+         * College Id
+         */
+        college_id?: string | null;
+        /**
+         * Role
+         */
+        role?: Role | null;
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/admin/accounts';
+};
+
+export type managementListAccountsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementListAccountsError = managementListAccountsErrors[keyof managementListAccountsErrors];
+
+export type managementListAccountsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_AccountView_;
+};
+
+export type managementListAccountsResponse = managementListAccountsResponses[keyof managementListAccountsResponses];
+
+export type managementCreateAccountData = {
+    body: AccountCreateWritable;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/accounts';
+};
+
+export type managementCreateAccountErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementCreateAccountError = managementCreateAccountErrors[keyof managementCreateAccountErrors];
+
+export type managementCreateAccountResponses = {
+    /**
+     * Successful Response
+     */
+    201: AccountView;
+};
+
+export type managementCreateAccountResponse = managementCreateAccountResponses[keyof managementCreateAccountResponses];
+
+export type managementGetAccountData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * User Id
+         */
+        user_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/accounts/{user_id}';
+};
+
+export type managementGetAccountErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementGetAccountError = managementGetAccountErrors[keyof managementGetAccountErrors];
+
+export type managementGetAccountResponses = {
+    /**
+     * Successful Response
+     */
+    200: AccountView;
+};
+
+export type managementGetAccountResponse = managementGetAccountResponses[keyof managementGetAccountResponses];
+
+export type managementUpdateAccountData = {
+    body: AccountPatch;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * User Id
+         */
+        user_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/accounts/{user_id}';
+};
+
+export type managementUpdateAccountErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementUpdateAccountError = managementUpdateAccountErrors[keyof managementUpdateAccountErrors];
+
+export type managementUpdateAccountResponses = {
+    /**
+     * Successful Response
+     */
+    200: AccountView;
+};
+
+export type managementUpdateAccountResponse = managementUpdateAccountResponses[keyof managementUpdateAccountResponses];
+
+export type managementGrantRoleData = {
+    body: GrantInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * User Id
+         */
+        user_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/accounts/{user_id}/grants';
+};
+
+export type managementGrantRoleErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementGrantRoleError = managementGrantRoleErrors[keyof managementGrantRoleErrors];
+
+export type managementGrantRoleResponses = {
+    /**
+     * Successful Response
+     */
+    200: AccountView;
+};
+
+export type managementGrantRoleResponse = managementGrantRoleResponses[keyof managementGrantRoleResponses];
+
+export type managementResetPasswordData = {
+    body: PasswordReset;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * User Id
+         */
+        user_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/accounts/{user_id}/reset-password';
+};
+
+export type managementResetPasswordErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementResetPasswordError = managementResetPasswordErrors[keyof managementResetPasswordErrors];
+
+export type managementResetPasswordResponses = {
+    /**
+     * Successful Response
+     */
+    200: Message;
+};
+
+export type managementResetPasswordResponse = managementResetPasswordResponses[keyof managementResetPasswordResponses];
+
+export type managementRevokeRoleData = {
+    body: GrantInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * User Id
+         */
+        user_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/accounts/{user_id}/revoke-grant';
+};
+
+export type managementRevokeRoleErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementRevokeRoleError = managementRevokeRoleErrors[keyof managementRevokeRoleErrors];
+
+export type managementRevokeRoleResponses = {
+    /**
+     * Successful Response
+     */
+    200: AccountView;
+};
+
+export type managementRevokeRoleResponse = managementRevokeRoleResponses[keyof managementRevokeRoleResponses];
+
+export type managementListCollegesData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * School Id
+         */
+        school_id?: string | null;
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/admin/colleges';
+};
+
+export type managementListCollegesErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementListCollegesError = managementListCollegesErrors[keyof managementListCollegesErrors];
+
+export type managementListCollegesResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_OrganizationView_;
+};
+
+export type managementListCollegesResponse = managementListCollegesResponses[keyof managementListCollegesResponses];
+
+export type managementCreateCollegeData = {
+    body: OrganizationInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/colleges';
+};
+
+export type managementCreateCollegeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementCreateCollegeError = managementCreateCollegeErrors[keyof managementCreateCollegeErrors];
+
+export type managementCreateCollegeResponses = {
+    /**
+     * Successful Response
+     */
+    201: OrganizationView;
+};
+
+export type managementCreateCollegeResponse = managementCreateCollegeResponses[keyof managementCreateCollegeResponses];
+
+export type managementUpdateCollegeData = {
+    body: OrganizationPatch;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Record Id
+         */
+        record_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/colleges/{record_id}';
+};
+
+export type managementUpdateCollegeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementUpdateCollegeError = managementUpdateCollegeErrors[keyof managementUpdateCollegeErrors];
+
+export type managementUpdateCollegeResponses = {
+    /**
+     * Successful Response
+     */
+    200: OrganizationView;
+};
+
+export type managementUpdateCollegeResponse = managementUpdateCollegeResponses[keyof managementUpdateCollegeResponses];
+
+export type managementListMajorsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * College Id
+         */
+        college_id?: string | null;
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/admin/majors';
+};
+
+export type managementListMajorsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementListMajorsError = managementListMajorsErrors[keyof managementListMajorsErrors];
+
+export type managementListMajorsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_OrganizationView_;
+};
+
+export type managementListMajorsResponse = managementListMajorsResponses[keyof managementListMajorsResponses];
+
+export type managementCreateMajorData = {
+    body: OrganizationInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/majors';
+};
+
+export type managementCreateMajorErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementCreateMajorError = managementCreateMajorErrors[keyof managementCreateMajorErrors];
+
+export type managementCreateMajorResponses = {
+    /**
+     * Successful Response
+     */
+    201: OrganizationView;
+};
+
+export type managementCreateMajorResponse = managementCreateMajorResponses[keyof managementCreateMajorResponses];
+
+export type managementUpdateMajorData = {
+    body: OrganizationPatch;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Record Id
+         */
+        record_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/majors/{record_id}';
+};
+
+export type managementUpdateMajorErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementUpdateMajorError = managementUpdateMajorErrors[keyof managementUpdateMajorErrors];
+
+export type managementUpdateMajorResponses = {
+    /**
+     * Successful Response
+     */
+    200: OrganizationView;
+};
+
+export type managementUpdateMajorResponse = managementUpdateMajorResponses[keyof managementUpdateMajorResponses];
+
+export type managementListSchoolsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/admin/schools';
+};
+
+export type managementListSchoolsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementListSchoolsError = managementListSchoolsErrors[keyof managementListSchoolsErrors];
+
+export type managementListSchoolsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_OrganizationView_;
+};
+
+export type managementListSchoolsResponse = managementListSchoolsResponses[keyof managementListSchoolsResponses];
+
+export type managementCreateSchoolData = {
+    body: OrganizationInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/admin/schools';
+};
+
+export type managementCreateSchoolErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementCreateSchoolError = managementCreateSchoolErrors[keyof managementCreateSchoolErrors];
+
+export type managementCreateSchoolResponses = {
+    /**
+     * Successful Response
+     */
+    201: OrganizationView;
+};
+
+export type managementCreateSchoolResponse = managementCreateSchoolResponses[keyof managementCreateSchoolResponses];
+
+export type managementUpdateSchoolData = {
+    body: OrganizationPatch;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Record Id
+         */
+        record_id: string;
+    };
+    query?: never;
+    url: '/api/v1/admin/schools/{record_id}';
+};
+
+export type managementUpdateSchoolErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementUpdateSchoolError = managementUpdateSchoolErrors[keyof managementUpdateSchoolErrors];
+
+export type managementUpdateSchoolResponses = {
+    /**
+     * Successful Response
+     */
+    200: OrganizationView;
+};
+
+export type managementUpdateSchoolResponse = managementUpdateSchoolResponses[keyof managementUpdateSchoolResponses];
+
+export type managementChangePasswordData = {
+    body: PasswordChange;
+    path?: never;
+    query?: never;
+    url: '/api/v1/auth/change-password';
+};
+
+export type managementChangePasswordErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementChangePasswordError = managementChangePasswordErrors[keyof managementChangePasswordErrors];
+
+export type managementChangePasswordResponses = {
+    /**
+     * Successful Response
+     */
+    200: Message;
+};
+
+export type managementChangePasswordResponse = managementChangePasswordResponses[keyof managementChangePasswordResponses];
+
+export type managementInvitationContextData = {
+    body?: never;
+    path: {
+        /**
+         * Code
+         */
+        code: string;
+    };
+    query: {
+        /**
+         * School Code
+         */
+        school_code: string;
+    };
+    url: '/api/v1/auth/invitations/{code}';
+};
+
+export type managementInvitationContextErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementInvitationContextError = managementInvitationContextErrors[keyof managementInvitationContextErrors];
+
+export type managementInvitationContextResponses = {
+    /**
+     * Successful Response
+     */
+    200: InvitationContextView;
+};
+
+export type managementInvitationContextResponse = managementInvitationContextResponses[keyof managementInvitationContextResponses];
 
 export type authLoginData = {
     body: LoginInput;
@@ -324,6 +2305,200 @@ export type authMeResponses = {
 
 export type authMeResponse = authMeResponses[keyof authMeResponses];
 
+export type managementRegisterAccountData = {
+    body: RegistrationWritable;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/auth/register';
+};
+
+export type managementRegisterAccountErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementRegisterAccountError = managementRegisterAccountErrors[keyof managementRegisterAccountErrors];
+
+export type managementRegisterAccountResponses = {
+    /**
+     * Successful Response
+     */
+    201: Message;
+};
+
+export type managementRegisterAccountResponse = managementRegisterAccountResponses[keyof managementRegisterAccountResponses];
+
+export type teachingCatalogsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * College Id
+         */
+        college_id?: string | null;
+        /**
+         * Archived
+         */
+        archived?: boolean;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/catalogs';
+};
+
+export type teachingCatalogsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingCatalogsError = teachingCatalogsErrors[keyof teachingCatalogsErrors];
+
+export type teachingCatalogsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_CatalogView_;
+};
+
+export type teachingCatalogsResponse = teachingCatalogsResponses[keyof teachingCatalogsResponses];
+
+export type teachingCreateCatalogData = {
+    body: CatalogInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/catalogs';
+};
+
+export type teachingCreateCatalogErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingCreateCatalogError = teachingCreateCatalogErrors[keyof teachingCreateCatalogErrors];
+
+export type teachingCreateCatalogResponses = {
+    /**
+     * Successful Response
+     */
+    201: CatalogView;
+};
+
+export type teachingCreateCatalogResponse = teachingCreateCatalogResponses[keyof teachingCreateCatalogResponses];
+
+export type teachingCatalogData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Catalog Id
+         */
+        catalog_id: string;
+    };
+    query?: never;
+    url: '/api/v1/catalogs/{catalog_id}';
+};
+
+export type teachingCatalogErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingCatalogError = teachingCatalogErrors[keyof teachingCatalogErrors];
+
+export type teachingCatalogResponses = {
+    /**
+     * Successful Response
+     */
+    200: CatalogView;
+};
+
+export type teachingCatalogResponse = teachingCatalogResponses[keyof teachingCatalogResponses];
+
+export type teachingUpdateCatalogData = {
+    body: CatalogPatch;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Catalog Id
+         */
+        catalog_id: string;
+    };
+    query?: never;
+    url: '/api/v1/catalogs/{catalog_id}';
+};
+
+export type teachingUpdateCatalogErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingUpdateCatalogError = teachingUpdateCatalogErrors[keyof teachingUpdateCatalogErrors];
+
+export type teachingUpdateCatalogResponses = {
+    /**
+     * Successful Response
+     */
+    200: CatalogView;
+};
+
+export type teachingUpdateCatalogResponse = teachingUpdateCatalogResponses[keyof teachingUpdateCatalogResponses];
+
 export type coursesCoursesData = {
     body?: never;
     headers?: {
@@ -342,6 +2517,22 @@ export type coursesCoursesData = {
          * Limit
          */
         limit?: number;
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Catalog Id
+         */
+        catalog_id?: string | null;
+        /**
+         * College Id
+         */
+        college_id?: string | null;
+        /**
+         * Archived
+         */
+        archived?: boolean;
     };
     url: '/api/v1/courses';
 };
@@ -367,6 +2558,10 @@ export type coursesCoursesResponse = coursesCoursesResponses[keyof coursesCourse
 export type coursesCreateCourseData = {
     body: CourseCreate;
     headers?: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key'?: string | null;
         /**
          * X-Work-Role
          */
@@ -462,6 +2657,761 @@ export type coursesCourseResponses = {
 
 export type coursesCourseResponse = coursesCourseResponses[keyof coursesCourseResponses];
 
+export type teachingArchiveClassData = {
+    body: RevisionInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/archive';
+};
+
+export type teachingArchiveClassErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingArchiveClassError = teachingArchiveClassErrors[keyof teachingArchiveClassErrors];
+
+export type teachingArchiveClassResponses = {
+    /**
+     * Successful Response
+     */
+    200: ClassManagementView;
+};
+
+export type teachingArchiveClassResponse = teachingArchiveClassResponses[keyof teachingArchiveClassResponses];
+
+export type teachingRotateJoinCodeData = {
+    body: InviteInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/invite';
+};
+
+export type teachingRotateJoinCodeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingRotateJoinCodeError = teachingRotateJoinCodeErrors[keyof teachingRotateJoinCodeErrors];
+
+export type teachingRotateJoinCodeResponses = {
+    /**
+     * Successful Response
+     */
+    200: JoinCodeIssued;
+};
+
+export type teachingRotateJoinCodeResponse = teachingRotateJoinCodeResponses[keyof teachingRotateJoinCodeResponses];
+
+export type teachingLeaveClassData = {
+    body?: never;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/leave';
+};
+
+export type teachingLeaveClassErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingLeaveClassError = teachingLeaveClassErrors[keyof teachingLeaveClassErrors];
+
+export type teachingLeaveClassResponses = {
+    /**
+     * Successful Response
+     */
+    200: EnrollmentResult;
+};
+
+export type teachingLeaveClassResponse = teachingLeaveClassResponses[keyof teachingLeaveClassResponses];
+
+export type teachingClassManagementData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/management';
+};
+
+export type teachingClassManagementErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingClassManagementError = teachingClassManagementErrors[keyof teachingClassManagementErrors];
+
+export type teachingClassManagementResponses = {
+    /**
+     * Successful Response
+     */
+    200: ClassManagementView;
+};
+
+export type teachingClassManagementResponse = teachingClassManagementResponses[keyof teachingClassManagementResponses];
+
+export type teachingMembersData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Status
+         */
+        status?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/courses/{course_id}/members';
+};
+
+export type teachingMembersErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingMembersError = teachingMembersErrors[keyof teachingMembersErrors];
+
+export type teachingMembersResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_MemberView_;
+};
+
+export type teachingMembersResponse = teachingMembersResponses[keyof teachingMembersResponses];
+
+export type teachingAddMemberData = {
+    body: MemberInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/members';
+};
+
+export type teachingAddMemberErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingAddMemberError = teachingAddMemberErrors[keyof teachingAddMemberErrors];
+
+export type teachingAddMemberResponses = {
+    /**
+     * Successful Response
+     */
+    200: EnrollmentResult;
+};
+
+export type teachingAddMemberResponse = teachingAddMemberResponses[keyof teachingAddMemberResponses];
+
+export type teachingRemoveMemberData = {
+    body: MemberInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/remove-member';
+};
+
+export type teachingRemoveMemberErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingRemoveMemberError = teachingRemoveMemberErrors[keyof teachingRemoveMemberErrors];
+
+export type teachingRemoveMemberResponses = {
+    /**
+     * Successful Response
+     */
+    200: EnrollmentResult;
+};
+
+export type teachingRemoveMemberResponse = teachingRemoveMemberResponses[keyof teachingRemoveMemberResponses];
+
+export type teachingRemoveStaffData = {
+    body: StaffInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/remove-staff';
+};
+
+export type teachingRemoveStaffErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingRemoveStaffError = teachingRemoveStaffErrors[keyof teachingRemoveStaffErrors];
+
+export type teachingRemoveStaffResponses = {
+    /**
+     * Successful Response
+     */
+    200: ClassManagementView;
+};
+
+export type teachingRemoveStaffResponse = teachingRemoveStaffResponses[keyof teachingRemoveStaffResponses];
+
+export type teachingRequestsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: {
+        /**
+         * Status
+         */
+        status?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/courses/{course_id}/requests';
+};
+
+export type teachingRequestsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingRequestsError = teachingRequestsErrors[keyof teachingRequestsErrors];
+
+export type teachingRequestsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_RequestView_;
+};
+
+export type teachingRequestsResponse = teachingRequestsResponses[keyof teachingRequestsResponses];
+
+export type teachingDecideRequestData = {
+    body: RequestDecision;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+        /**
+         * Request Id
+         */
+        request_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/requests/{request_id}/decide';
+};
+
+export type teachingDecideRequestErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingDecideRequestError = teachingDecideRequestErrors[keyof teachingDecideRequestErrors];
+
+export type teachingDecideRequestResponses = {
+    /**
+     * Successful Response
+     */
+    200: RequestView;
+};
+
+export type teachingDecideRequestResponse = teachingDecideRequestResponses[keyof teachingDecideRequestResponses];
+
+export type teachingUpdateSettingsData = {
+    body: CourseSettings;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/settings';
+};
+
+export type teachingUpdateSettingsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingUpdateSettingsError = teachingUpdateSettingsErrors[keyof teachingUpdateSettingsErrors];
+
+export type teachingUpdateSettingsResponses = {
+    /**
+     * Successful Response
+     */
+    200: ClassManagementView;
+};
+
+export type teachingUpdateSettingsResponse = teachingUpdateSettingsResponses[keyof teachingUpdateSettingsResponses];
+
+export type teachingListStaffData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/courses/{course_id}/staff';
+};
+
+export type teachingListStaffErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingListStaffError = teachingListStaffErrors[keyof teachingListStaffErrors];
+
+export type teachingListStaffResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_StaffView_;
+};
+
+export type teachingListStaffResponse = teachingListStaffResponses[keyof teachingListStaffResponses];
+
+export type teachingAddStaffData = {
+    body: StaffInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/staff';
+};
+
+export type teachingAddStaffErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingAddStaffError = teachingAddStaffErrors[keyof teachingAddStaffErrors];
+
+export type teachingAddStaffResponses = {
+    /**
+     * Successful Response
+     */
+    200: ClassManagementView;
+};
+
+export type teachingAddStaffResponse = teachingAddStaffResponses[keyof teachingAddStaffResponses];
+
+export type teachingTeacherOptionsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query: {
+        /**
+         * Q
+         */
+        q: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/courses/{course_id}/teacher-options';
+};
+
+export type teachingTeacherOptionsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingTeacherOptionsError = teachingTeacherOptionsErrors[keyof teachingTeacherOptionsErrors];
+
+export type teachingTeacherOptionsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_TeacherOption_;
+};
+
+export type teachingTeacherOptionsResponse = teachingTeacherOptionsResponses[keyof teachingTeacherOptionsResponses];
+
+export type teachingTransferClassData = {
+    body: StaffInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Course Id
+         */
+        course_id: string;
+    };
+    query?: never;
+    url: '/api/v1/courses/{course_id}/transfer';
+};
+
+export type teachingTransferClassErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingTransferClassError = teachingTransferClassErrors[keyof teachingTransferClassErrors];
+
+export type teachingTransferClassResponses = {
+    /**
+     * Successful Response
+     */
+    200: ClassManagementView;
+};
+
+export type teachingTransferClassResponse = teachingTransferClassResponses[keyof teachingTransferClassResponses];
+
+export type teachingJoinClassData = {
+    body: JoinInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/enrollments/join';
+};
+
+export type teachingJoinClassErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingJoinClassError = teachingJoinClassErrors[keyof teachingJoinClassErrors];
+
+export type teachingJoinClassResponses = {
+    /**
+     * Successful Response
+     */
+    200: EnrollmentResult;
+};
+
+export type teachingJoinClassResponse = teachingJoinClassResponses[keyof teachingJoinClassResponses];
+
+export type teachingMyRequestsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/enrollments/requests';
+};
+
+export type teachingMyRequestsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingMyRequestsError = teachingMyRequestsErrors[keyof teachingMyRequestsErrors];
+
+export type teachingMyRequestsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_RequestView_;
+};
+
+export type teachingMyRequestsResponse = teachingMyRequestsResponses[keyof teachingMyRequestsResponses];
+
+export type teachingCancelMyRequestData = {
+    body?: never;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Request Id
+         */
+        request_id: string;
+    };
+    query?: never;
+    url: '/api/v1/enrollments/requests/{request_id}/cancel';
+};
+
+export type teachingCancelMyRequestErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingCancelMyRequestError = teachingCancelMyRequestErrors[keyof teachingCancelMyRequestErrors];
+
+export type teachingCancelMyRequestResponses = {
+    /**
+     * Successful Response
+     */
+    200: Message;
+};
+
+export type teachingCancelMyRequestResponse = teachingCancelMyRequestResponses[keyof teachingCancelMyRequestResponses];
+
 export type systemHealthData = {
     body?: never;
     path?: never;
@@ -481,3 +3431,171 @@ export type systemHealthResponses = {
 };
 
 export type systemHealthResponse = systemHealthResponses[keyof systemHealthResponses];
+
+export type importsCommitImportData = {
+    body: CsvCommit;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/imports/commit';
+};
+
+export type importsCommitImportErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type importsCommitImportError = importsCommitImportErrors[keyof importsCommitImportErrors];
+
+export type importsCommitImportResponses = {
+    /**
+     * Successful Response
+     */
+    200: CsvResult;
+};
+
+export type importsCommitImportResponse = importsCommitImportResponses[keyof importsCommitImportResponses];
+
+export type importsPreviewImportData = {
+    body: CsvInput;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/imports/preview';
+};
+
+export type importsPreviewImportErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type importsPreviewImportError = importsPreviewImportErrors[keyof importsPreviewImportErrors];
+
+export type importsPreviewImportResponses = {
+    /**
+     * Successful Response
+     */
+    200: CsvPreview;
+};
+
+export type importsPreviewImportResponse = importsPreviewImportResponses[keyof importsPreviewImportResponses];
+
+export type importsTemplateData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query: {
+        /**
+         * Kind
+         */
+        kind: string;
+    };
+    url: '/api/v1/imports/template';
+};
+
+export type importsTemplateErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type importsTemplateError = importsTemplateErrors[keyof importsTemplateErrors];
+
+export type importsTemplateResponses = {
+    /**
+     * Successful Response
+     */
+    200: CsvTemplateView;
+};
+
+export type importsTemplateResponse = importsTemplateResponses[keyof importsTemplateResponses];
+
+export type managementGetProfileData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/profile';
+};
+
+export type managementGetProfileErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementGetProfileError = managementGetProfileErrors[keyof managementGetProfileErrors];
+
+export type managementGetProfileResponses = {
+    /**
+     * Successful Response
+     */
+    200: AccountView;
+};
+
+export type managementGetProfileResponse = managementGetProfileResponses[keyof managementGetProfileResponses];
+
+export type managementUpdateProfileData = {
+    body: ProfilePatch;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/profile';
+};
+
+export type managementUpdateProfileErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type managementUpdateProfileError = managementUpdateProfileErrors[keyof managementUpdateProfileErrors];
+
+export type managementUpdateProfileResponses = {
+    /**
+     * Successful Response
+     */
+    200: AccountView;
+};
+
+export type managementUpdateProfileResponse = managementUpdateProfileResponses[keyof managementUpdateProfileResponses];

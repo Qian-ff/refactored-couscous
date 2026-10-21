@@ -1,15 +1,18 @@
 from datetime import UTC, datetime, timedelta
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, Query
-from sqlalchemy import false, or_
-from sqlalchemy.exc import IntegrityError
+from fastapi import APIRouter, Header, HTTPException, Query
+from sqlalchemy import or_
 from sqlmodel import select
 
 from app.core.config import settings
 from app.core.security import create_access_token, get_password_hash, verify_password
-from app.domains.core.auth import CurrentAccount, CurrentIdentity, Db, available_work_roles, default_work_role
-from app.domains.core.models import College, Course, CourseCatalog, CourseStaff, Enrollment, LoginSession, Role, RoleGrant, School, User
+from app.domains.core.auth import AccountIdentity, CurrentAccount, CurrentIdentity, Db, available_work_roles, default_work_role
+from app.domains.core.class_routes import create_class
+from app.domains.core.management_routes import keyword, page
+from app.domains.core.models import College, Course, CourseStaff, LoginSession, Role, RoleGrant, School, User
+from app.domains.core.policy import visible_course_query
 from app.domains.core.schemas import (CourseContext, CourseCreate, CoursePublic, CoursesPublic,
                                       GrantPublic, LoginInput, Message, OrganizationPublic, Token, UserPublic)
 
@@ -22,7 +25,7 @@ def login(body: LoginInput, db: Db):
     school = db.exec(select(School).where(School.code == body.school_code)).first()
     school_filter = User.school_id == school.id if school else User.school_id.is_(None)
     user = db.exec(select(User).where(school_filter, User.username == body.username)).first()
-    valid_school = school is not None or body.school_code == "platform"
+    valid_school = (school is not None and school.is_active) or body.school_code == "platform"
     valid, updated = verify_password(body.password, user.hashed_password if user else DUMMY_HASH)
     if not valid_school or not user or not user.is_active or not valid:
         raise HTTPException(status_code=401, detail="学校、账号或密码不正确")
@@ -51,7 +54,7 @@ def logout(identity: CurrentAccount, db: Db):
 
 
 @router.get("/auth/me", tags=["auth"], response_model=UserPublic)
-def me(identity: CurrentIdentity, db: Db):
+def me(identity: AccountIdentity, db: Db):
     user = identity.user
     school = db.get(School, user.school_id) if user.school_id else None
     college = db.get(College, user.college_id) if user.college_id else None
@@ -62,29 +65,20 @@ def me(identity: CurrentIdentity, db: Db):
                       grants=[GrantPublic(role=g.role, college_id=g.college_id) for g in identity.all_grants],
                       effective_grants=[GrantPublic(role=g.role, college_id=g.college_id) for g in identity.grants],
                       available_work_roles=available_work_roles(identity.all_grants), active_work_role=identity.work_role,
-                      permissions=["courses:read"] + (["courses:create"] if create else []))
+                      student_no=user.student_no, major_id=user.major_id, gender=user.gender, contact=user.contact,
+                      must_change_password=user.must_change_password, revision=user.revision,
+                      permissions=(["profile:read", "password:change"] if user.must_change_password else
+                                   ["courses:read"] + (["courses:create"] if create else [])))
 
 
 def visible_courses(identity: CurrentIdentity):
-    if identity.has(Role.PLATFORM_ADMIN):
-        return select(Course)
-    terms = []
-    if identity.has(Role.SCHOOL_ADMIN):
-        terms.append(Course.school_id == identity.user.school_id)
-    colleges = [g.college_id for g in identity.grants if g.role == Role.COLLEGE_ADMIN and g.school_id == identity.user.school_id]
-    if colleges:
-        terms.append(Course.college_id.in_(colleges))
-    if identity.has(Role.TEACHER):
-        terms.append(Course.id.in_(select(CourseStaff.course_id).where(CourseStaff.user_id == identity.user.id)))
-    if identity.has(Role.STUDENT):
-        terms.append(Course.id.in_(select(Enrollment.course_id).where(Enrollment.user_id == identity.user.id, Enrollment.status == "active")))
-    return select(Course).where(Course.school_id == identity.user.school_id, or_(*terms) if terms else false())
+    return visible_course_query(identity)
 
 
 def public_course(course: Course, db: Db) -> CoursePublic:
     college = db.get(College, course.college_id)
     primary = db.exec(select(User).join(CourseStaff, CourseStaff.user_id == User.id).where(
-        CourseStaff.course_id == course.id, CourseStaff.is_primary == True)).first()  # noqa: E712
+        CourseStaff.course_id == course.id, CourseStaff.is_primary.is_(True), CourseStaff.is_active.is_(True))).first()
     return CoursePublic(id=course.id, school_id=course.school_id, college_id=course.college_id, catalog_id=course.catalog_id,
                         college_name=college.name, code=course.code, title=course.title,
                         teacher_name=primary.display_name if primary else "待分配")
@@ -92,7 +86,7 @@ def public_course(course: Course, db: Db) -> CoursePublic:
 
 @router.get("/courses/context", tags=["courses"], response_model=CourseContext)
 def context(identity: CurrentIdentity, db: Db):
-    query = select(College)
+    query = select(College).where(College.is_active.is_(True))
     if not identity.has(Role.PLATFORM_ADMIN):
         query = query.where(College.school_id == identity.user.school_id)
     colleges = [college for college in db.exec(query).all()
@@ -113,9 +107,17 @@ def context(identity: CurrentIdentity, db: Db):
 
 
 @router.get("/courses", tags=["courses"], response_model=CoursesPublic)
-def courses(identity: CurrentIdentity, db: Db, offset: int = Query(default=0, ge=0), limit: int = Query(default=100, ge=1, le=100)):
-    all_courses = list(db.exec(visible_courses(identity).order_by(Course.created_at.desc(), Course.id)).all())
-    return CoursesPublic(data=[public_course(c, db) for c in all_courses[offset:offset + limit]], count=len(all_courses))
+def courses(identity: CurrentIdentity, db: Db, offset: int = Query(default=0, ge=0),
+            limit: int = Query(default=100, ge=1, le=100), q: str = Query(default="", max_length=100),
+            catalog_id: UUID | None = None, college_id: UUID | None = None, archived: bool = False):
+    query = visible_course_query(identity, include_archived=archived).where(Course.archived == archived,
+        or_(Course.code.ilike(keyword(q)), Course.title.ilike(keyword(q))))
+    if catalog_id:
+        query = query.where(Course.catalog_id == catalog_id)
+    if college_id:
+        query = query.where(Course.college_id == college_id)
+    result = page(db, query.order_by(Course.created_at.desc(), Course.id), offset, limit)
+    return CoursesPublic(data=[public_course(c, db) for c in result["data"]], count=result["count"])
 
 
 @router.get("/courses/{course_id}", tags=["courses"], response_model=CoursePublic)
@@ -127,32 +129,6 @@ def course(course_id: UUID, identity: CurrentIdentity, db: Db):
 
 
 @router.post("/courses", tags=["courses"], response_model=CoursePublic, status_code=201)
-def create_course(body: CourseCreate, identity: CurrentIdentity, db: Db):
-    college = db.get(College, body.college_id)
-    if college is None or not identity.can_create(college.id, college.school_id):
-        raise HTTPException(status_code=403, detail="无权在该学院创建课程")
-    teacher = db.get(User, body.teacher_id)
-    teacher_role = db.exec(select(RoleGrant).where(RoleGrant.user_id == body.teacher_id,
-                                                  RoleGrant.role == Role.TEACHER)).first()
-    if teacher is None or not teacher.is_active or teacher.school_id != college.school_id or teacher_role is None:
-        raise HTTPException(status_code=422, detail="主教师必须是本校已授权的教师")
-    if not identity.manages(college.id, college.school_id) and teacher.id != identity.user.id:
-        raise HTTPException(status_code=403, detail="教师只能创建由本人负责的课程")
-    if not body.title.strip():
-        raise HTTPException(status_code=422, detail="课程名称不能为空")
-    catalog = CourseCatalog(school_id=college.school_id, college_id=college.id, owner_id=teacher.id,
-                            code=body.code, title=body.title.strip())
-    record = Course(school_id=college.school_id, college_id=college.id, catalog_id=catalog.id,
-                    code=body.code, title=body.title.strip())
-    try:
-        db.add(catalog)
-        db.flush()
-        db.add(record)
-        db.flush()
-        db.add(CourseStaff(school_id=college.school_id, course_id=record.id, user_id=teacher.id, is_primary=True))
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=409, detail="本校已存在相同课程代码")
-    db.refresh(record)
-    return public_course(record, db)
+def create_course(body: CourseCreate, identity: CurrentIdentity, db: Db,
+                  key: Annotated[str | None, Header(alias="Idempotency-Key", min_length=8, max_length=128)] = None):
+    return create_class(body, identity, db, key, public_course)
