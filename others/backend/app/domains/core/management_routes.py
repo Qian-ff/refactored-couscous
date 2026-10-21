@@ -259,6 +259,7 @@ def update_account(user_id: UUID, body: AccountPatch, identity: CurrentIdentity,
     def action():
         db.exec(select(User).where(User.id == user_id).with_for_update()).one()
         db.refresh(user)
+        require_account(db, identity, user_id, write=True)
         check_revision(user, body.revision)
         values = body.model_dump(exclude_unset=True, exclude={"revision"})
         college_id = values.get("college_id", user.college_id)
@@ -311,6 +312,7 @@ def revoke_role(user_id: UUID, body: GrantInput, identity: CurrentIdentity, db: 
         require_grant_authority(identity, user.school_id, user.college_id, body.role, body.college_id)
     def action():
         db.exec(select(User).where(User.id == user_id).with_for_update()).one()
+        require_account(db, identity, user_id, write=True)
         if body.role == Role.TEACHER:
             require_no_active_primary(db, user_id)
         grant = db.exec(select(RoleGrant).where(RoleGrant.user_id == user_id, RoleGrant.role == body.role,
@@ -330,6 +332,7 @@ def reset_password(user_id: UUID, body: PasswordReset, identity: CurrentIdentity
     user = require_account(db, identity, user_id, write=True)
     def action():
         db.exec(select(User).where(User.id == user_id).with_for_update()).one()
+        require_account(db, identity, user_id, write=True)
         user.hashed_password = get_password_hash(body.temporary_password.get_secret_value())
         user.must_change_password = True
         touch(user)

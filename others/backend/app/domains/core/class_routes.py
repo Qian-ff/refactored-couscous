@@ -252,7 +252,7 @@ def transfer_class(course_id: UUID, body: StaffInput, identity: CurrentIdentity,
         db.add(record)
         db.flush()
         # The outgoing teacher loses this class immediately; return the state without reading through old permission.
-        return ClassManagementView(**record.model_dump(), can_manage_staff=False, can_manage_members=False)
+        return management_view(db, identity, record)
     return execute_command(db, identity, class_scope(db, course_id), f"courses.transfer.{course_id}", key,
                            body.model_dump(), action, authorize)
 

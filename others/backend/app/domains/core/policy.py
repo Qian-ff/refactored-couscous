@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from sqlalchemy import false, or_
 from sqlmodel import Session, select
 
+from app.core.grants import validate_role_family
 from app.domains.core.auth import Identity
 from app.domains.core.models import College, Course, CourseCatalog, CourseStaff, Enrollment, Major, Role, RoleGrant, School, User
 
@@ -142,6 +143,10 @@ def require_account(db: Session, identity: Identity, user_id: UUID, *, write=Fal
     if write:
         require(user.id != identity.user.id, "请使用个人资料和本人改密，不可管理自己的授权")
         roles = {g.role for g in db.exec(select(RoleGrant).where(RoleGrant.user_id == user.id)).all()}
+        try:
+            validate_role_family(roles)
+        except ValueError as error:
+            raise HTTPException(409, f"账号 {user.id} 存在历史角色冲突，请保留数据并交总控核查") from error
         if not identity.has(Role.PLATFORM_ADMIN):
             require(not roles.intersection({Role.PLATFORM_ADMIN, Role.SCHOOL_ADMIN}), "不能管理同级或更高权限账号")
             require(identity.manages(user.college_id, user.school_id))
