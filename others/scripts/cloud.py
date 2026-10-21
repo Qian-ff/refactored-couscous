@@ -20,6 +20,8 @@ RUNTIME = ROOT / "others/runtime/cloud-ecs"
 CLOUD = ROOT / "others/deploy/cloud"
 ACCESS = RUNTIME / "access"
 REMOTE_ROOT = "/opt/labconnect"
+CLIENT_ORIGINS = ["http://127.0.0.1:48621", "https://localhost", "http://localhost", "capacitor://localhost"]
+CLIENT_ORIGINS += [f"http://{host}:{port}" for host in ("127.0.0.1", "localhost") for port in range(5173, 5177)]
 
 
 def run(args, **kwargs):
@@ -80,8 +82,7 @@ def prepare(public_host=None):
         print("Existing cloud secrets preserved. No passwords or master keys were reset.")
         return
     db_password, admin_password = secrets.token_urlsafe(36), secrets.token_urlsafe(36)
-    cors = ["https://" + host, "https://localhost", "http://localhost", "capacitor://localhost"]
-    cors += [f"http://{local}:{port}" for local in ("127.0.0.1", "localhost") for port in range(5173, 5177)]
+    cors = ["https://" + host, *CLIENT_ORIGINS]
     values = {
         "db.env": f"POSTGRES_USER=labconnect\nPOSTGRES_DB=labconnect\nPOSTGRES_PASSWORD={db_password}\n",
         "api.env": "APP_ENV=production\nSECRET_KEY=" + secrets.token_urlsafe(48)
@@ -231,6 +232,31 @@ def verify(url):
     print(json.dumps({"health": health, "web": info}, ensure_ascii=True))
 
 
+def sync_cors():
+    """Update only CORS for the known clients; keep every credential and data volume unchanged."""
+    path = RUNTIME / "secrets/api.env"
+    lines = path.read_text(encoding="utf-8").splitlines()
+    existing = next((line.split("=", 1)[1].split(",") for line in lines if line.startswith("CORS_ORIGINS=")), [])
+    value = "CORS_ORIGINS=" + ",".join(dict.fromkeys([*existing, *CLIENT_ORIGINS]))
+    path.write_text("\n".join([line for line in lines if not line.startswith("CORS_ORIGINS=")] + [value]) + "\n",
+                    encoding="utf-8", newline="\n")
+    remote("""set -eu
+python3 - "$1" <<'PY'
+import os, sys
+from pathlib import Path
+p=Path('/opt/labconnect/shared/api.env')
+lines=[line for line in p.read_text().splitlines() if not line.startswith('CORS_ORIGINS=')]
+temporary=p.with_suffix('.env.pending')
+temporary.write_text('\\n'.join(lines+[sys.argv[1]])+'\\n')
+temporary.chmod(0o600)
+os.replace(temporary,p)
+print('Updated client CORS origins; credentials preserved.')
+PY
+release=$(readlink -f /opt/labconnect/current)
+docker compose --env-file /opt/labconnect/shared/cloud.env --env-file "$release/release.env" -f "$release/compose.yml" up -d --force-recreate --wait api
+""", value)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -242,6 +268,7 @@ def main():
     deploy_parser.add_argument("bundle", type=Path)
     sub.add_parser("status")
     sub.add_parser("backup")
+    sub.add_parser("sync-cors")
     verify_parser = sub.add_parser("verify")
     verify_parser.add_argument("url")
     args = parser.parse_args()
@@ -257,6 +284,8 @@ def main():
         remote((CLOUD / "release.sh").read_text(encoding="utf-8"), args.command)
     elif args.command == "verify":
         verify(args.url)
+    elif args.command == "sync-cors":
+        sync_cors()
 
 
 if __name__ == "__main__":

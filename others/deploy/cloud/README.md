@@ -41,6 +41,8 @@ HTTPS使用官方Caddy、Let's Encrypt ACME shortlived证书，持久化证书�
 
 网页和API共用HTTPS来源。生产网页自动用同源API；Windows/安卓在现有服务设置中输入同一HTTPS根地址，服务端统一鉴权。客户端只保存服务地址和个人设置，密码/会话按现有规则处理，不接触数据库凭据。
 
+允许来源包含Windows固定http://127.0.0.1:48621、安卓WebView的localhost来源及已登记开发端口。已有云环境需要补齐客户端来源时，运行`python others/scripts/cloud.py sync-cors`；它只更新CORS并重建API容器，保留密码、密钥、数据及当前镜像版本。
+
 每次发布核对公网health的契约/迁移、build-info.json的源码SHA、容器标签和实际BUILD，验证登录/首次改密/退出、未授权拒绝及学校范围；确认公网数据库端口不可达且宿主机无对应端口映射。无真实Windows/安卓运行证据时单独标为待验，不以网页或容器构建代替。生产不提供dev/identity；网关不开放开发文档页面。
 
 初始运维登录信息仅见本机忽略的others/runtime/cloud-ecs/secrets/accounts.json；首次改密后记录实际新密码，bootstrap不会替换它。云端合成演示数据须明确标注，使用真实业务API创建，不复制本地数据库或使用已知演示密码。
