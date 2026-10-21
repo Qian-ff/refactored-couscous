@@ -12,3 +12,4 @@
 # Preserve upstream license bytes and original whitespace for provenance archives.
 others/licenses/** -text -whitespace
 others/design/ui-redesign/assets/fonts/OFL.txt -text -whitespace
+web/src/components/labconnect/assets/fonts/OFL.txt -text -whitespace

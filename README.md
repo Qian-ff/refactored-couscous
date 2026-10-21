@@ -6,7 +6,7 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：UI v1 网页方向已获用户批准，冻结设计已接收；进入D-UI公共组件与既有界面迁移。** 真实契约仍为0.3.1；D/B/F按[执行交接](others/docs/ui-redesign-execution.md)接续，既有UI经A验收后再进入C/B2。[B1集成交接](others/docs/b1-handoff.md)、历史 [A0基线](others/docs/a0-handoff.md) / a2-ready 与 [A1交接](others/docs/a1-handoff.md) 保留；设计交付不表示产品已改版或三端已验收。
+**当前阶段：D-UI第一批公共组件、身份壳及账号入口已接收，进入B展示迁移。** 组件基线与体验见[D-UI第一批交接](others/docs/d-ui-foundation-handoff.md)，双击Open-UI.cmd打开当前网页。真实契约仍为0.3.1；B迁移后D二次整合，既有UI经A/F验收后再进入C/B2。[B1集成交接](others/docs/b1-handoff.md)、历史[A0基线](others/docs/a0-handoff.md)及[A1交接](others/docs/a1-handoff.md)保留；本批不代表全部UI或三端最终验收。
 
 ## 从这里开始
 

@@ -41,7 +41,9 @@
         "execution_baseline_ref": "ui-redesign-ready"
       },
       "product_migration": {
-        "status": "ready_for_d_foundation",
+        "status": "d_foundation_received_ready_for_B",
+        "d_foundation_commit": "b61626a36caca964bff83142424833e1b0eafea5",
+        "component_baseline_ref": "d-ui-components-ready",
         "existing_ui_accepted_by_A": false,
         "C_B2_new_features_allowed": false
       }
