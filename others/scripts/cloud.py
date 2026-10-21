@@ -13,6 +13,7 @@ import shlex
 import shutil
 import subprocess
 import tarfile
+import urllib.parse
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -223,12 +224,39 @@ def deploy(bundle):
 
 
 def verify(url):
-    if not url.startswith("https://"):
-        raise ValueError("Public verification requires trusted HTTPS")
+    target = urllib.parse.urlsplit(url)
+    configured = dict(line.split("=", 1) for line in (RUNTIME / "secrets/cloud.env").read_text().splitlines() if "=" in line)
+    if (target.scheme != "https" or target.hostname not in {connection()["host"], configured.get("PUBLIC_HOST")}
+            or target.username or target.password or target.query or target.fragment or target.path not in {"", "/"}
+            or target.port not in {None, 443}):
+        raise ValueError("Verification requires this project's configured public HTTPS gateway")
     health = json.load(urllib.request.urlopen(url.rstrip("/") + "/api/v1/health", timeout=15))
     info = json.load(urllib.request.urlopen(url.rstrip("/") + "/build-info.json", timeout=15))
     if health.get("status") != "ok" or health.get("contract") != info.get("contract"):
         raise ValueError("Cloud health and client contract do not match")
+    remote("""set -eu
+umask 077
+python3 - "$1" <<'PY'
+from datetime import datetime, timezone
+import json, os, subprocess, sys
+from pathlib import Path
+root=Path('/opt/labconnect')
+manifest=json.loads((root/'current/manifest.json').read_text())
+sha=sys.argv[1]
+if manifest['source_sha'] != sha:
+    raise SystemExit('HTTPS client does not match the current server release')
+for name in ['labconnect-cloud-api-1','labconnect-cloud-web-1']:
+    revision=subprocess.check_output(['docker','inspect','--format','{{index .Config.Labels "org.opencontainers.image.revision"}}',name],text=True).strip()
+    if revision != sha: raise SystemExit('Container source version mismatch')
+actual=subprocess.check_output(['docker','exec','labconnect-cloud-api-1','.venv/bin/python','-c','import os; print(os.environ["LABCONNECT_SOURCE_SHA"])'],text=True).strip()
+if actual != sha: raise SystemExit('Running API source version mismatch')
+value={'source_sha':sha,'status':'trusted_https_verified','verified_at':datetime.now(timezone.utc).isoformat()}
+temporary=root/'deployment.pending.json'
+temporary.write_text(json.dumps(value)+'\\n')
+os.replace(temporary,root/'deployment.json')
+print('Verified trusted HTTPS, running API and both container source versions.')
+PY
+""", info["source_sha"])
     print(json.dumps({"health": health, "web": info}, ensure_ascii=True))
 
 
