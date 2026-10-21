@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react"
 import { ManagementService, type OrganizationInput, type OrganizationView } from "../../client"
 import type { PageProps } from "../../lib/extensions"
-import { ActionFeedback, Badge, BusinessPage, commandHeaders, Empty, Field, input, Loading, Notice, Pager, Section, SessionPage, useBusinessAction, useBusinessQuery } from "../teaching/ui"
+import { Button, ActionFeedback, Badge, BusinessPage, commandHeaders, Empty, Field, input, Loading, Notice, Pager, Section, SessionPage, useBusinessAction, useBusinessQuery } from "../teaching/ui"
 import { Options, OrganizationForm } from "./forms"
 import { isPlatform, isSchoolManager, useOrganizationChoices } from "./scope"
 
@@ -33,27 +33,27 @@ function OrganizationsBody(page: PageProps) {
   return <BusinessPage page={page} title="组织管理" description="维护学校、学院和专业，按当前授权范围操作，保留历史数据。">
     <ActionFeedback action={action} />
     {(choices.schools.error || choices.colleges.error || choices.majors.error) && <Notice kind="error" retry={choices.reload}>{choices.schools.error || choices.colleges.error || choices.majors.error}</Notice>}
-    <div className="b1-tabs">{kinds.map(value => <button key={value} type="button" className={`b1-button ${kind === value ? "" : "b1-secondary"}`} onClick={() => { setKind(value); setOffset(0); setEditing(null) }}>{names[value]}管理</button>)}</div>
+    <div className="b1-tabs">{kinds.map(value => <Button key={value} type="button" variant={kind === value ? "primary" : "secondary"} onClick={() => { setKind(value); setOffset(0); setEditing(null) }}>{names[value]}管理</Button>)}</div>
     <Section title={`${names[kind]}列表`} description="停用保留历史；学校停用后，本校账号不能继续访问。">
       <form className="b1-filter" onSubmit={event => { event.preventDefault(); setQ(input(event.currentTarget, "q")); setOffset(0) }}>
         {kind !== "school" && <Field label="学校"><select value={choices.schoolId} onChange={event => { choices.selectSchool(event.target.value); setOffset(0); setEditing(null) }}><Options values={choices.schools.data?.data ?? []} /></select></Field>}
         {kind === "major" && <Field label="学院"><select value={choices.collegeId} onChange={event => { choices.selectCollege(event.target.value); setOffset(0); setEditing(null) }}><Options values={choices.colleges.data?.data ?? []} /></select></Field>}
-        <Field label="搜索名称或代码"><input name="q" maxLength={100} placeholder="输入关键词" /></Field><button className="b1-button">查询</button>
-        <button type="button" className="b1-button b1-secondary" onClick={event => { event.currentTarget.form?.reset(); setQ(""); setOffset(0); rows.reload() }}>清空查询</button>
+        <Field label="搜索名称或代码"><input name="q" maxLength={100} placeholder="输入关键词" /></Field><Button type="submit" >查询</Button>
+        <Button type="button" variant="secondary" onClick={event => { event.currentTarget.form?.reset(); setQ(""); setOffset(0); rows.reload() }}>清空查询</Button>
       </form>
       {rows.loading ? <Loading /> : rows.error ? <Notice kind="error" retry={rows.reload}>{rows.error}</Notice> : rows.data?.count === 0 ? <Empty>当前范围内没有匹配的{names[kind]}。</Empty> : rows.data && <>
-        <div className="b1-table-wrap"><table className="b1-table"><thead><tr><th>名称</th><th>代码</th><th>状态</th><th>管理</th></tr></thead><tbody>{rows.data.data.map(row => <tr key={row.id}><td>{row.name}</td><td>{row.code}</td><td><Badge muted={!row.is_active}>{row.is_active ? "启用" : "停用"}</Badge></td><td><button type="button" className="b1-button b1-secondary" onClick={() => setEditing(row)}>编辑{names[kind]}</button></td></tr>)}</tbody></table></div>
+        <div className="b1-table-wrap"><table className="b1-table"><thead><tr><th>名称</th><th>代码</th><th>状态</th><th>管理</th></tr></thead><tbody>{rows.data.data.map(row => <tr key={row.id}><td>{row.name}</td><td>{row.code}</td><td><Badge muted={!row.is_active}>{row.is_active ? "启用" : "停用"}</Badge></td><td><Button type="button" variant="secondary" onClick={() => setEditing(row)}>编辑{names[kind]}</Button></td></tr>)}</tbody></table></div>
         <Pager offset={offset} count={rows.data.count} change={setOffset} />
       </>}
     </Section>
-    {editing && <Section title={`编辑${names[kind]}：${editing.name}`} actions={<button type="button" className="b1-button b1-secondary" onClick={() => setEditing(null)}>取消编辑</button>}>
+    {editing && <Section title={`编辑${names[kind]}：${editing.name}`} actions={<Button type="button" variant="secondary" onClick={() => setEditing(null)}>取消编辑</Button>}>
       <form className="b1-form" key={`${editing.id}:${editing.revision}`} onSubmit={event => {
         event.preventDefault(); const form = event.currentTarget
         const body = { revision: editing.revision, name: input(form, "name"), is_active: input(form, "is_active") === "true" }
         const path = { record_id: editing.id }
         void action.run(async key => (await (kind === "school" ? ManagementService.updateSchool({ body, path, headers: commandHeaders(key) }) : kind === "college" ? ManagementService.updateCollege({ body, path, headers: commandHeaders(key) }) : ManagementService.updateMajor({ body, path, headers: commandHeaders(key) }))).data,
           () => { setEditing(null); refresh() }, "组织信息已更新", JSON.stringify(["organization-update", kind, path, body]))
-      }}><Field label="名称"><input name="name" defaultValue={editing.name} maxLength={120} required /></Field><Field label="启用状态"><select name="is_active" defaultValue={String(editing.is_active)}><option value="true">启用</option><option value="false">停用</option></select></Field><div className="b1-actions"><button className="b1-button" disabled={action.pending}>保存组织信息</button></div></form>
+      }}><Field label="名称"><input name="name" defaultValue={editing.name} maxLength={120} required /></Field><Field label="启用状态"><select name="is_active" defaultValue={String(editing.is_active)}><option value="true">启用</option><option value="false">停用</option></select></Field><div className="b1-actions"><Button type="submit"  disabled={action.pending}>保存组织信息</Button></div></form>
     </Section>}
     <Section title={`创建${names[kind]}`}><OrganizationForm kind={kind} schools={choices.schools.data?.data ?? []} colleges={choices.colleges.data?.data ?? []} schoolId={choices.schoolId} collegeId={choices.collegeId} selectSchool={choices.selectSchool} selectCollege={choices.selectCollege} submit={create} pending={action.pending} /></Section>
   </BusinessPage>

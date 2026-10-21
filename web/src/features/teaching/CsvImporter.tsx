@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { Download, FileCheck2 } from "lucide-react"
 import { ImportsService, type CsvInput, type CsvPreview } from "../../client"
 import type { SessionSnapshot } from "../../lib/api"
-import { ActionFeedback, commandHeaders, Field, Notice, useBusinessAction } from "./ui"
+import { Button, ActionFeedback, commandHeaders, Field, Notice, useBusinessAction } from "./ui"
 
 export function CsvImporter({ session, kind, schoolId, courseId, imported }: {
   session: SessionSnapshot; kind: "accounts" | "roster"; schoolId: string; courseId?: string; imported: () => void
@@ -23,7 +23,7 @@ export function CsvImporter({ session, kind, schoolId, courseId, imported }: {
   return <div>
     <p>先预检全部数据，再确认整批提交。账号导入不会覆盖已有密码或授权，名单可以引用已开通学生。</p>
     <ActionFeedback action={action} />
-    <div className="b1-actions"><button className="b1-button b1-secondary" type="button" disabled={action.pending} onClick={download}><Download size={17} />下载 CSV 模板</button></div>
+    <div className="b1-actions"><Button variant="secondary" type="button" disabled={action.pending} onClick={download}><Download size={17} />下载 CSV 模板</Button></div>
     <Field label="选择 UTF-8 CSV 文件"><input type="file" accept=".csv,text/csv" disabled={action.pending} onChange={event => {
       const file = event.target.files?.[0]
       event.currentTarget.value = ""
@@ -37,16 +37,16 @@ export function CsvImporter({ session, kind, schoolId, courseId, imported }: {
     </Field>
     {!schoolId && <Notice>请先选择学校。</Notice>}
     <div className="b1-actions">
-      <button type="button" className="b1-button b1-secondary" disabled={action.pending || !schoolId || !csv} onClick={() => {
+      <Button type="button" variant="secondary" disabled={action.pending || !schoolId || !csv} onClick={() => {
         void action.run(async () => (await ImportsService.previewImport({ body })).data,
           preview => setChecked({ source: csv, preview }), "预检已完成")
-      }}><FileCheck2 size={17} />预检文件</button>
-      <button type="button" className="b1-button" disabled={action.pending || !current?.valid} onClick={() => {
+      }}><FileCheck2 size={17} />预检文件</Button>
+      <Button type="button"  disabled={action.pending || !current?.valid} onClick={() => {
         if (!current?.valid) return
         const payload = { ...body, preview_digest: current.digest }
         void action.run(async key => (await ImportsService.commitImport({ body: payload, headers: commandHeaders(key) })).data,
           () => { setCsv(""); setChecked(null); imported(); }, "整批提交成功", JSON.stringify(["csv-commit", payload]))
-      }}>{action.pending ? "正在处理…" : `确认整批提交${current?.valid ? `（${current.row_count} 行）` : ""}`}</button>
+      }}>{action.pending ? "正在处理…" : `确认整批提交${current?.valid ? `（${current.row_count} 行）` : ""}`}</Button>
     </div>
     {current && <Notice kind={current.valid ? "success" : "error"}>{current.valid ? `${current.row_count} 行全部通过预检，可以确认提交。` : `发现 ${current.errors.length} 个问题，请修正后重新预检；尚未写入。`}</Notice>}
     {current && current.errors.length > 0 && <div className="b1-table-wrap"><table className="b1-table"><thead><tr><th>行号</th><th>字段</th><th>问题</th></tr></thead><tbody>{current.errors.map((error, index) => <tr key={index}><td>{String(error.line ?? "—")}</td><td>{String(error.field ?? "—")}</td><td>{String(error.message ?? "格式不正确")}</td></tr>)}</tbody></table></div>}
