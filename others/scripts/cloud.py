@@ -162,13 +162,17 @@ def build():
             process.stdout.close()
         if process.wait() != 0:
             raise RuntimeError("Docker image export failed")
-    (target / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+    (target / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     (target / "release.env").write_text(
-        f"API_IMAGE={api_image}\nWEB_IMAGE={web_image}\nPOSTGRES_IMAGE={lock['postgres']}\n", encoding="ascii")
+        f"API_IMAGE={api_image}\nWEB_IMAGE={web_image}\nPOSTGRES_IMAGE={lock['postgres']}\n", encoding="ascii", newline="\n")
     for name in ("compose.yml", "release.sh"):
         shutil.copy2(CLOUD / name, target / name)
     names = ["images.tar.gz", "manifest.json", "release.env", "compose.yml", "release.sh"]
-    (target / "SHA256SUMS").write_text("".join(digest(target / name) + "  " + name + "\n" for name in names), encoding="ascii")
+    (target / "SHA256SUMS").write_text("".join(digest(target / name) + "  " + name + "\n" for name in names),
+                                      encoding="ascii", newline="\n")
+    for name in ("release.env", "release.sh", "SHA256SUMS"):
+        if b"\r" in (target / name).read_bytes():
+            raise ValueError("Linux release control files must use LF: " + name)
     with tarfile.open(bundle, "w") as archive:
         for name in [*names, "SHA256SUMS"]:
             archive.add(target / name, arcname=name)
