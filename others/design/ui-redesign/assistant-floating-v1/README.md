@@ -1,8 +1,9 @@
-# 安研通 · 三端悬浮助手图片候选 v1
+# 安研通 · 三端悬浮助手图片候选 v1.1
 
-版本 **UI-ASSISTANT-2026.10-v1**，状态：**图片候选，等待用户明确批准**。
+版本 **UI-ASSISTANT-2026.10-v1.1**，状态：**图片候选，等待用户明确批准**。
 
 - [全部图册](index.html) / [三端总览](preview.png)
+- [吸边修改前后对照](edge-comparison.png)：v1.1从露64px改为露48px，128px胶囊隐藏80px，恢复区48×56px。
 - [网页面板细节](images/web-dialog-detail.png)
 - [手机小窗](images/mobile-small.png) / [手机全屏](images/mobile-full.png) / [手机输入模拟](images/mobile-keyboard.png)
 - [个人设置](images/mobile-settings.png) / [四款外壳](index.html#preferences)
@@ -10,6 +11,8 @@
 - [图片清单](inventory.json) / [静态检查](qa-report.json)
 
 这里是隔离的静态设计资料。对话、课件引用、姓名、课程、时间均为合成示例；问答、录音、播放、权限按钮只演示本地状态。没有连接业务API，没有读取环境配置、账号文件或密钥，没有调用实际设备录音或扬声器。
+
+本次修订依据用户“半隐藏可以更收进去一点”的反馈，尚未获得图片批准；前版候选保留在Git提交452d2658de805c22c4cbb0eb57b2aa70a3d4a298，专项目录名称沿用登记的assistant-floating-v1。
 
 背景以已批准UI-v1课程画布为基础；仅在浏览器内把“学习助手”的未开放提示改成未来唤起入口示意，原背景文件不变。Windows标题栏/125%/150%及Android状态栏、安全区、软键盘均为浏览器布局参考，不是原生运行验收。手机全屏的空白是短对话后的正常对话流空间，不放无数据支撑的推荐或统计填充。
 

@@ -1,10 +1,12 @@
 {
   "task_id": "ui-assistant-floating-v1",
-  "version": "UI-ASSISTANT-2026.10-v1",
+  "version": "UI-ASSISTANT-2026.10-v1.1",
   "thread_id": "01a15e27-4a94-79f0-9a2b-37b3fcee6334",
   "branch": "codex/ui-design-v1",
   "worktree": "others/worktrees/ui-design",
-  "owned_paths": ["others/design/ui-redesign/assistant-floating-v1/"],
+  "owned_paths": [
+    "others/design/ui-redesign/assistant-floating-v1/"
+  ],
   "registration_commit": "df29c4e0d73ecdefeafdbab47174926cc27e125b",
   "baseline_commit": "2b5907d65730ff70d07373ee22dc18cd8d4d590f",
   "images_status": "awaiting_user_approval",
@@ -18,11 +20,20 @@
     "execution_target": "xhigh",
     "observed_model": "gpt-6.1-sol",
     "observed_effort": "xhigh",
-    "observed_turn_id": "01a15f91-d2b0-76e1-a5b9-cfe601b2b659",
+    "observed_turn_id": "01a15fac-d83d-7562-91b0-3c8fd02c60ff",
     "verification": "current turn_context, not inferred from task text",
     "A_execution_target": "max",
     "B_to_F_execution_target": "xhigh",
     "other_chats_changed": false,
     "global_configuration_changed": false
+  },
+  "revision": {
+    "previous_candidate_commit": "452d2658de805c22c4cbb0eb57b2aa70a3d4a298",
+    "human_feedback": "半隐藏可以更收进去一点",
+    "question_item_id": "[\"request_user_input_async\",\"call_aca7e076eb814bf9804e14b9abee38c7\",0]",
+    "hidden_width": 80,
+    "visible_width": 48,
+    "height": 56,
+    "images_status": "awaiting_user_approval"
   }
 }

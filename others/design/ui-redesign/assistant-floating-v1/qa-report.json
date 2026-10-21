@@ -1,7 +1,7 @@
 {
-  "version": "UI-ASSISTANT-2026.10-v1",
+  "version": "UI-ASSISTANT-2026.10-v1.1",
   "images_status": "awaiting_user_approval",
-  "rendered_at": "2026-10-21T18:09:18.754Z",
+  "rendered_at": "2026-10-21T18:21:37.376Z",
   "product_code_changed": false,
   "native_acceptance": false,
   "live_business_acceptance": false,
@@ -16,7 +16,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-capsule.png",
       "css_width": 1440,
@@ -28,6 +28,7 @@
         "clipped_controls": [],
         "touch_failures": [],
         "frame_bounds": null,
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -42,7 +43,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-dialog.png",
       "css_width": 1440,
@@ -59,6 +60,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -73,7 +75,7 @@
       "content": "history",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-history.png",
       "css_width": 1440,
@@ -90,6 +92,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -104,18 +107,25 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-dock-left.png",
       "css_width": 1440,
       "css_height": 960,
-      "sha256": "aa90f35cf8dd08459b33b96314d3d79f44ddc0d44d641d2e8445e2e95f8f324d",
+      "sha256": "1b2a89fbf148a49fa3c4a19746a1fa64d775796ee08ade29cf92cdb7576a044a",
       "layout": {
         "font": true,
         "page_overflow": false,
         "clipped_controls": [],
         "touch_failures": [],
         "frame_bounds": null,
+        "dock_geometry": {
+          "visible_width": 48,
+          "height": 56,
+          "target_width": 48,
+          "target_height": 56,
+          "visible_target_width": 48
+        },
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -130,18 +140,25 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-dock-right.png",
       "css_width": 1440,
       "css_height": 960,
-      "sha256": "407afe71f824ee6ed59a9363550cf14a96287c0cc1bdfb85c4bc9552710dbaa3",
+      "sha256": "6ed1094522d69a4f90a29627a65676902b75b02b7c26638fd1f7d77ea17d9ab5",
       "layout": {
         "font": true,
         "page_overflow": false,
         "clipped_controls": [],
         "touch_failures": [],
         "frame_bounds": null,
+        "dock_geometry": {
+          "visible_width": 48,
+          "height": 56,
+          "target_width": 48,
+          "target_height": 56,
+          "visible_target_width": 48
+        },
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -156,7 +173,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-settings.png",
       "css_width": 1440,
@@ -173,6 +190,7 @@
           "width": 510,
           "height": 627.8125
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -187,7 +205,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-disabled.png",
       "css_width": 1440,
@@ -204,6 +222,7 @@
           "width": 510,
           "height": 719.1875
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -218,7 +237,7 @@
       "content": "recording",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-recording.png",
       "css_width": 1440,
@@ -235,6 +254,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -249,7 +269,7 @@
       "content": "transcript",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-transcript.png",
       "css_width": 1440,
@@ -266,6 +286,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -280,7 +301,7 @@
       "content": "generating",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-generating.png",
       "css_width": 1440,
@@ -297,6 +318,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -311,7 +333,7 @@
       "content": "complete",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-complete.png",
       "css_width": 1440,
@@ -323,6 +345,7 @@
         "clipped_controls": [],
         "touch_failures": [],
         "frame_bounds": null,
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -337,7 +360,7 @@
       "content": "exam",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-exam.png",
       "css_width": 1440,
@@ -354,6 +377,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -368,7 +392,7 @@
       "content": "unknown",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-unknown.png",
       "css_width": 1440,
@@ -385,6 +409,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -399,7 +424,7 @@
       "content": "unconfigured",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-unconfigured.png",
       "css_width": 1440,
@@ -416,6 +441,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -430,7 +456,7 @@
       "content": "offline",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-offline.png",
       "css_width": 1440,
@@ -447,6 +473,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -461,7 +488,7 @@
       "content": "microphone",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-mic-denied.png",
       "css_width": 1440,
@@ -478,6 +505,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -492,7 +520,7 @@
       "content": "context",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-context.png",
       "css_width": 1440,
@@ -509,6 +537,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -523,7 +552,7 @@
       "content": "empty",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-new.png",
       "css_width": 1440,
@@ -540,6 +569,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -554,7 +584,7 @@
       "content": "delete",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-delete.png",
       "css_width": 1440,
@@ -571,6 +601,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -585,7 +616,7 @@
       "content": "clear",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "web-clear.png",
       "css_width": 1440,
@@ -602,6 +633,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -616,7 +648,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "windows-dialog.png",
       "css_width": 1280,
@@ -633,6 +665,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -647,7 +680,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "windows-compact.png",
       "css_width": 900,
@@ -664,6 +697,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -678,7 +712,7 @@
       "content": "chat",
       "dpr": 1.25,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "windows-scale-125.png",
       "css_width": 1024,
@@ -695,6 +729,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -709,7 +744,7 @@
       "content": "chat",
       "dpr": 1.5,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "windows-scale-150.png",
       "css_width": 852,
@@ -726,6 +761,7 @@
           "width": 420,
           "height": 532
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -740,7 +776,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-capsule.png",
       "css_width": 390,
@@ -752,6 +788,7 @@
         "clipped_controls": [],
         "touch_failures": [],
         "frame_bounds": null,
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -766,7 +803,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-small.png",
       "css_width": 390,
@@ -783,6 +820,7 @@
           "width": 273,
           "height": 342.265625
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -797,7 +835,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-full.png",
       "css_width": 390,
@@ -814,6 +852,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -828,7 +867,7 @@
       "content": "history",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-history.png",
       "css_width": 390,
@@ -845,6 +884,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -859,7 +899,7 @@
       "content": "clear",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-clear.png",
       "css_width": 390,
@@ -876,6 +916,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -890,7 +931,7 @@
       "content": "empty",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-new.png",
       "css_width": 390,
@@ -907,6 +948,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -921,7 +963,7 @@
       "content": "keyboard",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-keyboard.png",
       "css_width": 390,
@@ -938,6 +980,7 @@
           "width": 390,
           "height": 522
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -952,18 +995,25 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-dock-left.png",
       "css_width": 390,
       "css_height": 844,
-      "sha256": "5a49432869841b4894ce2fdbdbfa48b759e3d763fc7ff0d474128bcbbeafb1cb",
+      "sha256": "3b82f50700018ece03d71f1175839b5e8e38cc54fda74027dc3a1b64bd2bcd8a",
       "layout": {
         "font": true,
         "page_overflow": false,
         "clipped_controls": [],
         "touch_failures": [],
         "frame_bounds": null,
+        "dock_geometry": {
+          "visible_width": 48,
+          "height": 56,
+          "target_width": 48,
+          "target_height": 56,
+          "visible_target_width": 48
+        },
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -978,18 +1028,25 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-dock-right.png",
       "css_width": 390,
       "css_height": 844,
-      "sha256": "2bf9ed55cdc6a17a8f89a9eb2c27a581e909930f06712624e1ced9acf7e43877",
+      "sha256": "a807341c8063f831ee9d2fbe2bedfafff7bc74f988a8e751cc014b929a4176af",
       "layout": {
         "font": true,
         "page_overflow": false,
         "clipped_controls": [],
         "touch_failures": [],
         "frame_bounds": null,
+        "dock_geometry": {
+          "visible_width": 48,
+          "height": 56,
+          "target_width": 48,
+          "target_height": 56,
+          "visible_target_width": 48
+        },
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1004,7 +1061,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-settings.png",
       "css_width": 390,
@@ -1021,6 +1078,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1035,7 +1093,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-disabled.png",
       "css_width": 390,
@@ -1052,6 +1110,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1066,7 +1125,7 @@
       "content": "recording",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-recording.png",
       "css_width": 390,
@@ -1083,6 +1142,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1097,7 +1157,7 @@
       "content": "transcript",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-transcript.png",
       "css_width": 390,
@@ -1114,6 +1174,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1128,7 +1189,7 @@
       "content": "exam",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-exam.png",
       "css_width": 390,
@@ -1145,6 +1206,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1159,7 +1221,7 @@
       "content": "unconfigured",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-unconfigured.png",
       "css_width": 390,
@@ -1176,6 +1238,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1190,7 +1253,7 @@
       "content": "offline",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-offline.png",
       "css_width": 390,
@@ -1207,6 +1270,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1221,7 +1285,7 @@
       "content": "microphone",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-mic-denied.png",
       "css_width": 390,
@@ -1238,6 +1302,7 @@
           "width": 390,
           "height": 796
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1252,7 +1317,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-360-small.png",
       "css_width": 360,
@@ -1269,6 +1334,7 @@
           "width": 252,
           "height": 314.75
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1283,7 +1349,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-360-full.png",
       "css_width": 360,
@@ -1300,6 +1366,7 @@
           "width": 360,
           "height": 732
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1314,7 +1381,7 @@
       "content": "keyboard",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "mobile-360-keyboard.png",
       "css_width": 360,
@@ -1331,6 +1398,7 @@
           "width": 360,
           "height": 458
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1345,7 +1413,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "theme-white.png",
       "css_width": 980,
@@ -1362,6 +1430,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1376,7 +1445,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "teal",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "theme-teal.png",
       "css_width": 980,
@@ -1393,6 +1462,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1407,7 +1477,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "blue",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "theme-blue.png",
       "css_width": 980,
@@ -1424,6 +1494,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1438,7 +1509,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "charcoal",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true,
       "filename": "theme-charcoal.png",
       "css_width": 980,
@@ -1455,6 +1526,7 @@
           "width": 420,
           "height": 560
         },
+        "dock_geometry": null,
         "within_surface": true,
         "private_content_hidden": true
       }
@@ -1464,12 +1536,12 @@
   "blocked_requests": [],
   "bad_responses": [],
   "input_sha256": {
-    "prototype.html": "ba2a2c6b81fa759715e685ab8d7d7ddc52eef94ac2bb8dc094f9d91e00905486",
-    "prototype.css": "cdddd7e568a6c42e825381a2cf557028bc2a5623acf2070ce362c809416b8b60",
-    "prototype.js": "cf7d4c0eb6bfabd05f4f9619fd4b730fe2a7cc38e003360a2f3d59472c2fca55",
-    "gallery.css": "06aea9f1c57b7eea74876707bedf113e0366cd1d8cd07f1ec8a57e27ea2ad758",
-    "render.cjs": "dfb771d3c42d83c03f59a01a1d1fc3c4184195d4f2ca7df4832431c13554ff9d",
-    "design-plan.md": "9ac62a165b58084c91ef736eed1924fc6d024aa2154c44fd1dc24b34df36c231"
+    "prototype.html": "702cb9456a72888869383c8833ae1701661a710f50ed09d87bfddef8f995e3b7",
+    "prototype.css": "d8059b7384470e838c4b81ba1004006597229bcf66a3e8aebac09728e1b62918",
+    "prototype.js": "0af8be2ceba61f614824586719e5d61ed8d84bbf4736d141f9e1ed6beefff131",
+    "gallery.css": "d9869ac87dbbaf374b7fdeebf5ed1615654262e380f871b863b358154f0fd2ed",
+    "render.cjs": "9addab3f302edc39021462db501d398a7679f98486bef90ef3fcb97b04ece89b",
+    "design-plan.md": "98c2cc038e47439f0f1e5640651f046db0f720e15b74a242534c521ed09b9dec"
   },
   "checks": {
     "all_screens_rendered": true,
@@ -1480,6 +1552,7 @@
     "no_business_requests": true,
     "original_v1_unchanged": true,
     "theme_contrast": true,
+    "dock_48_by_56": true,
     "no_browser_errors": true
   },
   "interaction_checks": {
@@ -1498,10 +1571,14 @@
     "exam_has_no_history_or_answer_dom": true,
     "exam_cannot_bypass_via_capsule_voice": true,
     "clear_requires_confirmation": true,
-    "cleared_history_has_empty_state": true
+    "cleared_history_has_empty_state": true,
+    "web-dock-left_48px_restores": true,
+    "web-dock-right_48px_restores": true,
+    "mobile-dock-left_48px_restores": true,
+    "mobile-dock-right_48px_restores": true
   },
   "browser": "155.0.4283.62",
-  "baseline_sha": "df29c4e0d73ecdefeafdbab47174926cc27e125b",
+  "baseline_sha": "452d2658de805c22c4cbb0eb57b2aa70a3d4a298",
   "palette_contrast": [
     {
       "id": "white",
@@ -1532,5 +1609,16 @@
       "ratio": 12.17307581920892
     }
   ],
-  "original_v1_files": 141
+  "original_v1_files": 141,
+  "dock_revision": {
+    "before_commit": "452d2658de805c22c4cbb0eb57b2aa70a3d4a298",
+    "before_visible_width": 64,
+    "after_visible_width": 48,
+    "after_hidden_width": 80,
+    "height": 56,
+    "source_pngs": {
+      "web-dock-left": "aa90f35cf8dd08459b33b96314d3d79f44ddc0d44d641d2e8445e2e95f8f324d",
+      "mobile-dock-left": "5a49432869841b4894ce2fdbdbfa48b759e3d763fc7ff0d474128bcbbeafb1cb"
+    }
+  }
 }

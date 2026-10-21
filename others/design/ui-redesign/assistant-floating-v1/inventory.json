@@ -1,5 +1,5 @@
 {
-  "version": "UI-ASSISTANT-2026.10-v1",
+  "version": "UI-ASSISTANT-2026.10-v1.1",
   "images_status": "awaiting_user_approval",
   "synthetic_data": true,
   "product_code_changed": false,
@@ -14,7 +14,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -27,7 +27,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -40,7 +40,7 @@
       "content": "history",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -53,7 +53,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -66,7 +66,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -79,7 +79,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -92,7 +92,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -105,7 +105,7 @@
       "content": "recording",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -118,7 +118,7 @@
       "content": "transcript",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -131,7 +131,7 @@
       "content": "generating",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -144,7 +144,7 @@
       "content": "complete",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -157,7 +157,7 @@
       "content": "exam",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -170,7 +170,7 @@
       "content": "unknown",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -183,7 +183,7 @@
       "content": "unconfigured",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -196,7 +196,7 @@
       "content": "offline",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -209,7 +209,7 @@
       "content": "microphone",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -222,7 +222,7 @@
       "content": "context",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -235,7 +235,7 @@
       "content": "empty",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -248,7 +248,7 @@
       "content": "delete",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -261,7 +261,7 @@
       "content": "clear",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -274,7 +274,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -287,7 +287,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -300,7 +300,7 @@
       "content": "chat",
       "dpr": 1.25,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -313,7 +313,7 @@
       "content": "chat",
       "dpr": 1.5,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -326,7 +326,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -339,7 +339,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -352,7 +352,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -365,7 +365,7 @@
       "content": "history",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -378,7 +378,7 @@
       "content": "clear",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -391,7 +391,7 @@
       "content": "empty",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -404,7 +404,7 @@
       "content": "keyboard",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -417,7 +417,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -430,7 +430,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -443,7 +443,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -456,7 +456,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -469,7 +469,7 @@
       "content": "recording",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -482,7 +482,7 @@
       "content": "transcript",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -495,7 +495,7 @@
       "content": "exam",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -508,7 +508,7 @@
       "content": "unconfigured",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -521,7 +521,7 @@
       "content": "offline",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -534,7 +534,7 @@
       "content": "microphone",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -547,7 +547,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -560,7 +560,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -573,7 +573,7 @@
       "content": "keyboard",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -586,7 +586,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "white",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -599,7 +599,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "teal",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -612,7 +612,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "blue",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     },
     {
@@ -625,7 +625,7 @@
       "content": "chat",
       "dpr": 1,
       "theme": "charcoal",
-      "version": "UI-ASSISTANT-2026.10-v1",
+      "version": "UI-ASSISTANT-2026.10-v1.1",
       "synthetic_data": true
     }
   ]

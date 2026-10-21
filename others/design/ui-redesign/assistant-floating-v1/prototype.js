@@ -1,6 +1,6 @@
 'use strict';
 // Design-only simulation. No product imports, storage, permission, audio or API calls.
-const VERSION='UI-ASSISTANT-2026.10-v1';
+const VERSION='UI-ASSISTANT-2026.10-v1.1';
 const PALETTES=[['white','经典白','#FFFFFF'],['teal','青绿','#087F8C'],['blue','蓝色','#2563EB'],['charcoal','炭灰','#30363F']];
 const SCREENS=[
  ['web-capsule','胶囊入口','网页',1440,960,'capsule','chat'],
@@ -182,7 +182,7 @@ function bind(){
    if(e.button!==0||drag.dataset.drag==='panel'&&e.target.closest('button'))return;
    const host=drag.closest('.assistant-panel,.capsule,.dock');const surface=document.querySelector('.surface');if(!host||!surface)return;
    const r=host.getBoundingClientRect(),p=surface.getBoundingClientRect();const start={x:e.clientX,y:e.clientY,left:r.left-p.left,top:r.top-p.top};let moved=false;
-   const move=ev=>{const dx=ev.clientX-start.x,dy=ev.clientY-start.y;if(!moved&&Math.hypot(dx,dy)<8)return;moved=true;host.setPointerCapture?.(e.pointerId);host.style.left=Math.max(-64,Math.min(start.left+dx,p.width-r.width+64))+'px';host.style.top=Math.max(8,Math.min(start.top+dy,p.height-r.height-8))+'px';host.style.right='auto';host.style.bottom='auto';ev.preventDefault();};
+   const move=ev=>{const dx=ev.clientX-start.x,dy=ev.clientY-start.y;if(!moved&&Math.hypot(dx,dy)<8)return;moved=true;host.setPointerCapture?.(e.pointerId);host.style.left=Math.max(-80,Math.min(start.left+dx,p.width-r.width+80))+'px';host.style.top=Math.max(8,Math.min(start.top+dy,p.height-r.height-8))+'px';host.style.right='auto';host.style.bottom='auto';ev.preventDefault();};
    const up=ev=>{host.removeEventListener('pointermove',move);host.removeEventListener('pointerup',up);host.removeEventListener('pointercancel',up);if(!moved)return;state.suppressUntil=Date.now()+350;const b=host.getBoundingClientRect();state.playing=false;if(state.content==='recording')state.content='chat';if(b.left-p.left<=16||p.right-b.right<=16){state.previousView=state.view==='panel'?'panel':state.previousView;state.view=b.left-p.left<=16?'left':'right';state.position=null;}else{state.position={x:b.left-p.left,y:b.top-p.top};}draw();};
    host.addEventListener('pointermove',move);host.addEventListener('pointerup',up);host.addEventListener('pointercancel',up);
   });
