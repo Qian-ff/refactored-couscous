@@ -1,7 +1,7 @@
 import path from "node:path"
 import { randomUUID } from "node:crypto"
 import { expect, test, type Page } from "@playwright/test"
-import { demoAccounts } from "../../../../../../others/scripts/web-environment.mjs"
+import { demoAccounts, root } from "../../../../../../others/scripts/web-environment.mjs"
 
 const api = process.env.LABCONNECT_API_URL || "http://127.0.0.1:8001"
 const entry = `/src/features/teaching/dev/index.html?api=${encodeURIComponent(api)}`
@@ -20,6 +20,14 @@ async function signIn(page: Page, username: string, password = demo.password) {
 async function nav(page: Page, name: string) {
   await page.getByRole("navigation", { name: "B1 组件选择" }).getByRole("button", { name, exact: true }).click()
 }
+async function checkLayouts(page: Page, name: string) {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 })
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy()
+    await page.screenshot({ path: path.join(root, `others/reports/b1-components/${name}-${width}.png`), fullPage: true })
+  }
+  await page.setViewportSize({ width: 1440, height: 1000 })
+}
 
 test("组织、账号、首次改密与真实兼任身份收窄", async ({ page }) => {
   test.setTimeout(120_000)
@@ -34,6 +42,7 @@ test("组织、账号、首次改密与真实兼任身份收窄", async ({ page 
   await createMajor.getByLabel("专业名称", { exact: true }).fill(`界面合成专业${code}`)
   await createMajor.getByRole("button", { name: "确认创建", exact: true }).click()
   await expect(page.getByText("组织已创建", { exact: true })).toBeVisible()
+  await checkLayouts(page, "organizations")
   await nav(page, "账号与授权")
   await page.getByRole("button", { name: "新建账号", exact: true }).click()
   const create = section(page, "创建账号")
@@ -45,13 +54,15 @@ test("组织、账号、首次改密与真实兼任身份收窄", async ({ page 
   await create.getByRole("button", { name: "创建账号", exact: true }).click()
   await expect(page.getByText("账号已开通，首次登录须修改临时密码", { exact: true })).toBeVisible()
   const grants = section(page, "角色授权")
-  await grants.getByLabel("新增角色", { exact: true }).selectOption("college_admin")
-  await grants.getByLabel("学院管理员授权范围", { exact: true }).selectOption({ label: "化学学院" })
+  await grants.getByRole("combobox", { name: "新增角色", exact: true }).selectOption("college_admin")
+  await grants.getByRole("combobox", { name: "学院管理员授权范围", exact: true }).selectOption({ label: "化学学院" })
   await grants.getByRole("button", { name: "添加授权", exact: true }).click()
   await expect(page.getByText("角色授权已保存", { exact: true })).toBeVisible()
+  await checkLayouts(page, "accounts")
   await page.getByRole("button", { name: "退出登录", exact: true }).click()
   await signIn(page, username, temporary)
   await expect(page.getByRole("heading", { name: "首次登录请修改密码", exact: true })).toBeVisible()
+  await checkLayouts(page, "first-password-change")
   await page.getByLabel("原临时密码", { exact: true }).fill(temporary)
   await page.getByLabel("新密码", { exact: true }).fill(temporary + "-changed")
   await page.getByRole("button", { name: "修改密码并重新登录", exact: true }).click()
@@ -112,6 +123,8 @@ test("教师班级真实名单、审批、协作、交接和归档", async ({ pa
   const code = unique("CLASS")
   const title = `界面合成班${code.slice(-6)}`
   await signIn(page, "teacher")
+  await expect(section(page, "课程目录").locator("article").first()).toBeVisible()
+  await checkLayouts(page, "courses")
   await page.getByRole("button", { name: "新建课程与首班", exact: true }).click()
   const creating = section(page, "新建课程目录与首班")
   await creating.getByLabel("目录与首班代码", { exact: true }).fill(code)
@@ -121,6 +134,7 @@ test("教师班级真实名单、审批、协作、交接和归档", async ({ pa
   const course = await (await creationResponse).json()
   await page.getByRole("button", { name: "进入新教学班", exact: true }).click()
   await expect(page.getByRole("heading", { name: title, exact: true })).toBeVisible()
+  await checkLayouts(page, "class-management")
   const settings = section(page, "班级设置")
   await settings.getByLabel("加入本班需要审批", { exact: true }).check()
   await settings.getByLabel("退出本班需要审批", { exact: true }).check()
@@ -151,7 +165,7 @@ test("教师班级真实名单、审批、协作、交接和归档", async ({ pa
   const staff = section(page, "教师协作")
   await staff.getByLabel(/^查找本校教师/).fill("teacher_eng")
   await staff.getByRole("button", { name: "查找教师", exact: true }).click()
-  await staff.getByLabel("选择教师", { exact: true }).selectOption({ label: "周老师（teacher_eng）" })
+  await staff.getByRole("combobox", { name: "选择教师", exact: true }).selectOption({ label: "周老师（teacher_eng）" })
   await staff.getByRole("button", { name: "添加为协作教师", exact: true }).click()
   await expect(staff.getByRole("cell", { name: "周老师", exact: true })).toBeVisible()
   const other = await context.newPage()
@@ -164,12 +178,37 @@ test("教师班级真实名单、审批、协作、交接和归档", async ({ pa
   await section(other, "学生名单").getByRole("button", { name: "移出本班", exact: true }).click()
   await expect(section(other, "学生名单").getByText("student", { exact: true })).toHaveCount(0)
   expect((await request.get(api + `/api/v1/courses/${course.id}`, { headers: { Authorization: `Bearer ${token}` } })).status()).toBe(404)
-  await staff.getByLabel("选择教师", { exact: true }).selectOption({ label: "周老师（teacher_eng）" })
+  await staff.getByRole("combobox", { name: "选择教师", exact: true }).selectOption({ label: "周老师（teacher_eng）" })
   await staff.getByRole("button", { name: "转交为主教师", exact: true }).click()
   await staff.getByRole("button", { name: "确认转交主教师", exact: true }).click()
   await expect(page.getByRole("heading", { name: "我的课程与教学班", exact: true })).toBeVisible()
   await expect(section(page, "有权访问的教学班").getByRole("heading", { name: title, exact: true })).toHaveCount(0)
   await other.getByRole("button", { name: "刷新本班数据", exact: true }).click()
+  await other.getByRole("button", { name: "归档本教学班", exact: true }).click()
+  await other.getByRole("button", { name: "确认归档", exact: true }).click()
+  await expect(other.getByText("已归档 · 历史只读", { exact: false })).toBeVisible()
+
+  // The former primary remains catalog owner, without access to the transferred class.
+  await page.getByLabel("名称或代码", { exact: true }).fill(code)
+  await page.getByRole("button", { name: "查询课程", exact: true }).click()
+  const directory = section(page, "课程目录").locator("article").filter({ has: page.getByRole("heading", { name: title, exact: true }) })
+  await directory.getByRole("button", { name: "在此目录开班", exact: true }).click()
+  const picker = section(page, "查找课程可指定的本校教师")
+  await picker.getByLabel("教师姓名或账号", { exact: true }).fill("teacher_eng")
+  await picker.getByRole("button", { name: "查找可指定教师", exact: true }).click()
+  await picker.getByRole("combobox", { name: "指定查找到的教师", exact: true }).selectOption({ label: "周老师（teacher_eng）" })
+  const delegated = section(page, `已有课程开班：${title}`)
+  await delegated.getByLabel("教学班代码", { exact: true }).fill(code + "_D")
+  await delegated.getByLabel("教学班名称", { exact: true }).fill(title + "委派")
+  await delegated.getByRole("button", { name: "确认创建教学班", exact: true }).click()
+  await expect(page.getByText("班级由指定主教师管理；目录负责人不会自动获得该班名单、成绩或私有资料权限。", { exact: true })).toBeVisible()
+  await expect(page.getByRole("button", { name: "进入新教学班", exact: true })).toHaveCount(0)
+  await expect(section(page, "有权访问的教学班").getByRole("heading", { name: title + "委派", exact: true })).toHaveCount(0)
+  await nav(other, "课程与教学班")
+  await other.getByLabel("名称或代码", { exact: true }).fill(code + "_D")
+  await other.getByRole("button", { name: "查询课程", exact: true }).click()
+  await section(other, "有权访问的教学班").getByRole("button", { name: "管理教学班", exact: true }).click()
+  await expect(other.getByRole("heading", { name: title + "委派", exact: true })).toBeVisible()
   await other.getByRole("button", { name: "归档本教学班", exact: true }).click()
   await other.getByRole("button", { name: "确认归档", exact: true }).click()
   await expect(other.getByText("已归档 · 历史只读", { exact: false })).toBeVisible()
@@ -181,10 +220,10 @@ test("管理员邀请与 1440/390 布局、失败重试", async ({ page }) => {
   await nav(page, "学生账号邀请")
   await section(page, "创建开通邀请").getByRole("button", { name: "生成学生账号邀请", exact: true }).click()
   await expect(page.getByText("本次生成的邀请码", { exact: true })).toBeVisible()
-  await page.screenshot({ path: path.join(import.meta.dirname, "../.artifacts/admin-1440.png"), fullPage: true })
+  await page.screenshot({ path: path.join(root, "others/reports/b1-components/admin-1440.png"), fullPage: true })
   await page.setViewportSize({ width: 390, height: 844 })
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy()
-  await page.screenshot({ path: path.join(import.meta.dirname, "../.artifacts/admin-390.png"), fullPage: true })
+  await page.screenshot({ path: path.join(root, "others/reports/b1-components/admin-390.png"), fullPage: true })
   await page.getByRole("button", { name: "撤销邀请", exact: true }).first().click()
   await expect(page.getByText("邀请已撤销", { exact: true })).toBeVisible()
   await page.route("**/api/v1/admin/accounts?**", route => route.abort("failed"))

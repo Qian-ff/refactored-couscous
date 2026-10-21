@@ -121,7 +121,7 @@ function ClassManagementBody(page: PageProps) {
             () => { setConfirmArchive(false); setIssued(null); refresh() }, "教学班已归档，历史保留", JSON.stringify(["class-archive", path, body]))
         }}>确认归档</button><button className="b1-button b1-secondary" type="button" onClick={() => setConfirmArchive(false)}>取消归档</button></div></div>}
       </Section>}
-      <Notice>正式考试、学习进度和培训记录将在 B2 接入；本页当前只提供 B1 教学管理。</Notice>
+      <Notice>正式考试、学习进度和培训记录暂未开放。本页提供教学班设置、名单和教师协作管理。</Notice>
     </>}
   </BusinessPage>
 }

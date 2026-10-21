@@ -93,6 +93,6 @@ function CoursesBody(page: PageProps) {
       {teachers.data && teachers.data.count > 0 && <Field label="指定查找到的教师"><select value={teacherChoice} onChange={event => setTeacherChoice(event.target.value)}><Options values={teachers.data.data.map(value => ({ id: value.id, name: `${value.display_name}（${value.username}）` }))} /></select></Field>}
     </Section>}
     {created && <Notice kind="success"><strong>{created.course.title} 已建立。</strong>{created.assignedToSelf ? <button type="button" className="b1-button b1-secondary" onClick={() => page.navigate(`${base}/classes/${created.course.id}`)}>进入新教学班</button> : <span>班级由指定主教师管理；目录负责人不会自动获得该班名单、成绩或私有资料权限。</span>}</Notice>}
-    <Notice>课件、题库与共享版本由 C 接入；正式考试和培训记录由 B2 接入。当前目录不代表已有共享课件。</Notice>
+    <Notice>课件、题库、正式考试和培训记录暂未开放。当前可以管理课程目录和教学班；共享资料开放后需经审核发布。</Notice>
   </BusinessPage>
 }
