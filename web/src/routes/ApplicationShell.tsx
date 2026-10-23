@@ -8,12 +8,16 @@ import { adminPages } from "../features/admin/pages"
 import { teachingPages } from "../features/teaching/pages"
 import { ProfilePage } from "../features/student/ProfilePage"
 import { StudentCoursesPage } from "../features/student/StudentCoursesPage"
+import { EnrollmentRequestsPage } from "../features/student/EnrollmentRequestsPage"
+import { StudentClassPage } from "../features/student/StudentClassPage"
 import { Brand, notifyAccount, PasswordPage, ServiceSettings } from "../components/labconnect/AccountEntry"
 import { Button, Dialog, Notice, StatePanel } from "../components/labconnect"
 
 export const productPages: readonly PageRegistration[] = [
   ...adminPages, ...teachingPages,
   { id: "d-student-courses", path: "/student/courses", title: "我的课程", workRoles: ["student"], component: StudentCoursesPage, navGroup: "courses" },
+  { id: "d-student-enrollments", path: "/student/enrollments", title: "班级申请与历史", workRoles: ["student"], component: EnrollmentRequestsPage, navGroup: "courses" },
+  { id: "d-student-class", path: "/student/courses/:courseId", title: "教学班", workRoles: ["student"], component: StudentClassPage },
   { id: "d-profile", path: "/account/profile", title: "本人资料", workRoles: ["student", "teacher", "administrator"], component: ProfilePage },
   { id: "d-password", path: "/account/password", title: "修改密码", workRoles: ["student", "teacher", "administrator"], component: () => <PasswordPage /> },
 ]

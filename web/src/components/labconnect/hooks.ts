@@ -4,16 +4,17 @@ import { isStaleRequest, message, sessionSnapshot, subscribeSession } from "../.
 
 export function useResource<T>(load: (signal: AbortSignal) => Promise<T>) {
   const [data, setData] = useState<T>(), [error, setError] = useState(""), [loading, setLoading] = useState(true), [revision, setRevision] = useState(0)
+  const [status, setStatus] = useState<number>()
   useEffect(() => {
     const controller = new AbortController(), generation = sessionSnapshot().generation
     const unsubscribe = subscribeSession(s => { if (s.generation !== generation) controller.abort() })
-    setData(undefined); setError(""); setLoading(true)
+    setData(undefined); setError(""); setStatus(undefined); setLoading(true)
     load(controller.signal).then(value => { if (!controller.signal.aborted && generation === sessionSnapshot().generation) setData(value) })
-      .catch(reason => { if (!controller.signal.aborted && !isStaleRequest(reason)) setError(message(reason)) })
+      .catch(reason => { if (!controller.signal.aborted && !isStaleRequest(reason)) { setError(message(reason)); setStatus(axios.isAxiosError(reason) ? reason.response?.status : undefined) } })
       .finally(() => { if (!controller.signal.aborted) setLoading(false) })
     return () => { controller.abort(); unsubscribe() }
   }, [load, revision])
-  return { data, error, loading, reload: () => setRevision(x => x + 1) }
+  return { data, error, status, loading, reload: () => setRevision(x => x + 1) }
 }
 /** Retain keys only for uncertain transport failures; payloads never leave memory. */
 export function useCommand() {
