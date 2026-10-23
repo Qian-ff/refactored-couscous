@@ -36,10 +36,15 @@ services:
       options: {max-size: "10m", max-file: "3"}
   api:
     <<: *api
+    environment:
+      LABCONNECT_ASR_CONFIG: /run/labconnect-asr/client.json
+      LABCONNECT_PLATFORM_AI_PROFILE: /opt/labconnect/others/runtime/ai/platform-ai.json
     command: [.venv/bin/python, -m, uvicorn, "app.main:app", --host, 0.0.0.0, --port, "8000", --proxy-headers, --forwarded-allow-ips, "*", --limit-concurrency, "12"]
     volumes:
       - files:/opt/labconnect/others/runtime/files
       - /opt/labconnect/shared/ai-master.key:/opt/labconnect/others/runtime/ai-master.key:ro
+      - /opt/labconnect/shared/asr:/run/labconnect-asr:ro
+      - /opt/labconnect/shared/ai:/opt/labconnect/others/runtime/ai:ro
     depends_on:
       db: {condition: service_healthy}
     healthcheck:

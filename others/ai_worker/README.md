@@ -1,6 +1,6 @@
 # 独立内容与语音 worker
 
-A0准备本项目独立Python3.13.16、sherpa-onnx1.13.8及同版本sherpa-onnx-core、numpy2.4.4 CPU环境，精确依赖/平台wheel哈希在uv.lock。业务服务继续Python3.14，B/D不安装worker，所有树共享主树环境与模型缓存，各树绑定自己的worker源码。C接续实现content/、speech/模块，E后续监控；目前没有假成功推理HTTP接口。
+A0准备本项目独立Python3.13.16、sherpa-onnx1.13.8及同版本sherpa-onnx-core、numpy2.4.4 CPU环境，精确依赖/平台wheel哈希在uv.lock。业务服务继续Python3.14，B/D不安装worker，所有树共享主树环境与模型缓存，各树绑定自己的worker源码。A补充transport/私有真实ASR传输与进程生命周期，部署/验证及C消费见[云端ASR交接](../docs/cloud-asr-handoff.md)。C接续实现content/、speech/业务，E后续监控；没有假成功推理HTTP接口。
 
 A在主树重新准备：
 

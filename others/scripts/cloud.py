@@ -168,9 +168,9 @@ def build():
     (target / "release.env").write_text(
         f"API_IMAGE={api_image}\nWEB_IMAGE={web_image}\nPOSTGRES_IMAGE={manifest['image_ids']['postgres']}\n",
         encoding="ascii", newline="\n")
-    for name in ("compose.yml", "release.sh"):
+    for name in ("compose.yml", "release.sh", "asr-session.py"):
         shutil.copy2(CLOUD / name, target / name)
-    names = ["images.tar.gz", "manifest.json", "release.env", "compose.yml", "release.sh"]
+    names = ["images.tar.gz", "manifest.json", "release.env", "compose.yml", "release.sh", "asr-session.py"]
     (target / "SHA256SUMS").write_text("".join(digest(target / name) + "  " + name + "\n" for name in names),
                                       encoding="ascii", newline="\n")
     for name in ("release.env", "release.sh", "SHA256SUMS"):
@@ -185,11 +185,13 @@ def build():
 def deploy(bundle):
     with tarfile.open(bundle) as archive:
         expected = {"images.tar.gz", "manifest.json", "release.env", "compose.yml", "release.sh", "SHA256SUMS"}
+        if "asr-session.py" in archive.getnames():
+            expected.add("asr-session.py")
         if set(archive.getnames()) != expected or any(not item.isfile() for item in archive):
             raise ValueError("Unexpected release archive contents")
         manifest = json.load(archive.extractfile("manifest.json"))
         sums = archive.extractfile("SHA256SUMS").read().decode("ascii").splitlines()
-        if len(sums) != 5 or {line.split("  ", 1)[-1] for line in sums} != expected - {"SHA256SUMS"}:
+        if len(sums) != len(expected) - 1 or {line.split("  ", 1)[-1] for line in sums} != expected - {"SHA256SUMS"}:
             raise ValueError("Incomplete release checksums")
         for line in sums:
             wanted, name = line.split("  ", 1)
@@ -214,6 +216,9 @@ def deploy(bundle):
                "chown 10001:10001 /opt/labconnect/shared/ai-master.key\nchmod 400 /opt/labconnect/shared/ai-master.key\n")
     else:
         print("Existing server secrets preserved.")
+    remote("set -eu\nmkdir -p /opt/labconnect/shared/asr /opt/labconnect/shared/ai\n"
+           "chown 10001:10001 /opt/labconnect/shared/asr /opt/labconnect/shared/ai\n"
+           "chmod 700 /opt/labconnect/shared/asr /opt/labconnect/shared/ai\n")
     target = REMOTE_ROOT + "/incoming/" + sha + ".tar"
     upload(bundle, target)
     remote("set -euo pipefail\nsha=$1\ndigest=$2\nroot=/opt/labconnect\n"
@@ -285,6 +290,40 @@ docker compose --env-file /opt/labconnect/shared/cloud.env --env-file "$release/
 """, value)
 
 
+def provision_ai():
+    """Initial encrypted platform profile only. A later replacement needs C's test/enable workflow."""
+    import sys
+    run([sys.executable, ROOT / "others/scripts/shared_env.py", "backend", "app.core.cloud_setup", "prepare"], cwd=ROOT)
+    local = RUNTIME / "secrets/platform-ai.json"
+    profile = json.loads(local.read_text(encoding="utf-8"))
+    checksum = digest(RUNTIME / "secrets/ai-master.key")
+    result = remote(r'''set -eu
+python3 - "$1" "$2" <<'PY'
+import hashlib,json,os,sys
+from pathlib import Path
+root=Path('/opt/labconnect/shared')
+if hashlib.sha256((root/'ai-master.key').read_bytes()).hexdigest()!=sys.argv[1]:
+    raise SystemExit('Cloud encryption key differs from the project copy; preserved')
+directory=root/'ai'
+directory.mkdir(exist_ok=True)
+os.chown(directory,10001,10001)
+directory.chmod(0o700)
+active=directory/'platform-ai.json'
+if active.exists():
+    if json.loads(active.read_text())['revision']!=sys.argv[2]:
+        raise SystemExit('Different active profile preserved; use the tested revision/enable workflow')
+    print('configured')
+else: print('empty')
+PY
+''', checksum, profile["revision"], capture=True)
+    if result.stdout.strip() == b"empty":
+        upload(local, REMOTE_ROOT + "/shared/ai/platform-ai.pending.json")
+        remote("set -eu\nchown 10001:10001 /opt/labconnect/shared/ai/platform-ai.pending.json\n"
+               "chmod 400 /opt/labconnect/shared/ai/platform-ai.pending.json\n"
+               "mv /opt/labconnect/shared/ai/platform-ai.pending.json /opt/labconnect/shared/ai/platform-ai.json\n")
+    print("Encrypted cloud platform profile prepared; school selections remain unconfigured.")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -297,6 +336,8 @@ def main():
     sub.add_parser("status")
     sub.add_parser("backup")
     sub.add_parser("sync-cors")
+    sub.add_parser("provision-ai")
+    sub.add_parser("probe-ai")
     verify_parser = sub.add_parser("verify")
     verify_parser.add_argument("url")
     args = parser.parse_args()
@@ -314,6 +355,10 @@ def main():
         verify(args.url)
     elif args.command == "sync-cors":
         sync_cors()
+    elif args.command == "provision-ai":
+        provision_ai()
+    elif args.command == "probe-ai":
+        remote("docker exec labconnect-cloud-api-1 .venv/bin/python -m app.core.cloud_setup probe\n")
 
 
 if __name__ == "__main__":

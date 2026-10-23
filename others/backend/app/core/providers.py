@@ -110,7 +110,8 @@ def open_key(ciphertext: str, *, scope: str, revision: UUID, key: bytes) -> Secr
 
 def platform_profile() -> EncryptedProfile:
     try:
-        raw = (shared_root() / "others/runtime/platform-ai.json").read_text(encoding="utf-8")
+        path = Path(os.environ.get("LABCONNECT_PLATFORM_AI_PROFILE", shared_root() / "others/runtime/platform-ai.json"))
+        raw = path.read_text(encoding="utf-8")
     except FileNotFoundError as error:
         raise ProviderNotConfigured("平台默认 AI 尚未配置") from error
     return EncryptedProfile.model_validate_json(raw)
