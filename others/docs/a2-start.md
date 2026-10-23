@@ -6,17 +6,19 @@
 
 ## 固定顺序
 
-2026-10-23当前更新：A接收D第二批58ab4958e62ca50671be921aa4ce91c9e0c0c1e5，合并1bcab0d071de53010c06e7f593fde3f0f6781bcd；[既有UI已通过A集成验收](existing-ui-acceptance.md)，发布existing-ui-accepted本地标签，完整SHA用git rev-parse 'existing-ui-accepted^{}'核验。契约0.3.2，包含student-relations-ready与b-ui-integrated；原D Goal已交付，不重复执行。当前下一步为A完成云端API/ASR接入前置，再单独发布C开工基线；C/B2仍未放行。
+2026-10-23当前更新：既有UI与[云端API/ASR接入前置](cloud-asr-handoff.md)已通过A验收，**C允许开工，B2仍等待C交付经A接收**。最新C开工标签c-start-ready，完整SHA用`git rev-parse 'c-start-ready^{}'`核验；C保留本树工作后合并，不覆盖已有提交。云端实际源码717e1d0e5f88071c52b361cf3fa1c3bb09d13697，契约0.3.2，迁移b1c0e0a00001；其后交接/工具提交另计。原D Goal已交付，不重复执行。
+
+A已接收D第二批58ab4958e62ca50671be921aa4ce91c9e0c0c1e5，合并1bcab0d071de53010c06e7f593fde3f0f6781bcd；[existing-ui-accepted](existing-ui-acceptance.md)、student-relations-ready与b-ui-integrated等标签保留原历史位置。
 
 B展示迁移6682ec37a2543e9e50a1bf400a8d70057351c807和D公共组件/学生既有入口现已集成；旧b-ui-integrated、d-ui-components-ready及其他标签保持历史位置。本人关系接口与pnpm恢复历史见[0.3.2依赖交接](student-relations-handoff.md)，本轮正式入口为Open-DUI.cmd。
 
-B1最终集成时的真实契约为0.3.1，当前为0.3.2；UI-2026.10-v1批准与冻结d17b342c53fc054bd298bee356143d3b3ab77af6保持原始字节。登记见[辅助任务](../contracts/auxiliary-tasks.json)。existing_ui_accepted_by_A=true，C_B2_new_features_allowed=false，区分UI验收与后续环境放行。a2-ready和b1-ready保留历史位置。
+B1最终集成时的真实契约为0.3.1，当前为0.3.2；UI-2026.10-v1批准与冻结d17b342c53fc054bd298bee356143d3b3ab77af6保持原始字节。当前放行见[辅助任务](../contracts/auxiliary-tasks.json)的product_migration：existing_ui_accepted_by_A=true、C_new_features_allowed=true、B2_new_features_allowed=false。原聚合C_B2门禁已拆为逐角色字段，历史交接中的false不覆盖当前C放行。
 
 1. **A0公共执行基线**：兼容CourseCatalog/教学班、工作身份/学生互斥、前端会话和页面/预览协议、真实0.2.0 SDK、CORS、共享依赖/ASR与测试归属。实际检查见[a0-handoff.md](a0-handoff.md)。
 2. **B1（已完成）**：组织账号、目录班级、名单/审批/协作/交接/归档、授权服务和教师/管理组件；A已集成并发布b1-ready=1e1011b4ff2e3c5a66b22492fb87a671e9699584。
 3. **网页图片批准（已完成）**：用户明确回复“批准 v1，继续移动稿与规范”，绑定桌面b67ad77cd49c2b5f99d2037e5828c29433ea66a6；[批准证据](../design/ui-redesign/approval.json)已由A核对。
 4. **规范冻结（已接收）**：390px移动稿、视觉/组件/状态规范、功能映射及许可已补齐；最终冻结d17b342c53fc054bd298bee356143d3b3ab77af6，清单141文件，完整设计142文件，A发布ui-redesign-ready基线。
-5. **D-UI → A验收（已通过）**：公共组件、B展示迁移及D学生加退班/历史均已接收，A独立回归并重建实测客户端，补齐安卓系统返回/软键盘回归。见[实际验收](existing-ui-acceptance.md)。当前仍需A完成C所需云端API/ASR环境前置并另发C开工完整SHA；不因本标签提前实现或放行题库/考试/助手新业务。
+5. **D-UI → A验收（已通过）**：公共组件、B展示迁移及D学生加退班/历史均已接收，A独立回归并重建实测客户端，补齐安卓系统返回/软键盘回归。见[实际验收](existing-ui-acceptance.md)。A已另行完成云端API/ASR环境并发布c-start-ready；不把环境就绪冒称题库/考试/助手业务完成。
 6. **C**：授权资料、分层库、审核固定版本/关卡、搜索、学校AI设置和助手。按[悬浮助手交接](assistant-floating-handoff.md)提供内容/个人历史/固定范围/语音及宿主回调，取消独立聊天页计划；D仍唯一宿主。教师账号完成真实问答/中文语音；B2状态未有时学生辅导暂停，避免循环等待。
 7. **B2与C联合验证**：正式作答/保存/续答/超时/判分/进度/记录，账号级AI考试暂停与恢复，交D稳定真实接口。
 8. **D后续接入**：完整三角色工作台、真实资料搜索、六关互动预览与学习考试，沿用批准风格及已有壳；独立测试范围web/tests/d-learning/。

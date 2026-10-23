@@ -58,6 +58,8 @@ app/core/providers.py 已提供 ProviderSpec、EncryptedProfile、SchoolProvider
 
 业务 Python 3.14 与 ASR worker Python3.13分离，共用一份 CPU sherpa-onnx1.13.8 / Paraformer 缓存，来源哈希见 others/ai_worker/models.lock.json。C 校验真实 WAV 头、声道1、16kHz、PCM16、长度/大小；不把 WebM 改后缀当 WAV。C 完成识别、文字确认、检索问答及系统 TTS 协作；独立 worker 示例识别不等于网页/Windows/安卓采集完成。
 
+A已发布[cloud-asr-handoff](../docs/cloud-asr-handoff.md)的内部labconnect-asr-1适配：app.core.asr_client.AsrClient，最多30秒/964096字节、单推理、独立服务key、取消/超时回收子进程、结果TTL60秒。云端走SSH Unix套接字，本机角色树复用A的loopback配置；没有新增公共HTTP或SDK。C绑定业务task/授权/考试gate，服务地址与key只由A基础设施配置，不作为学校AI地址或前端参数；A维护transport/，C保持speech/content所有权。
+
 PlatformBridge 约定 permission/start/stop/cancelRecording、speak/stopSpeaking、openCitation、downloadMaterial。采集不满足格式时用真实解码/重采样，失败明确反馈。先显示识别文字供用户确认才发送问答，支持取消和停止；原始录音处理后默认删除。原生权限/文件选择/下载/引用跳转由 A/F 在 C/D 交付后适配并逐平台实测，本轮只声明协议。
 
 问答仅检索当前有权且允许云处理资料，引用固定版本页/段落；资料不足明确说明。无模型、配额/网络/设备失败及中文语音不可用均真实反馈。原始监控媒体不发送云端，E只交去身份事件摘要；合成摘要可测草稿，不能称完整监控已完成。

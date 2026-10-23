@@ -32,7 +32,7 @@ python .\others\scripts\shared_env.py probe-worker
 python .\others\scripts\shared_env.py worker speech.实际模块
 ~~~
 
-worker命令只接受当前树others/ai_worker内的实际模块，C交付前只有环境探测，没有假推理模块。它设置LABCONNECT_SHARED_ROOT和LABCONNECT_MODEL_ROOT，模型一份、源码当前树；没有业务.env或云密钥直通给worker。重型任务调度由后续实现。
+worker命令只接受当前树others/ai_worker内的实际模块。A已提供transport/私有真实ASR及进程取消/超时，各树业务通过app.core.asr_client消费主树忽略配置，见[云端ASR交接](cloud-asr-handoff.md)；C新增content/、speech/仍运行本树源码。worker入口设置LABCONNECT_SHARED_ROOT和LABCONNECT_MODEL_ROOT，模型一份；没有业务.env或云AI密钥直通给worker。A唯一维护共享服务/SSH通道，子树不另起占用18765的实例。
 
 所有共享pytest入口使用同一个本机专用测试库且加跨进程锁，冲突明确拒绝，稍后重试；不并行互删表，不用演示库测试。根others/backend/conftest.py覆盖tests及app/domains，领域夹具已以真实PG验证。测试命令用--tb=short避免驱动栈局部变量暴露配置；报告也不保存密钥。需要独立并行测试库先由A分配。
 

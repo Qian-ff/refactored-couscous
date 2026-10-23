@@ -6,7 +6,7 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：D二次整合已接收，既有UI通过A集成验收。** [existing-ui-accepted验收交接](others/docs/existing-ui-acceptance.md)包含学生加退班、申请/撤销、当前班级详情和本人关系历史，以及安卓返回修复。真实契约0.3.2；双击Open-DUI.cmd打开正式网页。C/B2仍待A完成云端API/ASR接入前置后单独放行；题库、考试、助手、监控及未来工作台尚未开放。[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
+**当前阶段：既有UI与云端API/ASR前置已通过A验收，C允许开工。** [c-start-ready交接](others/docs/cloud-asr-handoff.md)记录实际部署、AI/语音私有连接、鉴权/超时/取消/清理与故障恢复；B2仍等C交付后由A另行放行。真实契约0.3.2；双击Open-DUI.cmd打开现有网页，Start-CloudASR.cmd恢复本机识别节点。题库、考试、助手、监控及未来工作台尚未开放。[既有UI](others/docs/existing-ui-acceptance.md)、[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
 
 ## 从这里开始
 
@@ -25,6 +25,7 @@
 - [阶段Goal](others/docs/ai/README.md)：已交付B1、当前D-UI和依赖公共组件的B-UI，以及后续C/B2/完整D目标。
 - [共用本机环境](others/docs/shared-environment.md)：复用主工作区配置、Python 依赖和下载缓存。
 - [ECS 云端联调部署](others/deploy/cloud/README.md)：从干净主线打包、独立凭据、HTTPS、数据库备份与迁移；实际地址、版本与三端验证见[云端交接](others/docs/cloud-handoff.md)。
+- [C开工与云端ASR前置](others/docs/cloud-asr-handoff.md)：c-start-ready基线、私有适配、一键启停、云端/本地验证及后续权限边界。
 - [本机环境](others/docs/environment.md)：实际工具检查、会话级 JDK/SDK 设置与未验证项。
 - [七个 AI 聊天任务](others/docs/ai/README.md)：复制对应任务书到聊天。
 - [Git 与分支协作](others/docs/git-workflow.md)：每轮提交、独立工作区和合并。

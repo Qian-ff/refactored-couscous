@@ -1,6 +1,6 @@
 # B：分阶段任务书
 
-当前B1及B-UI展示迁移已交A接收；最终B提交6682ec37a2543e9e50a1bf400a8d70057351c807，接续以[b-ui-integrated交接](../b-ui-integration-handoff.md)为准。B保留业务文件所有权，配合后续具体问题，不重复执行下面历史迁移目标。D二次整合、A/F既有UI验收后才进入C，C经A集成后另启B2。公共协议见[模块协议](../../contracts/a2-protocols.md)，历史检查见[A0](../a0-handoff.md)。
+当前B1及B-UI展示迁移已交A接收；最终B提交6682ec37a2543e9e50a1bf400a8d70057351c807，接续以[b-ui-integrated交接](../b-ui-integration-handoff.md)为准。B保留业务文件所有权，配合后续具体问题，不重复执行下面历史迁移目标。既有UI和[云端API/ASR前置](../cloud-asr-handoff.md)现已验收，c-start-ready允许C开工；B2仍等C交付经A接收后另行放行。公共协议见[模块协议](../../contracts/a2-protocols.md)，历史检查见[A0](../a0-handoff.md)。
 
 ## B-UI Goal（已交付，保留历史）
 

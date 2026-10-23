@@ -1,6 +1,6 @@
 # 既有 UI 改版协作与批准门禁
 
-2026-10-23产品状态：[既有UI已通过A验收](existing-ui-acceptance.md)，标签existing-ui-accepted；批准/冻结记录保持原始字节，existing_ui_accepted_by_A=true。C/B2仍待A完成云端API/ASR环境前置并明确发布开工SHA，设计资料批准与产品验收、环境放行分别记录。
+2026-10-23产品状态：[既有UI已通过A验收](existing-ui-acceptance.md)，且[云端API/ASR前置](cloud-asr-handoff.md)已验收，c-start-ready允许C开工；B2仍等C交付。批准/冻结记录保持原始字节，existing_ui_accepted_by_A=true。设计资料批准、产品验收与当前逐角色环境放行分别记录，下文保留历史设计任务范围。
 
 2026-10-21，用户在设计聊天明确选择：保留蓝绿、实验室轻立体，先给全部已有页面的网页图片，批准后补移动稿和规范，交原D实施；既有UI经A验收后再进入C。当前阶段顺序以[a2-start](a2-start.md)为唯一入口。
 
@@ -19,7 +19,7 @@
 | 已接收冻结 | d17b342c53fc054bd298bee356143d3b3ab77af6；清单141文件 |
 | 执行基线 | 本地ui-redesign-ready；先D公共组件，再B展示迁移及D正式整合，A/F后续实测 |
 
-已批准桌面包含53个1440px页面/角色/弹窗/状态画面及2张长表单补图，冻结包另有16组390px移动参考和完整规范。A已接收进main：[网页图册](../design/ui-redesign/index.html)、[移动图册](../design/ui-redesign/mobile-gallery.html)、[冻结交接](../design/ui-redesign/handoff.md)。批准与冻结来源分别记录，当前仍未完成产品迁移；具体文件唯一责任方及接续见[执行交接](ui-redesign-execution.md)。
+已批准桌面包含53个1440px页面/角色/弹窗/状态画面及2张长表单补图，冻结包另有16组390px移动参考和完整规范。A已接收进main：[网页图册](../design/ui-redesign/index.html)、[移动图册](../design/ui-redesign/mobile-gallery.html)、[冻结交接](../design/ui-redesign/handoff.md)。批准与冻结来源分别记录；既有UI产品迁移现已验收，历史文件分工见[执行交接](ui-redesign-execution.md)。
 
 设计聊天每轮写入前显式指定设计工作树，核对git rev-parse --show-toplevel、当前分支、暂存区及本轮文件。聊天显示的工作目录仍可能是主树，不能据聊天名称推断隔离。只逐文件暂存上述前缀并本地提交；现有workflow.py的业务角色命令仍仅面向A–G，设计任务不用A或D身份绕过分支校验。A接收前按Git登记及main...候选提交的差异核对范围，不覆盖设计树未提交改动。
 

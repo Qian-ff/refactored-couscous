@@ -30,6 +30,6 @@
 
 ## 阶段与后续
 
-existing_ui_accepted_by_A已为true。C_B2_new_features_allowed仍为false：按既定顺序，A还需完成云端API与ASR worker接入的部署/鉴权/连接/超时/清理前置，再另发允许C开工的完整SHA。既有UI验收标签只证明本次产品界面与运行范围，不能当作C开工或助手完成的标签。
+existing_ui_accepted_by_A已为true。本标签发布时尚待云端API/ASR前置；**后续A现已完成并另发[c-start-ready](cloud-asr-handoff.md)，允许C开工，B2仍等C交付。** 当前逐角色门禁以auxiliary-tasks.json的product_migration及a2-start为准。既有UI验收标签只证明本次产品界面与运行范围，不能当作助手完成的标签。
 
 本轮未自动唤醒聊天、未更新云端、未推送；尚未到C/B2/完整D/A2完成后的checkpoint-2节点。实体手机、麦克风/TTS、完整助手、正式安装器/签名和完整监控按原职责后续验收。

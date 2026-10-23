@@ -41,7 +41,7 @@
         "execution_baseline_ref": "ui-redesign-ready"
       },
       "product_migration": {
-        "status": "existing_ui_accepted_pending_C_environment_release",
+        "status": "existing_ui_and_C_environment_accepted",
         "d_foundation_commit": "b61626a36caca964bff83142424833e1b0eafea5",
         "component_baseline_ref": "d-ui-components-ready",
         "b_ui_commit": "6682ec37a2543e9e50a1bf400a8d70057351c807",
@@ -51,8 +51,14 @@
         "acceptance_baseline_ref": "existing-ui-accepted",
         "acceptance_handoff": "others/docs/existing-ui-acceptance.md",
         "existing_ui_accepted_by_A": true,
-        "C_B2_new_features_allowed": false,
-        "C_release_remaining": "A cloud API/ASR worker deployment, authentication, connectivity, timeout and cleanup readiness"
+        "C_new_features_allowed": true,
+        "B2_new_features_allowed": false,
+        "C_release_approved_by": "A",
+        "C_release_baseline_ref": "c-start-ready",
+        "C_environment_source_sha": "717e1d0e5f88071c52b361cf3fa1c3bb09d13697",
+        "C_environment_handoff": "others/docs/cloud-asr-handoff.md",
+        "C_release_remaining": null,
+        "B2_release_condition": "C delivery accepted by A, followed by an explicit B2 integration baseline"
       }
     },
     "ui-assistant-floating-v1": {
@@ -104,9 +110,13 @@
         "desktop_images": 55,
         "original_bytes_required": true
       },
-      "product_implementation_allowed": false,
+      "design_receipt_alone_authorizes_product_implementation": false,
+      "implementation_release_source": "tasks.ui-design-v1.product_migration",
+      "C_content_history_voice_adapters_allowed": true,
+      "D_host_implementation_allowed": false,
+      "F_native_extension_allowed": false,
       "existing_ui_gate_changed": false,
-      "C_B2_new_features_allowed": false
+      "B2_new_features_allowed": false
     }
   }
 }
