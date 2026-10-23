@@ -15,6 +15,8 @@
 
 检查：共享3.13环境执行content.test_protocol，5项通过；共享Ruff检查worker content目录通过；git diff --check通过。仅证明协议合成测试，不是四格式解析、PG或受限上传验收。
 
-下一步：完成四格式CLI与真实夹具、ParseRunner能力协议、领域模型/授权查询/服务/上传/任务/审核候选及测试和c-02-integration.md，再交M1候选给A。M1前不实现依赖尚未生成SDK的前端。
+第二轮增加四格式CLI候选、严格TXT编码解析、OOXML实际读取预算/路径/宏/DTD预检及content.verify。14项可信合成测试通过；verify因缺解析依赖退出1，报告明确四格式正常集成和sandbox尚未通过。CLI不是受限运行适配器。依赖/许可及边界见worker content/README.md。
+
+下一步：完善真实四格式夹具、ParseRunner能力协议、领域模型/授权查询/服务/上传/任务/审核候选及测试和c-02-integration.md，再交M1候选给A。M1前不实现依赖尚未生成SDK的前端。
 
 未完成：格式解析、沙箱运行、领域业务、真实PG/HTTP、迁移/公共接入/SDK、前端和M2/M3全部待续。不得标记整包完成。未安装依赖或执行迁移/云模型。
