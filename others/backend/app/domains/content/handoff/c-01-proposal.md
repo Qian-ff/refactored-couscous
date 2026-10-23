@@ -86,13 +86,16 @@ QuestionSource 使用独立 id UUID 主键；对(question_version_id,material_ve
 
 | 动作 | 前置 | 结果及并发约束 |
 | --- | --- | --- |
-| 编辑草稿 | 有目标 submit 权、revision 匹配 | revision+1；过期409，不改已有冻结版本 |
-| 提审 | 校验题型、答案、来源及目标 submit | 冻结 QuestionVersion；新建 submitted Review；幂等重复不增版本 |
+| 创建草稿 | 对有权既有库有 S | 新建本人 Question/Draft；不能凭 S 创建或管理整个库 |
+| 读取草稿 | B 对当前真实草稿的 R | 仅返回当前可读草稿；staff 或 S 本身不授予他人草稿读取权 |
+| 编辑/删除草稿 | 当前资源 R，且（当前范围 S + 有权创建者，或该范围 V）；revision 匹配 | 编辑 revision+1；仅删除可编辑草稿，保留冻结/已引用版本；过期409 |
+| 提审 | 当前草稿 R，且（当前范围 S + 有权创建者，或该范围 V）；校验题型、答案、来源及目标 submit | 冻结 QuestionVersion；新建 submitted Review；幂等重复不增版本 |
 | 审核 | 当前目标 review 权、同一 submitted revision | approved/rejected，记录审核人/时间/理由；改内容必须新草稿重新提审 |
 | 发布 | approved 的确切版本/目标、当前 review 权 | 创建 Publication；再次校验来源/正文/附件/引用可公开性；不靠隐藏 URL 来公开私有内容 |
 | 停用 | 目标 review 权、revision 匹配 | binding.active=false；阻止新任务选用；旧试卷快照不漂移；访问仍实时判权 |
-| 引用 | 当前可读固定已发布版本及目标 submit | 指定版本提交目标题库审核；不追随最新版本，不把来源文件自动共享 |
-| 复制 | 当前可读版本及目标 submit、来源许可允许 | 新 Question+Draft；版本/许可来源链保留，不继承审批、公开范围或源文件访问 |
+| 教职读取已发布版本 | staff 且当前固定版本 R，不要求源库 S | 返回有权教职固定版本；不授予源库管理/编辑权，学生仍无原始答案 |
+| 引用 | 源固定已发布版本 R + 目标 S + 来源许可允许，不要求源库 S | 指定版本提交目标题库审核；不追随最新版本，不把来源文件自动共享或修改源库 |
+| 复制 | 源固定已发布版本 R + 目标 S + 来源许可允许，不要求源库 S | 新 Question+Draft；版本/许可来源链保留，不继承审批、公开范围或源文件访问，不修改源库 |
 | 资料重解析 | 当前资料权限和新任务 | 新 MaterialVersion，旧 ContentRef 永远锚定原版本 |
 | Job 开始 | queued、当前权限有效 | running；锁/条件更新确保单重任务 |
 | Job 完成 | running、generation匹配、权限及对象仍有效 | succeeded/failed；原子写结果；超时为 failed + TIMEOUT |
@@ -106,6 +109,8 @@ ResourceColumns.published 从“当前版本在目标题库的 active Publicatio
 
 R=read，S=submit，V=review。以下是 B 实现的摘要，不是另一套权限引擎；具体请求仍用 CurrentIdentity、read_resource_predicate 和 resource_access。
 
+矩阵 R/S/V 分别表示资源读取、内容提交、范围审核/管理，不是三个可互相替代的角色。库查询按 R；创建库、改名、启停等整库容器管理必须具有真实目标范围 V 并验证实际父级授权。仅 S 教师可向有权既有库提交本人内容，不能管理整个库；班级任课教师或目录负责人若已具有 B 的 V，仍按该范围管理，不新增角色。
+
 | scope | 平台运维（当前管理员） | 本校学校管理员 | 有范围学院管理员 | 当前教师 | 当前学生 |
 | --- | --- | --- | --- | --- | --- |
 | platform_public | R/S/V | 已发布 R | 已发布 R | 已发布 R | 仅已发布 audience=all 的安全资料 R |
@@ -117,6 +122,8 @@ R=read，S=submit，V=review。以下是 B 实现的摘要，不是另一套权�
 - identity.grants 已按当前身份收窄；不能用 all_grants。teacher/admin 兼任按当前身份重新判定；学生账号互斥继续由 B 保障。
 - 题库版本、原始题库导入/导出强制 staff；R 不是“学生可读答案”。学生读取普通发布课件不依赖 B2 gate。正式学生短课由 B2 校验任务/解锁后消费安全 DTO。
 - B 允许目录负责人和本班任课教师按现有权限审核，不新增作者审核人分离门槛。
+- 草稿创建用 S，读取用 B 当前资源 R；修改/删除要求当前 R 且（当前范围 S + 有权创建者，或该范围 V）。不能凭 S 读取、修改他人不可读草稿。已发布固定题目版本的教职读取只需 staff 且 R，不要求源库 S；源 R + 目标 S + 来源许可允许引用/复制，不能修改源库。
+- 创建者由当前持久 Question.creator_id 与 identity.user.id 比对，不信任请求中的 creator_id；管理员/教师身份名称本身不替代当前范围的 R/S/V。
 - scope/父级/published 等均由服务器真实对象构造，不把客户端 ResourceDescriptor 当凭据。新建时允许请求目标题库 ID，组织归属从真实库及父级加载。
 - 搜索：以真实版本/发布绑定拼 ResourceColumns，先授权，再按版本去重、计数、分页、片段/建议。详情、下载、审核、任务结果再次 resource_access，并检查版本/来源/文件不变量。
 - 退出一个班仍在同目录另一合法班时可保留目录共享权，不能保留退出班私有权；归档、撤权、停用在旧会话下同样生效。
@@ -127,16 +134,21 @@ R=read，S=submit，V=review。以下是 B 实现的摘要，不是另一套权�
 
 | 候选操作 | 请求字段 | 返回白名单 | 权限 / 幂等 / revision / 错误 |
 | --- | --- | --- | --- |
-| 库查询/创建/编辑 | query,scope,parent_id,title,audience；编辑revision | id,title,scope,有权父级,能力,revision | 查询按R；创建/管理按S/V且父级服务端推导；写幂等；归属不可改；422组合错误、409冲突 |
+| 库查询 | query,scope,parent_id | id,title,scope,有权父级,能力,revision | 按 R；scope/父级由真实对象校验，不因查询可读而授予管理权 |
+| 创建库 | scope,parent_id,title,audience | id,title,scope,真实父级,能力,revision | 真实目标范围 V + 实际父级授权，不能仅 S；服务端推导父级；写幂等；422组合错误 |
+| 库改名/启停 | library_id,title/active,revision | id,title,active,revision | 当前目标范围 V + 实际父级授权，不能仅 S；写幂等；归属不可改；409修订冲突 |
 | 文件上传/知识点输入 | library_id；file或knowledge_text；来源/许可/allow_cloud | material_id,version_id,input_kind,extraction_state,job_id | S；幂等键及输入hash；格式/大小422，无权限拒绝；allow_cloud仍须学校政策允许 |
 | 资料版本/页段查询 | material_id,version_id,定位/分页 | id,version,title,类型,状态,有权文本/定位 | R且具体版本授权；无权对象不返回私有标题；未提取只给真实状态，不造正文 |
 | 预览/下载 | material_id,version_id | 安全内容流/文件名与类型，或授权的短期受控地址 | 二次R；不得任意路径/任意URL；撤权/版本不可用拒绝，失败不回退别版本 |
-| 草稿CRUD/教职版本读取 | library/question_id,payload,source_refs,revision | 草稿/教职题型、题干、选项、答案解析、来源、revision | staff且S/范围管理；写幂等；编辑409；学生无此接口 |
+| 草稿创建 | library_id,payload,source_refs | question_id,本人草稿题干/选项/答案解析/来源,revision | staff 且既有目标库 S；写幂等，不授予库管理权 |
+| 草稿读取 | question_id | 当前可读草稿题型/题干/选项/答案解析/来源,revision | staff 且 B 对真实草稿的当前 R；不能仅凭 S 读取他人草稿 |
+| 草稿修改/删除 | question_id,payload/source_refs,revision | 修改后的草稿白名单及revision，或最小删除回执 | staff、当前资源 R，且（当前范围 S + 有权创建者，或该范围 V）；写幂等/冲突409；冻结及已引用版本不删除 |
+| 教职读取已发布固定版本 | question_id,version_id | 有权固定版本题型/题干/选项/答案解析/来源 | staff 且该已发布固定版本 R，不要求源库 S；不授予源库修改/整库管理权；学生无此接口 |
 | 导入预检 | target_library_id,format=csv/xlsx,file | batch_id,input_hash,revision,有效数/重复/逐行错误/预览 | S/staff；校验四题型和来源，零题目写入；不能执行公式/宏；限制交A文件政策 |
 | 导入确认 | batch_id,input_hash,revision | batch_id,created_draft_ids,count | 再验身份/目标/内容，事务内原子、幂等；无效422、变化409、撤权拒绝 |
 | 导出 | library_id,version_ids,format | job_id；结果经鉴权下载 | staff R，每条再次鉴权；幂等；不允许学校参数扩大范围或导出学生身份答案 |
-| 提审/决定/发布/停用 | version_id,target_library_id；review_id/decision/reason；revision | review/publication id,state,version_id,target,revision,时间 | S提交、V审核发布停用；写幂等；载荷不同同键/状态或revision变化409；来源不可公开拒绝 |
-| 引用/复制 | source_version_id,target_library_id,revision | 新review或新question/draft id、来源链 | 源R+目标S+许可；幂等；复制不继承发布；不得将私有来源仅改标签后公开 |
+| 提审/决定/发布/停用 | version_id,target_library_id；review_id/decision/reason；revision | review/publication id,state,version_id,target,revision,时间 | 提审须当前草稿 R 且（当前范围 S + 有权创建者，或该范围 V），并具目标 S；V审核发布停用；写幂等；载荷不同同键/状态或revision变化409；来源不可公开拒绝 |
+| 引用/复制 | source_version_id,target_library_id,revision | 新review或新question/draft id、来源链 | 源固定已发布版本 R + 目标 S + 来源许可，不要求源库 S；幂等；复制不继承发布，不修改源库；不得将私有来源仅改标签后公开 |
 | 资料/教职题库搜索 | q,scope/library/course/type/knowledge/updated筛选,page,page_size,sort | authorized_total,items安全投影,片段,定位,稳定游标/分页 | 先R再count/page；staff题库；参数长度/分页上限/排序白名单由A接入锁定；422无效参数 |
 | Job读取/取消/结果 | job_id；取消请求代次 | id,state,progress,error_code,经授权结果引用 | 创建者当前身份/范围或获准管理者；结果再验；取消幂等；不返回原始供应商错误/文件路径 |
 
@@ -205,9 +217,11 @@ A在每包执行工作单中锁定技术配额/名称及责任文件；C不得�
 | T12 | 未知考试gate使学生AI不可用而普通资料可读；后续B2真实考试跨班/设备暂停由联合验收补齐 |
 | T13 | Job取消与完成竞争，canceled不复活；超时failed；重启中断真实反馈；worker失效不阻塞普通业务 |
 | T14 | 文件损坏/扫描/加密/类型冒充/超额明确失败，页段不伪造；源文件和导出结果访问再次鉴权 |
+| T15 | 仅有源 R、没有源 S 的教师可读取公共已发布固定题目版本，在来源许可允许且目标 S 时可引用/复制到授权目标；修改源题或管理源库拒绝，学生仍不能读原始题库答案 |
+| T16 | 仅 S 教师可在有权既有库创建本人草稿；创建库/改名/启停等整库管理拒绝，读取或修改他人不可读草稿拒绝；具有范围 V 的管理者在当前 R 及真实父级授权下管理库和草稿成功 |
 
 ## 9. C-01本包验收与停止条件
 
-本包仅交此提案；检查基线/所有权/依赖输入、准备与文档引用、diff空白、唯一正式文件范围，并在忽略reports/c-01保存命令及覆盖证据。不得把后续T01–T14或既有A/B测试算作本包业务通过。
+本包仅交此提案；检查基线/所有权/依赖输入、准备与文档引用、diff空白、唯一正式文件范围，并在忽略reports/c-01保存命令及覆盖证据。不得把后续T01–T16或既有A/B测试算作本包业务通过。
 
 设置、基线、权限、跨模块或新业务取舍冲突交A；普通局部失败最多修复复查三轮。每轮修改本地提交，C不推送。交A完整SHA、文件路径、检查结果和技术接收项；按handoff生成临时脱敏摘要。A接收后另行批准C-02，本包不自动继续整包Goal。
