@@ -10,4 +10,4 @@ python .\others\scripts\check_preparation.py
 python .\others\scripts\shared_env.py probe
 ~~~
 
-准备检查只证明文件、归属和工具一致。业务/网页/原生/语音的已实现、实测、计划分别记录；完整搜索、题库考试、原生录音与A2包尚待后续。每轮相关检查后本地commit，不覆盖他人改动。A0不额外推送，A2重建入口/客户端及九组合真实验收后才按授权checkpoint-2，E/F后续扩展监控和正式发布，G独立验收。
+准备检查只证明文件、归属和工具一致。业务/网页/原生/语音的已实现、实测、计划分别记录；完整搜索、题库考试、原生录音与A2包尚待后续。每轮相关检查后本地commit，不覆盖他人改动。A0不额外推送，A2重建入口/客户端及九组合真实验收后才按授权checkpoint-2。当前[协作规范](coordination.md)下，C后续阶段承接原E监控，A副受托承接原F原生和发布准备，G独立验收；实际登记与设置见[接收记录](coordination-rollout.md)。

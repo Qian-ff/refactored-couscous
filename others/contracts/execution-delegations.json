@@ -5,10 +5,10 @@
       "executor": "A-executor",
       "approved_by": "human",
       "authorization_thread": "01a1687d-f65a-7462-8af9-306125bfa662",
-      "status": "active",
-      "baseline_sha": "8ad3304efee683e2a8d493673954085bd7b8cdcb",
+      "status": "completed",
+      "baseline_sha": "f586b9c6d09623c9e26045104244fed800c4fd46",
       "allowed_paths": ["others/reports/coordination-v1/"],
-      "purpose": "Read-only migration, shared environment and source-binding validation; ignored evidence only; no business changes or continuation of old goals"
+      "purpose": "Completed: migration, shared environment, independent API identity and CORS checks. Evidence: others/reports/coordination-v1/. Future writes require a new A-main-approved active package."
     }
   }
 }
