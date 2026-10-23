@@ -2,7 +2,7 @@
 
 A唯一控制主工作区main。开工读README/AGENTS、design、ownership、契约和a2-start，核实实际代码/Git/运行证据。当前A0公共基线目标及证据见[a0-handoff](../a0-handoff.md)；历史A1通过不代表新增业务通过。
 
-当前顺序以[a2-start](../a2-start.md)为准；B1已完成，UI网页批准及冻结设计已接收，按[执行交接](../ui-redesign-execution.md)先集成D公共组件，再交B消费并与D/F整合既有UI、真实验收，之后才允许C/B2新增业务。设计辅助任务、批准记录和持续frontend-design规则见[UI协作](../ui-redesign-coordination.md)。A目标max，其他角色恢复时核验各自当次档位；不改全局默认或用发消息切档位提前唤醒受门禁限制的任务。
+当前顺序以[a2-start](../a2-start.md)为准；B1、D-UI和B展示迁移已接收，既有UI通过[本轮验收](../existing-ui-acceptance.md)。A下一步落实云端API与ASR worker的部署、鉴权、连接、超时和清理前置，再明确发布C开工SHA；existing-ui-accepted本身不放行C/B2。设计辅助任务、批准记录和持续frontend-design规则见[UI协作](../ui-redesign-coordination.md)。A目标max，其他角色恢复时核验各自当次档位；不改全局默认或提前唤醒受门禁限制的任务。
 
 A0发布的a2-ready和B1的b1-ready保留。各阶段发布新的完整SHA，角色保留自己的提交后合并，共享环境维护一份，不自动启动子聊天。公共模型注册/迁移/路由/SDK、共享API/页面类型、依赖/CORS/测试配置/配置加密原语由A维护；D唯一公共前端入口/HashRouter。模块交接后避免并行改同一文件。
 

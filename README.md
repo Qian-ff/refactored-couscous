@@ -6,11 +6,12 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：B-UI教师/管理员展示迁移已接收，D二次整合等待接入学生本人关系接口。** 最新公共依赖为[student-relations-ready / 契约0.3.2](others/docs/student-relations-handoff.md)，已包含b-ui-integrated。双击Open-BUI.cmd打开现有正式网页；本人关系历史页面仍由D接续实现，不能把后端接口发布当作页面完成。既有UI经A/F验收后再进入C/B2。[D第一批交接](others/docs/d-ui-foundation-handoff.md)、[B1集成交接](others/docs/b1-handoff.md)、历史[A0基线](others/docs/a0-handoff.md)及[A1交接](others/docs/a1-handoff.md)保留；本批不代表全部UI或三端最终验收。
+**当前阶段：D二次整合已接收，既有UI通过A集成验收。** [existing-ui-accepted验收交接](others/docs/existing-ui-acceptance.md)包含学生加退班、申请/撤销、当前班级详情和本人关系历史，以及安卓返回修复。真实契约0.3.2；双击Open-DUI.cmd打开正式网页。C/B2仍待A完成云端API/ASR接入前置后单独放行；题库、考试、助手、监控及未来工作台尚未开放。[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
 
 ## 从这里开始
 
 - [A1 使用与一键打开](others/docs/a1-usage.md)：双击 Open-Web.cmd、Open-Windows.cmd、Open-Android.cmd，或 Open-A1.cmd 选择三端；包含登录和课程同步体验流程。
+- [既有UI验收与本轮入口](others/docs/existing-ui-acceptance.md)：Open-DUI.cmd、学生加退班/历史演示、三端实测、安卓返回回归及C前置边界。
 - [B-UI正式页面体验与D接续](others/docs/b-ui-integration-handoff.md)：Open-BUI.cmd打开当前正式界面，区别于历史B1独立组件夹具；本地基线b-ui-integrated。
 - [学生本人关系接口交接](others/docs/student-relations-handoff.md)：0.3.2真实接口、生成SDK、D接续条件及项目内pnpm恢复；Open-StudentRelations.cmd启动同一套现有网页/API。
 - [B1 阶段验收](others/docs/b1-handoff.md)：Open-B1.cmd 打开内部业务组件预览；Open-B1-API.cmd 打开真实后端联调入口。正式导航由 D 接入。

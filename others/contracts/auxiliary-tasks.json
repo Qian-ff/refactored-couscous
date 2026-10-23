@@ -41,13 +41,18 @@
         "execution_baseline_ref": "ui-redesign-ready"
       },
       "product_migration": {
-        "status": "b_ui_received_ready_for_D_second_pass",
+        "status": "existing_ui_accepted_pending_C_environment_release",
         "d_foundation_commit": "b61626a36caca964bff83142424833e1b0eafea5",
         "component_baseline_ref": "d-ui-components-ready",
         "b_ui_commit": "6682ec37a2543e9e50a1bf400a8d70057351c807",
         "b_integration_baseline_ref": "b-ui-integrated",
-        "existing_ui_accepted_by_A": false,
-        "C_B2_new_features_allowed": false
+        "d_second_pass_commit": "58ab4958e62ca50671be921aa4ce91c9e0c0c1e5",
+        "d_integration_commit": "1bcab0d071de53010c06e7f593fde3f0f6781bcd",
+        "acceptance_baseline_ref": "existing-ui-accepted",
+        "acceptance_handoff": "others/docs/existing-ui-acceptance.md",
+        "existing_ui_accepted_by_A": true,
+        "C_B2_new_features_allowed": false,
+        "C_release_remaining": "A cloud API/ASR worker deployment, authentication, connectivity, timeout and cleanup readiness"
       }
     },
     "ui-assistant-floating-v1": {

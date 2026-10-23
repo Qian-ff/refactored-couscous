@@ -1,5 +1,7 @@
 # 既有 UI 改版协作与批准门禁
 
+2026-10-23产品状态：[既有UI已通过A验收](existing-ui-acceptance.md)，标签existing-ui-accepted；批准/冻结记录保持原始字节，existing_ui_accepted_by_A=true。C/B2仍待A完成云端API/ASR环境前置并明确发布开工SHA，设计资料批准与产品验收、环境放行分别记录。
+
 2026-10-21，用户在设计聊天明确选择：保留蓝绿、实验室轻立体，先给全部已有页面的网页图片，批准后补移动稿和规范，交原D实施；既有UI经A验收后再进入C。当前阶段顺序以[a2-start](a2-start.md)为唯一入口。
 
 ## 临时设计支线

@@ -1,5 +1,7 @@
 # 学生本人关系接口与 D 接续
 
+后续状态：D第二批58ab4958已由A接收，见[既有UI验收](existing-ui-acceptance.md)及existing-ui-accepted。本页保留0.3.2依赖发布时的字段和接续记录；其中“D恢复工作”和页面待接入描述属于当轮历史，不再次执行。
+
 2026-10-23，A / main。基于b-ui-integrated（38fbc9621f97cd2568cbb62b60416ecf3ee8185e）补齐D第二批的只读依赖，发布本地student-relations-ready；完整提交用git rev-parse 'student-relations-ready^{}'取得。真实契约0.3.2，迁移仍为b1c0e0a00001，无DDL或演示数据重置。原领域责任方仍为B，A本次两文件补丁登记在[integration-handoffs.json](../contracts/integration-handoffs.json)。
 
 ## 接口与生成 SDK

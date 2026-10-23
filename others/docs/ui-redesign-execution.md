@@ -1,5 +1,7 @@
 # 已批准 UI v1：D-UI 执行交接
 
+产品实施更新：2026-10-23，[既有UI通过A集成验收](existing-ui-acceptance.md)，基线existing-ui-accepted；下文保留设计接收时的分工与要求。当前C/B2仍等A云端API/ASR前置及单独放行，不重复既有UI Goal。
+
 2026-10-22，A接收UI-2026.10-v1冻结设计，发布本地执行基线ui-redesign-ready，完整SHA见A本轮交付及git rev-parse ui-redesign-ready。七角色所有权4、业务契约0.3.1和既有服务端规则保持不变；这是设计接收，不是产品UI已改版或三端已验收。
 
 ## 来源与验收边界

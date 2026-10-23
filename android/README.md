@@ -2,6 +2,10 @@
 
 Capacitor8.5.3 原生工程位于 native，三项 Capacitor 包同版本。F 接管并扩展设备权限、录音/文件选择、返回键和安全凭据。
 
+D-UI验收补丁：系统返回键先交给当前HTML弹窗的cancel处理（提交中保持打开），没有弹窗时回退WebView历史，无历史时退出Activity。沿用[AndroidX官方返回分发](https://developer.android.com/guide/navigation/navigation-custom-back)，不增加插件或权限；未来助手内部返回次序仍由D/F按已批准宿主协议扩展。A临时接收的具体文件见others/contracts/integration-handoffs.json，F继续维护原生模块。
+
+在A8000和项目模拟器已运行、APK已重新构建后，根目录执行node android/tests/navigation.cjs，实际验证空闲/提交中弹窗、教学班详情返回与退出登录后的旧历史；报告在others/reports/android-navigation/result.json。该测试只延迟并放行真实失败请求，不伪造业务成功；使用合成账号，实体机需单独验收。
+
 复用本机 JDK21/Android SDK，Gradle8.14.3、AGP8.13.0、compile/target36，minSdk24（Android7+，只是构建下限，尚不代表所有版本实测）。运行 `others/scripts/Build-Android.ps1` 自动从本地配置设置当前进程环境；SDK路径保存在忽略的 native/local.properties，Gradle缓存位于本端 .gradle-user-home。
 
 根目录首次运行 `pnpm --filter @safelab/android run init:native`；已存在 native 时跳过。运行 `pnpm run build:android` 同步共享调试网页并构建 native/app/build/outputs/apk/debug/app-debug.apk。

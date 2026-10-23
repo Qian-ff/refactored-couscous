@@ -2,9 +2,9 @@
 
 当前D分为批准后的既有UI改版D-UI，以及C/B2经A集成后的完整D交付；不混用开工条件。公共入口/路由归D，A已发布PageProps、身份会话、关卡/预览和平台声明，见[模块协议](../../contracts/a2-protocols.md)。D测试范围为web/tests/d-learning/，共享配置/辅助归A。阶段顺序和用户批准状态见[UI门禁](../ui-redesign-coordination.md)。
 
-## D-UI 第二批 Goal（当前：B迁移集成后执行）
+## D-UI 第二批 Goal（已交付，保留历史目标）
 
-B展示迁移已由A接收；后续本人关系依赖见[0.3.2交接](../student-relations-handoff.md)。保留本树第二批WIP后合并本地student-relations-ready完整SHA（已包含b-ui-integrated），恢复原D Goal。第一批公共组件/身份壳/账号入口已完成，第二批补学生既有班级流程并核对正式路由；C/B2和下方完整D目标仍等待后续放行。
+D最终提交58ab4958e62ca50671be921aa4ce91c9e0c0c1e5已由A接收并完成[既有UI验收](../existing-ui-acceptance.md)，基线existing-ui-accepted。下方第二批Goal保留交付语义，不再次执行；D树保留原提交，后续按A正式放行再接新任务。C/B2和完整D目标仍未开放。
 
 ~~~text
 /goal 作为安研通原D，基于A发布的student-relations-ready完成既有UI二次整合，交A/F完整既有UI验收。

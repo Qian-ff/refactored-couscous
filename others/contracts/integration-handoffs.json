@@ -1,6 +1,21 @@
 {
   "version": 1,
   "handoffs": {
+    "android-back-d-ui-acceptance": {
+      "coordinator": "A",
+      "implementation_role": "A",
+      "domain_owner": "F",
+      "reason": "A native acceptance found system Back exits the app from D student class detail",
+      "baseline_commit": "1bcab0d071de53010c06e7f593fde3f0f6781bcd",
+      "temporary_domain_files": [
+        "android/native/app/src/main/java/cn/labconnect/platform/MainActivity.java",
+        "android/tests/navigation.cjs",
+        "android/README.md"
+      ],
+      "concurrency_evidence": "Legacy F worktree clean; no active F delivery or concurrent editing in this integration",
+      "scope": "Existing HTML dialog cancellation and WebView back history; no assistant/native permission implementation or new dependency",
+      "after_release": "F retains native maintenance; future assistant back ordering extends the approved host protocol"
+    },
     "student-self-relations": {
       "coordinator": "A",
       "implementation_role": "A",
