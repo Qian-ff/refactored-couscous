@@ -97,6 +97,13 @@ test("三种身份真实登录，B全部注册页面可达，学生越权直链�
       await expect(page.getByRole("heading", { name: "教师协作", exact: true })).toBeVisible()
       await page.goBack()
     }
+    if (username === "teacher") {
+      await page.getByRole("button", { name: "管理教学班", exact: true }).first().click()
+      await expect(page.getByRole("heading", { name: "学生名单", exact: true })).toBeVisible()
+      await expect(page.getByRole("heading", { name: "加入与退出审批", exact: true })).toBeVisible()
+      await expect(page.getByRole("heading", { name: "教师协作", exact: true })).toBeVisible()
+      await page.goBack()
+    }
     await expect(page.locator("main")).toHaveCount(1)
     await shot(page, username)
     await page.getByRole("button", { name: "退出登录", exact: true }).click()
