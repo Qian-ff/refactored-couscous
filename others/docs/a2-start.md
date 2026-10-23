@@ -8,6 +8,8 @@
 
 ## 固定顺序
 
+2026-10-24更新：A已接收[C-01 v1.1内容提案](../backend/app/domains/content/handoff/c-01-proposal.md)，C最终候选`157b99c0bf69af7e0830d8109dcbb3e3398c4251`，本地合并`f9d394856f29adc7cb12c86848df9da033b2f83c`。已明确整库管理须范围V、提交权S只允许有权内容提交，以及教职已发布版本R与草稿读改权限的区别；原T01–T14保留，新增未来T15/T16。此次仅接收模型、权限和候选接口设计，未实现内容业务，也未执行这些未来验收场景。真实契约仍为0.3.2，迁移仍为b1c0e0a00001；一键入口及客户端无需因纯文档接收重建。下一责任身份为C，C-02资料与解析须另行审定工作包并由用户手动首次启动；B2、D助手宿主、原生扩展和监控门禁保持原状态。
+
 2026-10-23当前更新：既有UI与[云端API/ASR接入前置](cloud-asr-handoff.md)已通过A验收，**C允许开工，B2仍等待C交付经A接收**。最新C开工标签c-start-ready，完整SHA用`git rev-parse 'c-start-ready^{}'`核验；C保留本树工作后合并，不覆盖已有提交。云端实际源码717e1d0e5f88071c52b361cf3fa1c3bb09d13697，契约0.3.2，迁移b1c0e0a00001；其后交接/工具提交另计。原D Goal已交付，不重复执行。
 
 A已接收D第二批58ab4958e62ca50671be921aa4ce91c9e0c0c1e5，合并1bcab0d071de53010c06e7f593fde3f0f6781bcd；[existing-ui-accepted](existing-ui-acceptance.md)、student-relations-ready与b-ui-integrated等标签保留原历史位置。
