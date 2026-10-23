@@ -44,7 +44,7 @@ pnpm run build:web
 node others/design/ui-redesign/freeze.cjs --check
 node others/design/ui-redesign/assistant-floating-v1/freeze.cjs --check
 $env:LABCONNECT_REPORT_STAGE='d-ui-integration'
-pnpm --filter @safelab/web run test -- tests/d-learning/d-ui.spec.ts tests/d-learning/enrollments.spec.ts
+pnpm --filter @safelab/web exec playwright test tests/d-learning/d-ui.spec.ts tests/d-learning/enrollments.spec.ts
 node web/tests/d-learning/production.mjs
 ```
 
