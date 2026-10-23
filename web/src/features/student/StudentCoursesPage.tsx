@@ -13,7 +13,7 @@ export function StudentCoursesPage() {
   const [joining, setJoining] = useState(false), [leaving, setLeaving] = useState<CoursePublic>(), [notice, setNotice] = useState<EnrollmentResult>()
   const size = 12
   const resource = useResource(useCallback(async (signal: AbortSignal) => (await CoursesService.courses({ query: { q: query, offset, limit: size }, signal })).data, [query, offset]))
-  return <PageContainer title="我的课程" description="查看已加入的教学班与授课教师。" actions={<><EnrollmentLinks /><Button onClick={() => setJoining(true)}>使用班级邀请码加入</Button><Button variant="secondary" onClick={resource.reload} pending={resource.loading}><RefreshCw size={17} />刷新</Button></>}>
+  return <PageContainer title="我的课程" description="查看已加入的教学班与授课教师。" actions={<><EnrollmentLinks /><Button onClick={() => setJoining(true)}>使用班级邀请码加入</Button><Button variant="secondary" onClick={() => { setNotice(undefined); resource.reload() }} pending={resource.loading}><RefreshCw size={17} />刷新</Button></>}>
     {notice && <Notice kind={notice.status.startsWith("pending_") ? "warning" : "success"}>{enrollmentMessage(notice)} <Link to="/student/enrollments">查看本人班级申请与历史</Link></Notice>}
     <section className="lc-course-intro"><div><p>实验室安全学习</p><h2>先了解规范，再走进实验室。</h2><p>这里汇集你已加入的课程。教师发布学习内容后，<br className="lc-desktop" />即可从对应课程开始学习。</p></div><img src={labBench} alt="" /></section>
     <SearchFilters value={input} onChange={setInput} label="搜索课程" placeholder="课程名称、代码或主讲教师" onSearch={() => { setQuery(input.trim()); setOffset(0) }} onClear={() => { setInput(""); setQuery(""); setOffset(0); resource.reload() }} />

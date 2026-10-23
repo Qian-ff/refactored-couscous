@@ -8,9 +8,10 @@ const api = process.env.LABCONNECT_API_URL || "http://127.0.0.1:8000"
 const demo = demoAccounts()
 const temporary = "D-Enrollment-Synthetic-Temporary!"
 const personal = "D-Enrollment-Synthetic-Personal!"
-let admin: string, school: string, college: string, teacher: string
+let admin: string, school: string, college: string, teacher: string, major: string
 const unique = (prefix: string) => prefix + "_" + Date.now().toString(36) + "_" + randomUUID().slice(0, 5)
 const testOrigins = new WeakMap<object, Set<string>>()
+const studentManagementRequests = new WeakMap<object, number>()
 async function call(request: APIRequestContext, method: string, route: string, data?: unknown, token = admin, status = 200) {
   const response = await request.fetch(api + "/api/v1" + route, { method, data, headers: { Authorization: "Bearer " + token, "Idempotency-Key": randomUUID() } })
   expect(response.status(), method + " " + route).toBe(status)
@@ -22,15 +23,15 @@ async function loginToken(request: APIRequestContext, username: string, password
 async function student(request: APIRequestContext) {
   const username = unique("drel")
   const record = await call(request, "POST", "/admin/accounts", {
-    school_id: school, college_id: college, username, student_no: unique("DREL"), display_name: "班级关系合成学生",
+    school_id: school, college_id: college, major_id: major, username, student_no: unique("DREL"), display_name: "班级关系合成学生",
     temporary_password: temporary, grants: [{ role: "student" }],
   }, admin, 201)
   const first = await loginToken(request, username, temporary)
   await call(request, "POST", "/auth/change-password", { old_password: temporary, new_password: personal }, first)
   return { ...record, username, token: await loginToken(request, username, personal) }
 }
-async function classroom(request: APIRequestContext, joinApproval = false, leaveApproval = false) {
-  const record = await call(request, "POST", "/courses", { college_id: college, teacher_id: teacher, code: unique("DREL"), title: "学生班级关系验证：实验室安全与跨学院协同" }, admin, 201)
+async function classroom(request: APIRequestContext, joinApproval = false, leaveApproval = false, labels?: { code: string; title: string }) {
+  const record = await call(request, "POST", "/courses", { college_id: college, teacher_id: teacher, code: labels?.code || unique("DREL"), title: labels?.title || "学生班级关系验证：实验室安全与跨学院协同" }, admin, 201)
   const management = await call(request, "GET", "/courses/" + record.id + "/management")
   const settings = await call(request, "PATCH", "/courses/" + record.id + "/settings", { revision: management.revision, join_approval: joinApproval, leave_approval: leaveApproval })
   const invite = await call(request, "POST", "/courses/" + record.id + "/invite", { revision: settings.revision, expires_at: new Date(Date.now() + 3600_000).toISOString() })
@@ -47,7 +48,9 @@ async function enter(page: Page, user: { username: string }, destination = "/stu
 async function join(page: Page, code: string) {
   await page.getByRole("button", { name: "使用班级邀请码加入", exact: true }).click()
   await page.getByLabel("班级邀请码", { exact: true }).fill(code)
+  const completed = page.waitForResponse(response => response.url() === api + "/api/v1/enrollments/join" && response.request().method() === "POST")
   await page.getByRole("dialog").getByRole("button", { name: "确认加入教学班", exact: true }).click()
+  if ((await completed).ok()) await expect(page.getByRole("dialog")).toHaveCount(0)
 }
 async function viewRequests(page: Page) {
   await page.goto("/#/student/enrollments")
@@ -71,10 +74,17 @@ test.beforeAll(async ({ request }) => {
   college = (await call(request, "GET", "/courses/context")).colleges[0].id
   const teacherToken = await loginToken(request, "teacher", demo.password)
   teacher = (await call(request, "GET", "/auth/me", undefined, teacherToken)).id
+  major = (await call(request, "POST", "/admin/majors", { school_id: school, college_id: college, code: unique("DREL-M"), name: "班级关系合成专业" }, admin, 201)).id
 })
 test.beforeEach(async ({ page }, info) => {
   const origins = new Set<string>()
-  page.on("request", request => { if (request.url().includes("/api/v1/")) origins.add(new URL(request.url()).origin) })
+  studentManagementRequests.set(info, 0)
+  page.on("request", request => {
+    const url = new URL(request.url())
+    if (!url.pathname.startsWith("/api/v1/")) return
+    origins.add(url.origin)
+    if (url.pathname.startsWith("/api/v1/admin/") || /\/courses\/[^/]+\/(management|members|requests)(\/|$)/.test(url.pathname)) studentManagementRequests.set(info, (studentManagementRequests.get(info) || 0) + 1)
+  })
   test.info().annotations.push({ type: "surface", description: "Formal HashRouter; real API only" })
   // Keep only API origins in evidence, never credentials, query values, invitation codes or payloads.
   await info.attach("expected-api-origin", { body: new URL(api).origin, contentType: "text/plain" })
@@ -85,6 +95,7 @@ test.afterEach(async ({}, info) => {
   await info.attach("actual-api-origins", { body: JSON.stringify(origins), contentType: "application/json" })
   expect(origins.length).toBeGreaterThan(0)
   expect(origins.every(origin => origin === new URL(api).origin)).toBeTruthy()
+  expect(studentManagementRequests.get(info)).toBe(0)
 })
 
 test("直接加入和退出，重复加入不重复建关系，退班旧直链无权", async ({ page, request }) => {
@@ -93,6 +104,7 @@ test("直接加入和退出，重复加入不重复建关系，退班旧直链�
   await join(page, course.invite)
   await expect(page.getByText("服务端已确认当前在班。", { exact: false })).toBeVisible()
   await expect(page.locator(".lc-course-card")).toHaveCount(1)
+  const firstRelation = (await call(request, "GET", "/enrollments/mine", undefined, user.token)).data[0]
   await join(page, course.invite)
   await expect(page.locator(".lc-course-card")).toHaveCount(1)
   const members = await call(request, "GET", "/courses/" + course.id + "/members")
@@ -109,6 +121,22 @@ test("直接加入和退出，重复加入不重复建关系，退班旧直链�
   await page.reload()
   await enter(page, user, "/student/courses/" + course.id)
   await expect(page.getByRole("heading", { name: "教学班当前不可访问" })).toBeVisible()
+  await page.getByRole("link", { name: "班级申请与历史", exact: true }).last().click()
+  const history = page.getByRole("region", { name: "本人班级关系历史", exact: true })
+  await expect(history.locator(".lc-records").getByText("已退出", { exact: true })).toBeVisible()
+  await expect(history.getByText(course.code, { exact: true })).toBeVisible()
+  await expect(history.getByRole("link", { name: "查看当前班级" })).toHaveCount(0)
+  await join(page, course.invite)
+  await expect(history.locator(".lc-records").getByText("在班", { exact: true })).toBeVisible()
+  const current = await call(request, "GET", "/enrollments/mine", undefined, user.token)
+  expect(current.count).toBe(1)
+  expect(current.data[0].enrollment_id).toBe(firstRelation.enrollment_id)
+  await history.getByRole("link", { name: "查看当前班级" }).click()
+  await expect(page.getByRole("heading", { level: 1, name: course.title, exact: true })).toBeVisible()
+  await page.goBack()
+  await expect(page.getByRole("heading", { level: 1, name: "班级申请与历史" })).toBeVisible()
+  await page.goForward()
+  await expect(page.getByRole("heading", { level: 1, name: course.title, exact: true })).toBeVisible()
 })
 test("加入审批、重复申请、撤销与批准后刷新，退出审批先保留当前关系", async ({ page, request }) => {
   const user = await student(request), course = await classroom(request, true, true)
@@ -118,6 +146,8 @@ test("加入审批、重复申请、撤销与批准后刷新，退出审批先�
   await join(page, course.invite)
   expect((await call(request, "GET", "/enrollments/requests", undefined, user.token)).count).toBe(1)
   await viewRequests(page)
+  await expect(page.getByRole("region", { name: "本人班级关系历史", exact: true }).getByText("暂无本人班级关系", { exact: true })).toBeVisible()
+  await expect(page.getByRole("region", { name: "本人班级申请", exact: true }).getByText(course.title, { exact: true })).toBeVisible()
   await expect(page.getByText("待审批", { exact: true })).toBeVisible()
   await page.getByRole("button", { name: "撤销申请", exact: true }).click()
   await page.getByRole("button", { name: "确认撤销申请", exact: true }).click()
@@ -125,7 +155,7 @@ test("加入审批、重复申请、撤销与批准后刷新，退出审批先�
   await join(page, course.invite)
   const pending = (await call(request, "GET", "/enrollments/requests", undefined, user.token)).data.find((r: { status: string }) => r.status === "pending")
   await call(request, "POST", "/courses/" + course.id + "/requests/" + pending.id + "/decide", { approve: true })
-  await page.getByRole("button", { name: "刷新申请状态" }).click()
+  await page.getByRole("button", { name: "刷新申请状态与关系" }).click()
   await expect(page.getByText("已批准", { exact: true })).toBeVisible()
   await page.goto("/#/student/courses")
   await expect(page.locator(".lc-course-card")).toHaveCount(1)
@@ -134,11 +164,24 @@ test("加入审批、重复申请、撤销与批准后刷新，退出审批先�
   await expect(page.getByText("退出申请待审批", { exact: false })).toBeVisible()
   await expect(page.locator(".lc-course-card")).toHaveCount(1)
   await viewRequests(page)
-  const leave = (await call(request, "GET", "/enrollments/requests", undefined, user.token)).data.find((r: { kind: string; status: string }) => r.kind === "leave" && r.status === "pending")
+  await expect(page.getByRole("region", { name: "本人班级关系历史", exact: true }).locator(".lc-records").getByText("在班", { exact: true })).toBeVisible()
+  await page.getByRole("button", { name: "撤销申请", exact: true }).click()
+  await page.getByRole("button", { name: "确认撤销申请", exact: true }).click()
+  await expect(page.getByRole("button", { name: "撤销申请", exact: true })).toHaveCount(0)
+  await call(request, "POST", "/courses/" + course.id + "/leave", {}, user.token)
+  let leave = (await call(request, "GET", "/enrollments/requests", undefined, user.token)).data.find((r: { kind: string; status: string }) => r.kind === "leave" && r.status === "pending")
+  await call(request, "POST", "/courses/" + course.id + "/requests/" + leave.id + "/decide", { approve: false })
+  await page.getByRole("button", { name: "刷新申请状态与关系" }).click()
+  await expect(page.getByText("未批准", { exact: true })).toBeVisible()
+  await expect(page.getByRole("region", { name: "本人班级关系历史", exact: true }).locator(".lc-records").getByText("在班", { exact: true })).toBeVisible()
+  await call(request, "POST", "/courses/" + course.id + "/leave", {}, user.token)
+  leave = (await call(request, "GET", "/enrollments/requests", undefined, user.token)).data.find((r: { kind: string; status: string }) => r.kind === "leave" && r.status === "pending")
   await call(request, "POST", "/courses/" + course.id + "/requests/" + leave.id + "/decide", { approve: true })
-  await page.getByRole("button", { name: "刷新申请状态" }).click()
+  await page.getByRole("button", { name: "刷新申请状态与关系" }).click()
   await page.goto("/#/student/courses")
   await expect(page.locator(".lc-course-card")).toHaveCount(0)
+  await viewRequests(page)
+  await expect(page.getByRole("region", { name: "本人班级关系历史", exact: true }).locator(".lc-records").getByText("已退出", { exact: true })).toBeVisible()
 })
 test("撤销与教师审批并发冲突，拒绝结果真实显示，不扩大学生读取范围", async ({ page, request }) => {
   const user = await student(request), other = await student(request), course = await classroom(request, true)
@@ -189,7 +232,7 @@ test("邀请码无效、轮换、过期与跨校拒绝，长代码和离线失�
   await page.getByRole("button", { name: "取消", exact: true }).click()
   await expect(page.locator(".lc-course-card")).toHaveCount(0)
 })
-test("退出响应丢失复用原幂等键，旧查询与退出会话不能回填", async ({ page, request }) => {
+test("退出响应丢失后复用原幂等键，服务端确认同一退出命令", async ({ page, request }) => {
   const user = await student(request), course = await classroom(request)
   await call(request, "POST", "/enrollments/join", { invitation_code: course.invite }, user.token)
   await enter(page, user)
@@ -207,6 +250,9 @@ test("退出响应丢失复用原幂等键，旧查询与退出会话不能回�
   await page.getByRole("button", { name: "确认退出教学班" }).click()
   await expect(page.locator(".lc-course-card")).toHaveCount(0)
   expect(calls).toBe(2)
+  const relations = await call(request, "GET", "/enrollments/mine", undefined, user.token)
+  expect(relations.count).toBe(1)
+  expect(relations.data[0].status).toBe("withdrawn")
 })
 test("移出、归档及撤权后旧班级页面清理，历史不授予当前权限", async ({ page, request }) => {
   const user = await student(request), course = await classroom(request)
@@ -216,6 +262,12 @@ test("移出、归档及撤权后旧班级页面清理，历史不授予当前�
   await call(request, "POST", "/courses/" + course.id + "/remove-member", { username: user.username })
   await page.getByRole("button", { name: "刷新班级状态" }).click()
   await expect(page.getByRole("heading", { name: "教学班当前不可访问" })).toBeVisible()
+  await page.getByRole("link", { name: "班级申请与历史", exact: true }).last().click()
+  const history = page.getByRole("region", { name: "本人班级关系历史", exact: true })
+  await expect(history.locator(".lc-records").getByText("已移出", { exact: true })).toBeVisible()
+  await expect(history.getByRole("link", { name: "查看当前班级" })).toHaveCount(0)
+  await page.goBack()
+  await expect(page.getByRole("heading", { name: "教学班当前不可访问" })).toBeVisible()
   await call(request, "POST", "/enrollments/join", { invitation_code: course.invite }, user.token)
   await page.getByRole("button", { name: "重新读取" }).click()
   await expect(page.getByRole("heading", { name: course.title, level: 1 })).toBeVisible()
@@ -223,6 +275,11 @@ test("移出、归档及撤权后旧班级页面清理，历史不授予当前�
   await call(request, "POST", "/courses/" + course.id + "/archive", { revision: management.revision })
   await page.getByRole("button", { name: "刷新班级状态" }).click()
   await expect(page.getByRole("heading", { name: "教学班当前不可访问" })).toBeVisible()
+  await page.getByRole("link", { name: "班级申请与历史", exact: true }).last().click()
+  await expect(history.locator(".lc-records").getByText("已归档", { exact: true })).toBeVisible()
+  await expect(history.getByRole("link", { name: "查看当前班级" })).toHaveCount(0)
+  await expect(history.getByText("加入时间", { exact: true })).toHaveCount(0)
+  await capture(page, "archived-relationship")
   await call(request, "POST", "/admin/accounts/" + user.id + "/revoke-grant", { role: "student" })
   await page.evaluate(() => window.dispatchEvent(new Event("focus")))
   await expect(page.getByRole("heading", { name: "欢迎使用安研通" })).toBeVisible()
@@ -235,15 +292,91 @@ test("本人申请分页与手机长列表，清空会话后不能保留记录",
     if (i < 20) await call(request, "POST", "/enrollments/requests/" + result.request_id + "/cancel", {}, user.token)
   }
   await enter(page, user, "/student/enrollments")
-  await expect(page.locator(".lc-records>li")).toHaveCount(20)
-  await page.getByRole("button", { name: "下一页", exact: true }).click()
-  await expect(page.locator(".lc-records>li")).toHaveCount(1)
-  await page.getByRole("button", { name: "上一页", exact: true }).click()
+  const applications = page.getByRole("region", { name: "本人班级申请", exact: true })
+  await expect(applications.locator(".lc-records>li")).toHaveCount(20)
+  await applications.getByRole("button", { name: "下一页", exact: true }).click()
+  await expect(applications.locator(".lc-records>li")).toHaveCount(1)
+  await applications.getByRole("button", { name: "上一页", exact: true }).click()
   await capture(page, "requests-long-list")
   await page.getByRole("button", { name: "退出登录", exact: true }).click()
   await expect(page.getByRole("heading", { name: "欢迎使用安研通" })).toBeVisible()
   await expect(page.locator(".lc-records>li")).toHaveCount(0)
 })
+test("本人关系按真实状态筛选和稳定分页，旧筛选响应不覆盖新条件，离线可恢复", async ({ page, context, request }) => {
+  test.setTimeout(120_000)
+  const user = await student(request), outsider = await student(request)
+  const prefix = unique("HISTORY")
+  const courses = []
+  for (let i = 0; i < 21; i++) {
+    const course = await classroom(request, false, false, { code: prefix + "_" + String(i).padStart(2, "0"), title: i === 0 ? "长班级名称：" + "化学实验室安全与跨学院协同".repeat(7) : "本人关系分页合成班级" + i })
+    await call(request, "POST", "/enrollments/join", { invitation_code: course.invite }, user.token)
+    courses.push(course)
+  }
+  for (const index of [0, 3]) await call(request, "POST", "/courses/" + courses[index].id + "/leave", {}, user.token)
+  await call(request, "POST", "/courses/" + courses[1].id + "/remove-member", { username: user.username })
+  const management = await call(request, "GET", "/courses/" + courses[2].id + "/management")
+  await call(request, "POST", "/courses/" + courses[2].id + "/archive", { revision: management.revision })
+  expect((await call(request, "GET", "/enrollments/mine?user_id=" + user.id, undefined, outsider.token)).count).toBe(0)
+  await enter(page, user, "/student/enrollments")
+  const history = page.getByRole("region", { name: "本人班级关系历史", exact: true })
+  await expect(history.locator(".lc-records>li")).toHaveCount(20)
+  await expect(history.locator(".lc-records>li").first()).toContainText(courses[0].code)
+  await history.getByRole("button", { name: "下一页", exact: true }).click()
+  await expect(history.locator(".lc-records>li")).toHaveCount(1)
+  await expect(history.locator(".lc-records>li").first()).toContainText(courses[20].code)
+  await history.getByRole("button", { name: "上一页", exact: true }).click()
+  await expect(history.locator(".lc-records>li")).toHaveCount(20)
+  await capture(page, "relationship-long-list")
+  await page.getByLabel("关系状态", { exact: true }).selectOption("withdrawn")
+  await expect(history.locator(".lc-records>li")).toHaveCount(2)
+  await expect(history.getByRole("button", { name: "上一页", exact: true })).toBeDisabled()
+  await page.getByLabel("关系状态", { exact: true }).selectOption("all")
+  await page.getByLabel("班级归档情况", { exact: true }).selectOption("archived")
+  await expect(history.locator(".lc-records>li")).toHaveCount(1)
+  await expect(history.locator(".lc-records>li").first()).toContainText(courses[2].code)
+  await expect(history.getByRole("link", { name: "查看当前班级" })).toHaveCount(0)
+  await history.getByRole("button", { name: "清空", exact: true }).click()
+  await page.getByLabel("搜索本人班级关系", { exact: true }).fill(courses[20].code)
+  await history.getByRole("button", { name: "搜索", exact: true }).click()
+  await expect(history.locator(".lc-records>li")).toHaveCount(1)
+  await expect(history.locator(".lc-records>li").first()).toContainText(courses[20].code)
+  await history.getByRole("button", { name: "清空", exact: true }).click()
+  await expect(history.locator(".lc-records>li")).toHaveCount(20)
+
+  let fetched!: () => void, release!: () => void, handled = false
+  const oldFetched = new Promise<void>(resolve => { fetched = resolve })
+  const withheld = new Promise<void>(resolve => { release = resolve })
+  await page.route("**/api/v1/enrollments/mine?**", async route => {
+    if (new URL(route.request().url()).searchParams.get("status") !== "withdrawn") return route.continue()
+    const response = await route.fetch()
+    fetched(); await withheld
+    try { await route.fulfill({ response }) } catch { /* The superseded browser request may already be canceled. */ } finally { handled = true }
+  })
+  await page.getByLabel("关系状态", { exact: true }).selectOption("withdrawn")
+  await oldFetched
+  await expect(history.getByRole("heading", { name: "正在读取", exact: true })).toBeVisible()
+  await page.getByLabel("关系状态", { exact: true }).selectOption("removed")
+  await expect(history.locator(".lc-records>li")).toHaveCount(1)
+  await expect(history.locator(".lc-records>li").first()).toContainText(courses[1].code)
+  release(); await expect.poll(() => handled).toBeTruthy()
+  await expect(history.locator(".lc-records>li").first()).toContainText(courses[1].code)
+  await page.unroute("**/api/v1/enrollments/mine?**")
+  await capture(page, "removed-relationship-filter")
+  await context.setOffline(true)
+  await page.getByRole("button", { name: "刷新申请状态与关系" }).click()
+  await expect(history.getByRole("alert")).toContainText("无法连接服务")
+  await expect(history.locator(".lc-records>li")).toHaveCount(0)
+  await capture(page, "relationship-offline")
+  await context.setOffline(false)
+  await history.getByRole("button", { name: "重新读取", exact: true }).click()
+  await expect(history.locator(".lc-records>li")).toHaveCount(1)
+  await expect(history.locator(".lc-records>li").first()).toContainText(courses[1].code)
+  await history.getByRole("button", { name: "清空", exact: true }).click()
+  await page.getByLabel("搜索本人班级关系", { exact: true }).fill("没有匹配的真实班级")
+  await history.getByRole("button", { name: "搜索", exact: true }).click()
+  await expect(history.getByText("没有匹配的本人班级关系", { exact: true })).toBeVisible()
+})
+
 test.describe("学生班级触控", () => {
   test.use({ hasTouch: true, viewport: { width: 390, height: 844 } })
   test("手机使用班级邀请码提交并撤销本人申请", async ({ page, request }) => {
