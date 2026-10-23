@@ -14,6 +14,9 @@ if ($LASTEXITCODE -ne 0) { throw 'Cannot identify this backend checkout.' }
 $webIdentity = & python $sourceTool --root $projectRoot --surface web | ConvertFrom-Json
 if ($LASTEXITCODE -ne 0) { throw 'Cannot identify this web checkout.' }
 $branch = & git -C $projectRoot branch --show-current
+if ($branch -eq 'codex/a-executor') {
+    throw 'A-executor uses Start-Backend.ps1 -Port 8002 and pnpm run dev (web 5177); preserve main services and do not migrate the shared demo database from this tree.'
+}
 $webPort = switch ($branch) { 'codex/b-core-a2' {5174} 'codex/c-content-ai-a2' {5175} 'codex/d-learning-ui-a2' {5176} default {5173} }
 function Test-Identity($Actual, $Expected) {
     foreach ($key in @('source_sha', 'worktree_id', 'source_fingerprint', 'contract', 'surface')) {

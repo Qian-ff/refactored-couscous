@@ -1,5 +1,7 @@
 # B：分阶段任务书
 
+当前模型、强度、工作包/汇报/handoff及调度规则先读[统一协作规范](../coordination.md)，其当前规则优先于下文历史阶段叙述；真实门禁仍以a2-start与辅助任务登记为准。
+
 当前B1及B-UI展示迁移已交A接收；最终B提交6682ec37a2543e9e50a1bf400a8d70057351c807，接续以[b-ui-integrated交接](../b-ui-integration-handoff.md)为准。B保留业务文件所有权，配合后续具体问题，不重复执行下面历史迁移目标。既有UI和[云端API/ASR前置](../cloud-asr-handoff.md)现已验收，c-start-ready允许C开工；B2仍等C交付经A接收后另行放行。公共协议见[模块协议](../../contracts/a2-protocols.md)，历史检查见[A0](../a0-handoff.md)。
 
 ## B-UI Goal（已交付，保留历史）
@@ -7,7 +9,7 @@
 A已接收D第一批，现使用本地d-ui-components-ready组件基线，完整SHA用git rev-parse获取，见[接续交接](../d-ui-foundation-handoff.md)。本阶段可开始B展示迁移；C/B2门禁未放行。先保存本树工作并合并该基线，不只合并旧ui-redesign-ready。公共导出及布局契约见web/src/components/labconnect/README.md，保持B唯一维护ui.tsx/business.css及业务钩子。
 
 ~~~text
-/goal 作为安研通B，按UI-2026.10-v1已批准冻结规范及A发布的d-ui-components-ready真实组件基线，完成B所属教师/管理员既有页面展示迁移，交A/D整合。先读AGENTS、阶段入口、UI执行交接及迁移清单；桌面批准b67ad77cd49c2b5f99d2037e5828c29433ea66a6，冻结d17b342c53fc054bd298bee356143d3b3ab77af6。使用frontend-design，计划max、执行xhigh并核验当次实际设置。保留本树提交后合并d-ui-components-ready对应完整SHA，核对组件README及布局契约；组件已交付，不再等待旧阶段或另造一套公共组件。
+/goal 作为安研通B，按UI-2026.10-v1已批准冻结规范及A发布的d-ui-components-ready真实组件基线，完成B所属教师/管理员既有页面展示迁移，交A/D整合。先读AGENTS、阶段入口、UI执行交接及迁移清单；桌面批准b67ad77cd49c2b5f99d2037e5828c29433ea66a6，冻结d17b342c53fc054bd298bee356143d3b3ab77af6。使用frontend-design，计划max、执行medium并核验当次实际设置。保留本树提交后合并d-ui-components-ready对应完整SHA，核对组件README及布局契约；组件已交付，不再等待旧阶段或另造一套公共组件。
 
 只改web/src/features/admin/、teaching/及本范围测试。B唯一维护teaching/ui.tsx、business.css和业务页面，改为消费D公共组件，保留useBusinessAction/useBusinessQuery/SessionPage的请求、内存会话、身份代次和重试行为，处理双main/双padding；不改公共入口或另建视觉/会话体系。按migration-checklist完整保留目录/班级、组织/账号/角色/邀请、名单/审批/协作/交接/归档、CSV字段及真实revision/幂等/权限，不把样图示例数据写死。
 
@@ -50,7 +52,7 @@ A已接收D第一批，现使用本地d-ui-components-ready组件基线，完整
 
 ## B2 Goal（C交付后）
 
-后续与C按[助手v1.1交接](../assistant-floating-handoff.md)联调账号级考试限制，覆盖历史/引用、旧会话和任务全程；B不实现悬浮宿主或C助手内容。本次设计接收不放行B2，计划max、执行xhigh，启用轮次核验实际设置。
+后续与C按[助手v1.1交接](../assistant-floating-handoff.md)联调账号级考试限制，覆盖历史/引用、旧会话和任务全程；B不实现悬浮宿主或C助手内容。本次设计接收不放行B2，计划max、执行medium，启用轮次核验实际设置。
 
 ~~~text
 /goal 作为安研通（LabConnect）的 B，在 A 集成 B1、C 后发布的真实基线上，完成 B2 学习考试服务及教师管理页面，与 C 联合验证，再交 D/A 接续。

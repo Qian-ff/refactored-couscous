@@ -1,4 +1,4 @@
-"""Local Git helpers for the seven SafeLabPlatform roles. Python 3.10+, stdlib."""
+"""Local Git helpers for active SafeLabPlatform roles and scoped A executors."""
 from __future__ import annotations
 
 import argparse
@@ -26,6 +26,36 @@ def manifest(root: Path) -> dict:
     return json.loads((root / "others/contracts/ownership.json").read_text(encoding="utf-8"))
 
 
+def identity(rules: dict, role: str) -> dict:
+    if role in rules.get("retired_roles", {}):
+        replacement = rules["retired_roles"][role]["replacement"]
+        raise RuntimeError(f"Role {role} is retired; use {replacement}. Historical trees are preserved")
+    identities = {**rules["roles"], **rules.get("executors", {})}
+    if role not in identities:
+        raise RuntimeError("Unknown active identity: " + role)
+    return identities[role]
+
+
+def executor_scope(root: Path, role: str, package: str | None) -> list[str]:
+    name = "others/contracts/execution-delegations.json"
+    published = committed_json(root, "main", name)
+    local = json.loads((root / name).read_text(encoding="utf-8"))
+    if local != published:
+        raise RuntimeError("Outdated execution delegation; synchronize A's published work package")
+    grant = published.get("packages", {}).get(package)
+    if not grant or grant.get("executor") != role or grant.get("status") != "active":
+        raise RuntimeError("An active A-approved work package is required for " + role)
+    paths = grant.get("allowed_paths", [])
+    if not paths or any(not isinstance(p, str) or not p or p in ("*", ".")
+                        or "*" in p or "\\" in p or ":" in p or p.startswith("/")
+                        or ".." in p.split("/") or p == ".git" or p.startswith(".git/") for p in paths):
+        raise RuntimeError("Execution delegation requires explicit safe source paths")
+    baseline = baseline_sha(root, grant["baseline_sha"])
+    if git(root, "merge-base", "--is-ancestor", baseline, "HEAD", check=False).returncode:
+        raise RuntimeError("Executor has not synchronized the work-package baseline")
+    return paths
+
+
 def committed_json(root: Path, reference: str, path: str, optional: bool = False) -> dict | None:
     result = git(root, "show", f"{reference}:{path}", check=False)
     if result.returncode and optional:
@@ -51,7 +81,7 @@ def registered_worktrees(root: Path) -> list[dict[str, str]]:
 
 
 def role_location(root: Path, role: str, rules: dict) -> Path | None:
-    owner = rules["roles"][role]
+    owner = identity(rules, role)
     if role == "A":
         return primary_root(root)
     if owner["worktree"] is None:
@@ -128,11 +158,11 @@ def normalized_paths(root: Path, paths: list[str]) -> list[str]:
 
 
 def checkpoint(root: Path, role: str, message: str, paths: list[str], note: str, wip: bool,
-               baseline: str | None = None) -> dict:
+               baseline: str | None = None, package: str | None = None) -> dict:
     # Read published main rules, even when a task worktree still has an old copy.
     published = committed_json(root, "main", "others/contracts/ownership.json")
     rules = manifest(root) if role == "A" else published
-    owner = rules["roles"][role]
+    owner = dict(identity(rules, role))
     branch = git(root, "branch", "--show-current").stdout.strip()
     if branch != owner["branch"]:
         raise RuntimeError(f"Role {role} requires {owner['branch']}; current branch: {branch}")
@@ -144,6 +174,10 @@ def checkpoint(root: Path, role: str, message: str, paths: list[str], note: str,
         baseline = baseline_sha(root, baseline)
         if not readiness(root, baseline)["contains_baseline"]:
             raise RuntimeError("Worktree has not synchronized baseline " + baseline)
+    if role in rules.get("executors", {}):
+        owner["owned_paths"] = executor_scope(root, role, package)
+    elif package:
+        raise RuntimeError("--package is only valid for an executor")
     if not message.strip() or not note.strip():
         raise RuntimeError("A commit message and truthful check note are required")
     for key in ("user.name", "user.email"):
@@ -182,7 +216,7 @@ def checkpoint(root: Path, role: str, message: str, paths: list[str], note: str,
 def new_worktree(root: Path, role: str, baseline: str | None = None) -> dict:
     main = primary_root(root)
     rules = manifest(main)
-    owner = rules["roles"][role]
+    owner = identity(rules, role)
     if role == "A":
         raise RuntimeError("A uses the primary worktree")
     git(main, "rev-parse", "--verify", rules["base_branch"])
@@ -220,7 +254,7 @@ def register_worktree(root: Path, role: str, path: Path, baseline: str | None = 
     rules = committed_json(main, "main", "others/contracts/ownership.json")
     if manifest(main) != rules or git(main, "status", "--porcelain").stdout.strip():
         raise RuntimeError("Commit the primary worktree and published ownership before registration")
-    owner = rules["roles"][role]
+    owner = identity(rules, role)
     if owner["worktree"] is not None:
         raise RuntimeError("Role " + role + " has a managed path; use the worktree command")
     target = path.resolve()
@@ -259,15 +293,25 @@ def register_worktree(root: Path, role: str, path: Path, baseline: str | None = 
 def status(root: Path, baseline: str | None = None) -> dict:
     resolved = baseline_sha(root, baseline)
     rules = committed_json(root, "main", "others/contracts/ownership.json")
-    branches = {"refs/heads/" + value["branch"]: role for role, value in rules["roles"].items()}
+    identities = {**rules["roles"], **rules.get("executors", {})}
+    branches = {"refs/heads/" + value["branch"]: role for role, value in identities.items()}
+    retired = {"refs/heads/" + value["branch"]: (role, value)
+               for role, value in rules.get("retired_roles", {}).items()}
     worktrees = []
     for fields in registered_worktrees(root):
         path = Path(fields["worktree"])
         role = branches.get(fields.get("branch"))
         report = {"role": role, "branch": fields.get("branch"), **readiness(path, resolved)}
+        if fields.get("branch") in retired:
+            old_role, old = retired[fields["branch"]]
+            report.update(role=old_role, historical=True, replacement=old["replacement"])
         report["registered"] = bool(role and role_location(root, role, rules) == path.resolve())
         report["ready"] = bool(report["registered"] and report["clean"]
                                and report["contains_baseline"] and report["ownership_current"])
+        if role in rules.get("executors", {}):
+            name = "others/contracts/execution-delegations.json"
+            report["delegation_current"] = committed_json(path, "HEAD", name, optional=True) == committed_json(root, "main", name, optional=True)
+            report["ready"] = report["ready"] and report["delegation_current"]
         worktrees.append(report)
     return {
         "root": str(root),
@@ -285,17 +329,23 @@ def main() -> int:
     commands = parser.add_subparsers(dest="command", required=True)
     inspect = commands.add_parser("status")
     inspect.add_argument("--baseline", help="Published commit SHA or ref; default main")
-    work = commands.add_parser("worktree", help="Create one isolated task worktree, or all B-G")
+    work = commands.add_parser("worktree", help="Create a registered active identity's worktree; preserve retired trees")
     choice = work.add_mutually_exclusive_group(required=True)
-    choice.add_argument("--role", choices=list("BCDEFG"))
+    choice.add_argument("--role", help="Active business role; E/F are retired")
+    choice.add_argument("--executor", help="A executor identity, e.g. A-executor")
     choice.add_argument("--all", action="store_true")
     work.add_argument("--baseline", help="Baseline used to report existing-worktree readiness")
     register = commands.add_parser("register", help="A binds an existing clean external Git worktree to a role")
-    register.add_argument("--role", choices=list("BCDEFG"), required=True)
+    registration = register.add_mutually_exclusive_group(required=True)
+    registration.add_argument("--role")
+    registration.add_argument("--executor")
     register.add_argument("--path", type=Path, required=True)
     register.add_argument("--baseline", help="Required ancestor; registration does not merge or synchronize files")
     commit = commands.add_parser("checkpoint", help="Commit only the selected role-owned changes")
-    commit.add_argument("--role", choices=list("ABCDEFG"), required=True)
+    committer = commit.add_mutually_exclusive_group(required=True)
+    committer.add_argument("--role")
+    committer.add_argument("--executor")
+    commit.add_argument("--package", help="A-approved execution-delegations package ID")
     commit.add_argument("--message", required=True)
     commit.add_argument("--check-note", required=True)
     commit.add_argument("--paths", nargs="+", required=True)
@@ -304,15 +354,22 @@ def main() -> int:
     args = parser.parse_args()
     try:
         root = repository(Path.cwd())
+        if args.command != "status":
+            rules = committed_json(root, "main", "others/contracts/ownership.json")
+            executor = getattr(args, "executor", None)
+            if executor and executor not in rules.get("executors", {}):
+                raise RuntimeError("Unknown executor: " + executor)
+            if getattr(args, "role", None) in rules.get("executors", {}):
+                raise RuntimeError("Executor must use --executor and an explicit work package")
         if args.command == "status":
             result = status(root, args.baseline)
         elif args.command == "worktree":
-            roles = list("BCDEFG") if args.all else [args.role]
+            roles = ([r for r in rules["roles"] if r != "A"] + list(rules.get("executors", {}))) if args.all else [args.role or args.executor]
             result = [new_worktree(root, role, args.baseline) for role in roles]
         elif args.command == "register":
-            result = register_worktree(root, args.role, args.path, args.baseline)
+            result = register_worktree(root, args.role or args.executor, args.path, args.baseline)
         else:
-            result = checkpoint(root, args.role, args.message, args.paths, args.check_note, args.wip, args.baseline)
+            result = checkpoint(root, args.role or args.executor, args.message, args.paths, args.check_note, args.wip, args.baseline, args.package)
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0
     except (OSError, RuntimeError, ValueError) as error:

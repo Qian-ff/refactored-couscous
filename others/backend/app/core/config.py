@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     DATABASE_URL: str
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     CORS_ORIGINS: str = ",".join(
-        [f"http://{host}:{port}" for host in ("localhost", "127.0.0.1") for port in range(5173, 5177)]
+        [f"http://{host}:{port}" for host in ("localhost", "127.0.0.1") for port in range(5173, 5178)]
         + ["http://127.0.0.1:48621", "https://localhost", "http://localhost"])
 
     @field_validator("SECRET_KEY")

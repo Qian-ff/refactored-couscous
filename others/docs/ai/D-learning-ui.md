@@ -1,5 +1,7 @@
 # D：三角色与学习体验任务书
 
+当前模型、强度、工作包/汇报/handoff及调度规则先读[统一协作规范](../coordination.md)，其当前规则优先于下文历史阶段叙述；真实门禁仍以a2-start与辅助任务登记为准。
+
 当前D分为批准后的既有UI改版D-UI，以及C/B2经A集成后的完整D交付；不混用开工条件。公共入口/路由归D，A已发布PageProps、身份会话、关卡/预览和平台声明，见[模块协议](../../contracts/a2-protocols.md)。D测试范围为web/tests/d-learning/，共享配置/辅助归A。阶段顺序和用户批准状态见[UI门禁](../ui-redesign-coordination.md)。
 
 ## D-UI 第二批 Goal（已交付，保留历史目标）
@@ -9,7 +11,7 @@ D最终提交58ab4958e62ca50671be921aa4ce91c9e0c0c1e5已由A接收并完成[既�
 ~~~text
 /goal 作为安研通原D，基于A发布的student-relations-ready完成既有UI二次整合，交A/F完整既有UI验收。
 
-在登记D工作树和codex/d-learning-ui-a2分支核对README、AGENTS、a2-start、ownership、共享环境、B-UI集成交接和student-relations-handoff。先保存本树工作，再合并student-relations-ready对应完整SHA，确认包含b-ui-integrated、B最终6682ec37a2543e9e50a1bf400a8d70057351c807及0.3.2真实契约/SDK。已有WIP与检查证据保留，不重置。计划max、执行xhigh，核验当次实际设置，不改全局默认。
+在登记D工作树和codex/d-learning-ui-a2分支核对README、AGENTS、a2-start、ownership、共享环境、B-UI集成交接和student-relations-handoff。先保存本树工作，再合并student-relations-ready对应完整SHA，确认包含b-ui-integrated、B最终6682ec37a2543e9e50a1bf400a8d70057351c807及0.3.2真实契约/SDK。已有WIP与检查证据保留，不重置。计划max、执行medium，核验当次实际设置，不改全局默认。
 
 使用frontend-design，沿用UI-2026.10-v1批准规范和原始冻结资源。保留现有账号注册、资料、首次/普通改密、工作身份、公共壳、HashRouter和B七条注册；B仍唯一维护admin/teaching业务文件及ui.tsx/business.css。只修改D所属入口、routes、styles、components、features/student和web/tests/d-learning。公共契约、SDK、测试配置或B文件需求交A明确交接。
 
@@ -29,22 +31,22 @@ D最终提交58ab4958e62ca50671be921aa4ce91c9e0c0c1e5已由A接收并完成[既�
 ~~~text
 /goal 作为安研通（LabConnect）原D，在用户已批准网页方案、移动与状态规范已冻结并经A发布完整执行SHA后，牵头完成全部已有界面改版，与B/F按所有权协作，交A既有UI验收。未满足批准与冻结条件时只核对依赖，不修改产品界面。
 
-1. 在登记D树/codex/d-learning-ui-a2读README、AGENTS、a2-start、ui-redesign-coordination、ui-redesign-execution、design及ownership；保留本树提交后合并A指定完整SHA或ui-redesign-ready。版本UI-2026.10-v1，批准桌面b67ad77cd49c2b5f99d2037e5828c29433ea66a6，冻结d17b342c53fc054bd298bee356143d3b3ab77af6；执行freeze.cjs --check，核对批准记录与功能映射。D目标xhigh，核验当次实际设置，不改变全局默认。
+1. 在登记D树/codex/d-learning-ui-a2读README、AGENTS、a2-start、ui-redesign-coordination、ui-redesign-execution、design及ownership；保留本树提交后合并A指定完整SHA或ui-redesign-ready。版本UI-2026.10-v1，批准桌面b67ad77cd49c2b5f99d2037e5828c29433ea66a6，冻结d17b342c53fc054bd298bee356143d3b3ab77af6；执行freeze.cjs --check，核对批准记录与功能映射。D执行目标medium，核验当次实际设置，不改变全局默认。
 2. 必须使用frontend-design并沿用冻结规范，先做主题/颜色/字体/布局方案与自查，再实施。D先在web/src/components/labconnect/导出公共组件与属性说明、在本目录assets/迁入正式资源，维护所属styles/、产品壳、登录/服务设置/首次改密及现有学生课程页、正式HashRouter与B注册。先将可用组件提交交A发布新公共SHA，再交B消费；B唯一维护所属ui.tsx/business.css/业务页面和钩子，F配合原生。需要跨范围修改先由A明确具体文件及唯一修改者。
 3. 按已批准的全部已有页面/角色/弹窗/状态清单迁移。接真实PageRegistration与PageProps，复用公共内存会话和生成SDK，不导入dev/harness作为产品入口。保持身份收窄/撤权清状态、学生独立、相同身份查询竞态、CSV预检/原子提交/丢响应同键重试、revision冲突、名单/审批/教师协作/交接/归档；不能用静态演示替换真实业务。
-4. 三端共用共享前端，正式素材迁入D拥有的产品资源范围并保留许可；打包和运行不依赖设计目录。保留当前未开放项，不提前实现题库/考试/助手/监控或未来工作台。后续常规新页沿用批准风格自主设计/实现/截图自查，显著偏离风格或改变业务/权限再确认。
+4. 三端共用共享前端，正式素材迁入D拥有的产品资源范围并保留许可；打包和运行不依赖设计目录。保留当前未开放项，不提前实现题库/考试/助手/监控或未来工作台。后续常规新页沿用批准风格自主设计/实现/截图自查，显著关键或特殊界面先询问用户；业务/架构由A主按硬约束协调。
 5. 运行相关类型、构建和本角色真实接口页面检查；覆盖首次改密/身份切换/权限直链/列表查询与竞态/CSV重试/审批协作交接归档，按功能映射核对无遗漏。检查1440/390、键盘/触屏、安全区/软键盘、长列表/表格内滚动、弹窗以及加载/空/失败重试/离线/无权限/未开放状态。主树API与本树页面均核对实际源码归属，不以设计图或构建成功代替运行验收。
 6. 每轮只暂存D所属改动并本地commit，不推送；报告完整SHA、功能映射、真实检查和待验事项交A。A/F集成后更新一键入口、重建实测Windows/安卓并记录版本；A验收通过后才放行C新增功能。本目标不等于C/B2后的完整D或A2验收完成。
 ~~~
 
 ## 完整D Goal（C/B2真实交接后执行）
 
-后续助手实施须合并A公布的ui-assistant-design-ready或更新完整SHA并读[助手交接](../assistant-floating-handoff.md)。D唯一实现应用内AssistantHost/Frame、四款外壳、48×56吸边恢复区、手机小窗/全屏、个人设置、导航唤起与宿主测试；消费C内容/历史/语音适配和A公共类型，不注册独立聊天页、不接管C业务。当前D-UI仍保持未开放状态。计划max、执行xhigh，实际设置逐轮核验。
+后续助手实施须合并A公布的ui-assistant-design-ready或更新完整SHA并读[助手交接](../assistant-floating-handoff.md)。D唯一实现应用内AssistantHost/Frame、四款外壳、48×56吸边恢复区、手机小窗/全屏、个人设置、导航唤起与宿主测试；消费C内容/历史/语音适配和A公共类型，不注册独立聊天页、不接管C业务。当前D-UI仍保持未开放状态。计划max、执行medium，实际设置逐轮核验。
 
 ~~~text
 /goal 作为安研通（LabConnect）的 D，在 A 集成 B1、C、B2 后发布的基线上，完成三角色公共界面、学生学习考试体验及真实业务页面集成，交A第二次三端验收。
 
-本阶段沿用已通过A验收的D-UI壳与冻结规范；所有UI设计使用frontend-design，常规新页自主设计/实现/截图自查，显著偏离风格或改变业务/权限再确认。D目标xhigh，开工核验实际当次设置。
+本阶段沿用已通过A验收的D-UI壳与冻结规范；所有UI设计使用frontend-design，常规新页自主设计/实现/截图自查，显著关键或特殊界面先询问用户；业务/架构由A主按硬约束协调。D执行目标medium，开工核验实际当次设置。
 
 一、结果与开工
 在Git登记D树/codex/d-learning-ui-a2。重读README、AGENTS、D任务、design、ownership、契约、a2-start、shared-environment和a0-handoff。保留提交合并A最新完整SHA，核对登记/分支/清洁/基线/所有权。完整D以前述真实接口为前提，缺失列依赖，不编造成功接口。复用A环境/SDK/页面类型/请求会话封装/已锁react-router8.5.0，D前端默认5176、API通常A8000，测试分别核对源码归属。

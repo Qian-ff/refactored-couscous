@@ -5,7 +5,6 @@ import json
 from pathlib import Path
 import re
 import subprocess
-import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -26,6 +25,9 @@ def main() -> int:
         "others/deploy/README.md", "others/config/local.example.json",
         "others/scripts/workflow.py", "others/scripts/preflight.py",
         "others/qa/acceptance.md", "others/qa/test_workflow.py",
+        "others/docs/coordination.md", "others/docs/coordination-rollout.md",
+        "others/docs/ai/executor.md", "others/docs/ai/work-package-template.md",
+        "others/contracts/execution-delegations.json",
     ]
     for name in required:
         file = ROOT / name
@@ -33,9 +35,11 @@ def main() -> int:
             failures.append("Missing/empty required file: " + name)
     try:
         rules = json.loads((ROOT / "others/contracts/ownership.json").read_text(encoding="utf-8"))
-        if set(rules["roles"]) != set("ABCDEFG") or rules["max_active_chats"] != 4:
+        if (set(rules["roles"]) != set("ABCDG") or rules["max_active_chats"] != 4
+                or set(rules.get("executors", {})) != {"A-executor"}
+                or set(rules.get("retired_roles", {})) != {"E", "F"}):
             failures.append("Role roster or concurrency differs from the agreed plan")
-        branches = [v["branch"] for v in rules["roles"].values()]
+        branches = [v["branch"] for v in [*rules["roles"].values(), *rules["executors"].values()]]
         if len(branches) != len(set(branches)):
             failures.append("Roles share a branch")
         scopes = []
@@ -57,6 +61,24 @@ def main() -> int:
                     or (right.endswith("/") and left.startswith(right))
                 ):
                     failures.append(f"Overlapping role scopes: {left_role}:{left} / {right_role}:{right}")
+        executor = rules["executors"]["A-executor"]
+        if (executor["owner_role"] != "A" or executor["branch"] != "codex/a-executor"
+                or executor.get("owned_paths") or executor["worktree"] is not None):
+            failures.append("Executor must use an independent registered branch and explicit per-package delegation")
+        if not (ROOT / executor["brief"]).is_file():
+            failures.append("Missing executor brief")
+        grants = json.loads((ROOT / executor["delegations"]).read_text(encoding="utf-8"))
+        for package, grant in grants["packages"].items():
+            paths = grant.get("allowed_paths", [])
+            if (grant.get("executor") not in rules["executors"] or not paths
+                    or not re.fullmatch(r"[0-9a-f]{40}", grant.get("baseline_sha", ""))
+                    or any(not isinstance(p, str) or not p or p in (".", "*")
+                           or "*" in p or "\\" in p or ":" in p or p.startswith("/")
+                           or ".." in p.split("/") or p == ".git" or p.startswith(".git/") for p in paths)):
+                failures.append("Unsafe execution delegation: " + package)
+        if (rules["retired_roles"]["E"]["replacement"] != "C"
+                or rules["retired_roles"]["F"]["replacement"] != "A-executor"):
+            failures.append("Retired E/F replacements differ from approved plan")
     except (OSError, ValueError, KeyError) as error:
         failures.append("Invalid ownership manifest: " + str(error))
     documents = [ROOT / "README.md", ROOT / "AGENTS.md"]
@@ -92,7 +114,7 @@ def main() -> int:
     if failures:
         print("\n".join("FAIL: " + value for value in failures))
         return 1
-    print(f"PASS: preparation files, local links, 7 roles, scope isolation and {len(checks)} ignore cases")
+    print(f"PASS: preparation files, local links, 5 business roles + 1 executor, retired E/F, scope isolation and {len(checks)} ignore cases")
     print("Application, model and installer readiness are not covered by this check.")
     return 0
 

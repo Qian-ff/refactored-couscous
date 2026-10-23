@@ -1,5 +1,7 @@
 # 多工作树共用本机环境
 
+现行职责见[统一协作规范](coordination.md)。A副复用主树依赖/配置/模型，但app_source、worker_source、Git提交和报告属于本树；共享测试库仍串行锁定，不能用主树服务证明分支新代码。
+
 统一入口通过 Git common directory 定位主工作区，不把个人路径写进公共配置。配置/依赖共享，源码/报告/Git分支分别属于各树。
 
 | 内容 | 规则 |
@@ -32,7 +34,7 @@ python .\others\scripts\shared_env.py probe-worker
 python .\others\scripts\shared_env.py worker speech.实际模块
 ~~~
 
-worker命令只接受当前树others/ai_worker内的实际模块。A已提供transport/私有真实ASR及进程取消/超时，各树业务通过app.core.asr_client消费主树忽略配置，见[云端ASR交接](cloud-asr-handoff.md)；C新增content/、speech/仍运行本树源码。worker入口设置LABCONNECT_SHARED_ROOT和LABCONNECT_MODEL_ROOT，模型一份；没有业务.env或云AI密钥直通给worker。A唯一维护共享服务/SSH通道，子树不另起占用18765的实例。
+worker命令只接受当前树others/ai_worker内的实际模块。A已提供transport/私有真实ASR及进程取消/超时，各树业务通过app.core.asr_client消费主树忽略配置，见[云端ASR交接](cloud-asr-handoff.md)；C新增content/、speech/仍运行本树源码。worker入口设置LABCONNECT_SHARED_ROOT和LABCONNECT_MODEL_ROOT，模型一份；没有业务.env或云AI密钥直通给worker。A主决定共享服务/SSH通道维护，A副仅按明确工作包执行，子树不另起占用18765的实例。
 
 所有共享pytest入口使用同一个本机专用测试库且加跨进程锁，冲突明确拒绝，稍后重试；不并行互删表，不用演示库测试。根others/backend/conftest.py覆盖tests及app/domains，领域夹具已以真实PG验证。测试命令用--tb=short避免驱动栈局部变量暴露配置；报告也不保存密钥。需要独立并行测试库先由A分配。
 
@@ -40,7 +42,7 @@ contracts.py的OpenAPI导出复用共享解释器并显式绑定当前工作树�
 
 ## 端口与来源
 
-A/B/C/D前端分别5173/5174/5175/5176，Vite按分支选择、strictPort。D通常连接A的8000 API；B/C分支API可选空闲8001等并先协调迁移，不能拿A已发布服务冒称分支新接口。
+A主/B/C/D前端分别5173/5174/5175/5176；A副前端5177、独立API8002，Vite按分支选择、strictPort。D通常连接A的8000 API；B/C分支API可选空闲8001等并先协调迁移，不能拿A已发布服务冒称分支新接口。
 
 ~~~powershell
 .\others\scripts\Start-Backend.ps1 -Port 8001
@@ -64,3 +66,7 @@ Codex运行时刷新后若pnpm消失，A在主树执行python others/scripts/pre
 依据：[CPython getpath](https://github.com/python/cpython/blob/v3.14.6/Modules/getpath.py#L377-L386)、[Windows路径查询](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-getfinalpathnamebyhandlew)。
 
 本轮证据和未完成边界见[a0-handoff.md](a0-handoff.md)，不能把环境准备当成三端语音验收。
+
+## A副独立验证入口
+
+在登记的A副树先运行shared_env.py status/probe/probe-worker；已有依赖不重装。需要网页依赖时用install-web离线复用。API使用Start-Backend.ps1 -Port 8002；网页按codex/a-executor分支默认5177。端口占用或源码身份不符则保留已有服务并报告，不终止其他树进程。浏览器验证显式设置LABCONNECT_API_ROOT为本树、LABCONNECT_API_URL为http://127.0.0.1:8002，避免默认主树API产生假通过。Start-A1仅用于既有主/业务树，A副使用上述分支独立验证入口，不执行演示库迁移。

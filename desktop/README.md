@@ -1,5 +1,7 @@
 # Windows desktop
 
+原F职责已由A副A-executor按A主工作包接收；当前分工、设置和放行见[统一协作规范](../others/docs/coordination.md)。本文件原生功能要求保留，角色合并不新增开工或发布授权。
+
 Electron44.9.0 共享网页客户端。A1 提供可搬移测试包；F 接管并扩展安全存储、设备能力和正式安装器。
 
 根目录运行 `pnpm run build:desktop`。完整复制 desktop/release/win-unpacked 文件夹后，运行 LabConnect.exe；不可只拷贝单个 exe。客户端在进程内启动仅监听本机的静态资源服务，业务连接独立后端，运行时不读取开发目录。

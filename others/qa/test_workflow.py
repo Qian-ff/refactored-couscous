@@ -257,6 +257,80 @@ class WorkflowTest(unittest.TestCase):
             workflow.register_worktree(self.repo, "B", target)
         self.assertEqual(workflow.git(target, "branch", "--show-current").stdout.strip(), "other-feature")
 
+    def executor_tree(self, paths: list[str] | None = None) -> Path:
+        baseline = self.git("rev-parse", "main")
+        self.write("others/contracts/execution-delegations.json", json.dumps({"version": 1, "packages": {
+            "fixture": {"executor": "A-executor", "status": "active", "baseline_sha": baseline,
+                        "allowed_paths": paths or ["desktop/"]}}}))
+        self.git("add", "others/contracts/execution-delegations.json")
+        self.git("commit", "-m", "approve executor fixture package")
+        target = self.external_tree("executor")
+        workflow.register_worktree(self.repo, "A-executor", target)
+        return target
+
+    def test_executor_requires_package_and_enforces_scope(self) -> None:
+        target = self.executor_tree()
+        file = target / "desktop/example.txt"
+        file.parent.mkdir(parents=True)
+        file.write_text("native fixture", encoding="utf-8")
+        with self.assertRaisesRegex(RuntimeError, "active A-approved"):
+            workflow.checkpoint(target, "A-executor", "test", ["desktop"], "PASS", False)
+        with self.assertRaisesRegex(RuntimeError, "requires main"):
+            workflow.checkpoint(target, "A", "test", ["desktop"], "PASS", False)
+        outside = target / "web/src/routes/forbidden.txt"
+        outside.parent.mkdir(parents=True)
+        outside.write_text("preserve", encoding="utf-8")
+        with self.assertRaisesRegex(RuntimeError, "outside this role"):
+            workflow.checkpoint(target, "A-executor", "test", ["web/src/routes"], "PASS", False, package="fixture")
+        result = workflow.checkpoint(target, "A-executor", "test native", ["desktop"], "fixture PASS", False, package="fixture")
+        self.assertEqual(result["branch"], "codex/a-executor")
+        self.assertEqual(outside.read_text(), "preserve")
+        self.assertFalse((self.repo / "desktop/example.txt").exists())
+        self.assertEqual(workflow.checkpoint(target, "A-executor", "unchanged", ["desktop"], "PASS", False, package="fixture")["status"], "no_changes")
+
+    def test_executor_cannot_edit_its_own_grant_or_use_revoked_package(self) -> None:
+        target = self.executor_tree()
+        name = "others/contracts/execution-delegations.json"
+        grant = json.loads((target / name).read_text())
+        grant["packages"]["fixture"]["allowed_paths"] = ["web/src/routes/"]
+        (target / name).write_text(json.dumps(grant), encoding="utf-8")
+        with self.assertRaisesRegex(RuntimeError, "Outdated execution delegation"):
+            workflow.checkpoint(target, "A-executor", "test", ["web/src/routes"], "PASS", False, package="fixture")
+        # Publish revocation on main, then synchronize normally without rewriting history.
+        grant["packages"]["fixture"]["status"] = "revoked"
+        self.write(name, json.dumps(grant))
+        self.git("add", name)
+        self.git("commit", "-m", "revoke executor fixture")
+        (target / name).write_text(json.dumps(grant), encoding="utf-8")
+        workflow.git(target, "add", name)
+        workflow.git(target, "commit", "-m", "preserve local grant edit")
+        workflow.git(target, "merge", "--no-edit", "main")
+        with self.assertRaisesRegex(RuntimeError, "active A-approved"):
+            workflow.checkpoint(target, "A-executor", "test", ["desktop"], "PASS", False, package="fixture")
+
+    def test_retired_roles_preserve_history_and_c_owns_monitoring(self) -> None:
+        for role in ("E", "F"):
+            old = self.rules["retired_roles"][role]
+            target = self.repo / "others/worktrees" / old["worktree"]
+            self.git("worktree", "add", "-b", old["branch"], str(target), "main")
+            with self.assertRaisesRegex(RuntimeError, "is retired"):
+                workflow.new_worktree(self.repo, role)
+            with self.assertRaisesRegex(RuntimeError, "is retired"):
+                workflow.checkpoint(target, role, "test", ["."], "PASS", False)
+            row = next(w for w in workflow.status(self.repo)["worktrees"] if w["role"] == role)
+            self.assertTrue(row["historical"])
+            self.assertFalse(row["ready"])
+            self.assertTrue(target.exists())
+        self.assertTrue(workflow.owned("others/ai_worker/monitoring/detector.py", self.rules["roles"]["C"]["owned_paths"]))
+
+    def test_executor_rejects_unsafe_path_grants_and_wrong_branch(self) -> None:
+        target = self.executor_tree(["*"])
+        with self.assertRaisesRegex(RuntimeError, "safe source paths"):
+            workflow.checkpoint(target, "A-executor", "test", ["desktop"], "PASS", False, package="fixture")
+        workflow.git(target, "switch", "-c", "other-executor")
+        with self.assertRaisesRegex(RuntimeError, "requires codex/a-executor"):
+            workflow.checkpoint(target, "A-executor", "test", ["desktop"], "PASS", False, package="fixture")
+
 
 if __name__ == "__main__":
     unittest.main()

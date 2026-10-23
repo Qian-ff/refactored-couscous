@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url"
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..")
 const git = (...args) => execFileSync("git", ["-C", root, ...args], { encoding: "utf8" }).trim()
 export const primaryRoot = path.dirname(path.resolve(root, git("rev-parse", "--git-common-dir")))
-const ports = { main: 5173, "codex/b-core-a2": 5174, "codex/c-content-ai-a2": 5175, "codex/d-learning-ui-a2": 5176 }
+const ports = { main: 5173, "codex/b-core-a2": 5174, "codex/c-content-ai-a2": 5175, "codex/d-learning-ui-a2": 5176, "codex/a-executor": 5177 }
 export const webPort = Number(process.env.LABCONNECT_WEB_PORT || ports[git("branch", "--show-current")] || 5173)
 const reportStage = process.env.LABCONNECT_REPORT_STAGE || "a0"
 if (!/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,63}$/.test(reportStage)) throw new Error("Invalid LABCONNECT_REPORT_STAGE")

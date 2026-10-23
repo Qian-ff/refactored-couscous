@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "base_branch": "main",
   "worktree_root": "others/worktrees",
   "max_active_chats": 4,
@@ -33,7 +33,10 @@
         "others/ai_worker/content/",
         "others/ai_worker/speech/",
         "web/src/features/content/",
-        "web/src/features/assistant/"
+        "web/src/features/assistant/",
+        "others/backend/app/domains/monitoring/",
+        "others/ai_worker/monitoring/",
+        "web/src/features/monitoring/"
       ]
     },
     "D": {
@@ -50,26 +53,6 @@
         "web/tests/d-learning/"
       ]
     },
-    "E": {
-      "title": "监控与风险反馈",
-      "branch": "task/monitoring",
-      "worktree": "monitoring",
-      "owned_paths": [
-        "others/backend/app/domains/monitoring/",
-        "others/ai_worker/monitoring/",
-        "web/src/features/monitoring/"
-      ]
-    },
-    "F": {
-      "title": "Windows 与安卓",
-      "branch": "task/clients",
-      "worktree": "clients",
-      "owned_paths": [
-        "desktop/",
-        "android/",
-        "web/src/platform/"
-      ]
-    },
     "G": {
       "title": "独立验收",
       "branch": "task/qa",
@@ -78,5 +61,19 @@
         "others/qa/"
       ]
     }
+  },
+  "executors": {
+    "A-executor": {
+      "title": "A副：集成执行与原生客户端",
+      "owner_role": "A",
+      "branch": "codex/a-executor",
+      "worktree": null,
+      "brief": "others/docs/ai/executor.md",
+      "delegations": "others/contracts/execution-delegations.json"
+    }
+  },
+  "retired_roles": {
+    "E": {"branch": "task/monitoring", "worktree": "monitoring", "replacement": "C"},
+    "F": {"branch": "task/clients", "worktree": "clients", "replacement": "A-executor"}
   }
 }

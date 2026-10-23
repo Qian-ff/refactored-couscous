@@ -1,12 +1,14 @@
 # Git 与多聊天工作区
 
+现行角色、工作包、汇报/handoff和自动调度见[统一协作规范](coordination.md)。A副以--executor A-executor登记，checkpoint还须--package已批准包编号；不使用--role A。A主仍唯一接收main与发布基线。
+
 用户要求：每轮代码生成或修改结束保存本地提交，分支聊天提交自己的分支。仓库规则由根 AGENTS.md 生效；此文给出操作步骤。
 
 ## 分支与工作区
 
-A 使用主目录 main；角色分支由 ownership.json 指定。B/C/D 使用用户新建的外部 Codex 工作树及 codex/*-a2 分支，由 A 登记；E/F/G 暂保留 others/worktrees 下的原任务分支。工作区之间共享 Git 历史，各自修改自己的源码。最多同时运行四个聊天。当前基线、顺序见 [A2 开工](a2-start.md)，配置和依赖见 [共享环境](shared-environment.md)。
+A 使用主目录 main；角色分支由 ownership.json 指定。B/C/D 使用用户新建的外部 Codex 工作树及 codex/*-a2 分支，由 A 登记；G按需使用原验收分支；E/F旧树与分支仅历史保留，A副用独立codex/a-executor分支。工作区之间共享 Git 历史，各自修改自己的源码。最多同时运行四个聊天。当前基线、顺序见 [A2 开工](a2-start.md)，配置和依赖见 [共享环境](shared-environment.md)。
 
-临时设计任务由A记录在[auxiliary-tasks.json](../contracts/auxiliary-tasks.json)，不放入七角色所有权。ui-design-v1已使用codex/ui-design-v1和others/worktrees/ui-design，只可提交others/design/ui-redesign/。每轮在该树核对实际目录、分支和暂存范围，显式逐文件git add后commit，不借用workflow.py的A/D身份。A按main...候选SHA核对差异；用户网页批准及完整规范冻结后才接收设计提交，详见[批准门禁](ui-redesign-coordination.md)。
+临时设计任务由A记录在[auxiliary-tasks.json](../contracts/auxiliary-tasks.json)，不充当当前业务或A副身份。ui-design-v1已使用codex/ui-design-v1和others/worktrees/ui-design，只可提交others/design/ui-redesign/。每轮在该树核对实际目录、分支和暂存范围，显式逐文件git add后commit，不借用workflow.py的A/D身份。A按main...候选SHA核对差异；用户网页批准及完整规范冻结后才接收设计提交，详见[批准门禁](ui-redesign-coordination.md)。
 
 用户已新建的外部工作树由 A 在干净、已提交规则的主目录执行登记，例如：
 
@@ -17,8 +19,6 @@ python .\others\scripts\workflow.py register --role B --path "实际的B工作�
 登记检查同一仓库、干净状态、指定祖先基线和分支占用；仅为 detached 树创建角色分支，不覆盖旧分支历史，不自动合并。A 再将三个新树快进同步到 a2-start。已登记 B/C/D 的 worktree 命令只报告现状；不会重新创建另一份目录。尚未启用的托管工作树可按需创建：
 
 ~~~powershell
-python .\others\scripts\workflow.py worktree --role E
-python .\others\scripts\workflow.py worktree --role F
 python .\others\scripts\workflow.py worktree --role G
 ~~~
 
@@ -57,8 +57,8 @@ python .\others\scripts\workflow.py checkpoint --role B --message "feat(core): a
 |---|---|---|
 | 第1次：当前交接 | 当前 A1 底座、一键工具及本轮角色/搜索要求提交并检查后立即推送 | checkpoint-1；同时保留并上传历史 a1-0.1.0 标签 |
 | 第2次：A第二轮集成 | B/C/D 均完成约定交付，A 合并、联调并验证本轮一键入口后推送 | checkpoint-2 |
-| 第3次：A第三轮集成 | 后续第三轮功能合并及相关验收完成后推送；预计包含 E/F 等，具体范围按当轮任务 | checkpoint-3 |
+| 第3次：A第三轮集成 | 后续第三轮功能合并及相关验收完成后推送；预计包含C后续监控/A副原生等，具体范围按当轮任务 | checkpoint-3 |
 
-每轮代码修改仍须本地提交；非上述节点不自行额外推送，B–G 仅提交自己的本地任务分支。每次推送记录完整提交 SHA，并用 ls-remote 核对远端 main/标签。推送失败不记作已上传；保留本地提交、准确报告原因，再在同一节点恢复，不改写远端历史。构建包、环境、账号密码、数据库与私密参考文件继续留在忽略区；这次授权是 Git 仓库备份，不含部署或公开发布安装包。
+每轮代码修改仍须本地提交；非上述节点不自行额外推送，A副及B/C/D/G仅提交自己的本地任务分支。每次推送记录完整提交 SHA，并用 ls-remote 核对远端 main/标签。推送失败不记作已上传；保留本地提交、准确报告原因，再在同一节点恢复，不改写远端历史。构建包、环境、账号密码、数据库与私密参考文件继续留在忽略区；这次授权是 Git 仓库备份，不含部署或公开发布安装包。
 
 checkpoint-1 是已上传的历史交接；本轮 B/C/D 使用 a2-start 和 A 后续发布的完整 SHA，详见 a2-start.md。历史标签均不覆盖或重打。仅项目级 user.name/user.email 使用用户提供值，不修改全局配置。

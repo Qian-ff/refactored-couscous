@@ -10,13 +10,15 @@
 
 ## 从这里开始
 
+- [多聊天协作规范](others/docs/coordination.md)：A主、A副、B/C/D/G；E并C、F并A副，工作包/设置/技能/汇报与自动分派统一规则；[实际迁移与接收记录](others/docs/coordination-rollout.md)。
+
 - [A1 使用与一键打开](others/docs/a1-usage.md)：双击 Open-Web.cmd、Open-Windows.cmd、Open-Android.cmd，或 Open-A1.cmd 选择三端；包含登录和课程同步体验流程。
 - [既有UI验收与本轮入口](others/docs/existing-ui-acceptance.md)：Open-DUI.cmd、学生加退班/历史演示、三端实测、安卓返回回归及C前置边界。
 - [B-UI正式页面体验与D接续](others/docs/b-ui-integration-handoff.md)：Open-BUI.cmd打开当前正式界面，区别于历史B1独立组件夹具；本地基线b-ui-integrated。
 - [学生本人关系接口交接](others/docs/student-relations-handoff.md)：0.3.2真实接口、生成SDK、D接续条件及项目内pnpm恢复；Open-StudentRelations.cmd启动同一套现有网页/API。
 - [B1 阶段验收](others/docs/b1-handoff.md)：Open-B1.cmd 打开内部业务组件预览；Open-B1-API.cmd 打开真实后端联调入口。正式导航由 D 接入。
-- [D-UI执行交接](others/docs/ui-redesign-execution.md)：已批准桌面与冻结SHA、D/B/F唯一文件分工、公共组件先行和C/B2验收门禁。
-- [悬浮助手 v1.1 接收交接](others/docs/assistant-floating-handoff.md)：已批准的三端应用内单例规范、D/C/F/B2职责和后续目标；仍待产品实施。
+- [D-UI执行交接](others/docs/ui-redesign-execution.md)：已批准桌面与冻结SHA、D/B/A副当前文件分工（历史F由A副接收）、公共组件先行和C/B2验收门禁。
+- [悬浮助手 v1.1 接收交接](others/docs/assistant-floating-handoff.md)：已批准的三端应用内单例规范、D/C/A副/B2职责和后续目标；仍待产品实施。
 - [UI网页图册](others/design/ui-redesign/index.html)、[390px移动图册](others/design/ui-redesign/mobile-gallery.html)：已接收的设计参考，非产品运行证据；持续规则见[UI改版协作](others/docs/ui-redesign-coordination.md)。
 - [设计基线](others/docs/design.md)：本聊天确认的功能、范围、数据和视觉要求。
 - [A1 状态与交接](others/docs/a1-handoff.md)：已验证证据、待完成项目和可发布基线。
@@ -27,7 +29,7 @@
 - [ECS 云端联调部署](others/deploy/cloud/README.md)：从干净主线打包、独立凭据、HTTPS、数据库备份与迁移；实际地址、版本与三端验证见[云端交接](others/docs/cloud-handoff.md)。
 - [C开工与云端ASR前置](others/docs/cloud-asr-handoff.md)：c-start-ready基线、私有适配、一键启停、云端/本地验证及后续权限边界。
 - [本机环境](others/docs/environment.md)：实际工具检查、会话级 JDK/SDK 设置与未验证项。
-- [七个 AI 聊天任务](others/docs/ai/README.md)：复制对应任务书到聊天。
+- [六个协作身份与任务](others/docs/ai/README.md)：复制对应任务书到聊天。
 - [Git 与分支协作](others/docs/git-workflow.md)：每轮提交、独立工作区和合并。
 - [验收清单](others/qa/acceptance.md)：将来应用必须通过的检查。
 - [配置模板](others/deploy/.env.example)：占位配置，实际密钥保存在忽略文件中。

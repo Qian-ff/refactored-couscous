@@ -1,15 +1,17 @@
 # C：内容、题库与助手任务书
 
+当前模型、强度、工作包/汇报/handoff及调度规则先读[统一协作规范](../coordination.md)，其当前规则优先于下文历史阶段叙述；真实门禁仍以a2-start与辅助任务登记为准。
+
 2026-10-23 A已验收既有UI及[云端API/ASR前置](../cloud-asr-handoff.md)，发布c-start-ready并允许C开工；完整SHA用git rev-parse 'c-start-ready^{}'核验，先保存本树工作再合并。A提供加密原语、真实私有ASR适配及已验证Flash配置，C负责学校配置业务、内容和助手。B2仍等待C交付；考试联合检查不构成C完成的循环依赖。来源/许可边界见[模块协议](../../contracts/a2-protocols.md)。
 
-[B1最终集成基线](../b1-handoff.md)保留底座事实：真实契约0.3.1、迁移b1c0e0a00001；先读B的core/handoff/b1-content-access.md，复用授权SQL、对象二次校验和合成双班样例。当前[UI前置门禁](../ui-redesign-coordination.md)优先，不能仅凭b1-ready启动C。UI验收后保留C本树改动并合并A新SHA，以下完整Goal继续有效，不重复A0/B1。C目标xhigh，恢复时核验实际轮次；涉及UI设计必须frontend-design并沿用冻结风格，常规新页自主设计/截图自查。
+[B1最终集成基线](../b1-handoff.md)保留底座事实：真实契约0.3.1、迁移b1c0e0a00001；先读B的core/handoff/b1-content-access.md，复用授权SQL、对象二次校验和合成双班样例。当前[UI前置门禁](../ui-redesign-coordination.md)优先，不能仅凭b1-ready启动C。UI验收后保留C本树改动并合并A新SHA，以下完整Goal继续有效，不重复A0/B1。C执行目标medium，恢复时核验实际轮次；涉及UI设计必须frontend-design并沿用冻结风格，常规新页自主设计/截图自查。
 
 ## C Goal
 
-助手采用[已批准v1.1交接](../assistant-floating-handoff.md)及a2-protocols宿主语义。C只交内容/个人历史/固定范围/引用/语音和生命周期适配，不再规划独立聊天PageRegistration；其他内容/编辑器页面仍按原协议。此补充不放行C，计划max、执行xhigh，实际轮次开工核验。
+助手采用[已批准v1.1交接](../assistant-floating-handoff.md)及a2-protocols宿主语义。C只交内容/个人历史/固定范围/引用/语音和生命周期适配，不再规划独立聊天PageRegistration；其他内容/编辑器页面仍按原协议。此补充不放行C，计划max、执行medium，实际轮次开工核验。
 
 ~~~text
-/goal 作为安研通（LabConnect）的 C，在既有UI改版已通过A验收、A明确允许C开工并发布最新完整基线后，完成授权资料、分层题库、AI建题、检索和资料语音助手，交 B2、D、A 接续。先核对当前阶段门禁，未放行时不启动新增业务；涉及UI必须使用frontend-design并沿用冻结规范，C目标xhigh且核验当次实际设置。
+/goal 作为安研通（LabConnect）的 C，在既有UI改版已通过A验收、A明确允许C开工并发布最新完整基线后，完成授权资料、分层题库、AI建题、检索和资料语音助手，交 B2、D、A 接续。先核对当前阶段门禁，未放行时不启动新增业务；涉及UI必须使用frontend-design并沿用冻结规范，C执行目标medium且核验当次实际设置。
 
 一、结果
 1. 在Git登记C树/codex/c-content-ai-a2。重读README、AGENTS、C任务、design、ownership、契约、a2-start、shared-environment、a0-handoff。保留本树提交，合并A最新完整SHA，核对登记/分支/清洁/基线/所有权和共享依赖源码。B1须已提供真实课程目录/教学班/组织及授权服务；以course_id为班、catalog_id为目录，复用B授权，不另建人员/课程体系。
@@ -35,7 +37,7 @@
 沿用现有栈、生成SDK和服务端正式数据，文件/推理为可取消有状态任务，初期重型任务串行，故障不阻塞普通业务。来源许可/审核版本完整；所有状态真实，蓝绿界面有加载/空/失败/离线/无权限/未配置/设备拒绝。退出/切身份清旧结果，组件内搜索处理竞态；凭据仅公共内存状态。
 
 四、边界
-只改C所有权：后端content/assistant、worker content/speech、前端features/content/assistant，提案/测试/交接同范围。A管公共契约/迁移/依赖/挂载/版本SDK/配置原语/最终原生适配，B管核心和正式学习，D管入口路由与互动渲染。C持久化学校配置和页面，不重复A加密。监控/正式安装器由E/F。
+只改C当前所有权：当前内容阶段为后端content/assistant、worker content/speech、前端features/content/assistant；监控三个目录归C但须后续单独放行，提案/测试/交接同范围。A管公共契约/迁移/依赖/挂载/版本SDK/配置原语/最终原生适配，B管核心和正式学习，D管入口路由与互动渲染。C持久化学校配置和页面，不重复A加密。监控整域由C后续独立阶段承担，正式安装器由A副受托承担。
 
 五、迭代政策
 提案→资料题库/审核固定版本→及时交A发布→检索→配置/问答/语音→模块验证/交B2。每轮仅暂存本轮C文件并本地commit，不推送/不改历史，无差异不空提交；报告角色分支完整SHA/修改/真实检查/失败/后续接收方。缺依赖推进独立项，不用假接口成功。

@@ -1,6 +1,15 @@
 {
   "version": 1,
   "handoffs": {
+    "coordination-v1-policy-migration": {
+      "coordinator": "A",
+      "implementation_role": "human-authorized coordination task",
+      "authorization_thread": "01a1687d-f65a-7462-8af9-306125bfa662",
+      "baseline_commit": "8ad3304efee683e2a8d493673954085bd7b8cdcb",
+      "scope": "Coordination docs, role/delegation tooling and tests, executor port/CORS support, existing A child relocation and five rule-only notifications; no business development or push",
+      "concurrency_evidence": "Main clean; A main idle, other registered roles notLoaded at implementation start",
+      "after_release": "A main receives main and releases baselines; A-executor prepares candidates, C receives former E, A-executor receives former F; old branch history and gates retained"
+    },
     "android-back-d-ui-acceptance": {
       "coordinator": "A",
       "implementation_role": "A",
