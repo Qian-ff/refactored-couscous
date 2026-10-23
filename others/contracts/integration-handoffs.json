@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "handoffs": {
+    "student-self-relations": {
+      "coordinator": "A",
+      "implementation_role": "A",
+      "domain_owner": "B",
+      "reason": "D second-pass dependency: self relationship history and safe class labels for own requests",
+      "source_thread": "01a15942-a1c7-7d33-951d-4dbe62d858f7",
+      "baseline_commit": "38fbc9621f97cd2568cbb62b60416ecf3ee8185e",
+      "temporary_domain_files": [
+        "others/backend/app/domains/core/business_schemas.py",
+        "others/backend/app/domains/core/class_routes.py"
+      ],
+      "concurrency_evidence": "B UI delivery completed at 6682ec37a2543e9e50a1bf400a8d70057351c807; B chat notLoaded and no active editing when inspected",
+      "scope": "Read-only self queries and DTO additions; no live course policy, model, migration or write-command changes",
+      "release_ref": "student-relations-ready",
+      "after_release": "B retains normal domain maintenance; D consumes the released generated SDK",
+      "C_B2_new_features_allowed": false
+    }
+  }
+}

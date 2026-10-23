@@ -6,9 +6,11 @@
 
 ## 固定顺序
 
+2026-10-23依赖更新：A发布本地student-relations-ready（完整提交用git rev-parse 'student-relations-ready^{}'核验），包含b-ui-integrated及真实契约0.3.2。D已保存的第二批WIP仍保留在自己的分支；先合并此依赖，再恢复原D Goal。新增本人关系接口、班级标签、SDK和pnpm恢复步骤见[本人关系交接](student-relations-handoff.md)。这不是D第二批完成或既有UI验收，C/B2门禁不变。
+
 当前接续更新：B展示迁移6682ec37a2543e9e50a1bf400a8d70057351c807已由A接收，新本地基线b-ui-integrated，见[实际交接与一键体验](b-ui-integration-handoff.md)。原D合并后补学生加退班、申请和撤销等既有入口，再交A/F完整既有UI验收。d-ui-components-ready及旧标签保留，C/B2仍未放行。下列“D-UI→A验收”指完整专项，不因B或D单批交付而提前完成。
 
-当前[B1最终集成交接](b1-handoff.md)已完成，真实契约0.3.1；UI-2026.10-v1网页方向已获用户明确批准，冻结d17b342c53fc054bd298bee356143d3b3ab77af6已接收。原D可合并ui-redesign-ready并先执行D-UI公共组件，B/F按[执行交接](ui-redesign-execution.md)接续；登记见[辅助任务](../contracts/auxiliary-tasks.json)。C/B2新增功能仍等待既有UI经A真实验收。a2-ready和b1-ready均保留历史位置。
+B1最终集成时的真实契约为0.3.1，当前公共依赖已更新为0.3.2；UI-2026.10-v1网页方向已获用户明确批准，冻结d17b342c53fc054bd298bee356143d3b3ab77af6已接收。原D公共组件第一批与B展示迁移已完成，当前执行上方D第二批；登记见[辅助任务](../contracts/auxiliary-tasks.json)。C/B2新增功能仍等待既有UI经A真实验收。a2-ready和b1-ready均保留历史位置。
 
 1. **A0公共执行基线**：兼容CourseCatalog/教学班、工作身份/学生互斥、前端会话和页面/预览协议、真实0.2.0 SDK、CORS、共享依赖/ASR与测试归属。实际检查见[a0-handoff.md](a0-handoff.md)。
 2. **B1（已完成）**：组织账号、目录班级、名单/审批/协作/交接/归档、授权服务和教师/管理组件；A已集成并发布b1-ready=1e1011b4ff2e3c5a66b22492fb87a671e9699584。
@@ -33,4 +35,4 @@ python .\others\scripts\shared_env.py probe
 
 registered/clean/contains_baseline/ownership_current以及依赖锁一致才就绪。主树配置/依赖共用、源码各树绑定，见[共享环境](shared-environment.md)。角色只能提交本分支本范围，不自行推送，保护已有提交。
 
-A0不是B1或A2完成。A0历史契约为0.2.0；当前B1公共契约0.3.1已接入组织账号/班级后端及教师/管理独立组件，正式导航由D接入。资料搜索、考试等后续协议只在[a2-protocols](../contracts/a2-protocols.md)和TS声明，尚未冒充真实接口。完整监控交E、签名/正式安装器交F。Windows/Android麦克风与采集、中文确认问答播报和文件适配在C/D交付后由A/F真实测试，不以worker示例代替。最终包必须对应A2源码及契约，准备阶段不额外推送。
+A0不是B1或A2完成。A0历史契约为0.2.0；当前公共契约0.3.2已接入组织账号/班级后端、学生本人关系元数据及教师/管理独立组件，正式导航由D接入。资料搜索、考试等后续协议只在[a2-protocols](../contracts/a2-protocols.md)和TS声明，尚未冒充真实接口。完整监控交E、签名/正式安装器交F。Windows/Android麦克风与采集、中文确认问答播报和文件适配在C/D交付后由A/F真实测试，不以worker示例代替。最终包必须对应A2源码及契约，准备阶段不额外推送。

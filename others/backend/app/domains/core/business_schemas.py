@@ -245,6 +245,25 @@ class RequestView(BaseModel):
     decided_at: datetime | None
 
 
+class SelfRequestView(RequestView):
+    """Safe class labels for the current student's own request, not live course access."""
+
+    course_code: str
+    course_title: str
+    course_archived: bool
+
+
+class SelfEnrollmentView(BaseModel):
+    """Latest stored relationship, not an event ledger or a live-resource permission."""
+
+    enrollment_id: UUID
+    course_id: UUID
+    course_code: str
+    course_title: str
+    course_archived: bool
+    status: Literal["active", "withdrawn", "removed"]
+
+
 class InvitationView(BaseModel):
     id: UUID
     school_id: UUID

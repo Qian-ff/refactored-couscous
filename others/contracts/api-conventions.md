@@ -1,12 +1,16 @@
 # API 约定
 
-## 实际 0.3.1（兼容0.3.0及A0的0.2.0）
+## 实际 0.3.2（兼容0.3.1、0.3.0及A0的0.2.0）
 
 唯一版本源为 ../config/application.json。OpenAPI 只导出实际接口；version.json 记录真实导出哈希，web/src/client 由工具生成，不手改。/courses 继续表示教学班，响应新增 catalog_id；旧创建请求兼容。
 
-B1真实组织/账号/目录/班级/CSV操作见[b1-public-handoff](../docs/b1-public-handoff.md)。新写入要求幂等键，修改带revision；输入校验错误不包含input/context。health增加migration并核验实际库头版本，未迁移返回503。B2等未来接口继续只保留设计，不生成占位SDK。
+B1真实组织/账号/目录/班级/CSV操作见[b1-public-handoff](../docs/b1-public-handoff.md)。写入按实际接口要求幂等键；只有DTO声明revision的操作才传revision。学生join/leave/cancel使用Idempotency-Key，没有revision字段，不补造字段。输入校验错误不包含input/context。health增加migration并核验实际库头版本，未迁移返回503。B2等未来接口继续只保留设计，不生成占位SDK。
 
 0.3.1目录教师选择接口要求目录负责人或有范围管理员，查询至少2字符、每页最多20项，只返回id/username/display_name/college_id。本校有效教师可跨学院任教，目录负责人不会因此获得所开班级的名单/私有资料权限；跨学院开班仍由校管理员协调。
+
+0.3.2本人关系接口要求当前有效学生身份及学校，仅查询服务端身份对应user_id/school_id并再次限定班级学校，客户端传入的身份参数不授予权限。GET /enrollments/mine支持q（最多100字符，按班级代码/名称字面搜索）、status（all/active/withdrawn/removed）、archived（省略为全部）、offset及limit（1–100，默认50）；先授权和筛选，再计数及按班级code/id、关系id稳定分页。归档是独立字段，不改写关系状态。GET /enrollments/requests保留原分页与created_at倒序/id排序，追加安全班级标签。关系没有加入/退出时间字段；申请时间不能代替关系变更时间或当前在班状态。详细字段见[本人关系交接](../docs/student-relations-handoff.md)。
+
+班级邀请码只支持过期和轮换，当前没有使用次数上限字段；max_uses只属于账号注册邀请。界面必须区别两种邀请，不给班级邀请码显示“次数满”等未实现语义。
 
 Bearer 凭据只存前端内存。X-Work-Role 取 student/teacher/administrator，由服务端在当前有效授权内确认。未显式选择按会话固定默认；教师兼管理员默认教师，撤权不回退管理员。非法或撤销身份403，停用/会话失效401；普通权限不足403。/auth/me 返回 grants（全部授权）、available_work_roles、active_work_role、effective_grants（当前身份）；业务判权只读 effective_grants。注销仍可在旧身份被撤销后撤销会话。
 

@@ -1,15 +1,18 @@
 # 契约入口
 
-A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；当前为 **0.3.1**。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A0历史基线0.2.0及B1首次基线0.3.0保留。
+A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；当前为 **0.3.2**。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A0历史基线0.2.0及B1首次基线0.3.0保留。
 
 0.3.0 在A0底座上增加真实组织/专业/账号/授权/改密、目录与班级管理/审批/交接、CSV导入等B1路由。模型注册、兼容迁移和生成SDK已交接，历史见[B1公共交接](../docs/b1-public-handoff.md)。B1最终领域及独立业务组件见[B1集成交接](../docs/b1-handoff.md)，正式导航由D接入；内容/助手/考试/记录接口未发布。
 
 0.3.1 增加真实GET /catalogs/{catalog_id}/teacher-options及生成方法TeachingService.catalogTeacherOptions。已有目录的负责人可指定本校主教师开班，仍无该班私有数据权限；无catalog_id的旧请求保持本人首班限制。无新模型或迁移。
 
+0.3.2 增加GET /enrollments/mine及TeachingService.myEnrollments，返回当前学生本人的最新选课关系状态和最小班级标签；GET /enrollments/requests保留原字段，追加course_code/course_title/course_archived，生成方法仍为TeachingService.myRequests。历史读取不开放当前课程、名单或管理数据；无模型或迁移变更。字段、筛选、排序及限制见[本人关系交接](../docs/student-relations-handoff.md)。
+
 - [领域不变量](domain-model.md)：已实现对象及后续业务规则。
 - [接口约定](api-conventions.md)：鉴权、版本、错误和幂等。
 - [后续模块协议](a2-protocols.md)：明确标为设计的内容、考试、关卡、页面和平台能力交接。
 - ownership.json：机器读取的角色、分支与路径。
+- [集成补丁登记](integration-handoffs.json)：A接收依赖时的具体临时文件范围和原领域责任方；不改变ownership，区别于设计辅助任务。
 - [临时辅助任务登记](auxiliary-tasks.json)：设计支线范围、候选及批准/冻结状态；不改变七角色所有权，流程见[UI协作](../docs/ui-redesign-coordination.md)。
 - [A0 检查与交接](../docs/a0-handoff.md)：运行证据与阶段边界。
 

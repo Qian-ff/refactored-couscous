@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Query
@@ -9,7 +10,8 @@ from app.domains.core.auth import CurrentIdentity, Db
 from app.domains.core.business_schemas import (
     CatalogInput, CatalogPatch, CatalogView, ClassManagementView, CommandKey, CourseSettings,
     EnrollmentResult, InviteInput, JoinCodeIssued, JoinInput, MemberInput, MemberView, Page,
-    RequestDecision, RequestView, RevisionInput, StaffInput, StaffView, TeacherOption,
+    RequestDecision, RequestView, RevisionInput, SelfEnrollmentView, SelfRequestView,
+    StaffInput, StaffView, TeacherOption,
 )
 from app.domains.core.commands import check_revision, code_hash, execute_command, issued_code, touch
 from app.domains.core.management_routes import keyword, page
@@ -464,14 +466,38 @@ def requests(course_id: UUID, identity: CurrentIdentity, db: Db, status: str = Q
     return {"data": [request_view(db, item) for item in result["data"]], "count": result["count"]}
 
 
-@router.get("/enrollments/requests", response_model=Page[RequestView])
+@router.get("/enrollments/mine", response_model=Page[SelfEnrollmentView])
+def my_enrollments(identity: CurrentIdentity, db: Db, q: str = Query(default="", max_length=100),
+                   status: Literal["active", "withdrawn", "removed", "all"] = "all",
+                   archived: bool | None = None, offset: int = Query(default=0, ge=0),
+                   limit: int = Query(default=50, ge=1, le=100)):
+    require(identity.has(Role.STUDENT) and identity.user.school_id is not None)
+    # This narrow metadata query does not alter visible_course_query or grant live access.
+    query = select(Enrollment, Course).join(Course, Course.id == Enrollment.course_id).where(
+        Enrollment.user_id == identity.user.id, Enrollment.school_id == identity.user.school_id,
+        Course.school_id == identity.user.school_id,
+        or_(Course.code.ilike(keyword(q)), Course.title.ilike(keyword(q))))
+    if status != "all":
+        query = query.where(Enrollment.status == status)
+    if archived is not None:
+        query = query.where(Course.archived == archived)
+    result = page(db, query.order_by(Course.code, Course.id, Enrollment.id), offset, limit)
+    return {"data": [SelfEnrollmentView(enrollment_id=enrollment.id, course_id=course.id,
+        course_code=course.code, course_title=course.title, course_archived=course.archived,
+        status=enrollment.status) for enrollment, course in result["data"]], "count": result["count"]}
+
+
+@router.get("/enrollments/requests", response_model=Page[SelfRequestView])
 def my_requests(identity: CurrentIdentity, db: Db, offset: int = Query(default=0, ge=0),
                 limit: int = Query(default=50, ge=1, le=100)):
-    require(identity.has(Role.STUDENT))
-    query = select(EnrollmentRequest).where(EnrollmentRequest.user_id == identity.user.id,
-        EnrollmentRequest.school_id == identity.user.school_id).order_by(EnrollmentRequest.created_at.desc(), EnrollmentRequest.id)
+    require(identity.has(Role.STUDENT) and identity.user.school_id is not None)
+    query = select(EnrollmentRequest, Course).join(Course, Course.id == EnrollmentRequest.course_id).where(
+        EnrollmentRequest.user_id == identity.user.id, EnrollmentRequest.school_id == identity.user.school_id,
+        Course.school_id == identity.user.school_id).order_by(EnrollmentRequest.created_at.desc(), EnrollmentRequest.id)
     result = page(db, query, offset, limit)
-    return {"data": [request_view(db, item) for item in result["data"]], "count": result["count"]}
+    return {"data": [SelfRequestView(**item.model_dump(), display_name=identity.user.display_name,
+        course_code=course.code, course_title=course.title, course_archived=course.archived)
+        for item, course in result["data"]], "count": result["count"]}
 
 
 @router.post("/enrollments/requests/{request_id}/cancel", response_model=Message)

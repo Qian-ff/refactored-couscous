@@ -1712,6 +1712,48 @@
         "title": "Page[RequestView]",
         "type": "object"
       },
+      "Page_SelfEnrollmentView_": {
+        "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/SelfEnrollmentView"
+            },
+            "title": "Data",
+            "type": "array"
+          }
+        },
+        "required": [
+          "data",
+          "count"
+        ],
+        "title": "Page[SelfEnrollmentView]",
+        "type": "object"
+      },
+      "Page_SelfRequestView_": {
+        "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/SelfRequestView"
+            },
+            "title": "Data",
+            "type": "array"
+          }
+        },
+        "required": [
+          "data",
+          "count"
+        ],
+        "title": "Page[SelfRequestView]",
+        "type": "object"
+      },
       "Page_StaffView_": {
         "properties": {
           "count": {
@@ -2039,6 +2081,128 @@
         "title": "Role",
         "type": "string"
       },
+      "SelfEnrollmentView": {
+        "description": "Latest stored relationship, not an event ledger or a live-resource permission.",
+        "properties": {
+          "course_archived": {
+            "title": "Course Archived",
+            "type": "boolean"
+          },
+          "course_code": {
+            "title": "Course Code",
+            "type": "string"
+          },
+          "course_id": {
+            "format": "uuid",
+            "title": "Course Id",
+            "type": "string"
+          },
+          "course_title": {
+            "title": "Course Title",
+            "type": "string"
+          },
+          "enrollment_id": {
+            "format": "uuid",
+            "title": "Enrollment Id",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "active",
+              "withdrawn",
+              "removed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "enrollment_id",
+          "course_id",
+          "course_code",
+          "course_title",
+          "course_archived",
+          "status"
+        ],
+        "title": "SelfEnrollmentView",
+        "type": "object"
+      },
+      "SelfRequestView": {
+        "description": "Safe class labels for the current student's own request, not live course access.",
+        "properties": {
+          "course_archived": {
+            "title": "Course Archived",
+            "type": "boolean"
+          },
+          "course_code": {
+            "title": "Course Code",
+            "type": "string"
+          },
+          "course_id": {
+            "format": "uuid",
+            "title": "Course Id",
+            "type": "string"
+          },
+          "course_title": {
+            "title": "Course Title",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "decided_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decided At"
+          },
+          "display_name": {
+            "title": "Display Name",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "user_id": {
+            "format": "uuid",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "course_id",
+          "user_id",
+          "display_name",
+          "kind",
+          "status",
+          "created_at",
+          "decided_at",
+          "course_code",
+          "course_title",
+          "course_archived"
+        ],
+        "title": "SelfRequestView",
+        "type": "object"
+      },
       "StaffInput": {
         "additionalProperties": false,
         "properties": {
@@ -2354,7 +2518,7 @@
   },
   "info": {
     "title": "安研通——实验室安全智能协同管理平台",
-    "version": "0.3.1"
+    "version": "0.3.2"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -6396,6 +6560,126 @@
         ]
       }
     },
+    "/api/v1/enrollments/mine": {
+      "get": {
+        "operationId": "teaching-my_enrollments",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "default": "",
+              "maxLength": 100,
+              "title": "Q",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "default": "all",
+              "enum": [
+                "active",
+                "withdrawn",
+                "removed",
+                "all"
+              ],
+              "title": "Status",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "archived",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Archived"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Work-Role",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Work-Role"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_SelfEnrollmentView_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "summary": "My Enrollments",
+        "tags": [
+          "teaching"
+        ]
+      }
+    },
     "/api/v1/enrollments/requests": {
       "get": {
         "operationId": "teaching-my_requests",
@@ -6445,7 +6729,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Page_RequestView_"
+                  "$ref": "#/components/schemas/Page_SelfRequestView_"
                 }
               }
             },
