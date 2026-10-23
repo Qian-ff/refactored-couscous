@@ -12,7 +12,7 @@ export function EnrollmentRequestsPage() {
   const resource = useResource(useCallback(async (signal: AbortSignal) => (await TeachingService.myRequests({ query: { offset, limit: size }, signal })).data, [offset, reload]))
   const action = useCommand()
   const refresh = () => { setReload(value => value + 1); setSelected(undefined) }
-  return <PageContainer title="班级申请与历史" description="本人加入和退出申请由教师审批。申请结果与当前在班关系分别确认。"
+  return <div className="lc-student-enrollment-workspace"><PageContainer title="班级申请与历史" description="本人加入和退出申请由教师审批。申请结果与当前在班关系分别确认。"
     actions={<><Button variant="secondary" onClick={refresh} pending={resource.loading}>刷新申请状态</Button><Button onClick={() => setJoining(true)}>使用班级邀请码加入</Button></>}>
     {notice && <Notice kind="success">{notice}</Notice>}{conflict && <Notice kind="warning">申请状态已变化，已重新读取。请核对教师处理结果。</Notice>}
     <Panel title="本人班级申请"><p>“加入已批准”记录不代表现在仍在班；退出、移出或归档后的权限以当前关系为准。</p>
@@ -35,5 +35,5 @@ export function EnrollmentRequestsPage() {
         })
         if (response) { setNotice("服务端已确认撤销申请。"); refresh() }
       }}>确认撤销申请</Button></div></Dialog>}
-  </PageContainer>
+  </PageContainer></div>
 }
