@@ -980,6 +980,34 @@ export type Page_RequestView_ = {
 };
 
 /**
+ * Page[SelfEnrollmentView]
+ */
+export type Page_SelfEnrollmentView_ = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Data
+     */
+    data: Array<SelfEnrollmentView>;
+};
+
+/**
+ * Page[SelfRequestView]
+ */
+export type Page_SelfRequestView_ = {
+    /**
+     * Count
+     */
+    count: number;
+    /**
+     * Data
+     */
+    data: Array<SelfRequestView>;
+};
+
+/**
  * Page[StaffView]
  */
 export type Page_StaffView_ = {
@@ -1149,6 +1177,90 @@ export type RevisionInput = {
  * Role
  */
 export type Role = 'platform_admin' | 'school_admin' | 'college_admin' | 'teacher' | 'student';
+
+/**
+ * SelfEnrollmentView
+ *
+ * Latest stored relationship, not an event ledger or a live-resource permission.
+ */
+export type SelfEnrollmentView = {
+    /**
+     * Course Archived
+     */
+    course_archived: boolean;
+    /**
+     * Course Code
+     */
+    course_code: string;
+    /**
+     * Course Id
+     */
+    course_id: string;
+    /**
+     * Course Title
+     */
+    course_title: string;
+    /**
+     * Enrollment Id
+     */
+    enrollment_id: string;
+    /**
+     * Status
+     */
+    status: 'active' | 'withdrawn' | 'removed';
+};
+
+/**
+ * SelfRequestView
+ *
+ * Safe class labels for the current student's own request, not live course access.
+ */
+export type SelfRequestView = {
+    /**
+     * Course Archived
+     */
+    course_archived: boolean;
+    /**
+     * Course Code
+     */
+    course_code: string;
+    /**
+     * Course Id
+     */
+    course_id: string;
+    /**
+     * Course Title
+     */
+    course_title: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Decided At
+     */
+    decided_at: string | null;
+    /**
+     * Display Name
+     */
+    display_name: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: string;
+    /**
+     * Status
+     */
+    status: string;
+    /**
+     * User Id
+     */
+    user_id: string;
+};
 
 /**
  * StaffInput
@@ -3381,6 +3493,58 @@ export type teachingJoinClassResponses = {
 
 export type teachingJoinClassResponse = teachingJoinClassResponses[keyof teachingJoinClassResponses];
 
+export type teachingMyEnrollmentsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Status
+         */
+        status?: 'active' | 'withdrawn' | 'removed' | 'all';
+        /**
+         * Archived
+         */
+        archived?: boolean | null;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/enrollments/mine';
+};
+
+export type teachingMyEnrollmentsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type teachingMyEnrollmentsError = teachingMyEnrollmentsErrors[keyof teachingMyEnrollmentsErrors];
+
+export type teachingMyEnrollmentsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_SelfEnrollmentView_;
+};
+
+export type teachingMyEnrollmentsResponse = teachingMyEnrollmentsResponses[keyof teachingMyEnrollmentsResponses];
+
 export type teachingMyRequestsData = {
     body?: never;
     headers?: {
@@ -3416,7 +3580,7 @@ export type teachingMyRequestsResponses = {
     /**
      * Successful Response
      */
-    200: Page_RequestView_;
+    200: Page_SelfRequestView_;
 };
 
 export type teachingMyRequestsResponse = teachingMyRequestsResponses[keyof teachingMyRequestsResponses];

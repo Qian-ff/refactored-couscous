@@ -9,6 +9,7 @@
 | 语音worker | 主树others/ai_worker/.venv，项目缓存CPython3.13.16、sherpa-onnx/core均1.13.8、numpy2.4.4；与业务分离 |
 | 模型 | 主树others/models/paraformer-2023-09-14一份；固定来源/哈希见worker/models.lock.json |
 | 前端包 | 主树others/cache/pnpm-store，各树node_modules离线硬链接；各自缓存/输出，禁止编辑包文件 |
+| pnpm CLI | 主树others/cache/tools/pnpm/11.25.0；A维护、官方包完整性校验，Use-ProjectEnvironment仅加入当前shell PATH |
 | uv/Gradle/Electron | 主树忽略缓存，设置仅会话级；不改系统Python/JDK |
 | 源码/测试报告/构建 | 当前树；正式客户端由A集成后重新构建 |
 
@@ -54,6 +55,8 @@ Playwright从common-root读合成账号；globalSetup检查网页为本树、API
 启动网页使用原Open-Web.cmd或Start-A1.ps1 -Target Web。它检查API/网页归属，遇忙端口且版本不匹配会保留服务并拒绝。主树迁移从共享入口运行，不偷偷重置账号或数据库。各树共用演示数据会互相可见，只用合成账号。
 
 ## A维护与重新建立
+
+Codex运行时刷新后若pnpm消失，A在主树执行python others/scripts/prepare_pnpm.py；固定来源、11.25.0版本、SHA512与许可记录在others/config/toolchain.json，不执行远程安装脚本、生命周期脚本、全局安装或Corepack切换。随后重新点载Use-ProjectEnvironment.ps1。各树合并本轮公共依赖后点载自己的同名脚本，即复用主树CLI，不复制工具环境。python others/scripts/prepare_pnpm.py --check可离线核验已安装文件；缺失或不完整明确失败并保留现场，不擅自覆盖。当前项目Node要求仍为package.json中的>=24.14.0 <25。
 
 业务用Bootstrap.ps1，锁定uv与项目内CPython3.14.6，uv sync --frozen --all-groups。旧环境已保留于主树others/backups；不修改原D盘解释器。语音用Prepare-Worker.ps1（见worker README），模型可续传，下载后核验哈希/许可并实测公开音频；不装到业务环境。
 

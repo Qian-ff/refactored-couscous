@@ -10,7 +10,21 @@ if (-not (Test-Path -LiteralPath $taskConfigPath)) {
 }
 $taskSettings = $null
 if (Test-Path -LiteralPath $taskConfigPath) {
-    $taskSettings = Get-Content -LiteralPath $taskConfigPath -Raw | ConvertFrom-Json
+    $taskSettings = Get-Content -LiteralPath $taskConfigPath -Raw -Encoding UTF8 | ConvertFrom-Json
+}
+$taskManager = (Get-Content -LiteralPath (Join-Path $taskProjectRoot 'package.json') -Raw -Encoding UTF8 | ConvertFrom-Json).packageManager
+if ($taskManager -match '^pnpm@(\d+\.\d+\.\d+)$') {
+    $taskPnpmVersion = $Matches[1]
+    $taskPnpmRoot = Join-Path $taskPrimaryRoot ('others/cache/tools/pnpm/' + $taskPnpmVersion)
+    $taskPnpmCommand = Join-Path $taskPnpmRoot 'pnpm.cmd'
+    if (Test-Path -LiteralPath $taskPnpmCommand) {
+        $taskPnpmPackage = Get-Content -LiteralPath (Join-Path $taskPnpmRoot 'package/package.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($taskPnpmPackage.version -ne $taskPnpmVersion) { throw 'Project pnpm cache version differs from packageManager.' }
+        $env:PATH = $taskPnpmRoot + [System.IO.Path]::PathSeparator + $env:PATH
+        Write-Output ('PNPM_VERSION=' + $taskPnpmVersion)
+    } elseif (-not (Get-Command pnpm -ErrorAction SilentlyContinue)) {
+        Write-Warning 'Pinned pnpm cache is missing; ask A to run python others/scripts/prepare_pnpm.py.'
+    }
 }
 $taskJavaHome = if ($taskSettings -and $taskSettings.java_home) { $taskSettings.java_home } else { $env:JAVA_HOME }
 if (-not $taskJavaHome) {

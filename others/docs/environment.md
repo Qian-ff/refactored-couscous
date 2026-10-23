@@ -2,6 +2,8 @@
 
 检查日期：2026-10-20。可重复运行 preflight.py；本机详细报告位于忽略的 others/reports/preflight.json。
 
+2026-10-23补充：Codex运行时刷新后旧pnpm路径失效，现已从官方npm包恢复到主树others/cache/tools/pnpm/11.25.0，点载Use-ProjectEnvironment.ps1后实际输出11.25.0；D树亦已只读验证可复用。Node24.14.0；Docker Desktop重新启动后Linux Engine29.9.2、既有PostgreSQL容器健康。以下表格保留2026-10-20历史快照，尤其“终端可发现”不代表后续会话自动具备PATH。恢复方法及受限进程说明见[共享环境](shared-environment.md)。
+
 | 项目 | 本次结果 |
 |---|---|
 | Git | 2.56.0.windows.1 |

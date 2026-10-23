@@ -1,5 +1,7 @@
 # 开源与素材要求
 
+项目工具pnpm固定11.25.0，官方npm元数据、下载URL及SHA512见others/config/toolchain.json。prepare_pnpm.py只下载并核验工具包，项目内缓存不提交；MIT原文逐字节归档为others/licenses/pnpm-11.25.0-MIT.txt。CLI仅为开发/构建工具，不放入三端产品包；现有产品依赖许可分发规则保持。
+
 用户允许按适用条款交付组件。A1固定FastAPI模板及Electron/Capacitor来源见upstream.md；A0新增精确React Router、cryptography及独立sherpa-onnx/core CPU语音运行时，锁文件及others/licenses归档许可。模型权重只在忽略缓存，不进入Git或客户端。
 
 others/licenses 保存模板 MIT 原文、实际前端运行依赖的许可文本与版本来源清单；运行 `node others/scripts/licenses.mjs` 从已安装依赖更新。文本随网页 dist/licenses、Windows 资源及安卓网页资源交付。Python 完整依赖由 uv.lock 固定，安装后的发行包保留其自带 dist-info 许可。Electron 包另保留 Chromium 自带许可。

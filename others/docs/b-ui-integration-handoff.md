@@ -1,5 +1,7 @@
 # B-UI：A 集成与 D 二次整合交接
 
+后续公共依赖已更新：D接续使用[student-relations-ready / 0.3.2](student-relations-handoff.md)，包含本页b-ui-integrated基线。本页0.3.1及运行证据属于B展示迁移当轮记录，不能当作新本人关系页面的验收。
+
 B交付6682ec37a2543e9e50a1bf400a8d70057351c807，组件起点d-ui-components-ready为27c1e385d2e0b97ce5880e0230bae2be7aa1a5c1。A从452dd40233429b9dddb26bf1f940bacb3cefc4af合并，保留公共foundation表单内搜索补丁及全部分支历史；本轮验证后发布本地b-ui-integrated，完整提交用git rev-parse 'b-ui-integrated^{}'获取。旧标签不移动。
 
 ## 当前范围
