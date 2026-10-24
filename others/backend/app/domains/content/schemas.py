@@ -106,6 +106,21 @@ class RevisionInput(Input):
     revision: int = Field(ge=1)
 
 
+class PublicationCreate(RevisionInput):
+    review_id: UUID
+
+
+class MaterialChange(Input):
+    revision: int = Field(ge=1)
+    title: str | None = Field(default=None, min_length=1, max_length=200)
+    retired: bool | None = None
+
+    @field_validator("title")
+    @classmethod
+    def nonblank(cls, value):
+        return LibraryCreate.nonblank(value) if value is not None else None
+
+
 class UploadCreate(Input):
     library_id: UUID
     material_id: UUID | None = None

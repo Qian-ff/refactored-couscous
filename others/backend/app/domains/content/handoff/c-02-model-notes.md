@@ -42,3 +42,13 @@ A stop对从未启动的ID也须记录拒绝后续延迟start的终止凭据，�
 scheduler.ContentScheduler(factory, storage, runner).serve(stop_event)由A lifespan唯一挂接。可以多API实例，但数据库全局短锁/活动任务屏障与A实际全部署单执行共同生效；运行阶段不持有连接。关闭须等待当前任务stop/release路径，不能只取消协程就宣称执行单元结束。硬终止后的旧任务由持久化ID和runner权威停止恢复。
 
 task_store负责短事务、当前发起身份及学校/父级重验、5秒心跳/20秒租约、旧generation拒绝提交、原子快照和占额。租约过期仅获得恢复处理权，不作为进程停止证明。恢复先失效旧generation，普通查询不受停机屏障影响。M1尚缺完整HTTP、PG竞争与真实runner验证，不据此发布SDK或放行B2。
+
+## 读取/路由候选
+
+router位于content/routes.py，prefix=/content，tag=content，A后续以/api/v1挂载。当前没有修改app/main.py、正式OpenAPI或SDK。runtime.ContentRuntime由A注入app.state.content_runtime，包含本树Session factory、私有存储及受限ParseRunner。未注入时存储不可用、parser显式unavailable，不自行读取新环境变量或运行普通解析子进程。
+
+二进制PUT固定/content/uploads/{upload_id}/bytes，原始application/octet-stream，Content-Length超20MiB返回413，未知长度仍流式计数。代理仅对该精确路由给21MiB例外。SDK须保留内存会话代次/身份取消行为；download作为binary响应，不生成JSON伪下载。
+
+下载路由在响应前释放请求鉴权DB会话，使用runtime.factory独立短会话逐块验证当前登录/工作身份/版本权限；文件I/O不持连接。中途失效终止传输，Content-Length使客户端辨识截断；不返回错误文本冒充原件。A应暴露Content-Disposition/Content-Length头并验证三端浏览器/原生后续路径。
+
+流式HTTP测试不能用会被close的共享外层回滚Session冒充独立连接；须在同一专用测试库和共享串行锁内，用可被独立Session读取的受控合成数据与独立文件根真实测试。数据库不可变保护与迁移尚未接入，因此当前没有HTTP/PG运行通过结论。

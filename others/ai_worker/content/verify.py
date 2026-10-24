@@ -18,14 +18,16 @@ def main():
             packages[name] = None
     suite = unittest.defaultTestLoader.discover(str(Path(__file__).parent), pattern="test_*.py")
     result = unittest.TextTestRunner(verbosity=2).run(suite)
+    complete = result.wasSuccessful() and all(packages.values()) and not result.skipped
     report = {"scope": "trusted-synthetic", "sandbox_verified": False,
               "packages": packages, "tests": result.testsRun,
               "failures": len(result.failures), "errors": len(result.errors),
-              "four_format_integration_verified": False,
+              "skipped": len(result.skipped),
+              "four_format_integration_verified": bool(complete),
               "dependencies_ready": all(packages.values())}
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
-    return 0 if result.wasSuccessful() and report["dependencies_ready"] else 1
+    return 0 if complete else 1
 
 
 if __name__ == "__main__":

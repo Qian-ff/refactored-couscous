@@ -16,7 +16,7 @@ from app.domains.content.models import (
 )
 from app.domains.content.quota import enforce_budget, enforce_queue, quota_lock
 from app.domains.content.schemas import (
-    LibraryChange, LibraryCreate, ReviewDecision, ReviewSubmit, RevisionInput, TextMaterialCreate,
+    LibraryChange, LibraryCreate, MaterialChange, ReviewDecision, ReviewSubmit, RevisionInput, TextMaterialCreate,
 )
 
 
@@ -155,6 +155,37 @@ def create_text_version(db: Session, identity: Identity, request: TextMaterialCr
 def warnings_hash(version: MaterialVersion):
     data = json.dumps(version.warnings, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(data).hexdigest()
+
+
+def change_material(db, identity, material_id, request: MaterialChange, key):
+    require_key(key)
+    original = db.get(Material, material_id)
+    if original is None:
+        raise HTTPException(403, "资料不存在或无权访问")
+    library = db.get(Library, original.library_id)
+
+    def authorize():
+        row = locked(db, Material, material_id)
+        source = db.get(Library, row.library_id)
+        access = resource_access(db, identity, descriptor(source, creator_id=row.creator_id))
+        if not source.active or not access.read or not (access.review or (access.submit and row.creator_id == identity.user.id)):
+            raise HTTPException(403, "无权修改此资料")
+        if request.retired is not None and not access.review:
+            raise HTTPException(403, "停用或恢复资料主记录须源范围V")
+
+    def action():
+        row = locked(db, Material, material_id)
+        check_revision(row, request.revision)
+        if request.title is not None:
+            row.title = request.title
+        if request.retired is not None:
+            row.retired = request.retired
+        touch(row)
+        db.add(row)
+        return {"material_id": str(row.id)}
+
+    return execute_command(db, identity, library.school_id, "content.material.change", key,
+                           {"id": str(material_id), **request.model_dump()}, action, authorize)
 
 
 def validate_publication_source(version, source: Library, target: Library, statement: str):
