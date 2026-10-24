@@ -35,6 +35,8 @@
 
 35项业务纯测试通过（包含新增4项查询SQL/候选OpenAPI/投影边界检查），没有发布正式OpenAPI/SDK。另新增3项真实PG查询场景，尚未运行。worker新增四格式真实CLI合成夹具，当前15项通过、3项因缺依赖跳过，verify明确退出1，parser.json仍标明未通过四格式/沙箱验收。测试日志及实际退出码保存others/reports/c-02/。Ruff及差异检查通过。
 
-已按关键架构依赖向A请示旧上传writer停止确认方式；A正在裁决，不把移动工作区当M1交付。当前仍需补数据库不可变保护/父级复合约束、writer权威恢复、故障场景及完整c-02-integration.md后交M1。M1前不实现依赖尚未生成SDK的前端。用户最新要求：完成C-02后停止，不启动后续模块。
+A已完成关键裁决：上传使用同卷稳定文件锁，Linux flock/Windows LockFileEx；清理取得同一guard后失效旧generation并删除/结算，不用额外宿主停止探针。ParseRunner固定execution_id、持久终止凭据及release清理任务副本获同意。完整执行补充见c-02-accepted-addendum.md，尚未实现文件锁与进程竞争测试，不视为M1接收。
+
+当前仍需补数据库不可变保护/父级复合约束、UploadFence及恢复、故障场景及完整c-02-integration.md后交M1。M1前不实现依赖尚未生成SDK的前端。用户最新要求：完成C-02后停止，不启动后续模块。
 
 未完成：格式解析、沙箱运行、领域业务、真实PG/HTTP、迁移/公共接入/SDK、前端和M2/M3全部待续。不得标记整包完成。未安装依赖或执行迁移/云模型。
