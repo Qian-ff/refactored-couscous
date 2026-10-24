@@ -10,7 +10,7 @@
 
 ## 从这里开始
 
-- [多聊天协作规范](others/docs/coordination.md)：A主、A副、B/C/D/G；E并C、F并A副，工作包/设置/技能/汇报与自动分派统一规则；[实际迁移与接收记录](others/docs/coordination-rollout.md)。
+- [多聊天协作规范](others/docs/coordination.md)：A主、A副、B/C/D/G；E并C、F并A副。v2按角色自查、重大影响交A、合并里程碑推进；C-01/C-02沿用原约定。[实际迁移与接收记录](others/docs/coordination-rollout.md)。
 
 - [A1 使用与一键打开](others/docs/a1-usage.md)：双击 Open-Web.cmd、Open-Windows.cmd、Open-Android.cmd，或 Open-A1.cmd 选择三端；包含登录和课程同步体验流程。
 - [既有UI验收与本轮入口](others/docs/existing-ui-acceptance.md)：Open-DUI.cmd、学生加退班/历史演示、三端实测、安卓返回回归及C前置边界。

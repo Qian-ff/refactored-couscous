@@ -2,6 +2,8 @@
 
 当前分工与设置见[统一协作规范](coordination.md)：A主/A副/B/C/D/G，E并C、F并A副；此调整不改变下述业务门禁和历史基线。
 
+协作v2只调整后续推进方式：C-01既有成果及接收记录、C-02 v1.1现行Goal/里程碑/A公共接入/独立集成实测/接收要求保留，不重做或重新拆包。按用户指令，C完成C-02后停止，不自动启动C-03；C-03获后续明确启动指令后及其他角色后续任务按统一规范自查分流、合并里程碑。下述带日期的接收状态保留为当时记录，不代替当前任务的实际进度。
+
 唯一总控A使用main，B/C/D使用已登记外部工作树及codex/b-core-a2、codex/c-content-ai-a2、codex/d-learning-ui-a2。ownership的worktree=null表示按Git registry查分支，本机路径由workflow报告，不写死公共契约。旧task/*树、未指派detached树和历史标签保留。
 
 历史a1-0.1.0/checkpoint-1不变；a2-start= dfd087d的完整值用git rev-parse a2-start核实（准备工具基线，不代表业务完成）。**A0完成后使用新的本地a2-ready**，其完整SHA用git rev-parse a2-ready取得，A在最终报告公布并同步三棵干净角色树。旧标签不覆盖；后续每次公共集成再发布新的完整SHA，B/C/D保留提交后合并。
@@ -28,7 +30,7 @@ B1最终集成时的真实契约为0.3.1，当前为0.3.2；UI-2026.10-v1批准�
 8. **D后续接入**：完整三角色工作台、真实资料搜索、六关互动预览与学习考试，沿用批准风格及已有壳；独立测试范围web/tests/d-learning/。
 9. **A2**：合并联调、更新通用入口及实际Open-A2、重新构建客户端并测九种平台身份组合、真实录音/引用/下载，完成后才checkpoint-2和已授权推送。
 
-完整可复制D-UI/B-UI及后续目标见[任务书入口](ai/README.md)。另已接收UI-ASSISTANT-2026.10-v1.1冻结78cdeb677ed1f302f1a3ecb68bfbd834aa4b85d1，规范基线ui-assistant-design-ready；它不改变第5步既有UI验收和C/B2门禁。获准角色先保存改动再合并A最新完整SHA，不替角色树覆盖改动；首次审定Goal手动，已批准续办按统一协作规范自动分派。计划max、执行按AGENTS角色档位逐轮核验。
+完整可复制D-UI/B-UI及后续目标见[任务书入口](ai/README.md)。另已接收UI-ASSISTANT-2026.10-v1.1冻结78cdeb677ed1f302f1a3ecb68bfbd834aa4b85d1，规范基线ui-assistant-design-ready；它不改变第5步既有UI验收和C/B2门禁。获准角色先保存改动再合并A最新完整SHA，不替角色树覆盖改动；全新模块首次Goal手动启动，已授权模块后续包可自主续办，另行分派遵循统一规范。规划及执行强度按任务性质和AGENTS角色档位核验，不因换包重复max规划。
 
 ## 开工条件及边界
 

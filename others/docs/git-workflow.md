@@ -38,7 +38,7 @@ python .\others\scripts\workflow.py checkpoint --role B --message "feat(core): a
 
 受外部条件阻塞时，使用 --wip，check-note 如实列出失败与未完成内容；WIP 不能当作可合并的完成状态。仅根目录准备检查可执行时，不声称已通过业务测试。
 
-提交后交付：角色、分支、commit ID、改动、检查、剩余问题。
+每轮提交后在本聊天记录角色、分支、commit ID、改动、检查和剩余问题；向A主的简报按统一协作规范合并到里程碑，不逐提交发送，普通简报不等回执。main正式接收与阶段放行仍由A主决定。
 
 ## A 合并
 
