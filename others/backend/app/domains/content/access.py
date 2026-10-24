@@ -37,7 +37,8 @@ def readable_versions(identity: Identity, library_id: UUID | None = None):
         MaterialReview.state == "approved",
         MaterialReview.version_id == MaterialPublication.version_id,
         MaterialReview.target_library_id == MaterialPublication.target_library_id,
-        read_resource_predicate(identity, columns(target, creator_id=Material.creator_id, published=true())),
+        # Published target access never needs the source creator; avoid a nested source-table cross join.
+        read_resource_predicate(identity, columns(target, creator_id=literal(None), published=true())),
     ).correlate(MaterialVersion, Material).exists()
     source = and_(Library.active.is_(True), Library.id == library_id if library_id is not None else true(), read_resource_predicate(
         identity, columns(Library, creator_id=Material.creator_id, published=false())))

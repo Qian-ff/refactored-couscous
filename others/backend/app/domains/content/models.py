@@ -60,6 +60,8 @@ class Material(SQLModel, table=True):
 class ContentUpload(SQLModel, table=True):
     __tablename__ = "content_upload"
     __table_args__ = (
+        ForeignKeyConstraint(["sealed_version_id"], ["content_material_version.id"],
+                             name="fk_content_upload_sealed_version", use_alter=True),
         ForeignKeyConstraint(["login_session_id", "owner_id"], ["login_session.id", "login_session.user_id"],
                              name="fk_content_upload_session_owner"),
         CheckConstraint("state IN ('created','receiving','sealed','canceled','expired','failed')", name="ck_content_upload_state"),
@@ -93,7 +95,7 @@ class ContentUpload(SQLModel, table=True):
     reserved_bytes: int = Field(default=0, sa_column=Column(BigInteger, nullable=False))
     retained_bytes: int = Field(default=0, sa_column=Column(BigInteger, nullable=False))
     expires_at: datetime = Field(sa_column=Column(DateTime(timezone=True), nullable=False))
-    sealed_version_id: UUID | None = Field(default=None, foreign_key="content_material_version.id")
+    sealed_version_id: UUID | None = None
     error_code: str | None = Field(default=None, max_length=40)
     created_at: datetime = timestamp()
 

@@ -5,16 +5,21 @@ import sys
 from pathlib import Path
 
 import pytest
+import json
+import importlib.util
 from dotenv import dotenv_values
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
 
 ROOT = Path(__file__).resolve().parents[2]
 config = dotenv_values(ROOT / ".env")
-base_url = make_url(os.environ.get("DATABASE_URL") or config["DATABASE_URL"])
+management_file = os.environ.get("LABCONNECT_C02_TEST_ADMIN_CONFIG")
+management = json.loads(Path(management_file).read_text()) if management_file else None
+base_url = make_url(management["owner_url"] if management else os.environ.get("DATABASE_URL") or config["DATABASE_URL"])
 if base_url.host not in ("127.0.0.1", "localhost"):
     raise RuntimeError("A1 tests require a local PostgreSQL host")
-test_url = base_url.set(database="safelab_a1_test", drivername="postgresql+psycopg")
+test_url = (make_url(management["runtime_url"]) if management else
+            base_url.set(database="safelab_a1_test", drivername="postgresql+psycopg"))
 os.environ["DATABASE_URL"] = test_url.render_as_string(hide_password=False)
 os.environ["APP_ENV"] = "test"
 
@@ -30,6 +35,15 @@ TEST_PASSWORD = "A1-synthetic-only-test-password"
 
 @pytest.fixture(scope="session", autouse=True)
 def migrated_database():
+    if management:
+        specification = importlib.util.spec_from_file_location("c02_management", ROOT / "others/deploy/content/database.py")
+        module = importlib.util.module_from_spec(specification)
+        specification.loader.exec_module(module)
+        module.migrate(management["owner_url"])
+        module.grant_runtime(management["owner_url"], management["runtime_role"])
+        yield
+        engine.dispose()
+        return
     admin = create_engine(base_url.set(database="postgres", drivername="postgresql+psycopg"), isolation_level="AUTOCOMMIT")
     with admin.connect() as connection:
         if not connection.execute(text("SELECT 1 FROM pg_database WHERE datname = 'safelab_a1_test'")).scalar():
