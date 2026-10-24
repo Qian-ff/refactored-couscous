@@ -15,6 +15,7 @@ class ContentRuntime:
     factory: Callable = field(default_factory=lambda: lambda: Session(engine))
     storage: PrivateStorage | None = None
     runner: ParseRunner = field(default_factory=UnavailableRunner)
+    unavailable_reason: str | None = None
 
     def require_storage(self):
         if self.storage is None:
@@ -31,7 +32,10 @@ class ContentRuntime:
 
 
 def get_runtime(request: Request):
-    return getattr(request.app.state, "content_runtime", None) or ContentRuntime()
+    runtime = getattr(request.app.state, "content_runtime", None) or ContentRuntime()
+    if runtime.unavailable_reason:
+        raise HTTPException(503, runtime.unavailable_reason)
+    return runtime
 
 
 Runtime = Annotated[ContentRuntime, Depends(get_runtime)]

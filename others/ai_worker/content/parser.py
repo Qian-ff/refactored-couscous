@@ -1,6 +1,7 @@
 """Local text extraction. Untrusted input must run inside A's restricted ParseRunner."""
 from importlib.metadata import version
 from pathlib import Path
+import re
 
 from content.archive import inspect_office
 from content.protocol import MAX_CHUNKS, MAX_TEXT_CHARS, ParseError, encode_result, split_text
@@ -26,7 +27,17 @@ def parse_file(path: Path, kind: str, encoding: str = "utf-8") -> bytes:
     if kind not in {"pdf", "pptx", "docx", "txt", "text"}:
         raise ParseError("UNSUPPORTED_TYPE")
     limit = 1024 * 1024 if kind in {"txt", "text"} else 20 * 1024 * 1024
-    if not path.is_file() or path.is_symlink() or not 0 < path.stat().st_size <= limit:
+    sealed = False
+    if re.fullmatch(r"/proc/self/fd/[0-9]+", str(path)):
+        # Only the fixed Linux wrapper's inherited, kernel-sealed input may use a proc fd path.
+        try:
+            import fcntl
+            descriptor = int(path.name)
+            required = fcntl.F_SEAL_WRITE | fcntl.F_SEAL_GROW | fcntl.F_SEAL_SHRINK | fcntl.F_SEAL_SEAL
+            sealed = fcntl.fcntl(descriptor, fcntl.F_GET_SEALS) & required == required
+        except (ImportError, OSError, ValueError):
+            pass
+    if not path.is_file() or (path.is_symlink() and not sealed) or not 0 < path.stat().st_size <= limit:
         raise ParseError("RESOURCE_LIMIT")
     output = Extraction()
     parser_version = "labconnect.parse/1"

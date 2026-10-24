@@ -6,6 +6,7 @@ from app.domains.core.policy import resource_access
 from app.domains.core.resource_query import read_resource_predicate
 from app.domains.content.access import columns, descriptor, readable_versions, require_library, require_version
 from app.domains.content.jobs import job_view
+from app.domains.content.queries import publication_projection, review_projection
 from app.domains.content.models import ContentJob, Library, MaterialPublication, MaterialReview, MaterialVersion
 from app.domains.content.views import JobView, Page, PublicationView, ReviewView
 
@@ -26,7 +27,7 @@ def own_jobs(db, identity, offset, limit, version_id=None):
     return page(db, query, ContentJob, JobView, offset, limit, lambda row: job_view(db, identity, row.id))
 
 
-def reviews(db, identity, offset, limit, library_id=None, state=None):
+def reviews(db, identity, offset, limit, library_id=None, state=None, version_id=None):
     manager = read_resource_predicate(identity, columns(Library, creator_id=literal(None), published=false()))
     own_version = readable_versions(identity).with_only_columns(MaterialVersion.id)
     query = select(MaterialReview).join(Library, Library.id == MaterialReview.target_library_id).where(
@@ -36,6 +37,8 @@ def reviews(db, identity, offset, limit, library_id=None, state=None):
         query = query.where(Library.id == library_id)
     if state:
         query = query.where(MaterialReview.state == state)
+    if version_id:
+        query = query.where(MaterialReview.version_id == version_id)
     return page(db, query, MaterialReview, ReviewView, offset, limit,
                 lambda row: review_view(db, identity, row.id))
 
@@ -50,11 +53,13 @@ def review_view(db, identity, review_id):
         if row.submitter_id != identity.user.id:
             raise HTTPException(403, "无权读取审核记录")
         require_version(db, identity, row.version_id)
-    return ReviewView(**{name: getattr(row, name) for name in ReviewView.model_fields})
+    return review_projection(db, identity, row)
 
 
-def publications(db, identity, library_id, offset, limit):
+def publications(db, identity, library_id, offset, limit, version_id=None):
     require_library(db, identity, library_id, "review")
     query = select(MaterialPublication).where(MaterialPublication.target_library_id == library_id)
+    if version_id:
+        query = query.where(MaterialPublication.version_id == version_id)
     return page(db, query, MaterialPublication, PublicationView, offset, limit,
-                lambda row: PublicationView(**{name: getattr(row, name) for name in PublicationView.model_fields}))
+                lambda row: publication_projection(db, identity, row))

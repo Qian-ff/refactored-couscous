@@ -1,5 +1,5 @@
 """FastAPI template application/operation-ID pattern; frontend served independently."""
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.exceptions import RequestValidationError
 from fastapi.encoders import jsonable_encoder
 from fastapi.routing import APIRoute
@@ -13,6 +13,9 @@ from starlette.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.db import engine
 from app.core.release import BUILD, ROOT, VERSION
+from app.core.content_runtime import lifespan
+from app.domains.content.routes import router as content_router
+from app.domains.content.runtime import get_runtime
 from app.domains.core.routes import router
 from app.domains.core.class_routes import router as class_router
 from app.domains.core.import_routes import router as import_router
@@ -24,14 +27,16 @@ def custom_generate_unique_id(route: APIRoute) -> str:
 
 
 app = FastAPI(title=settings.PROJECT_NAME, version=VERSION, openapi_url="/api/v1/openapi.json",
-              generate_unique_id_function=custom_generate_unique_id)
+              generate_unique_id_function=custom_generate_unique_id, lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=settings.CORS_ORIGINS.split(","),
                    allow_credentials=True, allow_methods=["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE"],
-                   allow_headers=["Authorization", "Content-Type", "X-Work-Role", "Idempotency-Key", "If-Match"])
+                   allow_headers=["Authorization", "Content-Type", "X-Work-Role", "Idempotency-Key", "If-Match"],
+                   expose_headers=["Content-Disposition", "Content-Length"])
 app.include_router(router, prefix="/api/v1")
 app.include_router(management_router, prefix="/api/v1")
 app.include_router(class_router, prefix="/api/v1")
 app.include_router(import_router, prefix="/api/v1")
+app.include_router(content_router, prefix="/api/v1", dependencies=[Depends(get_runtime)])
 MIGRATION_HEAD = ScriptDirectory.from_config(Config(str(ROOT / "others/backend/alembic.ini"))).get_current_head()
 
 

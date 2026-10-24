@@ -172,8 +172,9 @@ def retry_job(db: Db, identity: CurrentIdentity, runtime: Runtime, job_id: UUID,
 
 @router.get("/material-reviews", response_model=Page[ReviewView])
 def list_reviews(db: Db, identity: CurrentIdentity, offset: Offset = 0, limit: Limit = 50,
-                  library_id: UUID | None = None, state: Literal["submitted", "approved", "rejected"] | None = None):
-    return management_queries.reviews(db, identity, offset, limit, library_id, state)
+                  library_id: UUID | None = None, state: Literal["submitted", "approved", "rejected"] | None = None,
+                  version_id: UUID | None = None):
+    return management_queries.reviews(db, identity, offset, limit, library_id, state, version_id)
 
 
 @router.get("/material-reviews/{review_id}", response_model=ReviewView)
@@ -192,8 +193,9 @@ def decide_review(db: Db, identity: CurrentIdentity, review_id: UUID, body: Revi
 
 
 @router.get("/material-publications", response_model=Page[PublicationView])
-def list_publications(db: Db, identity: CurrentIdentity, library_id: UUID, offset: Offset = 0, limit: Limit = 50):
-    return management_queries.publications(db, identity, library_id, offset, limit)
+def list_publications(db: Db, identity: CurrentIdentity, library_id: UUID, offset: Offset = 0, limit: Limit = 50,
+                      version_id: UUID | None = None):
+    return management_queries.publications(db, identity, library_id, offset, limit, version_id)
 
 
 @router.post("/material-publications", response_model=CommandResult, response_model_exclude_none=True, status_code=201)

@@ -113,12 +113,14 @@ class ContentScheduler:
             task = ParseTask(job_id=claim["job_id"], execution_id=claim["execution_id"],
                              generation=claim["generation"], version_id=claim["version_id"],
                              input_sha256=spec["hash"], format=spec["format"], encoding=spec["encoding"])
-            deadline = monotonic() + 60
+            # Input receipt has its own bound; parsing gets 60s after complete receipt.
+            deadline = monotonic() + 300
             source = self._source(spec)
             try:
                 state = await self._live_call(self.runner.start(task, source), claim, deadline)
             finally:
                 await source.aclose()
+            deadline = monotonic() + 60
             while True:
                 self._check_state(state, claim["execution_id"])
                 if state.state == "succeeded" and state.stop_confirmed:

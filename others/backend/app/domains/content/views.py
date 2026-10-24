@@ -24,6 +24,7 @@ class LibraryView(BaseModel):
     active: bool
     can_submit: bool
     can_review: bool
+    can_manage: bool = False
 
 
 class SubmitTarget(BaseModel):
@@ -31,6 +32,49 @@ class SubmitTarget(BaseModel):
     title: str
     scope: Scope
     can_submit: Literal[True] = True
+
+
+class ReviewView(BaseModel):
+    id: UUID
+    version_id: UUID
+    target_library_id: UUID
+    state: str
+    revision: int
+    warning_hash: str
+    original_authorized: bool
+    authorization_statement: str
+    reason: str | None
+    submitted_at: datetime
+    decided_at: datetime | None
+    can_decide: bool = False
+    can_publish: bool = False
+
+
+class PublicationView(BaseModel):
+    id: UUID
+    version_id: UUID
+    target_library_id: UUID
+    review_id: UUID
+    active: bool
+    revision: int
+    published_at: datetime
+    retired_at: datetime | None
+    can_retire: bool = False
+
+
+class VersionActions(BaseModel):
+    edit_material: bool = False
+    retire_material: bool = False
+    create_version: bool = False
+    submit_review: bool = False
+    preview: bool = False
+    download: bool = False
+
+
+class TargetBinding(BaseModel):
+    target_library_id: UUID
+    review: ReviewView | None = None
+    active_publication: PublicationView | None = None
 
 
 class VersionView(BaseModel):
@@ -49,6 +93,9 @@ class VersionView(BaseModel):
     warnings: list[str]
     warning_hash: str
     source_metadata: SourceMetadata | None = None
+    material_revision: int | None = None
+    actions: VersionActions = Field(default_factory=VersionActions)
+    binding: TargetBinding | None = None
 
 
 class ChunkView(BaseModel):
@@ -95,31 +142,6 @@ class JobView(BaseModel):
     created_at: datetime
     started_at: datetime | None
     finished_at: datetime | None
-
-
-class ReviewView(BaseModel):
-    id: UUID
-    version_id: UUID
-    target_library_id: UUID
-    state: str
-    revision: int
-    warning_hash: str
-    original_authorized: bool
-    authorization_statement: str
-    reason: str | None
-    submitted_at: datetime
-    decided_at: datetime | None
-
-
-class PublicationView(BaseModel):
-    id: UUID
-    version_id: UUID
-    target_library_id: UUID
-    review_id: UUID
-    active: bool
-    revision: int
-    published_at: datetime
-    retired_at: datetime | None
 
 
 class Capabilities(BaseModel):

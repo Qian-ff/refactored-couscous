@@ -2,6 +2,8 @@
 from uuid import UUID
 import hashlib
 
+import pytest
+from fastapi import HTTPException
 from sqlmodel import select
 
 from app.seed import fixture_id
@@ -12,6 +14,51 @@ from app.domains.content.schemas import LibraryCreate, TextMaterialCreate
 from app.domains.content.services import create_library, create_text_version
 from app.domains.content.tests.test_services_pg import completed_fixture, identity, school_library
 from app.domains.core.policy import resource_access
+
+
+def test_target_bindings_and_material_revision_do_not_blend(db):
+    from app.domains.content.schemas import MaterialChange, ReviewDecision, ReviewSubmit, RevisionInput
+    from app.domains.content.services import change_material, decide_review, publish_review, submit_review, warnings_hash
+    admin = identity(db, "admin", "administrator")
+    teacher = identity(db, "teacher", "teacher")
+    student = identity(db, "student", "student")
+    first = school_library(db, admin)
+    second = UUID(create_library(db, admin, LibraryCreate(scope="school", parent_id=admin.user.school_id,
+        title="Second target", audience="all"), "c02-target-second")["library_id"])
+    created = create_text_version(db, teacher, TextMaterialCreate(library_id=first, title="Fixed version", text="Original"),
+                                  "c02-binding-text", 10 * 1024**3)
+    version = completed_fixture(db, created)
+    reviews = [submit_review(db, teacher, ReviewSubmit(version_id=version.id, target_library_id=target,
+        authorization_statement="Synthetic original authorized for target"), "c02-binding-review-" + str(index))
+        for index, target in enumerate((first, second))]
+    decide_review(db, admin, UUID(reviews[0]["review_id"]), ReviewDecision(revision=1, decision="approved",
+        warning_hash=warnings_hash(version), warnings_acknowledged=True, original_authorized=True), "c02-binding-approve")
+    publication = publish_review(db, admin, UUID(reviews[0]["review_id"]), RevisionInput(revision=2), "c02-binding-publish")
+    change_material(db, teacher, UUID(created["material_id"]), MaterialChange(revision=1, title="Updated title"),
+                    "c02-binding-rename")
+    current_a = queries.version_view(db, admin, version.id, first)
+    current_b = queries.version_view(db, admin, version.id, second)
+    assert current_a.material_revision == 2 and current_a.version_no == 1
+    assert current_a.binding.review.state == "approved"
+    assert str(current_a.binding.active_publication.id) == publication["publication_id"]
+    assert current_b.binding.target_library_id == second
+    assert current_b.binding.active_publication is None
+    assert current_b.binding.review.state == "submitted" and current_b.binding.review.can_decide
+    assert current_b.binding.review.warning_hash == warnings_hash(version)
+    safe = queries.version_view(db, student, version.id, first)
+    assert safe.material_revision is None and safe.source_metadata is None and safe.binding.review is None
+    assert safe.actions.preview and safe.actions.download
+    assert not safe.actions.edit_material and not safe.actions.retire_material and not safe.actions.submit_review
+    with pytest.raises(HTTPException):
+        queries.version_view(db, student, version.id, second)
+
+
+def test_submit_right_does_not_grant_library_management(db):
+    admin = identity(db, "admin", "administrator")
+    teacher = identity(db, "teacher", "teacher")
+    school_library(db, admin)
+    assert queries.targets(db, teacher, "", 0, 100)
+    assert not any(row.can_manage or row.can_review for row in queries.libraries(db, teacher, "", 0, 100).items)
 
 
 def test_submit_sql_matches_b_capability_for_all_seed_roles(db):

@@ -30,7 +30,7 @@ from app.core.db import engine, get_db  # noqa: E402
 from app.main import app  # noqa: E402
 from app.seed import seed  # noqa: E402
 
-TEST_PASSWORD = "A1-synthetic-only-test-password"
+TEST_PASSWORD = management.get("synthetic_password", "A1-synthetic-only-test-password") if management else "A1-synthetic-only-test-password"
 
 
 @pytest.fixture(scope="session", autouse=True)
