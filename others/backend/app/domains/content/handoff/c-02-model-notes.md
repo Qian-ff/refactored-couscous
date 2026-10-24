@@ -32,3 +32,13 @@ UnavailableRunner显式报PARSER_UNAVAILABLE，不尝试普通子进程降级，
 上传新增title/source_metadata字段，仍在M1模型候选中，未迁移。PrivateStorage使用本任务不透明UUID key，临时与原件同私有卷，以不覆盖硬链接封存，文件fsync后提交版本；Linux同时同步目录。A应核验实际文件卷支持与部署权限。取消后的文件清理与配额结算分开，清理失败仍占额。
 
 上传服务receive_upload接受服务端身份三元组与AsyncIterator字节；传输阶段每个DB事务独立关闭。请求取消必须等已提交线程中的写入/封存事务完成才清理，不能因await取消便当作底层I/O停止。cleanup_idle_upload只处理明确没有writer且未被版本引用的终止/过期会话；失联writer不能只凭lease超时清除。后续恢复需记录/核对权威writer执行归属，无法确认停止时保持占额和接收槽位，不触碰保留版本。
+
+## 调度接入补充
+
+ParseTask新增execution_id，由C在向runner发送请求前持久化并建立唯一约束。A start必须以此ID幂等，先完整接收并核对输入、再启动固定执行单元；start返回前不得留下仍在消费C输入迭代器的独立任务。响应丢失时通过同一ID查询/停止，不能另起一个ID冒充恢复。
+
+A stop对从未启动的ID也须记录拒绝后续延迟start的终止凭据，返回stop_confirmed仅表示整个执行单元已停止。不得用“此刻未查到”冒充停止。release返回true须确认任务输入、输出及临时区已清理；false/失败继续占额。C先保存不可变快照，随后释放运行临时区；清理失败不改写已成功版本。
+
+scheduler.ContentScheduler(factory, storage, runner).serve(stop_event)由A lifespan唯一挂接。可以多API实例，但数据库全局短锁/活动任务屏障与A实际全部署单执行共同生效；运行阶段不持有连接。关闭须等待当前任务stop/release路径，不能只取消协程就宣称执行单元结束。硬终止后的旧任务由持久化ID和runner权威停止恢复。
+
+task_store负责短事务、当前发起身份及学校/父级重验、5秒心跳/20秒租约、旧generation拒绝提交、原子快照和占额。租约过期仅获得恢复处理权，不作为进程停止证明。恢复先失效旧generation，普通查询不受停机屏障影响。M1尚缺完整HTTP、PG竞争与真实runner验证，不据此发布SDK或放行B2。

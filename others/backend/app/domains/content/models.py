@@ -197,7 +197,7 @@ class ContentJob(SQLModel, table=True):
     stage: str = Field(default="queued", max_length=30)
     generation: int = 1
     lease_owner: UUID | None = None
-    execution_id: UUID | None = None
+    execution_id: UUID | None = Field(default=None, unique=True)
     lease_until: datetime | None = Field(default=None, sa_column=Column(DateTime(timezone=True)))
     heartbeat_at: datetime | None = Field(default=None, sa_column=Column(DateTime(timezone=True)))
     stop_confirmed: bool = False

@@ -26,7 +26,7 @@ class RunnerContractTests(unittest.TestCase):
     def test_missing_adapter_never_claims_execution_or_stop(self):
         runner = UnavailableRunner()
         for method, args in ((runner.capabilities, ()), (runner.inspect, (uuid4(),)),
-                             (runner.stop, (uuid4(),)), (runner.result, (uuid4(),))):
+                             (runner.stop, (uuid4(),)), (runner.result, (uuid4(),)), (runner.release, (uuid4(),))):
             with self.subTest(method=method.__name__), self.assertRaises(RunnerUnavailable):
                 asyncio.run(method(*args))
 

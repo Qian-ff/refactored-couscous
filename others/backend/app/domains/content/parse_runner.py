@@ -48,6 +48,7 @@ class RunnerCapabilities:
 @dataclass(frozen=True)
 class ParseTask:
     job_id: UUID
+    execution_id: UUID
     generation: int
     version_id: UUID
     input_sha256: str
@@ -71,6 +72,7 @@ class ParseRunner(Protocol):
     async def inspect(self, execution_id: UUID) -> ExecutionState: ...
     async def stop(self, execution_id: UUID) -> ExecutionState: ...
     async def result(self, execution_id: UUID) -> bytes: ...
+    async def release(self, execution_id: UUID) -> bool: ...
 
 
 class UnavailableRunner:
@@ -87,4 +89,7 @@ class UnavailableRunner:
         raise RunnerUnavailable()
 
     async def result(self, execution_id: UUID) -> bytes:
+        raise RunnerUnavailable()
+
+    async def release(self, execution_id: UUID) -> bool:
         raise RunnerUnavailable()
