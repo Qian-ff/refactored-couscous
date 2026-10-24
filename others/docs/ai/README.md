@@ -13,6 +13,8 @@
 | D | [当前D-UI及C/B2后的完整D Goal](D-learning-ui.md) | codex/d-learning-ui-a2 |
 | G | [独立验收](G-qa.md) | task/qa |
 
+[C-02公共接入工作包](c02-public-integration.md)承接C的M1冻结候选，登记为planned；A副须等A明确启用及公布完整执行SHA后开工，当前不自动唤醒。未验证的候选先在独立集成树接入，不直接进main；C等待实际技术基线进入M2，完成C-02后停止。
+
 读取根AGENTS、[A2开工](../a2-start.md)、[共享环境](../shared-environment.md)、[公共协议](../../contracts/a2-protocols.md)。A0检查见[交接报告](../a0-handoff.md)。各角色按Git登记自己的树；仅当前所有权代码/测试/提案/交接，公共变更交A，D唯一入口路由。B/C普通页面通过PageRegistration输出；助手按[已批准v1.1交接](../assistant-floating-handoff.md)由D唯一宿主承载C内容/历史/语音，不再注册独立聊天页，无第二套登录。该设计接收不提前放行C/B2或当前D-UI的助手新功能。
 
 临时ui-design-v1见[UI协作与批准](../ui-redesign-coordination.md)及[辅助任务登记](../../contracts/auxiliary-tasks.json)，只修改设计资料前缀，不增加业务角色或接管D。所有UI设计使用frontend-design和批准规范；常规新页沿用风格自主设计/自查，不逐页等待审美批准。当前模型/强度与设置核验统一遵循协作规范，不以文字冒充已切换。
