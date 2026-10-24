@@ -1,5 +1,7 @@
 # 既有 UI 改版协作与批准门禁
 
+**2026-10-24 v3产品接续**：[首版流程](delivery-workflow.md)明确A副/D收尾C02、C只准备题库/关卡首次Goal，D新增三项内容/助手/监控前端所有权；B页面不变。下方旧阶段说明保留历史，冻结图册/清单不改。
+
 当前模型/强度、角色、UI询问和自动唤起规则以[统一协作规范](coordination.md)为准。下文批准与设置记录属于历史证据；E/F独立身份停用，不用历史xhigh/模型原安排恢复新任务。
 
 2026-10-23产品状态：[既有UI已通过A验收](existing-ui-acceptance.md)，且[云端API/ASR前置](cloud-asr-handoff.md)已验收，c-start-ready允许C开工；B2仍等C交付。批准/冻结记录保持原始字节，existing_ui_accepted_by_A=true。设计资料批准、产品验收与当前逐角色环境放行分别记录，下文保留历史设计任务范围。

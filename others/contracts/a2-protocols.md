@@ -1,22 +1,22 @@
 # A2 模块交接协议
 
-当前角色合并见[协作规范](../docs/coordination.md)：历史F原生职责由A副受托接收，D仍唯一宿主；业务协议与既有门禁不因更名改变。
+当前角色合并见[协作规范](../docs/coordination.md)：历史F原生职责由A副受托接收，D仍唯一宿主；业务协议不变；v3角色与阶段接续见[首版流程](../docs/delivery-workflow.md)，资料前端由D1、C02后端/worker由A副接收。
 
 本文件是后续实现的约束，**不表示 HTTP 接口、业务 UI 或原生适配已完成**。共享 TypeScript 声明已经存在；实际字段变更先交 A，再随真实实现导出。
 
 ## 页面、身份及导航
 
-A 维护 web/src/lib/api.ts、extensions.ts、lesson-protocol.ts 及生成 SDK。D 使用已锁定的 react-router 8.5.0 HashRouter，唯一维护 App/main/routes。B/C普通业务页面导出 PageRegistration[]：id/path/title/workRoles/component/navGroup；助手采用下述单例宿主适配，不导出独立聊天PageRegistration。PageProps 只有服务器用户/当前 SessionSnapshot、路由参数、navigate 和 PlatformBridge，不含 token、数据库或 AI 密钥。校验合法目的地和资源授权后导航；未知/无权限页面有独立状态。
+A 维护 web/src/lib/api.ts、extensions.ts、lesson-protocol.ts 及生成 SDK。D 使用已锁定的 react-router 8.5.0 HashRouter，唯一维护 App/main/routes。B及D内容类普通业务页面导出 PageRegistration[]：id/path/title/workRoles/component/navGroup；助手采用下述单例宿主适配，不导出独立聊天PageRegistration。PageProps 只有服务器用户/当前 SessionSnapshot、路由参数、navigate 和 PlatformBridge，不含 token、数据库或 AI 密钥。校验合法目的地和资源授权后导航；未知/无权限页面有独立状态。
 
 D 在登录后调用 confirmSession；切换使用 switchWorkRole 后等待服务端确认，不仅切标签。订阅会话代次清除所有页面请求和查询；退出失败也清理本地并提示远端撤销失败。组件内搜索再处理同身份查询竞态。B/C 不导入 D 的入口或路由实现。
 
-B/C在完整D路由前，用本角色所有权内的开发渲染夹具和独立测试配置验证页面组件，复用公共服务归属辅助并调用真实API，记录测试入口。该夹具不注册产品公共路由，不替代D集成，也不用假成功数据冒充业务。公开入口由D后续统一接入。
+B业务页/D内容组件在正式路由联调前，用本角色所有权内的开发渲染夹具和独立测试配置验证页面组件，复用公共服务归属辅助并调用真实API，记录测试入口。该夹具不注册产品公共路由，不替代D集成，也不用假成功数据冒充业务。公开入口由D后续统一接入。
 
 ## 悬浮助手：已批准语义，待真实实现
 
 本节依[UI-ASSISTANT-2026.10-v1.1交接](../docs/assistant-floating-handoff.md)补充既有协议。以下是行为语义，A在对应实现阶段统一正式公共类型和导出名；本次未发布占位HTTP或修改生成SDK。
 
-D维护应用内唯一宿主/框架和个人设置；C提供助手内容、状态及动作，F提供PlatformBridge。展示状态 hidden/capsule/panel/fullscreen/docked_left/right 与业务 allowed/paused/unavailable/unconfigured 分开，个人enabled不授予服务端能力。导航唤起同一实例；关闭状态引导设置，手机全屏是布局变化，不创建独立对话路由。
+D维护应用内唯一宿主/框架、个人设置、助手内容/历史/语音前端及生命周期回调；C提供服务端内容/状态/动作，A副受托实现PlatformBridge。展示状态 hidden/capsule/panel/fullscreen/docked_left/right 与业务 allowed/paused/unavailable/unconfigured 分开，个人enabled不授予服务端能力。导航唤起同一实例；关闭状态引导设置，手机全屏是布局变化，不创建独立对话路由。
 
 D向C提供已确认SessionSnapshot/代次、当前有权教学班上下文、PlatformBridge及本设备播报偏好、请求展开/收起/完成提示回调；不传token或密钥。C向D提供内容视图、业务可用性、音频/任务状态、历史/新建、内部返回消费和停止/取消/清理回调，不创建第二fixed容器。返回先由C处理内部临时视图，再由D按全屏→小窗→胶囊，最后交A副原生适配/路由；业务阻塞弹窗高于助手且焦点不穿透。
 
@@ -48,7 +48,7 @@ B2 给 C 提供 account-level tutoring gate，语义为 allowed/paused/unavailab
 
 ## 服务端 AI 配置
 
-app/core/providers.py 已提供 ProviderSpec、EncryptedProfile、SchoolProviderSelection、seal_key/open_key、resolve_provider、不可变 ProviderSnapshot、can_manage_school_provider。C 复用，不另建一套加密；C 实现 DB持久化、配置管理/测试/启用/审计和管理员设置页，A 接迁移、公共挂载和 SDK，D 接路由。
+app/core/providers.py 已提供 ProviderSpec、EncryptedProfile、SchoolProviderSelection、seal_key/open_key、resolve_provider、不可变 ProviderSnapshot、can_manage_school_provider。C 复用，不另建一套加密；C 实现DB持久化、配置管理/测试/启用/审计后端，D实现管理员设置页与路由，A接迁移、公共挂载和SDK。
 
 学校主动选择 unconfigured/platform/school。学校管理员且当前 administrator 身份才可管本校；学院管理员无此权限。platform 模式使用平台完整配置；school 模式自有地址/模型/密钥必须成组绑定，禁止继承平台密钥到新地址。ProviderSpec 当前支持 openai-chat + HTTPS；本地 HTTP 推理若确需启用先由 A 增加平台控制的本机地址白名单，学校不能任意放开 HTTP/内网目标。C 的云连接器还需由平台策略控制目标与重定向，不能让可配置地址读取内网服务。
 

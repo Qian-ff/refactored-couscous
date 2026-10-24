@@ -6,11 +6,11 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：既有UI与云端API/ASR前置已通过A验收，C允许开工。** [c-start-ready交接](others/docs/cloud-asr-handoff.md)记录实际部署、AI/语音私有连接、鉴权/超时/取消/清理与故障恢复；B2仍等C交付后由A另行放行。真实契约0.3.2；双击Open-DUI.cmd打开现有网页，Start-CloudASR.cmd恢复本机识别节点。题库、考试、助手、监控及未来工作台尚未开放。[既有UI](others/docs/existing-ui-acceptance.md)、[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
+**当前阶段：[v3首版交付流程](others/docs/delivery-workflow.md)已发布，A副接C02后端/worker、D接资料前端，C准备后续题库/关卡。** [c-start-ready交接](others/docs/cloud-asr-handoff.md)记录实际部署、AI/语音私有连接、鉴权/超时/取消/清理与故障恢复；B2等真实固定内容版本、学生DTO和受控答案服务由A接收后放行。真实契约0.3.2；双击Open-DUI.cmd打开现有网页，Start-CloudASR.cmd恢复本机识别节点。题库、考试、助手、监控及未来工作台尚未开放。[既有UI](others/docs/existing-ui-acceptance.md)、[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
 
 ## 从这里开始
 
-- [多聊天协作规范](others/docs/coordination.md)：A主、A副、B/C/D/G；E并C、F并A副，工作包/设置/技能/汇报与自动分派统一规则；[实际迁移与接收记录](others/docs/coordination-rollout.md)。
+- [多聊天协作规范](others/docs/coordination.md)：A主、A副、B/C/D/G；E并C、F并A副。v3保留自查/里程碑规则，新增C02责任移交及C前端统一交D；业务和历史证据保留。[实际迁移与接收记录](others/docs/coordination-rollout.md)。
 
 - [A1 使用与一键打开](others/docs/a1-usage.md)：双击 Open-Web.cmd、Open-Windows.cmd、Open-Android.cmd，或 Open-A1.cmd 选择三端；包含登录和课程同步体验流程。
 - [既有UI验收与本轮入口](others/docs/existing-ui-acceptance.md)：Open-DUI.cmd、学生加退班/历史演示、三端实测、安卓返回回归及C前置边界。
