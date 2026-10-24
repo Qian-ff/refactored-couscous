@@ -79,6 +79,8 @@ stop确认整个执行单元退出；release确认挂载、输出和临时区清
 
 ## 5. 公共路由、生命周期和真实契约
 
+接D1组件候选后的最小查询/动作接缝见[A接入决定](../d1-component-candidate.md)：资料编辑revision、细分对象动作和按目标绑定的审核/发布状态必须有真实授权来源；同版本多目标状态不能合并推断。该补充在现有具体委托内，由A副实现并测真实API，公共发布前交A核对DTO/SDK，不让D猜字段或交C收尾。
+
 在lifespan唯一挂接C scheduler，等待停止/清理路径；普通请求和文件流不持长DB事务。后台task factory绑定本树、当前运行角色和正确存储，测试显式隔离调度器及临时区，不能误扫演示文件。
 
 挂载C实际router到`/api/v1`。contract目标0.4.0，在单一application.json中更新，再导出真实OpenAPI/hash和生成SDK；不提前改状态、不手写客户端。实际二进制PUT/download、Content-Length及UTF-8文件名正确。CORS暴露Content-Disposition/Content-Length，保留现有角色及来源限制。
