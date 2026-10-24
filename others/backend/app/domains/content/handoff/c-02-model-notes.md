@@ -28,3 +28,7 @@ UnavailableRunner显式报PARSER_UNAVAILABLE，不尝试普通子进程降级，
 新增服务候选见services.py、schemas.py、quota.py。配额计量不按终态过滤，未清理残留/保留快照继续占额；全局锁只包短事务，调用方须在事务外采集真实free_disk_bytes。当前缺容量探针返回503。尚需上传、调度和最终结算路径全部采用同一锁序并以PG竞争实测。
 
 待审核版本的目标V必须能核对原件；readable_versions新增对应submitted/approved Review的目标V分支（B未发布资源R语义，creator为空），详情再次确认目标review能力。S和学生不能通过提审绑定获得草稿权限。输出投影只能带授权目标，不泄露源库字段；正式DTO/HTTP和PG隔离验收仍待补齐。
+
+上传新增title/source_metadata字段，仍在M1模型候选中，未迁移。PrivateStorage使用本任务不透明UUID key，临时与原件同私有卷，以不覆盖硬链接封存，文件fsync后提交版本；Linux同时同步目录。A应核验实际文件卷支持与部署权限。取消后的文件清理与配额结算分开，清理失败仍占额。
+
+上传服务receive_upload接受服务端身份三元组与AsyncIterator字节；传输阶段每个DB事务独立关闭。请求取消必须等已提交线程中的写入/封存事务完成才清理，不能因await取消便当作底层I/O停止。cleanup_idle_upload只处理明确没有writer且未被版本引用的终止/过期会话；失联writer不能只凭lease超时清除。后续恢复需记录/核对权威writer执行归属，无法确认停止时保持占额和接收槽位，不触碰保留版本。

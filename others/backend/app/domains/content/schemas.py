@@ -104,3 +104,38 @@ class ReviewDecision(Input):
 
 class RevisionInput(Input):
     revision: int = Field(ge=1)
+
+
+class UploadCreate(Input):
+    library_id: UUID
+    material_id: UUID | None = None
+    title: str = Field(min_length=1, max_length=200)
+    original_name: str = Field(min_length=1, max_length=240)
+    format: Literal["pdf", "pptx", "docx", "txt"]
+    encoding: Literal["utf-8", "gb18030"] = "utf-8"
+    expected_bytes: int = Field(gt=0, le=20971520)
+    expected_hash: str = Field(pattern="^[0-9a-f]{64}$")
+    source_metadata: SourceMetadata = Field(default_factory=SourceMetadata)
+
+    @field_validator("title")
+    @classmethod
+    def title_nonblank(cls, value):
+        return LibraryCreate.nonblank(value)
+
+    @field_validator("original_name")
+    @classmethod
+    def safe_filename(cls, value):
+        if any(ord(c) < 32 or c in '/\\:' for c in value) or value in {".", ".."}:
+            raise ValueError("文件名不可含路径或控制字符")
+        return value
+
+    @classmethod
+    def validate_file(cls, request):
+        if request.original_name.rsplit(".", 1)[-1].lower() != request.format:
+            raise ValueError("文件扩展名与格式不一致")
+        if request.format == "txt" and request.expected_bytes > 1048576:
+            raise ValueError("TXT文件最多1MiB")
+        return request
+
+    def model_post_init(self, _context):
+        self.validate_file(self)

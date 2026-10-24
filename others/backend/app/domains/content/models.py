@@ -73,6 +73,8 @@ class ContentUpload(SQLModel, table=True):
     work_role: str = Field(max_length=20)
     school_id: UUID | None = Field(default=None, foreign_key="school.id", index=True)
     original_name: str = Field(max_length=240)
+    title: str = Field(max_length=200)
+    source_metadata: dict = Field(default_factory=dict, sa_column=Column(JSONB, nullable=False))
     format: str = Field(max_length=8)
     encoding: str = Field(default="utf-8", max_length=12)
     mime: str = Field(max_length=150)
