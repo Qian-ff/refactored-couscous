@@ -2,7 +2,7 @@
 from uuid import UUID
 
 from fastapi import HTTPException
-from sqlalchemy import and_, false, or_, true
+from sqlalchemy import and_, false, literal, or_, true
 from sqlalchemy.orm import aliased
 from sqlmodel import Session, select
 
@@ -40,8 +40,16 @@ def readable_versions(identity: Identity):
     ).correlate(MaterialVersion, Material).exists()
     source = and_(Library.active.is_(True), read_resource_predicate(
         identity, columns(Library, creator_id=Material.creator_id, published=false())))
+    review_target = aliased(Library)
+    reviewable = select(MaterialReview.id).join(
+        review_target, review_target.id == MaterialReview.target_library_id,
+    ).where(
+        MaterialReview.version_id == MaterialVersion.id,
+        MaterialReview.state.in_(["submitted", "approved"]), review_target.active.is_(True),
+        read_resource_predicate(identity, columns(review_target, creator_id=literal(None), published=false())),
+    ).correlate(MaterialVersion).exists()
     return select(MaterialVersion).join(Material, Material.id == MaterialVersion.material_id).join(
-        Library, Library.id == Material.library_id).where(or_(source, published))
+        Library, Library.id == Material.library_id).where(or_(source, published, reviewable))
 
 
 def require_version(db: Session, identity: Identity, version_id: UUID):
@@ -62,6 +70,13 @@ def require_version(db: Session, identity: Identity, version_id: UUID):
     ).order_by(MaterialPublication.id)).all()
     for _publication, _review, target in bindings:
         if resource_access(db, identity, descriptor(target, creator_id=material.creator_id, published=True)).read:
+            return version, material, target
+    reviews = db.exec(select(MaterialReview, Library).join(
+        Library, Library.id == MaterialReview.target_library_id,
+    ).where(MaterialReview.version_id == version_id, MaterialReview.state.in_(["submitted", "approved"]),
+            Library.active.is_(True)).order_by(MaterialReview.id)).all()
+    for _review, target in reviews:
+        if resource_access(db, identity, descriptor(target)).review:
             return version, material, target
     raise HTTPException(403, "资料授权已改变，请刷新")
 

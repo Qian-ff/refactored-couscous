@@ -24,3 +24,7 @@ UnavailableRunner显式报PARSER_UNAVAILABLE，不尝试普通子进程降级，
 ## 当前检查范围
 
 业务解释器下4项模型/SQL编译检查和2项runner能力检查通过，未连接数据库。查询使用真实B授权SQL及详情二次判权，多个发布绑定通过EXISTS避免版本重复。尚未进行真实PG权限/并发/快照保护验收，不能作业务完成证据。
+
+新增服务候选见services.py、schemas.py、quota.py。配额计量不按终态过滤，未清理残留/保留快照继续占额；全局锁只包短事务，调用方须在事务外采集真实free_disk_bytes。当前缺容量探针返回503。尚需上传、调度和最终结算路径全部采用同一锁序并以PG竞争实测。
+
+待审核版本的目标V必须能核对原件；readable_versions新增对应submitted/approved Review的目标V分支（B未发布资源R语义，creator为空），详情再次确认目标review能力。S和学生不能通过提审绑定获得草稿权限。输出投影只能带授权目标，不泄露源库字段；正式DTO/HTTP和PG隔离验收仍待补齐。

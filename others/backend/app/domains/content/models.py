@@ -96,6 +96,7 @@ class MaterialVersion(SQLModel, table=True):
     __table_args__ = (
         UniqueConstraint("material_id", "version_no", name="uq_content_material_version"),
         CheckConstraint("version_no > 0", name="ck_content_version_number"),
+        CheckConstraint("retained_bytes >= 0", name="ck_content_version_bytes"),
         CheckConstraint("(input_kind='file' AND upload_id IS NOT NULL AND input_text IS NULL) OR "
                         "(input_kind='text' AND upload_id IS NULL AND input_text IS NOT NULL)", name="ck_content_version_input"),
         CheckConstraint("extraction_state IN ('queued','running','succeeded','failed','canceled')", name="ck_content_version_state"),
