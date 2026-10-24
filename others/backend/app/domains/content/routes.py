@@ -14,6 +14,7 @@ from app.domains.content.schemas import (
     RevisionInput, TextMaterialCreate, UploadCreate,
 )
 from app.domains.content.uploads import _io
+from app.domains.content.upload_fence import FenceUnavailable
 from app.domains.content.views import (
     Capabilities, ChunkPage, CommandResult, JobView, LibraryView, Page, PublicationView, ReviewView,
     SubmitTarget, UploadView, VersionView,
@@ -141,7 +142,10 @@ async def cancel_upload(db: Db, identity: CurrentIdentity, runtime: Runtime, upl
     result = uploads.cancel_upload(db, identity, upload_id, key)
     db.close()
     if runtime.storage:
-        await _io(uploads.cleanup_idle_upload, runtime.factory, runtime.storage, upload_id)
+        try:
+            await _io(uploads.cleanup_idle_upload, runtime.factory, runtime.storage, upload_id)
+        except (OSError, FenceUnavailable):
+            raise HTTPException(503, "STORAGE_CLEANUP_FAILED：预留空间保持占用") from None
     return result
 
 

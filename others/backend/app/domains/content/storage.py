@@ -5,6 +5,9 @@ import shutil
 from pathlib import Path
 
 from fastapi import HTTPException
+from uuid import UUID
+
+from app.domains.content.upload_fence import UploadFence
 
 KEY = re.compile(r"[0-9a-f]{32}\.(?:part|blob)\Z")
 
@@ -14,6 +17,7 @@ class PrivateStorage:
         self.root = root.resolve(strict=True)
         if not self.root.is_dir():
             raise HTTPException(503, "STORAGE_UNAVAILABLE")
+        self.fence = UploadFence(self.root)
 
     def path(self, key: str):
         if not KEY.fullmatch(key):
@@ -23,8 +27,9 @@ class PrivateStorage:
             raise HTTPException(503, "STORAGE_UNAVAILABLE")
         return path
 
-    def create(self, key: str):
+    def create(self, key: str, guard):
         path = self.path(key)
+        guard.require(self.root, UUID(hex=key[:32]))
         flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_BINARY", 0)
         return os.fdopen(os.open(path, flags, 0o600), "wb")
 
@@ -41,9 +46,11 @@ class PrivateStorage:
             os.close(descriptor)
             raise
 
-    def seal(self, temporary_key: str, final_key: str):
+    def seal(self, temporary_key: str, final_key: str, guard):
         # Atomic no-replace publication on the same private volume; recovery also checks .part.
         temporary, final = self.path(temporary_key), self.path(final_key)
+        guard.require(self.root, UUID(hex=temporary_key[:32]))
+        guard.require(self.root, UUID(hex=final_key[:32]))
         os.link(temporary, final, follow_symlinks=False)
         temporary.unlink()
         if os.name == "posix":
@@ -53,13 +60,16 @@ class PrivateStorage:
             finally:
                 os.close(directory)
 
-    def flush(self, file):
+    def flush(self, file, guard):
+        guard.require(self.root, guard.upload_id)
         file.flush()
         os.fsync(file.fileno())
 
-    def remove_unreferenced(self, key: str):
+    def remove_unreferenced(self, key: str, guard):
         # Callers must first prove no version references this upload and its writer has stopped.
-        self.path(key).unlink(missing_ok=True)
+        path = self.path(key)
+        guard.require(self.root, UUID(hex=key[:32]))
+        path.unlink(missing_ok=True)
 
     def free_bytes(self):
         return shutil.disk_usage(self.root).free

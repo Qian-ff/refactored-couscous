@@ -37,6 +37,8 @@
 
 A已完成关键裁决：上传使用同卷稳定文件锁，Linux flock/Windows LockFileEx；清理取得同一guard后失效旧generation并删除/结算，不用额外宿主停止探针。ParseRunner固定execution_id、持久终止凭据及release清理任务副本获同意。完整执行补充见c-02-accepted-addendum.md，尚未实现文件锁与进程竞争测试，不视为M1接收。
 
-当前仍需补数据库不可变保护/父级复合约束、UploadFence及恢复、故障场景及完整c-02-integration.md后交M1。M1前不实现依赖尚未生成SDK的前端。用户最新要求：完成C-02后停止，不启动后续模块。
+第八轮完成稳定UploadFence和孤立上传恢复候选：Windows LockFileEx/Linux flock，所有写入/封存/清理持同guard；真实线程取消、独立进程竞争、冻结进程持锁、终止恢复5项新增检查通过，业务纯检查累计40项。错误保留预留，scheduler记录安全清理错误。尚未进行PG迟到写入/文件-DB中断竞争，不能以锁原语测试代替完整恢复验收。
+
+模型新增班级完整父级和真实会话owner复合FK，所需核心UNIQUE交A；目录条件父级、不可变历史、成功快照、审核发布和延迟封存约束候选见c-02-guards.sql。save_snapshot先flush chunks再冻结成功版本。新增3项PG guard测试候选未运行。完整M1候选交接见c-02-integration.md；M1前不实现依赖尚未生成SDK的前端。用户最新要求：完成C-02后停止，不启动后续模块。
 
 未完成：格式解析、沙箱运行、领域业务、真实PG/HTTP、迁移/公共接入/SDK、前端和M2/M3全部待续。不得标记整包完成。未安装依赖或执行迁移/云模型。

@@ -10,7 +10,7 @@ from fastapi import HTTPException
 from app.domains.content import task_store
 from app.domains.content.parse_result import ResultError, validate_result
 from app.domains.content.parse_runner import ParseTask, RunnerUnavailable
-from app.domains.content.uploads import _io
+from app.domains.content.uploads import _io, reap_uploads
 
 SAFE_ERRORS = {"TIMEOUT", "RESOURCE_LIMIT", "PARSER_UNAVAILABLE", "UNSUPPORTED_TYPE", "NO_TEXT", "CORRUPT_FILE",
                "STORAGE_FULL", "ACCESS_REVOKED", "WORKER_INTERRUPTED", "INVALID_RESULT", "INVALID_ENCODING",
@@ -89,6 +89,10 @@ class ContentScheduler:
             return False
 
     async def tick(self):
+        if self.storage is not None:
+            cleanup_error = await _io(reap_uploads, self.factory, self.storage)
+            if cleanup_error:
+                self.last_error_code = cleanup_error
         recovered = await _io(task_store.recovery_candidate, self.factory, self.owner)
         if recovered:
             await self._reap(recovered["job_id"], recovered["execution_id"])

@@ -27,6 +27,9 @@ class Library(SQLModel, table=True):
         ForeignKeyConstraint(["college_id", "school_id"], ["college.id", "college.school_id"]),
         ForeignKeyConstraint(["catalog_id", "school_id"], ["course_catalog.id", "course_catalog.school_id"]),
         ForeignKeyConstraint(["course_id", "school_id"], ["course.id", "course.school_id"]),
+        ForeignKeyConstraint(["course_id", "school_id", "college_id", "catalog_id"],
+                             ["course.id", "course.school_id", "course.college_id", "course.catalog_id"],
+                             name="fk_content_library_course_parent"),
         Index("ix_content_library_scope", "scope", "school_id", "college_id", "catalog_id", "course_id"),
     )
     id: UUID = Field(default_factory=uuid4, primary_key=True)
@@ -57,6 +60,8 @@ class Material(SQLModel, table=True):
 class ContentUpload(SQLModel, table=True):
     __tablename__ = "content_upload"
     __table_args__ = (
+        ForeignKeyConstraint(["login_session_id", "owner_id"], ["login_session.id", "login_session.user_id"],
+                             name="fk_content_upload_session_owner"),
         CheckConstraint("state IN ('created','receiving','sealed','canceled','expired','failed')", name="ck_content_upload_state"),
         CheckConstraint("expected_bytes > 0 AND expected_bytes <= 20971520 AND reserved_bytes >= 0 AND retained_bytes >= 0", name="ck_content_upload_bytes"),
         CheckConstraint("work_role IN ('teacher','administrator')", name="ck_content_upload_role"),
@@ -179,6 +184,8 @@ class MaterialPublication(SQLModel, table=True):
 class ContentJob(SQLModel, table=True):
     __tablename__ = "content_job"
     __table_args__ = (
+        ForeignKeyConstraint(["login_session_id", "owner_id"], ["login_session.id", "login_session.user_id"],
+                             name="fk_content_job_session_owner"),
         CheckConstraint("state IN ('queued','running','succeeded','failed','canceled')", name="ck_content_job_state"),
         CheckConstraint("work_role IN ('teacher','administrator')", name="ck_content_job_role"),
         CheckConstraint("generation > 0 AND reserved_bytes >= 0", name="ck_content_job_generation"),

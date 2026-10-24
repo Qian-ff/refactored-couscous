@@ -135,6 +135,8 @@ def save_snapshot(factory, job_id, owner, generation, result, raw_bytes, free_di
         for chunk in result.chunks:
             db.add(SourceChunk(material_version_id=version.id, ordinal=chunk.ordinal,
                                locator=chunk.locator.model_dump(), text=chunk.text, text_hash=chunk.text_hash))
+        # Insert chunks while the version is running; the DB guard rejects inserts after success.
+        db.flush()
         version.parser_version = result.parser_version
         version.warnings = result.warnings
         version.extraction_state = "succeeded"

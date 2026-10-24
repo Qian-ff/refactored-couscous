@@ -18,6 +18,7 @@ from app.domains.content.models import ContentJob, ContentUpload, Material, Mate
 from app.domains.content.quota import enforce_budget, enforce_queue, quota_lock
 from app.domains.content.schemas import UploadCreate
 from app.domains.content.services import editable_material, execute_command, locked, require_key
+from app.domains.content.upload_fence import FenceUnavailable
 
 MIMES = {"pdf": "application/pdf", "txt": "text/plain", "docx":
          "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "pptx":
@@ -101,7 +102,14 @@ def cancel_upload(db, identity, upload_id, key):
                            {"id": str(upload_id)}, action, lambda: upload_access(db, identity, upload_id))
 
 
-def _claim(factory, context, upload_id, writer_id):
+def _check_upload(factory, context, upload_id):
+    with factory() as db:
+        identity = load_identity(db, *context)
+        upload_access(db, identity, upload_id)
+
+
+def _claim(factory, context, upload_id, writer_id, guard):
+    guard.require(guard.root, upload_id)
     with factory() as db:
         identity = load_identity(db, *context)
         row = upload_access(db, identity, upload_id)
@@ -110,42 +118,43 @@ def _claim(factory, context, upload_id, writer_id):
         def action():
             quota_lock(db)
             current = locked(db, ContentUpload, upload_id)
-            if current.state == "sealed":
-                return {**current.model_dump(), "replay": True}
-            if (current.state != "created" or current.login_session_id != identity.login.id
-                    or current.expires_at <= db_now(db)):
+            replay = current.state == "sealed"
+            if not replay and (current.state != "created" or current.login_session_id != identity.login.id
+                               or current.expires_at <= db_now(db)):
                 raise HTTPException(409, "上传会话不能开始，请查询状态后重新上传")
             streams = db.exec(select(func.count()).select_from(ContentUpload).where(
-                ContentUpload.lease_owner.is_not(None))).one()
+                ContentUpload.lease_owner.is_not(None), ContentUpload.id != upload_id)).one()
             if streams >= 2:
                 raise HTTPException(409, "上传通道繁忙，请稍后重试")
-            current.state = "receiving"
+            if not replay:
+                current.state = "receiving"
             current.lease_owner = writer_id
             current.lease_until = db_now(db) + timedelta(seconds=20)
             db.add(current)
-            return {**current.model_dump(), "replay": False}
+            return {**current.model_dump(), "replay": replay}
 
         return execute_command(db, identity, school_id, "content.upload.receive", None, {"id": str(upload_id)},
                                action, lambda: upload_access(db, identity, upload_id))
 
 
-def _heartbeat(factory, context, upload_id, writer_id, generation, replay=False):
+def _heartbeat(factory, context, upload_id, writer_id, generation, replay=False, guard=None):
+    if guard is None:
+        raise FenceUnavailable()
+    guard.require(guard.root, upload_id)
     with factory() as db:
         identity = load_identity(db, *context)
         row = upload_access(db, identity, upload_id)
-        if replay:
-            if row.state != "sealed":
-                raise HTTPException(409, "上传状态已改变")
-            return
-        if (row.state != "receiving" or row.generation != generation or row.lease_owner != writer_id
-                or row.expires_at <= db_now(db) or row.lease_until is None or row.lease_until <= db_now(db)):
+        if (row.state != ("sealed" if replay else "receiving") or row.generation != generation
+                or row.lease_owner != writer_id or (not replay and row.expires_at <= db_now(db))
+                or row.lease_until is None or row.lease_until <= db_now(db)):
             raise HTTPException(409, "上传已取消、过期或失去租约")
         row.lease_until = db_now(db) + timedelta(seconds=20)
         db.add(row)
         db.commit()
 
 
-def _finish(factory, context, upload_id, writer_id, generation, free_disk_bytes):
+def _finish(factory, context, upload_id, writer_id, generation, free_disk_bytes, guard):
+    guard.require(guard.root, upload_id)
     with factory() as db:
         identity = load_identity(db, *context)
         initial = upload_access(db, identity, upload_id)
@@ -172,6 +181,7 @@ def _finish(factory, context, upload_id, writer_id, generation, free_disk_bytes)
             db.add(version)
             db.flush()
             row.sealed_version_id = version.id
+            row.material_id = material.id
             row.state = "sealed"
             row.retained_bytes += row.expected_bytes
             row.reserved_bytes = 0
@@ -189,32 +199,8 @@ def _finish(factory, context, upload_id, writer_id, generation, free_disk_bytes)
                                lambda: upload_access(db, identity, upload_id))
 
 
-def _cleanup_writer(factory, storage, upload_id, writer_id):
-    with factory() as db:
-        row = db.get(ContentUpload, upload_id)
-        if row is None or row.sealed_version_id is not None or row.lease_owner != writer_id:
-            return
-        key, school_id = row.file_key, row.school_id
-    # This is called only once this writer has closed its stream/file. No DB connection is held.
-    storage.remove_unreferenced(upload_id.hex + ".part")
-    storage.remove_unreferenced(key)
-    with factory() as db:
-        tenant_write_lock(db, school_id)
-        quota_lock(db)
-        row = locked(db, ContentUpload, upload_id)
-        if row.sealed_version_id is None and row.lease_owner == writer_id:
-            if row.state == "receiving":
-                row.state = "failed"
-                row.error_code = "UPLOAD_INTERRUPTED"
-            row.reserved_bytes = 0
-            row.lease_owner = None
-            row.lease_until = None
-            db.add(row)
-            db.commit()
-
-
-def cleanup_idle_upload(factory, storage, upload_id):
-    """Janitor/cancel follow-up for uploads proven to have no attached writer."""
+def _cleanup_held(factory, storage, upload_id, guard, expected_writer=None):
+    guard.require(storage.root, upload_id)
     cleaner = uuid4()
     with factory() as db:
         original = db.get(ContentUpload, upload_id)
@@ -223,21 +209,77 @@ def cleanup_idle_upload(factory, storage, upload_id):
         tenant_write_lock(db, original.school_id)
         quota_lock(db)
         row = locked(db, ContentUpload, upload_id)
-        if row.sealed_version_id is not None or row.lease_owner is not None:
+        if expected_writer is not None and row.lease_owner != expected_writer:
             db.rollback()
             return False
-        if row.state == "created" and row.expires_at <= db_now(db):
+        referenced = db.exec(select(MaterialVersion.id).where(MaterialVersion.upload_id == upload_id)).first()
+        if row.sealed_version_id is not None or referenced is not None or row.state == "sealed":
+            # A completed replay can release its receiving slot, never its permanent original.
+            row.lease_owner, row.lease_until = None, None
+            db.add(row)
+            db.commit()
+            return False
+        if row.state == "created" and row.expires_at > db_now(db):
+            db.rollback()
+            return False
+        if row.state == "created":
             row.state = "expired"
-            row.generation += 1
+        elif row.state == "receiving":
+            row.state, row.error_code = "failed", "UPLOAD_INTERRUPTED"
         if row.state not in {"canceled", "expired", "failed"}:
             db.rollback()
             return False
-        # Claim cleanup so two janitors cannot release accounting during each other's file work.
+        # The kernel guard proves no old I/O still owns the upload; fence delayed claim callbacks.
+        row.generation += 1
         row.lease_owner = cleaner
+        row.lease_until = db_now(db) + timedelta(seconds=20)
         db.add(row)
+        key, school_id, generation = row.file_key, row.school_id, row.generation
         db.commit()
-    _cleanup_writer(factory, storage, upload_id, cleaner)
+    storage.remove_unreferenced(upload_id.hex + ".part", guard)
+    storage.remove_unreferenced(key, guard)
+    with factory() as db:
+        tenant_write_lock(db, school_id)
+        quota_lock(db)
+        row = locked(db, ContentUpload, upload_id)
+        referenced = db.exec(select(MaterialVersion.id).where(MaterialVersion.upload_id == upload_id)).first()
+        if (row.sealed_version_id is None and referenced is None and row.lease_owner == cleaner
+                and row.generation == generation):
+            row.reserved_bytes = 0
+            row.lease_owner, row.lease_until = None, None
+            db.add(row)
+            db.commit()
     return True
+
+
+def cleanup_idle_upload(factory, storage, upload_id):
+    """No lease/PID guess: take the stable kernel guard before invalidating or deleting anything."""
+    attempt = storage.fence.try_acquire(upload_id)
+    if attempt.status == "unavailable":
+        raise FenceUnavailable()
+    if attempt.status == "busy":
+        return False
+    with attempt.guard:
+        return _cleanup_held(factory, storage, upload_id, attempt.guard)
+
+
+def reap_uploads(factory, storage, limit=50):
+    with factory() as db:
+        rows = db.exec(select(ContentUpload.id).where(
+            (ContentUpload.lease_owner.is_not(None))
+            | ((ContentUpload.state == "created") & (ContentUpload.expires_at <= db_now(db)))
+            | (ContentUpload.state.in_(["canceled", "expired", "failed"]) & (ContentUpload.reserved_bytes > 0))
+        ).order_by(ContentUpload.expires_at, ContentUpload.id).limit(limit)).all()
+    # Each attempt uses a nonblocking filesystem guard outside any DB transaction.
+    error_code = None
+    for upload_id in rows:
+        try:
+            cleanup_idle_upload(factory, storage, upload_id)
+        except FenceUnavailable:
+            error_code = "UPLOAD_FENCE_UNAVAILABLE"
+        except OSError:
+            error_code = "STORAGE_CLEANUP_FAILED"
+    return error_code
 
 
 async def _io(function, *args, dispose_on_cancel=None):
@@ -282,14 +324,22 @@ async def _next_chunk(iterator, wall_deadline, heartbeat):
 async def receive_upload(factory, storage, context, upload_id, source):
     """context is server-derived (user.id, login.id, work_role), never HTTP body identity."""
     writer_id = uuid4()
-    stream, replay = None, False
+    stream, guard = None, None
     try:
-        snapshot = await _io(_claim, factory, context, upload_id, writer_id)
+        await _io(_check_upload, factory, context, upload_id)
+        attempt = await _io(storage.fence.try_acquire, upload_id,
+                            dispose_on_cancel=lambda result: result.guard.close() if result.guard else None)
+        if attempt.status != "acquired":
+            raise HTTPException(409 if attempt.status == "busy" else 503,
+                                "UPLOAD_BUSY" if attempt.status == "busy" else "UPLOAD_FENCE_UNAVAILABLE")
+        guard = attempt.guard
+        snapshot = await _io(_claim, factory, context, upload_id, writer_id, guard)
         generation, replay = snapshot["generation"], snapshot["replay"]
         digest, count, signature = hashlib.sha256(), 0, b""
         start = checkpoint = monotonic()
         if not replay:
-            stream = await _io(storage.create, upload_id.hex + ".part", dispose_on_cancel=lambda file: file.close())
+            await _io(_heartbeat, factory, context, upload_id, writer_id, generation, replay, guard)
+            stream = await _io(storage.create, upload_id.hex + ".part", guard, dispose_on_cancel=lambda file: file.close())
         iterator = aiter(source)
         while True:
             remaining = 300 - (monotonic() - start)
@@ -297,11 +347,11 @@ async def receive_upload(factory, storage, context, upload_id, source):
                 raise HTTPException(408, "UPLOAD_TIMEOUT")
             try:
                 piece = await _next_chunk(iterator, start + 300, lambda: _io(
-                    _heartbeat, factory, context, upload_id, writer_id, generation, replay))
+                    _heartbeat, factory, context, upload_id, writer_id, generation, replay, guard))
             except StopAsyncIteration:
                 break
             if monotonic() - checkpoint >= 5:
-                await _io(_heartbeat, factory, context, upload_id, writer_id, generation, replay)
+                await _io(_heartbeat, factory, context, upload_id, writer_id, generation, replay, guard)
                 checkpoint = monotonic()
             count += len(piece)
             if count > snapshot["expected_bytes"]:
@@ -315,17 +365,19 @@ async def receive_upload(factory, storage, context, upload_id, source):
         if ((snapshot["format"] == "pdf" and not signature.startswith(b"%PDF-"))
                 or (snapshot["format"] in {"docx", "pptx"} and not signature.startswith(b"PK\x03\x04"))):
             raise HTTPException(415, "文件类型与声明不符")
-        await _io(_heartbeat, factory, context, upload_id, writer_id, generation, replay)
+        await _io(_heartbeat, factory, context, upload_id, writer_id, generation, replay, guard)
         if replay:
             with factory() as db:
                 identity = load_identity(db, *context)
                 return upload_status(db, identity, upload_id)
-        await _io(storage.flush, stream)
+        await _io(storage.flush, stream, guard)
         await _io(stream.close)
         stream = None
-        await _io(storage.seal, upload_id.hex + ".part", snapshot["file_key"])
+        await _io(storage.seal, upload_id.hex + ".part", snapshot["file_key"], guard)
         free = await _io(storage.free_bytes)
-        return await _io(_finish, factory, context, upload_id, writer_id, generation, free)
+        return await _io(_finish, factory, context, upload_id, writer_id, generation, free, guard)
+    except FenceUnavailable:
+        raise HTTPException(503, "UPLOAD_FENCE_UNAVAILABLE") from None
     except asyncio.TimeoutError as error:
         raise HTTPException(408, "UPLOAD_TIMEOUT") from error
     except OSError as error:
@@ -336,9 +388,11 @@ async def receive_upload(factory, storage, context, upload_id, source):
             if stream:
                 await _io(stream.close)
         finally:
-            if not replay:
-                # Cleanup cannot be canceled midway while accounting claims bytes are free.
+            if guard:
                 try:
-                    await _io(_cleanup_writer, factory, storage, upload_id, writer_id)
-                except OSError:
+                    # Keep the same guard through cleanup and accounting, including completed replays.
+                    await _io(_cleanup_held, factory, storage, upload_id, guard, writer_id)
+                except (OSError, FenceUnavailable):
                     raise HTTPException(503, "STORAGE_CLEANUP_FAILED：预留空间保持占用") from None
+                finally:
+                    await _io(guard.close)

@@ -4,7 +4,7 @@ import threading
 import unittest
 from pathlib import Path
 from time import monotonic
-from uuid import uuid4
+from uuid import UUID, uuid4
 
 from fastapi import HTTPException
 from pydantic import ValidationError
@@ -22,18 +22,22 @@ class StorageTests(unittest.TestCase):
 
     def test_sealed_file_exact_bytes_and_no_replacement(self):
         key = uuid4().hex
+        attempt = self.storage.fence.try_acquire(UUID(hex=key))
+        self.assertEqual(attempt.status, "acquired")
+        guard = attempt.guard
+        self.addCleanup(guard.close)
         data = "中文实验安全".encode()
-        with self.storage.create(key + ".part") as file:
+        with self.storage.create(key + ".part", guard) as file:
             file.write(data)
-            self.storage.flush(file)
-        self.storage.seal(key + ".part", key + ".blob")
+            self.storage.flush(file, guard)
+        self.storage.seal(key + ".part", key + ".blob", guard)
         with self.storage.open(key + ".blob") as file:
             self.assertEqual(file.read(), data)
         self.assertFalse(self.storage.path(key + ".part").exists())
-        with self.storage.create(key + ".part") as file:
+        with self.storage.create(key + ".part", guard) as file:
             file.write(b"replacement")
         with self.assertRaises(FileExistsError):
-            self.storage.seal(key + ".part", key + ".blob")
+            self.storage.seal(key + ".part", key + ".blob", guard)
         with self.storage.open(key + ".blob") as file:
             self.assertEqual(file.read(), data)
 
