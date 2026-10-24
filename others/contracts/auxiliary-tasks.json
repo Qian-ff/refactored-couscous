@@ -8,7 +8,9 @@
       "worktree": "others/worktrees/ui-design",
       "baseline_ref": "b1-ready",
       "baseline_sha": "1e1011b4ff2e3c5a66b22492fb87a671e9699584",
-      "owned_paths": ["others/design/ui-redesign/"],
+      "owned_paths": [
+        "others/design/ui-redesign/"
+      ],
       "reasoning_effort_target": "xhigh",
       "status": "design_received",
       "candidate": {
@@ -58,7 +60,13 @@
         "C_environment_source_sha": "717e1d0e5f88071c52b361cf3fa1c3bb09d13697",
         "C_environment_handoff": "others/docs/cloud-asr-handoff.md",
         "C_release_remaining": null,
-        "B2_release_condition": "C delivery accepted by A, followed by an explicit B2 integration baseline"
+        "B2_release_condition": "A-accepted actual fixed QuestionVersion/LessonVersion, student-safe DTO and controlled answer-read service, followed by an explicit full B2 execution SHA; no dependency on complete assistant/monitoring.",
+        "current_workflow": "others/docs/delivery-workflow.md",
+        "C_current_stage": "C1 preparation only; first new module requires manual start",
+        "C02_remaining_backend_worker_executor": "A-executor",
+        "C02_remaining_frontend_executor": "D",
+        "C02_accepted_by_A": false,
+        "D_material_frontend_allowed": true
       }
     },
     "ui-assistant-floating-v1": {
@@ -68,7 +76,9 @@
       "worktree": "others/worktrees/ui-design",
       "baseline_ref": "ui-redesign-ready",
       "baseline_sha": "2b5907d65730ff70d07373ee22dc18cd8d4d590f",
-      "owned_paths": ["others/design/ui-redesign/assistant-floating-v1/"],
+      "owned_paths": [
+        "others/design/ui-redesign/assistant-floating-v1/"
+      ],
       "planning_reasoning_effort_target": "max",
       "reasoning_effort_target": "xhigh",
       "status": "design_received",
@@ -112,11 +122,34 @@
       },
       "design_receipt_alone_authorizes_product_implementation": false,
       "implementation_release_source": "tasks.ui-design-v1.product_migration",
-      "C_content_history_voice_adapters_allowed": true,
+      "C_content_history_voice_adapters_allowed": false,
       "D_host_implementation_allowed": false,
       "F_native_extension_allowed": false,
       "existing_ui_gate_changed": false,
-      "B2_new_features_allowed": false
+      "B2_new_features_allowed": false,
+      "frontend_owner": "D",
+      "backend_owner": "C",
+      "current_release_note": "Old C frontend adapters transferred to D; assistant backend/frontend and native extension await their workflow v3 stage. Existing frozen design approval preserved."
+    },
+    "workflow-v3": {
+      "coordinator_role": "A",
+      "thread_id": "01a1544b-7eb1-77f1-9f83-52fa8510503c",
+      "status": "first_round_authorized",
+      "baseline_sha": "2f07bd08893f5f0b0e6260068b1c3e9106a7db68",
+      "workflow": "others/docs/delivery-workflow.md",
+      "rollout": "others/docs/workflow-v3-rollout.md",
+      "C02_status": "transferred_unfinished",
+      "A_executor_package": "c02-public-integration",
+      "D_package": "others/docs/ai/d1-content-ui.md",
+      "C1_status": "prepare_first_goal_only",
+      "B2_status": "waiting_real_content_baseline_and_A_release",
+      "G_status": "manual_chat_creation_and_registration_required_at_milestone",
+      "frontend_transferred_to_D": [
+        "web/src/features/content/",
+        "web/src/features/assistant/",
+        "web/src/features/monitoring/"
+      ],
+      "first_round_start_evidence": "Record actual target activity after dispatch; authorization alone is not evidence of start."
     }
   }
 }

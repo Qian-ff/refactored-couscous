@@ -1,18 +1,20 @@
 {
-  "version": 1,
+  "version": 2,
   "handoffs": {
     "c02-public-integration": {
       "coordinator": "A",
-      "implementation_role": "A-executor after explicit activation",
-      "status": "planned",
+      "implementation_role": "A-executor under active committed grant",
+      "status": "active",
       "source_thread": "01a15942-9518-7660-a13c-6b5711d08ef6",
-      "baseline_commit": "768bc0c5e4587616bdeace369723d23a94ba5dcb",
+      "baseline_commit": "2f07bd08893f5f0b0e6260068b1c3e9106a7db68",
       "candidate_commit": "ecb7129497d1f6a69daf09df6db3f2f30537d7ba",
       "domain_owner": "B",
-      "temporary_domain_files": ["others/backend/app/domains/core/models.py"],
-      "scope": "Only named UNIQUE keys uq_login_session_owner(id,user_id) and uq_course_content_parent(id,school_id,college_id,catalog_id), needed by the frozen C composite FKs. No B policy or business change. Not active execution authorization.",
+      "temporary_domain_files": [
+        "others/backend/app/domains/core/models.py"
+      ],
+      "scope": "B core models: only named UNIQUE keys uq_login_session_owner(id,user_id) and uq_course_content_parent(id,school_id,college_id,catalog_id). Frozen C-02 backend/worker files explicitly transferred to A-executor for implementation repairs; material frontend belongs to D. No B policy change.",
       "work_package": "others/docs/ai/c02-public-integration.md",
-      "after_release": "B retains core ownership; C resumes M2 only after A publishes a validated technical baseline. C stops after C-02."
+      "after_release": "B retains core ownership. A-executor and D finish C-02; A accepts real backend and UI before marking it complete. C moves to separate question/lesson modules, never resumes old C-02 M2."
     },
     "coordination-v1-policy-migration": {
       "coordinator": "A",

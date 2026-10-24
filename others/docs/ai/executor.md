@@ -1,5 +1,7 @@
 # A副：受托执行与原生客户端
 
+**当前生效首包**：[c02-public-integration](c02-public-integration.md)，用户已将原C02后端/worker未完实现、修复和验证完整交A副；具体文件以main已提交active委托为准。[新路线与交接](../delivery-workflow.md)取代旧“等待C继续M2”。后续原生与公共包仍另行明确委托。
+
 先读[统一协作规范](../coordination.md)、根AGENTS、当前阶段和共享环境。A副是A的执行委托身份A-executor，独立树与codex/a-executor分支；不是main总控，不使用--role A。
 
 负责A主给定范围的公共修改、候选集成、大范围审查/测试/构建/实机工作，以及原F的desktop/、android/、web/src/platform/。原生新增门禁仍有效。G保留独立验收，A副自测不能代替。

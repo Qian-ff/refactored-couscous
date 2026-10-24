@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "base_branch": "main",
   "worktree_root": "others/worktrees",
   "max_active_chats": 4,
@@ -24,7 +24,7 @@
       ]
     },
     "C": {
-      "title": "内容与 AI",
+      "title": "内容与AI后端、推理",
       "branch": "codex/c-content-ai-a2",
       "worktree": null,
       "owned_paths": [
@@ -32,15 +32,12 @@
         "others/backend/app/domains/assistant/",
         "others/ai_worker/content/",
         "others/ai_worker/speech/",
-        "web/src/features/content/",
-        "web/src/features/assistant/",
         "others/backend/app/domains/monitoring/",
-        "others/ai_worker/monitoring/",
-        "web/src/features/monitoring/"
+        "others/ai_worker/monitoring/"
       ]
     },
     "D": {
-      "title": "学习体验与设计系统",
+      "title": "内容学习助手监控前端与设计系统",
       "branch": "codex/d-learning-ui-a2",
       "worktree": null,
       "owned_paths": [
@@ -50,7 +47,10 @@
         "web/src/features/student/",
         "web/src/App.tsx",
         "web/src/main.tsx",
-        "web/tests/d-learning/"
+        "web/tests/d-learning/",
+        "web/src/features/content/",
+        "web/src/features/assistant/",
+        "web/src/features/monitoring/"
       ]
     },
     "G": {
@@ -73,7 +73,15 @@
     }
   },
   "retired_roles": {
-    "E": {"branch": "task/monitoring", "worktree": "monitoring", "replacement": "C"},
-    "F": {"branch": "task/clients", "worktree": "clients", "replacement": "A-executor"}
+    "E": {
+      "branch": "task/monitoring",
+      "worktree": "monitoring",
+      "replacement": "C"
+    },
+    "F": {
+      "branch": "task/clients",
+      "worktree": "clients",
+      "replacement": "A-executor"
+    }
   }
 }

@@ -1,5 +1,7 @@
 # A：总控与集成
 
+**v3当前调度**：[首版路线和逐聊天交接](../delivery-workflow.md)、[实际落地](../workflow-v3-rollout.md)。A副/D接原C02未完项，C准备C1；B2等固定题目/关卡版本、学生DTO及受控答案服务发布后放行，不等待整个助手。A主提交生效委托并实际发送首轮任务，按四聊天容量接棒；下文旧阶段门禁按当前路线解释。
+
 当前模型、强度、工作包/汇报/handoff及调度规则先读[统一协作规范](../coordination.md)，其当前规则优先于下文历史阶段叙述；真实门禁仍以a2-start与辅助任务登记为准。
 
 A唯一控制主工作区main。开工读README/AGENTS、design、ownership、契约和a2-start，核实实际代码/Git/运行证据。当前A0公共基线目标及证据见[a0-handoff](../a0-handoff.md)；历史A1通过不代表新增业务通过。

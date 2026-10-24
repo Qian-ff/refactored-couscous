@@ -1,5 +1,7 @@
 # G：独立验收任务书
 
+**v3后续验收**：当前无已登记G聊天，用户手动创建/登记后启用；用[集成后独立验收包](qa-final-acceptance.md)和[完整路线](../delivery-workflow.md)，不以A副自测替代G。
+
 当前模型、强度、工作包/汇报/handoff及调度规则先读[统一协作规范](../coordination.md)，其当前规则优先于下文历史阶段叙述；真实门禁仍以a2-start与辅助任务登记为准。
 
 请作为 SafeLabPlatform 的 G 角色工作。本任务以根 AGENTS.md、设计基线与真实接口契约为准，A1 的实际实现、验收状态与可交接基线见 others/docs/a1-handoff.md；后续模块按已发布基线继续开发。

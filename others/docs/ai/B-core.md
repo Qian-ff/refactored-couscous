@@ -1,5 +1,7 @@
 # B：分阶段任务书
 
+**v3 B2门禁**：B1/B-UI已接收；当前只读准备，等A接收并发布固定QuestionVersion/LessonVersion、学生安全DTO及受控答案读取服务的完整SHA后放行。B2不等待全部助手/监控；现有admin/teaching所有权保持。下一步和交接见[首版路线](../delivery-workflow.md)，首次新模块仍由用户手动启动。
+
 当前模型、强度、工作包/汇报/handoff及调度规则先读[统一协作规范](../coordination.md)，其当前规则优先于下文历史阶段叙述；真实门禁仍以a2-start与辅助任务登记为准。
 
 当前B1及B-UI展示迁移已交A接收；最终B提交6682ec37a2543e9e50a1bf400a8d70057351c807，接续以[b-ui-integrated交接](../b-ui-integration-handoff.md)为准。B保留业务文件所有权，配合后续具体问题，不重复执行下面历史迁移目标。既有UI和[云端API/ASR前置](../cloud-asr-handoff.md)现已验收，c-start-ready允许C开工；B2仍等C交付经A接收后另行放行。公共协议见[模块协议](../../contracts/a2-protocols.md)，历史检查见[A0](../a0-handoff.md)。
@@ -55,7 +57,7 @@ A已接收D第一批，现使用本地d-ui-components-ready组件基线，完整
 后续与C按[助手v1.1交接](../assistant-floating-handoff.md)联调账号级考试限制，覆盖历史/引用、旧会话和任务全程；B不实现悬浮宿主或C助手内容。本次设计接收不放行B2，规划与执行强度依统一规范按任务性质核验。
 
 ~~~text
-/goal 作为安研通（LabConnect）的 B，在 A 集成 B1、C 后发布的真实基线上，完成 B2 学习考试服务及教师管理页面，与 C 联合验证，再交 D/A 接续。
+/goal 作为安研通（LabConnect）的 B，在 A 接收B1及固定内容版本/学生DTO/受控答案服务后发布的真实基线上，完成 B2 学习考试服务及教师管理页面，与 C 联合验证，再交 D/A 接续。
 
 一、结果
 1. 在登记B树/codex/b-core-a2，重读 README、AGENTS、B任务、design、ownership、契约、a2-start、shared-environment。核对 A 最新完整SHA、B1/C交接及当前树/暂存区，保留提交后合并，不只停在旧a2-ready。复用统一课程/授权/工作身份和真实SDK，不另建题库。

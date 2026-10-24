@@ -1,5 +1,7 @@
 # 已批准 UI v1：D-UI 执行交接
 
+**v3当前接续**：当前环境前置已验收，资料前端由[D1](ai/d1-content-ui.md)接续、资料后端/worker由A副接续；其他新模块按[新版路线](delivery-workflow.md)。下文旧C/F及等待环境表述属于设计接收时记录，不作为当前开工门禁。
+
 现行职责接收见[统一协作规范](coordination.md)：历史F由A副受托承接，E归C后续阶段；D仍唯一宿主/入口。以下批准、冻结与历史验证记录不改写，原放行限制同样约束新接收方。
 
 产品实施更新：2026-10-23，[既有UI通过A集成验收](existing-ui-acceptance.md)，基线existing-ui-accepted；下文保留设计接收时的分工与要求。当前C/B2仍等A云端API/ASR前置及单独放行，不重复既有UI Goal。
