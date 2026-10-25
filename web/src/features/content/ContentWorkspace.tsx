@@ -69,7 +69,7 @@ export function MaterialPreview({ title, versionLabel, state, chunks, error, can
   </Dialog>
 }
 
-export type UploadProgress = Readonly<{ state: "idle" | "uploading" | "queued" | "running" | "failed" | "uncertain"; sentBytes: number; totalBytes: number; error?: string }>
+export type UploadProgress = Readonly<{ state: "idle" | "preparing" | "uploading" | "queued" | "running" | "failed" | "uncertain"; sentBytes: number; totalBytes: number; error?: string }>
 export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose, children, initialTitle = "", initialLibraryId, targetControl, selectedLibraryId }: {
   targets: readonly { id: string; label: string }[]; progress: UploadProgress
   onSubmit: (input: { file: File; title: string; libraryId: string }) => void; onCancel: () => void; onClose: () => void
@@ -78,7 +78,7 @@ export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose,
   targetControl?: ReactNode; selectedLibraryId?: string
 }) {
   const [title, setTitle] = useState(initialTitle), [library, setLibrary] = useState(initialLibraryId || targets[0]?.id || ""), [file, setFile] = useState<File>(), [error, setError] = useState("")
-  const busy = ["uploading", "queued", "running"].includes(progress.state), uncertain = progress.state === "uncertain"
+  const busy = ["preparing", "uploading", "queued", "running"].includes(progress.state), uncertain = progress.state === "uncertain"
   const percent = progress.totalBytes > 0 ? Math.max(0, Math.min(100, Math.floor(100 * progress.sentBytes / progress.totalBytes))) : 0
   return <Dialog title="上传授权资料" long busy={busy || uncertain} onClose={onClose}>
     <Notice>可提交范围不等于整库管理权。上传后须等待解析、审核与发布；上传完成不表示学生已可阅读。</Notice>
@@ -94,7 +94,7 @@ export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose,
       <Field label="资料文件" hint="PDF / PPTX / DOCX 最多 20 MiB，TXT 最多 1 MiB。扫描件暂不支持 OCR。"><input type="file" accept=".pdf,.pptx,.docx,.txt" disabled={busy || uncertain} onChange={event => setFile(event.target.files?.[0])} /></Field>
       {children}
       {(error || progress.error) && <Notice kind="error">{error || progress.error}</Notice>}
-      {progress.state !== "idle" && <div className="lc-material-progress" role="status"><p>{({ uploading: "正在传输原件", queued: "原件已接收，排队解析", running: "正在解析资料", failed: "处理失败，请核对原因后重试", uncertain: "结果尚未确认，保留本次文件与参数重试" })[progress.state]}</p>
+      {progress.state !== "idle" && <div className="lc-material-progress" role="status"><p>{({ preparing: "正在读取文件并校验完整性，尚未上传", uploading: "正在传输原件", queued: "原件已接收，排队解析", running: "正在解析资料", failed: "处理失败，请核对原因后重试", uncertain: "结果尚未确认，保留本次文件与参数重试" })[progress.state]}</p>
         {progress.state === "uploading" && <><progress aria-label="文件上传进度" value={percent} max={100} /><span>{percent}%（{progress.sentBytes} / {progress.totalBytes} 字节）</span></>}</div>}
       <div className="lc-actions"><Button variant="secondary" disabled={busy || uncertain} onClick={onClose}>关闭上传</Button>{(busy || uncertain) && <Button variant="secondary" onClick={onCancel}>取消本次处理</Button>}<Button type="submit" disabled={busy || !targets.length}>{uncertain ? "核对原请求并重试" : "上传并解析"}</Button></div>
     </form>

@@ -66,7 +66,7 @@ export function ContentPage({ session, platform }: PageProps) {
       canUpload={!student && uploads.length > 0 && !!capabilities.data?.storage_available && !!capabilities.data?.parser_available}
       canManageLibrary={!student && (libraries.data?.items.some(row => row.can_manage) || !!scopeLibrary?.can_manage)} searchPlaceholder="标题、文件名、正文或输入知识点文字"
       hasFilters={!!(applied.course || applied.fileType || applied.after || applied.before)}
-      scopeNotice="只检索当前授权范围。正文命中来自已提取快照；输入知识点文字不等于题库标签。仅chunk命中提供真实页段定位，标题/文件名/未提取输入文字不补造定位。"
+      scopeNotice="可搜索当前有权查看的资料标题、文件名、已解析正文和录入的知识点文字。正文匹配成功时可查看对应页段；扫描件或尚未解析的资料暂不提供正文定位。"
       filterControls={<><Button variant="secondary" onClick={() => setDialog("scope")}>查找更多资料范围</Button><details className="lc-content-filters"><summary>课程、类型与版本时间筛选</summary>
         <CourseSelector value={filters.course} label={filters.courseLabel} onChange={(id, label) => setFilters(current => ({ ...current, course: id, courseLabel: label }))} />
         <div className="lc-content-filter-fields"><Field label="资料类型"><select value={filters.fileType} onChange={e => setFilters(current => ({ ...current, fileType: e.target.value }))}><option value="">全部类型</option><option value="pdf">PDF</option><option value="pptx">PPTX</option><option value="docx">DOCX</option><option value="txt">TXT文件</option><option value="text">输入知识点文字</option></select></Field>
@@ -84,7 +84,7 @@ export function ContentPage({ session, platform }: PageProps) {
       {uploads.length > 0 && <Button variant="secondary" onClick={() => setDialog("text")}>录入知识点文字</Button>}
       {jobVersion && <Notice>当前查看：{jobVersionLabel}<Button variant="secondary" onClick={() => { setJobVersion(""); setJobVersionLabel(""); setJobOffset(0) }}>查看全部本人任务</Button></Notice>}
       {jobs.loading ? <StatePanel kind="loading" /> : jobs.error ? <StatePanel kind="error" description={jobs.error} retry={jobs.reload} /> : jobs.data?.items.length ? <RecordList items={jobs.data.items} itemKey={row => row.job_id} title={row => "解析任务：" + (sourceItems.find(version => version.version_id === row.version_id)?.title || (jobVersion === row.version_id ? jobVersionLabel : "关联资料"))}
-        fields={[{ label: "状态", value: row => ({ queued: "排队中", running: "解析中", succeeded: "解析完成", failed: "解析失败", canceled: "已取消" } as Record<string, string>)[row.state] || row.state }, { label: "阶段", value: row => row.stage }, { label: "错误", value: row => row.error_code || "无" }]}
+        fields={[{ label: "状态", value: row => ({ queued: "排队中", running: "解析中", succeeded: "解析完成", failed: "解析失败", canceled: "已取消" } as Record<string, string>)[row.state] || row.state }, { label: "错误", value: row => row.error_code || "无" }]}
         actions={row => <><Button variant="secondary" pending={action.pending} onClick={async () => {
           const result = await action.run("job-version:" + row.version_id, () => ContentService.versionDetail({ path: { version_id: row.version_id } }))
           if (result?.data.actions?.preview) { setSelected(result.data); setDialog("preview") }

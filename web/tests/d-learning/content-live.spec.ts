@@ -289,3 +289,57 @@ test("本人任务可重新打开已完成的关联资料", async ({ page, reque
   await expect(page.getByRole("dialog")).toContainText(title)
   await expect(page.getByRole("dialog")).toContainText(text)
 })
+
+for (const interruption of ["session", "unmount", "cancel"] as const) {
+  test(`摘要等待取消保护：${interruption}之后不创建上传或发送字节`, async ({ page }) => {
+    await login(page, "teacher")
+    await expect(page.getByRole("button", { name: "上传资料", exact: true })).toBeVisible()
+    // Delay only the tiny file digest. Spy on both generated methods, preventing accidental writes.
+    await page.evaluate(async () => {
+      const modulePath = "/src/client/index.ts"
+      const { ContentService } = await import(modulePath)
+      const counts = { createUpload: 0, uploadBytes: 0 }
+      for (const method of ["createUpload", "uploadBytes"] as const) ContentService[method] = () => {
+        counts[method]++
+        return Promise.reject(new Error("Canceled preparation must not reach the SDK"))
+      }
+      const original = crypto.subtle.digest.bind(crypto.subtle)
+      let release!: () => void
+      const gate = new Promise<void>(resolve => { release = resolve })
+      const guard = { counts, started: false, release }
+      Object.assign(window, { uploadGuard: guard })
+      crypto.subtle.digest = async (algorithm, bytes) => {
+        const result = original(algorithm, bytes)
+        guard.started = true
+        await gate
+        return result
+      }
+    })
+    await page.getByRole("button", { name: "上传资料", exact: true }).click()
+    await page.getByLabel("资料名称", { exact: true }).fill("D1取消文件准备")
+    await page.getByLabel("资料文件", { exact: true }).setInputFiles({ name: "合成小文件.txt", mimeType: "text/plain", buffer: Buffer.from("仅用于摘要等待取消验证。") })
+    await page.getByRole("button", { name: "上传并解析", exact: true }).click()
+    await expect(page.getByRole("status")).toContainText("正在读取文件并校验完整性")
+    await expect(page.getByRole("button", { name: "上传并解析", exact: true })).toBeDisabled()
+    await expect.poll(() => page.evaluate(() => (window as unknown as { uploadGuard: { started: boolean } }).uploadGuard.started)).toBe(true)
+    if (interruption === "session") {
+      await page.evaluate(async () => {
+        const modulePath = "/src/lib/api.ts"
+        const session = await import(modulePath)
+        const before = session.sessionSnapshot().generation
+        await session.switchWorkRole("teacher") // Real session advance and server-confirmed identity.
+        if (session.sessionSnapshot().generation === before) throw new Error("Session did not advance")
+      })
+    } else if (interruption === "unmount") {
+      await page.evaluate(() => { location.hash = "/teaching/courses" })
+    } else await page.getByRole("button", { name: "取消本次处理", exact: true }).click()
+    await expect(page.getByRole("dialog")).toHaveCount(0)
+    const counts = await page.evaluate(async () => {
+      const guard = (window as unknown as { uploadGuard: { release: () => void; counts: { createUpload: number; uploadBytes: number } } }).uploadGuard
+      guard.release()
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+      return guard.counts
+    })
+    expect(counts).toEqual({ createUpload: 0, uploadBytes: 0 })
+  })
+}

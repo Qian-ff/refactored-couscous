@@ -6,6 +6,7 @@ import { MaterialPreview, MaterialUpload, type UploadProgress } from "./ContentW
 import { locatorLabel } from "./material-adapter"
 import { SourceFields } from "./SourceFields"
 import { SubmitTargetChooser } from "./ScopeSelectors"
+import { sessionSnapshot, subscribeSession } from "../../lib/api"
 
 type Done = { onClose: () => void; onDone: (message: string, version?: { id: string; title: string }) => void }
 type Target = { id: string; label: string }
@@ -21,41 +22,61 @@ export function ContentPreview({ version, onClose, onDownload }: { version: Vers
 export function ContentUpload({ targets, capabilities, version, onClose, onDone }: Done & { targets: readonly Target[]; capabilities?: Capabilities; version?: VersionView }) {
   const [target, setTarget] = useState(targets[0]?.id || ""), [targetLabel, setTargetLabel] = useState(targets[0]?.label || "")
   const [source, setSource] = useState<SourceMetadata>(version?.source_metadata || { origin: "upload" }), [encoding, setEncoding] = useState<"utf-8" | "gb18030">("utf-8"), [progress, setProgress] = useState<UploadProgress>({ state: "idle", sentBytes: 0, totalBytes: 0 })
-  const uploadId = useRef<string | undefined>(undefined), controller = useRef<AbortController | undefined>(undefined), command = useCommand(), cancel = useCommand()
-  useEffect(() => () => controller.current?.abort(), [])
+  const uploadId = useRef<string | undefined>(undefined), attempt = useRef<{ generation: number; controller: AbortController; requested: boolean } | undefined>(undefined), alive = useRef(true), command = useCommand(), cancel = useCommand()
+  useEffect(() => {
+    alive.current = true
+    const unsubscribe = subscribeSession(session => { if (attempt.current && session.generation !== attempt.current.generation) attempt.current.controller.abort() })
+    return () => { alive.current = false; attempt.current?.controller.abort(); unsubscribe() }
+  }, [])
   async function submit(input: { file: File; title: string; libraryId: string }) {
+    if (!alive.current || (attempt.current && !attempt.current.controller.signal.aborted)) return
+    const current = { generation: sessionSnapshot().generation, controller: new AbortController(), requested: false }
+    attempt.current = current
+    const valid = () => alive.current && attempt.current === current && !current.controller.signal.aborted && current.generation === sessionSnapshot().generation
     const format = input.file.name.split(".").pop()?.toLowerCase() as "pdf" | "pptx" | "docx" | "txt"
     const max = format === "txt" ? capabilities?.max_text_bytes || 1048576 : capabilities?.max_file_bytes || 20971520
-    if (input.file.size > max || !(capabilities?.formats || ["pdf", "pptx", "docx", "txt"]).includes(format)) { setProgress({ ...progress, state: "failed", error: "文件不符合当前服务支持的格式或大小。" }); return }
-    setProgress({ state: "uploading", sentBytes: 0, totalBytes: input.file.size })
+    if (input.file.size > max || !(capabilities?.formats || ["pdf", "pptx", "docx", "txt"]).includes(format)) { current.controller.abort(); setProgress({ ...progress, state: "failed", error: "文件不符合当前服务支持的格式或大小。" }); return }
+    setProgress({ state: "preparing", sentBytes: 0, totalBytes: input.file.size })
     let hash: string
-    try { hash = [...new Uint8Array(await crypto.subtle.digest("SHA-256", await input.file.arrayBuffer()))].map(byte => byte.toString(16).padStart(2, "0")).join("") }
-    catch { setProgress({ state: "failed", sentBytes: 0, totalBytes: input.file.size, error: "无法读取文件并计算摘要，请重新选择可读取的文件。" }); return }
+    try {
+      const bytes = await input.file.arrayBuffer()
+      if (!valid()) return
+      hash = [...new Uint8Array(await crypto.subtle.digest("SHA-256", bytes))].map(byte => byte.toString(16).padStart(2, "0")).join("")
+    } catch { if (valid()) { current.controller.abort(); setProgress({ state: "failed", sentBytes: 0, totalBytes: input.file.size, error: "无法读取文件并计算摘要，请重新选择可读取的文件。" }) }; return }
+    if (!valid()) return
     const body = { library_id: input.libraryId, material_id: version?.material_id, title: input.title, original_name: input.file.name, format, encoding, expected_bytes: input.file.size, expected_hash: hash, source_metadata: source }
     const result = await command.run(JSON.stringify(body), async key => {
-      controller.current = new AbortController()
-      const created = await ContentService.createUpload({ body, signal: controller.current.signal, headers: { "Idempotency-Key": key } })
+      if (!valid()) throw new DOMException("上传已取消", "AbortError")
+      current.requested = true
+      const created = await ContentService.createUpload({ body, signal: current.controller.signal, headers: { "Idempotency-Key": key } })
+      if (!valid()) throw new DOMException("上传已取消", "AbortError")
       if (!created.data.upload_id) throw new Error("服务端未返回上传标识，请重新读取状态")
       uploadId.current = created.data.upload_id
       setProgress({ state: "uploading", sentBytes: 0, totalBytes: input.file.size })
-      return ContentService.uploadBytes({ path: { upload_id: uploadId.current }, body: input.file, signal: controller.current.signal,
-        onUploadProgress: event => setProgress({ state: "uploading", sentBytes: event.loaded, totalBytes: input.file.size }) })
+      return ContentService.uploadBytes({ path: { upload_id: uploadId.current }, body: input.file, signal: current.controller.signal,
+        onUploadProgress: event => { if (valid()) setProgress({ state: "uploading", sentBytes: event.loaded, totalBytes: input.file.size }) } })
     })
+    if (!valid()) return
+    current.controller.abort()
     if (result) onDone("原件已由服务端接收，解析任务已建立；请读取任务状态，尚未审核或发布。", result.data.version_id ? { id: result.data.version_id, title: input.title } : undefined)
     else setProgress(previous => ({ ...previous, state: "uncertain", error: "本次结果尚未确认。保留原文件和参数重试，或确认取消。" }))
   }
-  return <MaterialUpload initialTitle={version?.title} initialLibraryId={version?.library_id} selectedLibraryId={version?.library_id || target} targetControl={version ? undefined : <SubmitTargetChooser value={target} label={targetLabel} onChange={(id, label) => { setTarget(id); setTargetLabel(label) }} disabled={progress.state === "uploading" || progress.state === "uncertain"} />} targets={version ? [{ id: version.library_id, label: "原资料所属库 · 新固定版本" }] : targets} progress={{ ...progress, error: cancel.error || command.error || progress.error }} onClose={onClose} onSubmit={input => { void submit(input) }} onCancel={async () => {
-    controller.current?.abort()
+  const locked = ["preparing", "uploading", "uncertain"].includes(progress.state)
+  return <MaterialUpload initialTitle={version?.title} initialLibraryId={version?.library_id} selectedLibraryId={version?.library_id || target} targetControl={version ? undefined : <SubmitTargetChooser value={target} label={targetLabel} onChange={(id, label) => { setTarget(id); setTargetLabel(label) }} disabled={locked} />} targets={version ? [{ id: version.library_id, label: "原资料所属库 · 新固定版本" }] : targets} progress={{ ...progress, error: cancel.error || command.error || progress.error }} onClose={onClose} onSubmit={input => { void submit(input) }} onCancel={async () => {
+    const current = attempt.current
+    current?.controller.abort()
+    if (!alive.current || (current && current.generation !== sessionSnapshot().generation)) return
+    if (current && !current.requested) { onDone("已取消本次文件准备，未发起上传。"); return }
     if (!uploadId.current) { setProgress(previous => ({ ...previous, state: "uncertain", error: "上传标识尚未确认。请保留原参数重试，再核对取消结果。" })); return }
     const result = await cancel.run("cancel-upload:" + uploadId.current, key => ContentService.cancelUpload({ path: { upload_id: uploadId.current! }, headers: { "Idempotency-Key": key } }))
     if (result) onDone("服务端已确认取消本次上传。")
-  }}><Field label="TXT文字编码" hint="PDF、PPTX、DOCX不使用此选项。"><select value={encoding} onChange={e => setEncoding(e.target.value as typeof encoding)} disabled={progress.state === "uploading" || progress.state === "uncertain"}><option value="utf-8">UTF-8</option><option value="gb18030">GB18030</option></select></Field><SourceFields value={source} onChange={setSource} disabled={progress.state === "uploading" || progress.state === "uncertain"} /></MaterialUpload>
+  }}><Field label="TXT文字编码" hint="PDF、PPTX、DOCX不使用此选项。"><select value={encoding} onChange={e => setEncoding(e.target.value as typeof encoding)} disabled={locked}><option value="utf-8">UTF-8</option><option value="gb18030">GB18030</option></select></Field><SourceFields value={source} onChange={setSource} disabled={locked} /></MaterialUpload>
 }
 
 export function ContentEdit({ version, library, onClose, onDone, onNewVersion }: Done & { version?: VersionView; library?: LibraryView; onNewVersion?: (version: VersionView) => void }) {
   const [title, setTitle] = useState(version?.title || library?.title || ""), [active, setActive] = useState(library?.active ?? true), action = useCommand()
   return <Dialog title={library ? "修改资料库" : "修改资料名称"} busy={action.pending} onClose={onClose}>
-    <p>按当前资源 revision 保存；发生冲突请关闭窗口、刷新资料后重新核对，不覆盖新修改。</p>
+    <p>按当前读取的信息保存；若资料已被修改，请关闭窗口、刷新后重新核对，避免覆盖他人的修改。</p>
     {version?.actions?.create_version && onNewVersion && <><Notice>已存在版本的原文不能覆盖。替换原件会建立新固定版本，并重新解析、审核和发布。</Notice><Button variant="secondary" pending={action.pending} onClick={async () => {
       const result = await action.run("new-version:" + version.version_id, async () => {
         const response = await ContentService.versionDetail({ path: { version_id: version.version_id } })
