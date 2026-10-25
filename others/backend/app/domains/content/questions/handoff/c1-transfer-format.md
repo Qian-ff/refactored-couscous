@@ -1,6 +1,6 @@
 # C1题目交换模板候选
 
-实现：`questions/transfer_codec.py`。这里只提供无数据库编解码；不证明上传、排队、确认入库、授权导出、真实沙箱或清理已完成。固定CLI及可信控制端接缝仍待交付。
+实现：`questions/transfer_codec.py`、`questions/transfer_cli.py`、`questions/imports.py`。已提供无数据库编解码、固定CLI和领域内的预检入库/原子确认候选；不证明上传、排队、真实PG确认入库、授权导出、真实沙箱或清理已完成。可信控制端和公共接口接入仍待交付。
 
 ## 模板
 
@@ -26,3 +26,22 @@ CSV采用UTF-8（接受BOM，导出带BOM）；XLSX只有名为`Questions`的一
 ## 已执行证据
 
 `test_transfer_codec.py`包含CSV往返/公式文本/冲突答案重复、错误脱敏、格式/编码/大小/行数边界、ZIP实际解包大小、路径/宏/外链、危险XML/公式/超范围单元格测试。真实XLSX往返检查在缺指定依赖时明确skip；skip不算格式可用证明。下一阶段须在A副2真实技术SHA复核XLSX、上传确认/原子回滚、授权导出、配额、取消/重启和沙箱。
+
+## 固定CLI与预检确认接缝
+
+可信runner只允许以下固定模块命令，输入固定挂载`/job/input`，不接受HTTP传入命令、路径或镜像：
+
+```
+python -m app.domains.content.questions.transfer_cli --operation import --format csv
+python -m app.domains.content.questions.transfer_cli --operation import --format xlsx
+python -m app.domains.content.questions.transfer_cli --operation export --format csv
+python -m app.domains.content.questions.transfer_cli --operation export --format xlsx
+```
+
+import输入为实际文件字节，stdout为严格Preview JSON；export输入为`{"protocol":"labconnect.question-transfer/1","questions":[DraftContent...]}`的有界JSON，stdout为文件字节。退出0才可消费结果；失败退出1，stdout仅含协议和脱敏error_code，不输出堆栈。固定CLI不加载dotenv、数据库或AI设置。A副2须把本包及纯输入模型纳入受限镜像，并锁定依赖，不在普通API请求进程直接运行解析。
+
+`ingest_preview`仅供可信控制端的事务调用：先读取固定runner实际有界输出并严格解析，校验generation/execution_id/lease_owner/租约/状态/输入指纹，重载真实登录/角色和目标授权；在当前可读草稿内检查重复后记录批次与绑定指纹。它不提交事务，也不释放任务预留；调用方须明确提交/回滚、确认进程停止及清理。迟到结果、替换执行、取消、撤权或过期不能落为ready。对已取消任务的存储回收仍由控制端处理。
+
+`confirm_import`重验真实会话、目标库、revision、原件hash、预检hash及任务状态，重新查有权重复题；全部通过才一次批量创建待审核Question/QuestionDraft与结果映射，并执行公共统一配额检查。任一错误整笔回滚；幂等重放仍鉴权，命令回执只含batch_id/state/revision/count，无题干或答案。结果ID经重新授权后分页读取；未通过预检的批次不支持跳过错误或覆盖旧题，须更正文件重新预检。
+
+纯检查验证了篡改指纹/内容/目标/代次/状态与未知结果字段被拒绝，以及固定worker处理函数的CSV导出→预检往返。真实PG原子回滚、幂等及重复竞争候选在`tests/pg/test_imports.py`，尚未运行。上传/队列共用、stop-before-start、失败恢复、真实HTTP及导出下载再鉴权仍为后续必需工作。

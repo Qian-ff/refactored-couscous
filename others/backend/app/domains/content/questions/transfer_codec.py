@@ -5,9 +5,10 @@ import io
 import json
 import re
 import zipfile
+from typing import Literal
 from xml.parsers import expat
 
-from pydantic import Field, ValidationError
+from pydantic import Field, ValidationError, model_validator
 
 from app.domains.content.questions.schemas import DraftContent, StrictModel, canonical_bytes
 
@@ -29,14 +30,32 @@ class TransferError(ValueError):
 class PreviewRow(StrictModel):
     row: int = Field(ge=3, le=1002, strict=True)
     content: DraftContent | None = None
-    error: str | None = None
-    duplicate_of: int | None = None
+    error: Literal["column_count", "cell_size_or_control", "text_escape", "formula_prefix", "invalid_question"] | None = None
+    duplicate_of: int | None = Field(default=None, ge=3, le=1002, strict=True)
 
 
 class Preview(StrictModel):
-    protocol: str = VERSION
-    input_hash: str
-    rows: tuple[PreviewRow, ...]
+    protocol: Literal["labconnect.question-transfer/1"] = VERSION
+    input_hash: str = Field(pattern=r"^[0-9a-f]{64}$")
+    rows: tuple[PreviewRow, ...] = Field(min_length=1, max_length=1000)
+
+    @model_validator(mode="after")
+    def valid_rows(self):
+        seen = {}
+        for number, row in enumerate(self.rows, start=3):
+            if row.row != number or (row.content is None) == (row.error is None):
+                raise ValueError("预检行号或结果无效")
+            expected_duplicate = None
+            if row.content is not None:
+                if row.content.sources:
+                    raise ValueError("交换模板不能提供资料权限引用")
+                first = seen.setdefault(row.content.payload.duplicate_hash(), number)
+                expected_duplicate = first if first != number else None
+            if row.duplicate_of != expected_duplicate:
+                raise ValueError("预检重复行不一致")
+        if len(canonical_bytes(self)) > OUTPUT_LIMIT:
+            raise ValueError("预检结果过大")
+        return self
 
     def digest(self):
         return hashlib.sha256(canonical_bytes(self)).hexdigest()
