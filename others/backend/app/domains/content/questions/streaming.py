@@ -38,8 +38,10 @@ class TransferIO:
 def receiving_count(db):
     """A must also use this combined count in the C02 receiving-slot check under quota_lock."""
     uploads = db.exec(select(func.count()).select_from(ContentUpload).where(ContentUpload.lease_owner.is_not(None))).one()
+    # Cancellation/expiry is not proof that the receiver or its cleanup has closed.
+    # Sealed imports may hold parser leases, which are not upload-slot occupancy.
     transfers = db.exec(select(func.count()).select_from(TransferTask).where(
-        TransferTask.kind == "import", TransferTask.state == "receiving", TransferTask.lease_owner.is_not(None))).one()
+        TransferTask.kind == "import", TransferTask.input_sealed.is_(False), TransferTask.lease_owner.is_not(None))).one()
     return int(uploads) + int(transfers)
 
 

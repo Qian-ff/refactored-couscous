@@ -60,3 +60,9 @@ ContentBudget为A统一计量的必需接缝，未接入明确503并回滚；C�
 M1完整候选重跑66项，65通过、真实XLSX往返1项skip；Ruff通过。新增3项本地实际文件I/O检查通过，原候选路由学生拒绝检查包含新增读写流接口。m1-pure.txt/exit及源清单在忽略证据目录。真实PG14项均未跑，32MiB工作峰值、真实runner/PG/HTTP/SDK均未证实。
 
 M1领域候选现已具备提交A审查的代码与接缝，详见c1-m1-handoff.md；不等于C1整包完成。交A登记A副2具体公共接入后，等待其准确技术SHA、迁移/非owner PG入口，再由C联合验证并修自有模块；A副2补公共运行、真实接口与已有功能回归，A最终发布B2/D2。完整Goal保持，不启动后包或自行推送。
+
+## A委托的接收槽局部返工
+
+已只读核对main cff0d654b1801671fba453dd728c0ba3d3a4e3c4规范，实际Default/gpt-6.1-sol/medium，起点91bd07d清洁。receiving_count改按import、未封存、lease_owner非空统计，不再按receiving状态过滤：取消/租约到期不能提前释放仍在接收或清理的占用；已封存后的解析租约排除。未改模型、旧C02、公共文件、worker、依赖或transfer_cli。
+
+新增真实PG候选test_receiving_slots.py：真实临时文件写入期间取消并使租约过期，计数仍保持；关闭写文件后调用实际cleanup_upload，在物理删除过程中仍保持占用，最终文件清理且DB清lease后才回到基线。尚无T1表/入口，明确未跑，不用模拟计数或SQLite代替；累计PG候选15项未跑。本轮仅Ruff及已有3项本地实际文件I/O检查通过，证据receiving-slot-local.txt/exit。原C1公共集成阻塞保持；本局部修复交A后不空轮询、不创建或完成另一个Goal。
