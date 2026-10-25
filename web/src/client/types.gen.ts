@@ -143,6 +143,32 @@ export type AccountView = {
 };
 
 /**
+ * Capabilities
+ */
+export type Capabilities = {
+    /**
+     * Formats
+     */
+    formats?: Array<string>;
+    /**
+     * Max File Bytes
+     */
+    max_file_bytes?: number;
+    /**
+     * Max Text Bytes
+     */
+    max_text_bytes?: number;
+    /**
+     * Parser Available
+     */
+    parser_available: boolean;
+    /**
+     * Storage Available
+     */
+    storage_available: boolean;
+};
+
+/**
  * CatalogInput
  */
 export type CatalogInput = {
@@ -225,6 +251,56 @@ export type CatalogView = {
 };
 
 /**
+ * ChunkPage
+ */
+export type ChunkPage = {
+    /**
+     * Items
+     */
+    items: Array<ChunkView>;
+    /**
+     * Next Ordinal
+     */
+    next_ordinal: number | null;
+    /**
+     * Total
+     */
+    total: number;
+    /**
+     * Version Id
+     */
+    version_id: string;
+};
+
+/**
+ * ChunkView
+ */
+export type ChunkView = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Locator
+     */
+    locator: {
+        [key: string]: unknown;
+    };
+    /**
+     * Ordinal
+     */
+    ordinal: number;
+    /**
+     * Text
+     */
+    text: string;
+    /**
+     * Text Hash
+     */
+    text_hash: string;
+};
+
+/**
  * ClassManagementView
  */
 export type ClassManagementView = {
@@ -276,6 +352,40 @@ export type ClassManagementView = {
      * Title
      */
     title: string;
+};
+
+/**
+ * CommandResult
+ */
+export type CommandResult = {
+    /**
+     * Job Id
+     */
+    job_id?: string | null;
+    /**
+     * Library Id
+     */
+    library_id?: string | null;
+    /**
+     * Material Id
+     */
+    material_id?: string | null;
+    /**
+     * Publication Id
+     */
+    publication_id?: string | null;
+    /**
+     * Review Id
+     */
+    review_id?: string | null;
+    /**
+     * Upload Id
+     */
+    upload_id?: string | null;
+    /**
+     * Version Id
+     */
+    version_id?: string | null;
 };
 
 /**
@@ -704,6 +814,44 @@ export type InviteInput = {
 };
 
 /**
+ * JobView
+ */
+export type JobView = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Error Code
+     */
+    error_code: string | null;
+    /**
+     * Finished At
+     */
+    finished_at: string | null;
+    /**
+     * Job Id
+     */
+    job_id: string;
+    /**
+     * Stage
+     */
+    stage: string;
+    /**
+     * Started At
+     */
+    started_at: string | null;
+    /**
+     * State
+     */
+    state: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
+};
+
+/**
  * JoinCodeIssued
  */
 export type JoinCodeIssued = {
@@ -736,6 +884,88 @@ export type JoinInput = {
 };
 
 /**
+ * LibraryChange
+ */
+export type LibraryChange = {
+    /**
+     * Active
+     */
+    active?: boolean | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Title
+     */
+    title?: string | null;
+};
+
+/**
+ * LibraryCreate
+ */
+export type LibraryCreate = {
+    /**
+     * Audience
+     */
+    audience?: 'all' | 'staff';
+    /**
+     * Parent Id
+     */
+    parent_id?: string | null;
+    /**
+     * Scope
+     */
+    scope: 'platform_public' | 'school' | 'college' | 'catalog' | 'course';
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
+ * LibraryView
+ */
+export type LibraryView = {
+    /**
+     * Active
+     */
+    active: boolean;
+    /**
+     * Audience
+     */
+    audience: 'all' | 'staff';
+    /**
+     * Can Manage
+     */
+    can_manage?: boolean;
+    /**
+     * Can Review
+     */
+    can_review: boolean;
+    /**
+     * Can Submit
+     */
+    can_submit: boolean;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Scope
+     */
+    scope: 'platform_public' | 'school' | 'college' | 'catalog' | 'course';
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
  * LoginInput
  */
 export type LoginInput = {
@@ -751,6 +981,24 @@ export type LoginInput = {
      * Username
      */
     username: string;
+};
+
+/**
+ * MaterialChange
+ */
+export type MaterialChange = {
+    /**
+     * Retired
+     */
+    retired?: boolean | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Title
+     */
+    title?: string | null;
 };
 
 /**
@@ -938,6 +1186,50 @@ export type Page_InvitationView_ = {
 };
 
 /**
+ * Page[JobView]
+ */
+export type Page_JobView_ = {
+    /**
+     * Items
+     */
+    items: Array<JobView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * Page[LibraryView]
+ */
+export type Page_LibraryView_ = {
+    /**
+     * Items
+     */
+    items: Array<LibraryView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
  * Page[MemberView]
  */
 export type Page_MemberView_ = {
@@ -966,6 +1258,28 @@ export type Page_OrganizationView_ = {
 };
 
 /**
+ * Page[PublicationView]
+ */
+export type Page_PublicationView_ = {
+    /**
+     * Items
+     */
+    items: Array<PublicationView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
  * Page[RequestView]
  */
 export type Page_RequestView_ = {
@@ -977,6 +1291,28 @@ export type Page_RequestView_ = {
      * Data
      */
     data: Array<RequestView>;
+};
+
+/**
+ * Page[ReviewView]
+ */
+export type Page_ReviewView_ = {
+    /**
+     * Items
+     */
+    items: Array<ReviewView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
 };
 
 /**
@@ -1036,6 +1372,28 @@ export type Page_TeacherOption_ = {
 };
 
 /**
+ * Page[VersionView]
+ */
+export type Page_VersionView_ = {
+    /**
+     * Items
+     */
+    items: Array<VersionView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
  * PasswordChange
  */
 export type PasswordChange = {
@@ -1075,6 +1433,62 @@ export type ProfilePatch = {
      * Revision
      */
     revision: number;
+};
+
+/**
+ * PublicationCreate
+ */
+export type PublicationCreate = {
+    /**
+     * Review Id
+     */
+    review_id: string;
+    /**
+     * Revision
+     */
+    revision: number;
+};
+
+/**
+ * PublicationView
+ */
+export type PublicationView = {
+    /**
+     * Active
+     */
+    active: boolean;
+    /**
+     * Can Retire
+     */
+    can_retire?: boolean;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Published At
+     */
+    published_at: string;
+    /**
+     * Retired At
+     */
+    retired_at: string | null;
+    /**
+     * Review Id
+     */
+    review_id: string;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Target Library Id
+     */
+    target_library_id: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
 };
 
 /**
@@ -1161,6 +1575,112 @@ export type RequestView = {
      * User Id
      */
     user_id: string;
+};
+
+/**
+ * ReviewDecision
+ */
+export type ReviewDecision = {
+    /**
+     * Decision
+     */
+    decision: 'approved' | 'rejected';
+    /**
+     * Original Authorized
+     */
+    original_authorized?: boolean;
+    /**
+     * Reason
+     */
+    reason?: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Warning Hash
+     */
+    warning_hash?: string | null;
+    /**
+     * Warnings Acknowledged
+     */
+    warnings_acknowledged?: boolean;
+};
+
+/**
+ * ReviewSubmit
+ */
+export type ReviewSubmit = {
+    /**
+     * Authorization Statement
+     */
+    authorization_statement: string;
+    /**
+     * Target Library Id
+     */
+    target_library_id: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
+};
+
+/**
+ * ReviewView
+ */
+export type ReviewView = {
+    /**
+     * Authorization Statement
+     */
+    authorization_statement: string;
+    /**
+     * Can Decide
+     */
+    can_decide?: boolean;
+    /**
+     * Can Publish
+     */
+    can_publish?: boolean;
+    /**
+     * Decided At
+     */
+    decided_at: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Original Authorized
+     */
+    original_authorized: boolean;
+    /**
+     * Reason
+     */
+    reason: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * State
+     */
+    state: string;
+    /**
+     * Submitted At
+     */
+    submitted_at: string;
+    /**
+     * Target Library Id
+     */
+    target_library_id: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
+    /**
+     * Warning Hash
+     */
+    warning_hash: string;
 };
 
 /**
@@ -1263,6 +1783,48 @@ export type SelfRequestView = {
 };
 
 /**
+ * SourceMetadata
+ */
+export type SourceMetadata = {
+    /**
+     * Acquired Date
+     */
+    acquired_date?: string | null;
+    /**
+     * Adapted
+     */
+    adapted?: boolean;
+    /**
+     * Author
+     */
+    author?: string | null;
+    /**
+     * License
+     */
+    license?: string | null;
+    /**
+     * License Url
+     */
+    license_url?: string | null;
+    /**
+     * Origin
+     */
+    origin?: 'upload' | 'open_seed' | 'derived';
+    /**
+     * Original Url
+     */
+    original_url?: string | null;
+    /**
+     * Public Reuse Allowed
+     */
+    public_reuse_allowed?: boolean;
+    /**
+     * Source Version
+     */
+    source_version?: string | null;
+};
+
+/**
  * StaffInput
  */
 export type StaffInput = {
@@ -1299,6 +1861,40 @@ export type StaffView = {
 };
 
 /**
+ * SubmitTarget
+ */
+export type SubmitTarget = {
+    /**
+     * Can Submit
+     */
+    can_submit?: true;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Scope
+     */
+    scope: 'platform_public' | 'school' | 'college' | 'catalog' | 'course';
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
+ * TargetBinding
+ */
+export type TargetBinding = {
+    active_publication?: PublicationView | null;
+    review?: ReviewView | null;
+    /**
+     * Target Library Id
+     */
+    target_library_id: string;
+};
+
+/**
  * TeacherOption
  */
 export type TeacherOption = {
@@ -1321,6 +1917,29 @@ export type TeacherOption = {
 };
 
 /**
+ * TextMaterialCreate
+ */
+export type TextMaterialCreate = {
+    /**
+     * Library Id
+     */
+    library_id: string;
+    /**
+     * Material Id
+     */
+    material_id?: string | null;
+    source_metadata?: SourceMetadata;
+    /**
+     * Text
+     */
+    text: string;
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
  * Token
  */
 export type Token = {
@@ -1336,6 +1955,79 @@ export type Token = {
      * Token Type
      */
     token_type?: string;
+};
+
+/**
+ * UploadCreate
+ */
+export type UploadCreate = {
+    /**
+     * Encoding
+     */
+    encoding?: 'utf-8' | 'gb18030';
+    /**
+     * Expected Bytes
+     */
+    expected_bytes: number;
+    /**
+     * Expected Hash
+     */
+    expected_hash: string;
+    /**
+     * Format
+     */
+    format: 'pdf' | 'pptx' | 'docx' | 'txt';
+    /**
+     * Library Id
+     */
+    library_id: string;
+    /**
+     * Material Id
+     */
+    material_id?: string | null;
+    /**
+     * Original Name
+     */
+    original_name: string;
+    source_metadata?: SourceMetadata;
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
+ * UploadView
+ */
+export type UploadView = {
+    /**
+     * Error Code
+     */
+    error_code: string | null;
+    /**
+     * Expected Bytes
+     */
+    expected_bytes: number;
+    /**
+     * Expires At
+     */
+    expires_at: string;
+    /**
+     * Material Id
+     */
+    material_id?: string | null;
+    /**
+     * State
+     */
+    state: string;
+    /**
+     * Upload Id
+     */
+    upload_id: string;
+    /**
+     * Version Id
+     */
+    version_id?: string | null;
 };
 
 /**
@@ -1428,6 +2120,105 @@ export type ValidationError = {
      * Error Type
      */
     type: string;
+};
+
+/**
+ * VersionActions
+ */
+export type VersionActions = {
+    /**
+     * Create Version
+     */
+    create_version?: boolean;
+    /**
+     * Download
+     */
+    download?: boolean;
+    /**
+     * Edit Material
+     */
+    edit_material?: boolean;
+    /**
+     * Preview
+     */
+    preview?: boolean;
+    /**
+     * Retire Material
+     */
+    retire_material?: boolean;
+    /**
+     * Submit Review
+     */
+    submit_review?: boolean;
+};
+
+/**
+ * VersionView
+ */
+export type VersionView = {
+    actions?: VersionActions;
+    binding?: TargetBinding | null;
+    /**
+     * Content Hash
+     */
+    content_hash: string;
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Extraction State
+     */
+    extraction_state: 'queued' | 'running' | 'succeeded' | 'failed' | 'canceled';
+    /**
+     * File Bytes
+     */
+    file_bytes: number | null;
+    /**
+     * Input Kind
+     */
+    input_kind: 'file' | 'text';
+    /**
+     * Library Id
+     */
+    library_id: string;
+    /**
+     * Material Id
+     */
+    material_id: string;
+    /**
+     * Material Revision
+     */
+    material_revision?: number | null;
+    /**
+     * Original Name
+     */
+    original_name: string | null;
+    /**
+     * Parser Version
+     */
+    parser_version: string | null;
+    source_metadata?: SourceMetadata | null;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
+    /**
+     * Version No
+     */
+    version_no: number;
+    /**
+     * Warning Hash
+     */
+    warning_hash: string;
+    /**
+     * Warnings
+     */
+    warnings: Array<string>;
 };
 
 /**
@@ -2659,6 +3450,1150 @@ export type teachingCatalogTeacherOptionsResponses = {
 };
 
 export type teachingCatalogTeacherOptionsResponse = teachingCatalogTeacherOptionsResponses[keyof teachingCatalogTeacherOptionsResponses];
+
+export type contentCapabilitiesData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/capabilities';
+};
+
+export type contentCapabilitiesErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentCapabilitiesError = contentCapabilitiesErrors[keyof contentCapabilitiesErrors];
+
+export type contentCapabilitiesResponses = {
+    /**
+     * Successful Response
+     */
+    200: Capabilities;
+};
+
+export type contentCapabilitiesResponse = contentCapabilitiesResponses[keyof contentCapabilitiesResponses];
+
+export type contentListJobsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Version Id
+         */
+        version_id?: string | null;
+    };
+    url: '/api/v1/content/jobs';
+};
+
+export type contentListJobsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentListJobsError = contentListJobsErrors[keyof contentListJobsErrors];
+
+export type contentListJobsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_JobView_;
+};
+
+export type contentListJobsResponse = contentListJobsResponses[keyof contentListJobsResponses];
+
+export type contentJobStatusData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Job Id
+         */
+        job_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/jobs/{job_id}';
+};
+
+export type contentJobStatusErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentJobStatusError = contentJobStatusErrors[keyof contentJobStatusErrors];
+
+export type contentJobStatusResponses = {
+    /**
+     * Successful Response
+     */
+    200: JobView;
+};
+
+export type contentJobStatusResponse = contentJobStatusResponses[keyof contentJobStatusResponses];
+
+export type contentCancelJobData = {
+    body?: never;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Job Id
+         */
+        job_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/jobs/{job_id}/cancel';
+};
+
+export type contentCancelJobErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentCancelJobError = contentCancelJobErrors[keyof contentCancelJobErrors];
+
+export type contentCancelJobResponses = {
+    /**
+     * Successful Response
+     */
+    200: CommandResult;
+};
+
+export type contentCancelJobResponse = contentCancelJobResponses[keyof contentCancelJobResponses];
+
+export type contentRetryJobData = {
+    body?: never;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Job Id
+         */
+        job_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/jobs/{job_id}/retry';
+};
+
+export type contentRetryJobErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentRetryJobError = contentRetryJobErrors[keyof contentRetryJobErrors];
+
+export type contentRetryJobResponses = {
+    /**
+     * Successful Response
+     */
+    200: CommandResult;
+};
+
+export type contentRetryJobResponse = contentRetryJobResponses[keyof contentRetryJobResponses];
+
+export type contentListLibrariesData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Include Inactive
+         */
+        include_inactive?: boolean;
+    };
+    url: '/api/v1/content/libraries';
+};
+
+export type contentListLibrariesErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentListLibrariesError = contentListLibrariesErrors[keyof contentListLibrariesErrors];
+
+export type contentListLibrariesResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_LibraryView_;
+};
+
+export type contentListLibrariesResponse = contentListLibrariesResponses[keyof contentListLibrariesResponses];
+
+export type contentCreateLibraryData = {
+    body: LibraryCreate;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/libraries';
+};
+
+export type contentCreateLibraryErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentCreateLibraryError = contentCreateLibraryErrors[keyof contentCreateLibraryErrors];
+
+export type contentCreateLibraryResponses = {
+    /**
+     * Successful Response
+     */
+    201: CommandResult;
+};
+
+export type contentCreateLibraryResponse = contentCreateLibraryResponses[keyof contentCreateLibraryResponses];
+
+export type contentChangeLibraryData = {
+    body: LibraryChange;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Library Id
+         */
+        library_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/libraries/{library_id}';
+};
+
+export type contentChangeLibraryErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentChangeLibraryError = contentChangeLibraryErrors[keyof contentChangeLibraryErrors];
+
+export type contentChangeLibraryResponses = {
+    /**
+     * Successful Response
+     */
+    200: CommandResult;
+};
+
+export type contentChangeLibraryResponse = contentChangeLibraryResponses[keyof contentChangeLibraryResponses];
+
+export type contentListPublicationsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query: {
+        /**
+         * Library Id
+         */
+        library_id: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Version Id
+         */
+        version_id?: string | null;
+    };
+    url: '/api/v1/content/material-publications';
+};
+
+export type contentListPublicationsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentListPublicationsError = contentListPublicationsErrors[keyof contentListPublicationsErrors];
+
+export type contentListPublicationsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_PublicationView_;
+};
+
+export type contentListPublicationsResponse = contentListPublicationsResponses[keyof contentListPublicationsResponses];
+
+export type contentPublishReviewData = {
+    body: PublicationCreate;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/material-publications';
+};
+
+export type contentPublishReviewErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentPublishReviewError = contentPublishReviewErrors[keyof contentPublishReviewErrors];
+
+export type contentPublishReviewResponses = {
+    /**
+     * Successful Response
+     */
+    201: CommandResult;
+};
+
+export type contentPublishReviewResponse = contentPublishReviewResponses[keyof contentPublishReviewResponses];
+
+export type contentRetirePublicationData = {
+    body: RevisionInput;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Publication Id
+         */
+        publication_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/material-publications/{publication_id}/retire';
+};
+
+export type contentRetirePublicationErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentRetirePublicationError = contentRetirePublicationErrors[keyof contentRetirePublicationErrors];
+
+export type contentRetirePublicationResponses = {
+    /**
+     * Successful Response
+     */
+    200: CommandResult;
+};
+
+export type contentRetirePublicationResponse = contentRetirePublicationResponses[keyof contentRetirePublicationResponses];
+
+export type contentListReviewsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+        /**
+         * State
+         */
+        state?: 'submitted' | 'approved' | 'rejected' | null;
+        /**
+         * Version Id
+         */
+        version_id?: string | null;
+    };
+    url: '/api/v1/content/material-reviews';
+};
+
+export type contentListReviewsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentListReviewsError = contentListReviewsErrors[keyof contentListReviewsErrors];
+
+export type contentListReviewsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_ReviewView_;
+};
+
+export type contentListReviewsResponse = contentListReviewsResponses[keyof contentListReviewsResponses];
+
+export type contentSubmitReviewData = {
+    body: ReviewSubmit;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/material-reviews';
+};
+
+export type contentSubmitReviewErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentSubmitReviewError = contentSubmitReviewErrors[keyof contentSubmitReviewErrors];
+
+export type contentSubmitReviewResponses = {
+    /**
+     * Successful Response
+     */
+    201: CommandResult;
+};
+
+export type contentSubmitReviewResponse = contentSubmitReviewResponses[keyof contentSubmitReviewResponses];
+
+export type contentReviewDetailData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Review Id
+         */
+        review_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/material-reviews/{review_id}';
+};
+
+export type contentReviewDetailErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentReviewDetailError = contentReviewDetailErrors[keyof contentReviewDetailErrors];
+
+export type contentReviewDetailResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewView;
+};
+
+export type contentReviewDetailResponse = contentReviewDetailResponses[keyof contentReviewDetailResponses];
+
+export type contentDecideReviewData = {
+    body: ReviewDecision;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Review Id
+         */
+        review_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/material-reviews/{review_id}/decision';
+};
+
+export type contentDecideReviewErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentDecideReviewError = contentDecideReviewErrors[keyof contentDecideReviewErrors];
+
+export type contentDecideReviewResponses = {
+    /**
+     * Successful Response
+     */
+    200: CommandResult;
+};
+
+export type contentDecideReviewResponse = contentDecideReviewResponses[keyof contentDecideReviewResponses];
+
+export type contentListMaterialsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/materials';
+};
+
+export type contentListMaterialsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentListMaterialsError = contentListMaterialsErrors[keyof contentListMaterialsErrors];
+
+export type contentListMaterialsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_VersionView_;
+};
+
+export type contentListMaterialsResponse = contentListMaterialsResponses[keyof contentListMaterialsResponses];
+
+export type contentCreateTextData = {
+    body: TextMaterialCreate;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/materials/text';
+};
+
+export type contentCreateTextErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentCreateTextError = contentCreateTextErrors[keyof contentCreateTextErrors];
+
+export type contentCreateTextResponses = {
+    /**
+     * Successful Response
+     */
+    201: CommandResult;
+};
+
+export type contentCreateTextResponse = contentCreateTextResponses[keyof contentCreateTextResponses];
+
+export type contentChangeMaterialData = {
+    body: MaterialChange;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Material Id
+         */
+        material_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/materials/{material_id}';
+};
+
+export type contentChangeMaterialErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentChangeMaterialError = contentChangeMaterialErrors[keyof contentChangeMaterialErrors];
+
+export type contentChangeMaterialResponses = {
+    /**
+     * Successful Response
+     */
+    200: CommandResult;
+};
+
+export type contentChangeMaterialResponse = contentChangeMaterialResponses[keyof contentChangeMaterialResponses];
+
+export type contentMaterialVersionsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Material Id
+         */
+        material_id: string;
+    };
+    query?: {
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/materials/{material_id}/versions';
+};
+
+export type contentMaterialVersionsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentMaterialVersionsError = contentMaterialVersionsErrors[keyof contentMaterialVersionsErrors];
+
+export type contentMaterialVersionsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_VersionView_;
+};
+
+export type contentMaterialVersionsResponse = contentMaterialVersionsResponses[keyof contentMaterialVersionsResponses];
+
+export type contentSubmitTargetsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/content/submit-targets';
+};
+
+export type contentSubmitTargetsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentSubmitTargetsError = contentSubmitTargetsErrors[keyof contentSubmitTargetsErrors];
+
+export type contentSubmitTargetsResponses = {
+    /**
+     * Response Content-Submit Targets
+     *
+     * Successful Response
+     */
+    200: Array<SubmitTarget>;
+};
+
+export type contentSubmitTargetsResponse = contentSubmitTargetsResponses[keyof contentSubmitTargetsResponses];
+
+export type contentCreateUploadData = {
+    body: UploadCreate;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/uploads';
+};
+
+export type contentCreateUploadErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentCreateUploadError = contentCreateUploadErrors[keyof contentCreateUploadErrors];
+
+export type contentCreateUploadResponses = {
+    /**
+     * Successful Response
+     */
+    201: CommandResult;
+};
+
+export type contentCreateUploadResponse = contentCreateUploadResponses[keyof contentCreateUploadResponses];
+
+export type contentUploadStatusData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Upload Id
+         */
+        upload_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/uploads/{upload_id}';
+};
+
+export type contentUploadStatusErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentUploadStatusError = contentUploadStatusErrors[keyof contentUploadStatusErrors];
+
+export type contentUploadStatusResponses = {
+    /**
+     * Successful Response
+     */
+    200: UploadView;
+};
+
+export type contentUploadStatusResponse = contentUploadStatusResponses[keyof contentUploadStatusResponses];
+
+export type contentUploadBytesData = {
+    body: Blob | File;
+    headers?: {
+        /**
+         * Content-Type
+         */
+        'content-type'?: string;
+        /**
+         * Content-Length
+         */
+        'content-length'?: number | null;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Upload Id
+         */
+        upload_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/uploads/{upload_id}/bytes';
+};
+
+export type contentUploadBytesErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentUploadBytesError = contentUploadBytesErrors[keyof contentUploadBytesErrors];
+
+export type contentUploadBytesResponses = {
+    /**
+     * Successful Response
+     */
+    200: CommandResult;
+};
+
+export type contentUploadBytesResponse = contentUploadBytesResponses[keyof contentUploadBytesResponses];
+
+export type contentCancelUploadData = {
+    body?: never;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Upload Id
+         */
+        upload_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/uploads/{upload_id}/cancel';
+};
+
+export type contentCancelUploadErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentCancelUploadError = contentCancelUploadErrors[keyof contentCancelUploadErrors];
+
+export type contentCancelUploadResponses = {
+    /**
+     * Successful Response
+     */
+    200: CommandResult;
+};
+
+export type contentCancelUploadResponse = contentCancelUploadResponses[keyof contentCancelUploadResponses];
+
+export type contentVersionDetailData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Version Id
+         */
+        version_id: string;
+    };
+    query?: {
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/versions/{version_id}';
+};
+
+export type contentVersionDetailErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentVersionDetailError = contentVersionDetailErrors[keyof contentVersionDetailErrors];
+
+export type contentVersionDetailResponses = {
+    /**
+     * Successful Response
+     */
+    200: VersionView;
+};
+
+export type contentVersionDetailResponse = contentVersionDetailResponses[keyof contentVersionDetailResponses];
+
+export type contentVersionChunksData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Version Id
+         */
+        version_id: string;
+    };
+    query?: {
+        /**
+         * After
+         */
+        after?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/versions/{version_id}/chunks';
+};
+
+export type contentVersionChunksErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentVersionChunksError = contentVersionChunksErrors[keyof contentVersionChunksErrors];
+
+export type contentVersionChunksResponses = {
+    /**
+     * Successful Response
+     */
+    200: ChunkPage;
+};
+
+export type contentVersionChunksResponse = contentVersionChunksResponses[keyof contentVersionChunksResponses];
+
+export type contentDownloadVersionData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Version Id
+         */
+        version_id: string;
+    };
+    query?: {
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/versions/{version_id}/download';
+};
+
+export type contentDownloadVersionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentDownloadVersionError = contentDownloadVersionErrors[keyof contentDownloadVersionErrors];
+
+export type contentDownloadVersionResponses = {
+    /**
+     * Successful Response
+     */
+    200: Blob | File;
+};
+
+export type contentDownloadVersionResponse = contentDownloadVersionResponses[keyof contentDownloadVersionResponses];
+
+export type contentReparseVersionData = {
+    body?: never;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Version Id
+         */
+        version_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/versions/{version_id}/reparse';
+};
+
+export type contentReparseVersionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentReparseVersionError = contentReparseVersionErrors[keyof contentReparseVersionErrors];
+
+export type contentReparseVersionResponses = {
+    /**
+     * Successful Response
+     */
+    200: CommandResult;
+};
+
+export type contentReparseVersionResponse = contentReparseVersionResponses[keyof contentReparseVersionResponses];
 
 export type coursesCoursesData = {
     body?: never;

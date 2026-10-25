@@ -39,12 +39,15 @@ services:
     environment:
       LABCONNECT_ASR_CONFIG: /run/labconnect-asr/client.json
       LABCONNECT_PLATFORM_AI_PROFILE: /opt/labconnect/others/runtime/ai/platform-ai.json
+      LABCONNECT_CONTENT_RUNTIME: /run/labconnect-content/runtime.json
     command: [.venv/bin/python, -m, uvicorn, "app.main:app", --host, 0.0.0.0, --port, "8000", --proxy-headers, --forwarded-allow-ips, "*", --limit-concurrency, "12"]
     volumes:
       - files:/opt/labconnect/others/runtime/files
       - /opt/labconnect/shared/ai-master.key:/opt/labconnect/others/runtime/ai-master.key:ro
       - /opt/labconnect/shared/asr:/run/labconnect-asr:ro
       - /opt/labconnect/shared/ai:/opt/labconnect/others/runtime/ai:ro
+      - content-files:/opt/labconnect/others/runtime/content
+      - /opt/labconnect/shared/content-client:/run/labconnect-content:ro
     depends_on:
       db: {condition: service_healthy}
     healthcheck:
@@ -57,6 +60,8 @@ services:
     <<: *api
     profiles: [tools]
     restart: "no"
+    # Only this management process receives the separate owner URL. api.env is runtime-only.
+    env_file: [/opt/labconnect/shared/api.env, /opt/labconnect/shared/migration.env]
     command: [.venv/bin/python, -m, alembic, -c, alembic.ini, upgrade, head]
   bootstrap:
     <<: *api
@@ -86,5 +91,6 @@ networks:
 volumes:
   database: {name: labconnect_cloud_pg18}
   files: {name: labconnect_cloud_files}
+  content-files: {name: labconnect_cloud_content}
   certificates: {name: labconnect_cloud_certificates}
   caddy_config: {name: labconnect_cloud_caddy_config}

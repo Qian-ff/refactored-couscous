@@ -66,7 +66,13 @@
         "C02_remaining_backend_worker_executor": "A-executor",
         "C02_remaining_frontend_executor": "D",
         "C02_accepted_by_A": false,
-        "D_material_frontend_allowed": true
+        "D_material_frontend_allowed": true,
+        "C02_backend_received_by_A": true,
+        "C02_backend_candidate": "578d2e869393ac96a25a1a21e6d9619542287a1e",
+        "C02_backend_main_merge": "0266e0b13b6a74244d30f9b3a91ba0389c760f27",
+        "D_material_api_runtime_ready": false,
+        "C02_backend_main_contract": "0.4.0",
+        "C02_backend_handoff": "others/docs/c02-main-reception.md"
       }
     },
     "ui-assistant-floating-v1": {

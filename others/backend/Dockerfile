@@ -10,7 +10,7 @@ COPY others/config/application.json /opt/labconnect/others/config/application.js
 COPY others/licenses/fastapi-template-MIT.txt /opt/labconnect/licenses/fastapi-template-MIT.txt
 RUN uv sync --frozen --no-dev
 RUN useradd --uid 10001 --create-home labconnect \
-    && mkdir -p /opt/labconnect/others/runtime/files \
+    && mkdir -p /opt/labconnect/others/runtime/files /opt/labconnect/others/runtime/content \
     && chown -R 10001:10001 /opt/labconnect/others/runtime
 ARG SOURCE_SHA=unrecorded
 LABEL org.opencontainers.image.revision=$SOURCE_SHA

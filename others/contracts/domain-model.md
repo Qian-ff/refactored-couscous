@@ -22,6 +22,8 @@ LoginSession.default_work_role 固定隐式默认，teacher 兼管理员默认 t
 
 ## C 内容及 B2 学习对象（设计）
 
+资料子域已在C02公共候选中实现Library、Material、ContentUpload、MaterialVersion、SourceChunk、MaterialReview、MaterialPublication和ContentJob八表，兼容迁移c02d0c00001；是否已进main由A主接收记录确认。成功快照/页段/审核历史不可改写；上传封存回指为延迟约束，重解析复用原件但生成新版本。API使用非owner运行角色，管理/迁移凭据独立。以下题库、关卡、考试和助手对象仍是后续模块，不能由资料接入推导为已实现。
+
 | 对象 | 不变量 |
 |---|---|
 | Material / MaterialVersion | 文件授权、可提取状态、不可变来源页/段落和文件哈希 |

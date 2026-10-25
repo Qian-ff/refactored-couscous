@@ -118,6 +118,7 @@ class Course(SQLModel, table=True):
     __tablename__ = "course"
     __table_args__ = (
         UniqueConstraint("school_id", "code"), UniqueConstraint("id", "school_id"),
+        UniqueConstraint("id", "school_id", "college_id", "catalog_id", name="uq_course_content_parent"),
         UniqueConstraint("join_code_hash"),
         ForeignKeyConstraint(["college_id", "school_id"], ["college.id", "college.school_id"]),
         ForeignKeyConstraint(["catalog_id", "school_id"], ["course_catalog.id", "course_catalog.school_id"]),
@@ -170,6 +171,7 @@ class Enrollment(SQLModel, table=True):
 
 class LoginSession(SQLModel, table=True):
     __tablename__ = "login_session"
+    __table_args__ = (UniqueConstraint("id", "user_id", name="uq_login_session_owner"),)
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     user_id: UUID = Field(foreign_key="app_user.id", index=True)
     expires_at: datetime

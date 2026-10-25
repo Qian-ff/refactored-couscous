@@ -70,9 +70,17 @@ transport.interceptors.request.use((original) => {
 transport.interceptors.response.use((response) => {
   settle(response.config)
   return response
-}, (error: unknown) => {
+}, async (error: unknown) => {
   if (axios.isAxiosError(error)) {
     settle(error.config)
+    const body = error.response?.data
+    if (body instanceof Blob && body.size <= 65536 && body.type.includes("application/json")) {
+      let decoded: unknown
+      try { decoded = JSON.parse(await body.text()) } catch { /* Keep a bounded generic error for malformed JSON. */ }
+      // Reading a Blob yields: a late 401 must never clear a newer login/work identity.
+      settle(error.config)
+      if (decoded && typeof decoded === "object" && error.response) error.response.data = decoded
+    }
     if (error.response?.status === 401) {
       token = undefined
       advance({ phase: "anonymous", reason: "unauthorized" })

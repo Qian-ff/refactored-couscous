@@ -20,22 +20,37 @@
 		-Server
 		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
 	}
-	request_body {
-		max_size 2MB
+	@content_upload {
+		method PUT
+		path_regexp content_bytes ^/api/v1/content/uploads/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/bytes$
 	}
-	handle /api/* {
+	handle @content_upload {
+		request_body {
+			max_size 22020096
+		}
 		reverse_proxy api:8000
 	}
-	handle /docs* {
-		respond 404
-	}
-	handle /redoc* {
-		respond 404
-	}
 	handle {
-		root * /srv
-		@fresh path / /index.html /build-info.json
-		header @fresh Cache-Control "no-store"
-		file_server
+		request_body {
+			max_size 2MB
+		}
+		handle /api/v1/openapi.json {
+			respond 404
+		}
+		handle /api/* {
+			reverse_proxy api:8000
+		}
+		handle /docs* {
+			respond 404
+		}
+		handle /redoc* {
+			respond 404
+		}
+		handle {
+			root * /srv
+			@fresh path / /index.html /build-info.json
+			header @fresh Cache-Control "no-store"
+			file_server
+		}
 	}
 }

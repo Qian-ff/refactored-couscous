@@ -4,17 +4,25 @@
     "c02-public-integration": {
       "coordinator": "A",
       "implementation_role": "A-executor under active committed grant",
-      "status": "active",
+      "status": "received_pending_basic_main_checks",
       "source_thread": "01a15942-9518-7660-a13c-6b5711d08ef6",
       "baseline_commit": "2f07bd08893f5f0b0e6260068b1c3e9106a7db68",
-      "candidate_commit": "ecb7129497d1f6a69daf09df6db3f2f30537d7ba",
+      "candidate_commit": "578d2e869393ac96a25a1a21e6d9619542287a1e",
       "domain_owner": "B",
       "temporary_domain_files": [
         "others/backend/app/domains/core/models.py"
       ],
       "scope": "B core models: only named UNIQUE keys uq_login_session_owner(id,user_id) and uq_course_content_parent(id,school_id,college_id,catalog_id). Frozen C-02 backend/worker files explicitly transferred to A-executor for implementation repairs; material frontend belongs to D. No B policy change.",
       "work_package": "others/docs/ai/c02-public-integration.md",
-      "after_release": "B retains core ownership. A-executor and D finish C-02; A accepts real backend and UI before marking it complete. C moves to separate question/lesson modules, never resumes old C-02 M2."
+      "after_release": "B retains core ownership. A-executor and D finish C-02; A accepts real backend and UI before marking it complete. C moves to separate question/lesson modules, never resumes old C-02 M2.",
+      "acceptance_review": "others/docs/reviews/c02-e43da754-review.md",
+      "acceptance_remaining": [
+        "main shared environment and preserved database activation",
+        "ordinary API and affected clients basic checks",
+        "D real material UI integration after A runtime release"
+      ],
+      "main_reception_commit": "0266e0b13b6a74244d30f9b3a91ba0389c760f27",
+      "current_handoff": "others/docs/c02-main-reception.md"
     },
     "coordination-v1-policy-migration": {
       "coordinator": "A",
@@ -56,6 +64,17 @@
       "release_ref": "student-relations-ready",
       "after_release": "B retains normal domain maintenance; D consumes the released generated SDK",
       "C_B2_new_features_allowed": false
+    },
+    "d1-component-candidate": {
+      "coordinator": "A",
+      "implementation_role": "D",
+      "status": "candidate_received_not_merged",
+      "source_thread": "01a15942-a1c7-7d33-951d-4dbe62d858f7",
+      "baseline_commit": "e42dee58eefdeadf1fb5bbd462fefe47c8331703",
+      "candidate_commit": "fbe0c568f2c7e665177744328e2798c1640aa136",
+      "scope": "D-owned component fixture and material route only; no real material API validation or main merge.",
+      "handoff": "others/docs/d1-component-candidate.md",
+      "next_owner": "A-executor under c02-public-integration for authorized revision/action/target-bound query projections; A reviews and publishes actual API/SDK before D resumes full material integration."
     }
   }
 }

@@ -26,6 +26,7 @@
 - A1 只完成三端共享底座、最小账号/课程切片及实际运行验证；A2 负责后续模块集成。完整语音由C、监控由C后续独立阶段、正式安装器由A副受托扩展，不能作为 A1 的前置条件。
 - B 负责核心及学习考试后端；D 负责学习界面。A 的全仓库权限用于底座与集成，模块交接后按明确交接修改，避免并行编辑同一文件。
 - 配置、安装依赖、运行后端或并行测试前读 others/docs/shared-environment.md。A主决定共享依赖变更，A副可按明确工作包执行；各树运行自己的源码，业务与 AI worker 环境分开。
+- 当前演示阶段按 others/docs/coordination.md 的检查范围做基础功能/权限/数据及受影响三端验证；停止追加高级安全评估和压力复现，不要求Daybreak或付费安全服务。
 - 页面/关卡/考试/AI 配置及语音交接读 others/contracts/a2-protocols.md；共享 API/类型归 A，D 唯一维护入口路由及 web/tests/d-learning/，公共测试配置/辅助归 A。
 - 助手实施先读 others/docs/assistant-floating-handoff.md：D唯一应用内宿主并接内容/历史/语音前端适配，C交服务端接口与worker，A副受托接原生；C不再注册独立聊天页，开工仍受既有UI验收门禁约束。
 

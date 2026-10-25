@@ -1,14 +1,31 @@
-# C1：题库与固定关卡版本首次启动词
+# C1：题库与固定关卡版本，先规划后实施
 
-当前只准备与只读核对；业务尚未开工。原C-02资料后端/worker由A副接续、前端由D接续，不再等待C收尾。全局交接见[首版流程](../delivery-workflow.md)，下列首次Goal由用户在C副2手动复制启动；按实际新模块要求先Plan＋grilling＋max，定案后实施medium，工具不能切模式时如实说明具体待切项。
+当前只准备与只读核对；业务尚未开工。原C-02资料后端/worker由A副接续、前端由D接续，不再等待C收尾。全局交接见[首版流程](../delivery-workflow.md)。**先在C副2切Plan、强度max，只发送第一段规划提示；方案定案后切Default、强度medium，才手动发送第二段实现Goal。** 工具不能切模式时如实说明具体待切项。
+
+`/plan`用于切换计划模式，`/goal`用于设置持续目标，两者不是互相替代的命令；max/medium是另一个推理强度设置。命令依据：[OpenAI Plan说明](https://developers.openai.com/blog/run-long-horizon-tasks-with-codex)、[Goals说明](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)。先max规划、再medium实施是本项目安排。
 
 <details>
-<summary>展开复制C1首次Goal</summary>
+<summary>第一步：Plan＋max，只规划的复制文字</summary>
+
+~~~text
+作为安研通的C，请先使用grilling，只完成C1题库/固定关卡版本的规划，不启动实现Goal、不修改业务代码、不恢复旧C02。当前应为Plan模式、gpt-6.1-sol/max，请核实实际设置；设置不符时明确需要我切换哪一项，不把文字目标当实际模式。
+
+读取main现行coordination、delivery-workflow、ownership，以及others/docs/ai/c1-question-lessons.md第二段的完整实现目标；核对实际树/分支/Git状态、已接收C01提案、a2-protocols和A副当前资料接口依赖。环境中能查明的事实自行只读调查，保留已批准决定；只问会改变方案且无法从材料确定的问题。
+
+C02资料遗留由A副/D接续；C1只规划content/questions与content/lessons新增模块，不修改旧资料文件、B学习服务、D前端或A公共文件。沿用固定版本、分层授权、学生无答案DTO和受控答案读取服务；两个示范班各三关合计六关。独立领域工作可并行准备，真实PG/API验证等待实际公共基线。
+
+交付一份可审定的实施计划：模型/接口与授权、版本/审核/共享、B2答案服务、D消费、A副2公共接入、并发/撤权/历史保护检查、明确写范围和完成条件。列出需A决定的重大事项；普通局部选择按现有实现自查解决。不重复整套已批准设计。计划完成后停在本聊天等我确认并切Default/medium，不写实现、不自动切换或启动第二段Goal。
+~~~
+
+</details>
+
+<details>
+<summary>第二步：方案定案后，Default＋medium的实现Goal</summary>
 
 ~~~text
 /goal 作为安研通的C，在A登记的codex/c-content-ai-a2独立树，完成题库与固定关卡版本后端，交A副受托集成、由A发布B2可用的真实内容基线。只接C1，不恢复已经交接的原C-02。
 
-1. 核对实际树、分支、完整SHA、Git/暂存区、当前模型/强度/模式、main现行规范和本包。先按新模块Plan＋grilling＋max确认必要设计；沿用已接收C-01权限/数据提案、a2-protocols及StudentLesson，不重开已有决定。用户手动启动不代替真实依赖与模式核实；定案后按medium实施。
+1. 确认C1已经完成Plan＋grilling＋max规划、必要重大事项已解决，用户已确认采用并手动启动本实现Goal；实际应为Default、gpt-6.1-sol/medium。核对树、分支、完整SHA、Git/暂存区、main现行规范和已定计划，保留工作后普通合并A明确执行基线。沿用已接收C-01权限/数据提案、a2-protocols及StudentLesson，不重开已有决定。规划未定案或实际仍为Plan时，只说明缺项并保持只读，不开始实现。
 2. 原C-02冻结候选和修复由A副独占。C1新增只写content/questions/与content/lessons/及各自测试/提案/交接；不改旧content顶层文件、worker资料解析、B学习服务、D前端或A公共文件。需要公共挂载/迁移/SDK时提供具体清单给A；涉及旧文件先由A串行登记。
 3. 复用学校/学院/目录/教学班授权服务，完成平台公共库、学校/学院、目录共享及班级私有的题库/关卡管理、关键词与知识点筛选、手动增删改和教师审核发布。整库管理需相应管理范围；提交权不等于整库管理；已发布读取与草稿编辑分别判权。共享/复制不穿透私库。
 4. 建立不可变QuestionVersion/LessonVersion及来源/审核记录；历史发布版本、答案和规则不随草稿改动。支持既定题型及choice/hotspot/order，按labconnect.lesson/1交学生StudentLesson，不含原始答案。ID、引用、坐标、安全SVG等按已有协议校验，数量由数据驱动。
@@ -21,4 +38,4 @@
 
 </details>
 
-本文件是可复制首次启动材料，不是C1已运行或已完成的证据。当前只读核对可指出必要遗漏，责任方普通续办不重复全文送审。
+本文件是可复制首次启动材料，不是C1已运行或已完成的证据。当前只读核对可指出必要遗漏，责任方普通续办不重复全文送审。若旧C02系统Goal占用而客户端拒绝创建C1，先保留Git候选/未完成交接，由用户手动`/goal clear`清除当前系统目标后再启动C1；不伪报旧C02已完成，也不修改应用内部数据库。
