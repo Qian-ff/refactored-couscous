@@ -5,7 +5,7 @@
 ## 输入与边界
 
 - 保留本树已有提交，合并A实际发送的完整发布SHA，先核对README/规范/ownership/共享环境/批准UI规范。实际model、effort、mode从当前轮记录核实，API来源和前端来源分别核实。
-- C-01已接收提案在content/handoff/c-01-proposal.md；C-02冻结候选`ecb7129497d1f6a69daf09df6db3f2f30537d7ba`中的schemas/routes及交接通过git show读取。当前main没有资料API/0.4.0客户端，不能将类型提案当作已发布接口。
+- C-01已接收提案在content/handoff/c-01-proposal.md；C-02冻结候选`ecb7129497d1f6a69daf09df6db3f2f30537d7ba`中的schemas/routes及交接通过git show读取。main现已接收0.4.1资料检索源码与生成客户端；准确运行SHA/origin仍以A实际激活消息为准。旧冻结候选作为历史，不替代现行接口。
 - D拥有公共组件/样式/路由、学生界面、`web/tests/d-learning/`，以及新接收的`web/src/features/content/`、`assistant/`、`monitoring/`。本包只实施资料界面及必要公共入口；不开发助手/监控，不修改B的admin/teaching、公共SDK或API传输层。
 - A副独占C-02后端/worker收尾。真实API到达前可通过组件props和标记为开发预览的夹具验证交互；产品路径显示真实未接通/失败状态，不返回模拟成功，也不维护平行的手写SDK。
 

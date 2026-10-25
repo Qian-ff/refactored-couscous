@@ -2,7 +2,7 @@
 
 现行六身份及E/F接收方见[统一协作规范](../docs/coordination.md)；仅协作身份变更，不改业务API版本。A副具体写范围见[执行委托](execution-delegations.json)。
 
-A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；本资料接入候选为 **0.4.0**，待A主接收后发布，不能用分支版本声称现行main或ECS已经升级。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A0历史基线0.2.0及B1首次基线0.3.0保留。
+A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；main源码现行契约为 **0.4.1**，包含资料与有权正文检索；运行、客户端和ECS版本须分别看A实际发布记录。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A0历史基线0.2.0及B1首次基线0.3.0保留。
 
 0.3.0 在A0底座上增加真实组织/专业/账号/授权/改密、目录与班级管理/审批/交接、CSV导入等B1路由。模型注册、兼容迁移和生成SDK已交接，历史见[B1公共交接](../docs/b1-public-handoff.md)。B1最终领域及独立业务组件见[B1集成交接](../docs/b1-handoff.md)，正式导航由D接入；内容/助手/考试/记录接口未发布。
 

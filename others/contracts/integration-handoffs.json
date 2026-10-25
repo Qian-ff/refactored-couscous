@@ -4,7 +4,7 @@
     "c02-public-integration": {
       "coordinator": "A",
       "implementation_role": "A-executor under active committed grant",
-      "status": "main_basic_checks_verified_UI_and_search_pending",
+      "status": "search_source_received_main_increment_and_UI_pending",
       "source_thread": "01a15942-9518-7660-a13c-6b5711d08ef6",
       "baseline_commit": "2f07bd08893f5f0b0e6260068b1c3e9106a7db68",
       "candidate_commit": "578d2e869393ac96a25a1a21e6d9619542287a1e",
@@ -17,11 +17,13 @@
       "after_release": "B retains core ownership. A-executor and D finish C-02; A accepts real backend and UI before marking it complete. C moves to separate question/lesson modules, never resumes old C-02 M2.",
       "acceptance_review": "others/docs/reviews/c02-e43da754-review.md",
       "acceptance_remaining": [
-        "authorized body search with excerpt and locator; actual OpenAPI/SDK increment",
-        "D real material UI integration on the A-released runtime"
+        "main 0.4.1 activation and affected client increment verification",
+        "D real material UI and search on the A-released runtime"
       ],
       "main_reception_commit": "0266e0b13b6a74244d30f9b3a91ba0389c760f27",
-      "current_handoff": "others/docs/c02-main-reception.md"
+      "current_handoff": "others/docs/c02-main-reception.md",
+      "search_candidate_commit": "d2ec17e842fe8af231e94d974469fb3912da4425",
+      "search_main_reception_commit": "7c7570dee7680e0356517a4e8ddb71d2cbe307d1"
     },
     "coordination-v1-policy-migration": {
       "coordinator": "A",

@@ -71,11 +71,15 @@
         "C02_backend_candidate": "578d2e869393ac96a25a1a21e6d9619542287a1e",
         "C02_backend_main_merge": "0266e0b13b6a74244d30f9b3a91ba0389c760f27",
         "D_material_api_runtime_ready": true,
-        "D_material_api_source_sha": "40feea4e1ae02affd0dcfd7bdec333aaa69d528e",
         "D_material_api_origin": "http://127.0.0.1:8000",
         "C02_main_basic_checks_receipt": "others/docs/reviews/c02-main-basic-receipt.json",
-        "C02_backend_main_contract": "0.4.0",
-        "C02_backend_handoff": "others/docs/c02-main-reception.md"
+        "C02_backend_main_contract": "0.4.1",
+        "C02_backend_handoff": "others/docs/c02-main-reception.md",
+        "D_material_api_last_verified_source_sha": "40feea4e1ae02affd0dcfd7bdec333aaa69d528e",
+        "D_material_api_last_verified_contract": "0.4.0",
+        "C02_search_source_received_by_A": true,
+        "C02_search_candidate_sha": "d2ec17e842fe8af231e94d974469fb3912da4425",
+        "C02_search_main_merge": "7c7570dee7680e0356517a4e8ddb71d2cbe307d1"
       }
     },
     "ui-assistant-floating-v1": {

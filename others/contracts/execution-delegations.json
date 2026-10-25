@@ -5,7 +5,7 @@
       "executor": "A-executor",
       "approved_by": "A-main",
       "status": "active",
-      "baseline_sha": "0266e0b13b6a74244d30f9b3a91ba0389c760f27",
+      "baseline_sha": "7c7570dee7680e0356517a4e8ddb71d2cbe307d1",
       "candidate_sha": "ecb7129497d1f6a69daf09df6db3f2f30537d7ba",
       "work_package": "others/docs/ai/c02-public-integration.md",
       "activation_requirement": "Active only from this committed grant and A-main explicitly dispatched full execution SHA; baseline_sha is the pre-rollout ancestor, not a technical release.",
@@ -109,11 +109,13 @@
       "authorization_source": "Human-started workflow v3 Goal, 2026-10-24",
       "candidate_file_count": 49,
       "responsibility_transfer": "A-executor owns all unfinished C-02 backend/worker repairs and checks; D owns material frontend. C plans separate questions/lessons and does not edit frozen C-02 files.",
-      "phase": "post_main_basic_validation",
+      "phase": "post_main_search_activation",
       "received_candidate_sha": "578d2e869393ac96a25a1a21e6d9619542287a1e",
       "main_reception_sha": "0266e0b13b6a74244d30f9b3a91ba0389c760f27",
       "post_main_handoff": "others/docs/c02-main-reception.md",
-      "validation_scope": "Essential demo checks only per human 2026-10-25: shared activation, preserved database migration, ordinary API/permissions/upload/download, affected client build/start. No new advanced security or stress work, Daybreak, paid audit, ECS deployment or push."
+      "validation_scope": "Essential demo checks only per human 2026-10-25: shared activation, preserved database migration, ordinary API/permissions/upload/download, affected client build/start. No new advanced security or stress work, Daybreak, paid audit, ECS deployment or push.",
+      "received_search_candidate_sha": "d2ec17e842fe8af231e94d974469fb3912da4425",
+      "search_main_reception_sha": "7c7570dee7680e0356517a4e8ddb71d2cbe307d1"
     },
     "coordination-v1-validation": {
       "executor": "A-executor",

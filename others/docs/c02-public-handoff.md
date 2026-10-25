@@ -4,7 +4,7 @@
 授权工作包：[c02-public-integration](ai/c02-public-integration.md)；执行起点
 `e42dee58eefdeadf1fb5bbd462fefe47c8331703`，原 C 候选
 `ecb7129497d1f6a69daf09df6db3f2f30537d7ba`，接收 merge `d5e566cae01c1ddae443e70ef483364087568224`。
-0.4.0后台已由A接收，main基础激活/构建来源为`40feea4e1ae02affd0dcfd7bdec333aaa69d528e`；本树0.4.1正文检索是随后兼容增量候选，仍待A接收。ECS未更新。
+0.4.0后台已由A接收，main基础激活/构建来源为`40feea4e1ae02affd0dcfd7bdec333aaa69d528e`；0.4.1正文检索增量已由A接收至main 7c7570dee7680e0356517a4e8ddb71d2cbe307d1；主线运行和客户端增量验证见c02-main-reception.md。ECS未更新。
 
 ## 实现与运行
 
