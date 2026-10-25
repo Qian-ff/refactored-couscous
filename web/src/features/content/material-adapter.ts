@@ -12,6 +12,12 @@ export function materialItem(version: VersionView, libraryLabel: string): Materi
 }
 export function locatorLabel(locator: Record<string, unknown>): string {
   const labels: string[] = []
+  const kindLabel = ({ page: "页", slide: "张幻灯片", paragraph: "段" } as Record<string, string>)[String(locator.kind)]
+  if (kindLabel && typeof locator.position === "number") {
+    labels.push(`第 ${locator.position} ${kindLabel}`)
+    if (typeof locator.part === "number") labels.push(`分片 ${locator.part}`)
+    return labels.join(" · ")
+  }
   for (const [key, label] of [["page", "页"], ["slide", "张幻灯片"], ["paragraph", "段"]]) {
     const value = locator[key]
     if (typeof value === "number" || typeof value === "string") labels.push(`第 ${value} ${label}`)

@@ -21,5 +21,6 @@ test("解析成功和提交权不推断发布、编辑或审核权限", () => {
 })
 test("页段定位仅呈现标量字段，不拼接HTML", () => {
   expect(locatorLabel({ page: 3, paragraph: 2 })).toBe("第 3 页 · 第 2 段")
+  expect(locatorLabel({ kind: "paragraph", position: 2, part: 1 })).toBe("第 2 段 · 分片 1")
   expect(locatorLabel({ page: { html: "untrusted" } })).toBe("原文定位")
 })
