@@ -1,6 +1,12 @@
 # C1 T1：公共表与专用 PG 技术交接
 
-2026-10-26，A副 / `codex/a-executor`，按已登记 `c1-schema-pg-integration` 实施。输入 main `d4a328bb0fb9742d3d981c20c68f7cff3be5fa3a`、C 候选 `84355fecf0ddb0edb1dc9bcfd030c2f8ee7cd695`；普通合并保留双方历史，两个新域逐路径 blob 与 C 冻结候选一致。准确技术 SHA 以本轮提交及 A 发送记录为准。
+2026-10-26，A副 / `codex/a-executor`，按已登记 `c1-schema-pg-integration` 实施。输入 main `d4a328bb0fb9742d3d981c20c68f7cff3be5fa3a`、C 候选 `84355fecf0ddb0edb1dc9bcfd030c2f8ee7cd695`，随后原样普通合并 A 明确批准的 C 修复 `6719c31353a3bfa76a10e08820ea18eb0bad50e3`；两段历史均保留，两个新域逐路径 blob 与最新 671 候选一致。准确技术 SHA 以本轮提交及 A 发送记录为准。
+
+## A 复审后的同包返修
+
+初版 `b139213a4a5a9e2e6bb0f1ce528b0382b141de54` 与其 `t1/manifest.json` 保留，不改写旧结果。A 指出固定 Q/L 版本的 no-op UPDATE 即使内容未变也会生成新 xmin，可能重新打开子记录插入：现已在相等内容快捷返回之前，无条件拒绝这两类父版本的 UPDATE。未使用 `RETURN OLD` 冒充阻止新 tuple，也没有改变正常创建事务补齐、草稿更新或 C 领域语义。
+
+现有一个真实公共检查增加已提交 Q/L 版本 no-op UPDATE 拒绝、xmin 保持及同事务内后续子记录仍被 `C1_SNAPSHOT_CLOSED` 拒绝的回归。最终本轮 **1 passed**，新证据位于 `others/reports/c1-public/t1/revision-1/`，原 schema/pytest/失败记录不覆盖。另清理静态 DDL 行尾空白；差异检查以 `git diff --check d4a328bb0fb9742d3d981c20c68f7cff3be5fa3a <最终技术SHA>` 为准。初版只检查工作区差异，不能作为发布祖先到 b139 的检查通过证据，已在此纠正。
 
 ## 本阶段已交付
 
@@ -39,8 +45,8 @@ python others/scripts/shared_env.py backend pytest app/domains/content/questions
 
 目标是最新 **15 项**领域 PG，尚未由 A副代跑。不要按旧 91bd 候选/14 项计算，也不要让它使用演示库或普通 owner `.env`。C 的 semantic budget/admission 夹具只证明领域语义，不是 T2 统一配额/runner 证据。
 
-## 已发现且留给 C 的实际问题
+## 已发现并收到 C 修复的问题
 
-公共检查曾额外尝试正常 `create_question → submit_question`：创建成功，提交在 C `questions/services.py` 的 `locked(db, QuestionDraft, question_id)` 抛 `AttributeError: id`。既有 `content/services.py:locked` 使用 `model.id`，而 `QuestionDraft` 主键为 `question_id`，`LessonDraft` 为 `lesson_id`。证据 `pytest-attempt2-domain-defect.log`，已带根因交 A，由 C 在自己的领域范围修复并跑 15 项；A副没有改 C 模型/服务或弱化生产保护。最终公共测试仅明确验证真实数据库合同，不把该服务失败改称领域通过。
+公共检查曾额外尝试正常 `create_question → submit_question`：创建成功，提交在 C `questions/services.py` 的 `locked(db, QuestionDraft, question_id)` 抛 `AttributeError: id`。既有 `content/services.py:locked` 使用 `model.id`，而 `QuestionDraft` 主键为 `question_id`，`LessonDraft` 为 `lesson_id`。证据 `pytest-attempt2-domain-defect.log` 保留。C 在 671 修复中新增按 `DOMAINS.parent_key` 的 `locked_draft`，保留 `FOR UPDATE`、`populate_existing` 和无权限/缺失拒绝，替换两个域六处调用；C 报告 17 项纯检查通过，A 已审查批准，A副仅原样合并、未改 C 文件。本次未替 C 跑 15 项领域 PG，待合入准确最终技术 SHA 后由 C 执行；最终公共测试仍仅证明数据库合同，不将旧命令失败改称领域通过。
 
 此缺陷不妨碍交付可运行迁移和专库入口，正是 T1→C 真实 PG 阶段需要处理的内容。CLI sealed 输入适配、CSV/XLSX依赖/计量、固定任务运行、路由/SDK和真实发布留 T2；助手/监控/原生新能力、云端与 G 独立验收未放行。

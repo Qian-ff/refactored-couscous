@@ -142,6 +142,26 @@ def test_c1_dedicated_schema_migration_and_committed_integrity(migrated_database
                                       ("content_scene_asset", "id", asset_id)]:
             denied(f'UPDATE {table} SET retained_bytes=retained_bytes+1 WHERE {column}=:id', {"id": value})
             denied(f'DELETE FROM {table} WHERE {column}=:id', {"id": value})
+        for parent, child, key, version_id in [
+            ("content_question_version", "content_question_source", "question_version_id", qvid),
+            ("content_lesson_version", "content_lesson_source", "lesson_version_id", lvid),
+        ]:
+            with runtime.begin() as connection:
+                before_xmin = connection.execute(text(f'SELECT xmin::text FROM {parent} WHERE id=:id'), {"id": version_id}).scalar_one()
+                with pytest.raises(IntegrityError) as no_op:
+                    with connection.begin_nested():
+                        connection.execute(text(f'UPDATE {parent} SET payload_hash=payload_hash WHERE id=:id'), {"id": version_id})
+                assert no_op.value.orig.diag.message_primary == "C1_FIXED_VERSION_UPDATE_FORBIDDEN"
+                assert connection.execute(text(f'SELECT xmin::text FROM {parent} WHERE id=:id'), {"id": version_id}).scalar_one() == before_xmin
+                with pytest.raises(IntegrityError) as late_child:
+                    with connection.begin_nested():
+                        columns = f"id,{key},material_version_id,locator" + (",activity_id" if parent == "content_lesson_version" else "")
+                        values = ":new,:id,:material,'{}'::jsonb" + (",'late-noop'" if parent == "content_lesson_version" else "")
+                        connection.execute(text(f'INSERT INTO {child}({columns}) VALUES ({values})'),
+                                           {"new": uuid4(), "id": version_id, "material": material_version_id})
+                # Check the guard, not a duplicate source's unique constraint.
+                assert late_child.value.orig.diag.message_primary == "C1_SNAPSHOT_CLOSED"
+        report["no_op_update_cannot_reopen_committed_question_or_lesson"] = True
         for table, key, value in [("content_question_source", "question_version_id", qvid),
                                   ("content_lesson_source", "lesson_version_id", lvid),
                                   ("content_lesson_question", "lesson_version_id", lvid),
@@ -245,13 +265,13 @@ def test_c1_dedicated_schema_migration_and_committed_integrity(migrated_database
             db.commit()
             assert copied_version.copied_from_version_id == public_version.id
         report["schema_review_publish_retire_and_cross_school_lineage_fks"] = True
-        report["domain_authorization_and_15_pg_checks"] = "not run; C repairs draft primary-key locking after T1"
+        report["domain_authorization_and_15_pg_checks"] = "not run by executor; C primary-key repair received as 6719c313"
     finally:
         # Leave a pristine HEAD schema for C, not permanent idempotency receipts from this check.
         empty_dedicated_schema()
         move(HEAD)
         report["final_schema_pristine_for_domain_pg"] = True
-        target_report = ROOT / "others/reports/c1-public/t1/schema.json"
+        target_report = ROOT / "others/reports/c1-public/t1/revision-1/schema.json"
         target_report.parent.mkdir(parents=True, exist_ok=True)
         target_report.write_text(json.dumps(report, indent=2), encoding="utf-8")
         owner.dispose()
