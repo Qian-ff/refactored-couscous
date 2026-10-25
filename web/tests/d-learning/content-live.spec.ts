@@ -104,6 +104,9 @@ test("真实资料：建库上传解析、审核发布、学生预览下载与�
   await expect(page.getByRole("dialog")).toHaveCount(0)
   await expect(row).toContainText("已发布")
   await capture(page, "content-real-teacher-published")
+  await row.getByRole("button", { name: "编辑草稿", exact: true }).click()
+  await capture(page, "content-real-edit-info")
+  await page.getByRole("button", { name: "取消修改", exact: true }).click()
   await page.getByRole("button", { name: "退出登录", exact: true }).click()
   await login(page, "student")
   await page.getByLabel("搜索资料", { exact: true }).fill(bodyMarker)
@@ -322,6 +325,7 @@ for (const interruption of ["session", "unmount", "cancel"] as const) {
     await expect(page.locator(".lc-material-progress[role=status]")).toContainText("正在读取文件并校验完整性")
     await expect(page.getByRole("button", { name: "上传并解析", exact: true })).toBeDisabled()
     await expect.poll(() => page.evaluate(() => (window as unknown as { uploadGuard: { started: boolean } }).uploadGuard.started)).toBe(true)
+    if (interruption === "session") await capture(page, "content-real-preparing")
     if (interruption === "session") {
       await page.evaluate(async () => {
         const modulePath = "/src/lib/api.ts"

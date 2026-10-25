@@ -66,7 +66,7 @@ export function ContentUpload({ targets, capabilities, version, onClose, onDone 
     const current = attempt.current
     current?.controller.abort()
     if (!alive.current || (current && current.generation !== sessionSnapshot().generation)) return
-    if (current && !current.requested) { onDone("已取消本次文件准备，未发起上传。"); return }
+    if (current && !current.requested && !uploadId.current) { onDone("已取消本次文件准备，未发起新的上传。此前上传结果仍以任务状态为准。"); return }
     if (!uploadId.current) { setProgress(previous => ({ ...previous, state: "uncertain", error: "上传标识尚未确认。请保留原参数重试，再核对取消结果。" })); return }
     const result = await cancel.run("cancel-upload:" + uploadId.current, key => ContentService.cancelUpload({ path: { upload_id: uploadId.current! }, headers: { "Idempotency-Key": key } }))
     if (result) onDone("服务端已确认取消本次上传。")
