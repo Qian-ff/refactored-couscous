@@ -7,6 +7,7 @@ from fastapi import Depends, Header, HTTPException, Query, Request
 from app.domains.content.questions.budget import ContentBudget
 from app.domains.content.questions.policy import staff
 from app.domains.content.questions.transfers import TransferAdmission
+from app.domains.content.questions.streaming import TransferIO
 from app.domains.core.auth import CurrentIdentity, Identity
 
 
@@ -26,6 +27,12 @@ Keyword = Annotated[str, Query(max_length=100)]
 class C1Environment:
     budget: ContentBudget = ContentBudget()
     admission: TransferAdmission = TransferAdmission()
+    io: TransferIO | None = None
+
+    def require_io(self):
+        if self.io is None:
+            raise HTTPException(503, "CONTENT_TRANSFER_IO_UNAVAILABLE：文件运行环境尚未接入")
+        return self.io
 
 
 def get_environment(request: Request):

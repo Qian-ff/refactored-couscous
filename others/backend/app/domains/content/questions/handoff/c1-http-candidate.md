@@ -35,7 +35,7 @@
 
 仅questions下：POST /imports；GET /imports/{batch_id}、/rows、/created；POST /imports/{batch_id}/confirm；POST /exports；GET /tasks/{task_id}；POST /tasks/{task_id}/cancel、/retry。响应分别为BatchView、Page[ImportRowView]、Page[CreatedQuestion]、TransferResult、TransferView。状态响应不返回私有文件key、执行/租约ID或题干答案。
 
-实际上传字节及导出下载流尚未实现，未注册虚假成功入口。后续必须接真实封存/hash/长度、跨块撤权、stop-before-start/清理和共享计量；不得将私有export_worker_input或export_download存储票据注册成公开JSON接口。详情见c1-transfer-format.md。
+流候选已提供PUT /tasks/{task_id}/input和GET /exports/{task_id}/download，前者接octet-stream真实文件字节，后者只返回经鉴权的文件流。C1Environment.io需由A注入实际TransferIO；缺失503。上传验证长度/hash后封存，下载验证文件并逐块重新鉴权；初始认证Session在网络I/O前关闭。共享队列、可信runner/stop-before-start、真实PG及公共HTTP尚待A副2接入；不得将私有export_worker_input或export_download存储票据注册成公开JSON接口。详情见c1-transfer-format.md和c1-m1-handoff.md。
 
 ## B2与学生
 

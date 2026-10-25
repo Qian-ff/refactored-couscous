@@ -1,10 +1,11 @@
 """Candidate staff API. A owns mounting, OpenAPI publication and generated clients."""
-from typing import Literal
+from typing import Annotated, Literal
 from uuid import UUID
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Header, HTTPException, Request
+from starlette.responses import StreamingResponse
 
-from app.domains.content.questions import imports, lifecycle, queries, services, transfers
+from app.domains.content.questions import imports, lifecycle, queries, services, streaming, transfers
 from app.domains.content.questions.http import CommandKey, Environment, Keyword, Limit, Offset, StaffIdentity
 from app.domains.content.questions.schemas import CopyOrReference, Decision, ParentChange, QuestionChange, QuestionCreate, Revision, Submit
 from app.domains.content.questions.views import BankView, CommandResult, DraftView, Page, PublicationView, ReviewView, VersionView
@@ -148,3 +149,27 @@ def cancel(db: Db, identity: StaffIdentity, task_id: UUID, body: transfers.TaskG
 @router.post("/tasks/{task_id}/retry", response_model=transfers.TransferResult, response_model_exclude_none=True)
 def retry(db: Db, identity: StaffIdentity, env: Environment, task_id: UUID, body: transfers.TaskGeneration, key: CommandKey):
     return transfers.retry_transfer(db, identity, task_id, body, key, env.budget, env.admission)
+
+
+@router.put("/tasks/{task_id}/input", response_model=transfers.TransferResult, response_model_exclude_none=True,
+    openapi_extra={"requestBody": {"required": True, "content": {
+        "application/octet-stream": {"schema": {"type": "string", "format": "binary"}}}}})
+async def upload_input(db: Db, identity: StaffIdentity, env: Environment, task_id: UUID, request: Request, key: CommandKey,
+    content_type: Annotated[str, Header()] = "application/octet-stream", content_length: Annotated[int | None, Header(ge=1)] = None):
+    if content_length is not None and content_length > 5242880:
+        raise HTTPException(413, "上传超过5MiB上限")
+    if content_type.split(";", 1)[0].strip().lower() != "application/octet-stream":
+        raise HTTPException(415, "须传输application/octet-stream原始文件字节")
+    runtime = env.require_io()
+    context = (identity.user.id, identity.login.id, identity.work_role)
+    db.close()
+    return await streaming.receive(runtime, context, task_id, request.stream())
+
+
+@router.get("/exports/{task_id}/download", response_class=StreamingResponse,
+    responses={200: {"content": {"application/octet-stream": {"schema": {"type": "string", "format": "binary"}}}}})
+async def download_export(db: Db, identity: StaffIdentity, env: Environment, task_id: UUID):
+    runtime = env.require_io()
+    context = (identity.user.id, identity.login.id, identity.work_role)
+    db.close()
+    return await streaming.download(runtime, context, task_id)
