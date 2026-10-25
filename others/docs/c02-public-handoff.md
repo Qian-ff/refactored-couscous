@@ -71,4 +71,6 @@ Docker Desktop 安装位置为当前用户目录 `C:/Users/lenovo/AppData/Local/
 
 `GET /content/materials`在授权版本集合内匹配标题、文件名、成功SourceChunk正文与知识点输入原文；课程所属源/发布/审核库、类型和带时区版本日期筛选先于计数/最新匹配版本及稳定分页。每条最多240字符片段；正文命中保留稳定chunk_id/ordinal/locator，未提取知识点可按原文命中但不伪造页段。无新数据库迁移或付费依赖，不改写固定快照。
 
-参数、日期真实语义及新增DTO见[接口约定](../contracts/api-conventions.md)。片段只对当前有权分页生成，学生不读私有草稿或无权review。`post-main/search-pg.txt`记录9项针对性PG检查；真实OpenAPI/生成SDK与类型/构建检查分别运行。本树后续8002真实文件正文命中与定位验证、完整候选SHA和证据索引在`post-main/search-candidate.json`，不把main0.4.0当作搜索已上线。
+参数、日期真实语义及新增DTO见[接口约定](../contracts/api-conventions.md)。片段只对当前有权分页生成，学生不读私有草稿或无权review。`post-main/search-0.4.1/search-pg.txt`记录9项针对性PG检查；真实OpenAPI/生成SDK与类型/构建检查分别运行。本树8002真实文件正文命中与定位验证及新索引见`post-main/search-0.4.1/search-candidate.json`、同目录`manifest.json`，不把main0.4.0当作搜索已上线。
+
+A已在`cb94591f41b3f0be4515694c022cd03973c5ace7`登记40fe基础里程碑。该轮`post-main/manifest.json`（e1e234aaa10e62f3bd773c8e6673f6a83b6bd2c2e1179de229cbd3e6635876d9）与15附件冻结；0.4.1新报告只写上述独立子目录。
