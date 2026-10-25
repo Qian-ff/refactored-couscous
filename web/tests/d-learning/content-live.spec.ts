@@ -5,7 +5,7 @@ import path from "node:path"
 import { demoAccounts, reportDirectory } from "../../../others/scripts/web-environment.mjs"
 
 // Run only after A publishes the main API runtime identity. Shared setup checks both sources.
-test.use({ trace: "off" })
+test.use({ trace: "off", actionTimeout: 15_000 })
 const api = process.env.LABCONNECT_API_URL || "http://127.0.0.1:8000"
 const demo = demoAccounts()
 async function call(request: APIRequestContext, token: string, method: string, route: string, body?: unknown, expected = 200) {
@@ -39,7 +39,8 @@ test("真实资料：建库上传解析、审核发布、学生预览下载与�
   const suffix = Date.now().toString(36) + randomUUID().slice(0, 4), courseTitle = "D1资料演示班" + suffix, libraryTitle = "D1授权资料库" + suffix, title = "D1实验室安全资料" + suffix
   const teacher = await token(request, "teacher"), student = await token(request, "student")
   const college = (await call(request, teacher, "GET", "/courses/context")).colleges[0].id
-  const course = await call(request, teacher, "POST", "/courses", { college_id: college, code: "D1_" + suffix, title: courseTitle }, 201)
+  const teacherId = (await call(request, teacher, "GET", "/auth/me")).id
+  const course = await call(request, teacher, "POST", "/courses", { college_id: college, teacher_id: teacherId, code: "D1_" + suffix, title: courseTitle }, 201)
   const management = await call(request, teacher, "GET", "/courses/" + course.id + "/management")
   const invitation = await call(request, teacher, "POST", "/courses/" + course.id + "/invite", { revision: management.revision, expires_at: new Date(Date.now() + 3600_000).toISOString() })
   await call(request, student, "POST", "/enrollments/join", { invitation_code: invitation.code })
@@ -59,6 +60,13 @@ test("真实资料：建库上传解析、审核发布、学生预览下载与�
   expect(library).toBeTruthy()
   await page.getByLabel("资料范围", { exact: true }).selectOption(library.id)
   await page.locator(".lc-search").getByRole("button", { name: "搜索", exact: true }).click()
+  for (let attempt = 0; attempt < 3 && !await page.getByRole("button", { name: "上传资料", exact: true }).count(); attempt++) {
+    const capabilities = page.waitForResponse(response => response.url() === api + "/api/v1/content/capabilities")
+    await page.getByRole("button", { name: "刷新资料", exact: true }).click()
+    const value = await (await capabilities).json()
+    if (value.parser_available && value.storage_available) break
+  }
+  await expect(page.getByRole("button", { name: "上传资料", exact: true })).toBeVisible({ timeout: 10_000 })
   await page.getByRole("button", { name: "上传资料", exact: true }).click()
   await page.getByLabel("资料名称", { exact: true }).fill(title)
   await page.getByLabel("提交范围", { exact: true }).selectOption(library.id)
@@ -108,7 +116,7 @@ test("真实资料：建库上传解析、审核发布、学生预览下载与�
   await capture(page, "content-real-student-preview")
   await page.getByRole("button", { name: "关闭预览", exact: true }).click()
   await call(request, student, "PATCH", "/content/materials/" + materialId, { revision: 1, title: "不得修改" }, 403)
-  const foreign = await token(request, "student_b", "demo-b")
+  const foreign = await token(request, "teacher_b", "demo-b")
   await call(request, foreign, "GET", "/content/versions/" + versionId, undefined, 403)
   await context.setOffline(true)
   await page.getByRole("button", { name: "刷新资料", exact: true }).click()

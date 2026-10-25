@@ -104,12 +104,12 @@ export function MaterialReview({ title, versionLabel, authorization, warnings, p
   return <Dialog title="审核资料版本" long busy={pending} onClose={onClose}><h3 className="lc-material-title">{title}</h3><p>{versionLabel}</p>
     <Notice kind="warning">决定绑定当前固定版本。审核通过后仍须单独发布；发布不能扩大原件的授权范围。</Notice>
     <Panel title="原件授权说明"><p className="lc-material-snippet">{authorization || "未提供授权说明，不能批准。"}</p></Panel>
-    {warnings.length > 0 && <Panel title="解析警告"><ul>{warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul></Panel>}
+    {warnings.length > 0 ? <Panel title="解析警告"><ul>{warnings.map((warning, index) => <li key={index}>{warning}</li>)}</ul></Panel> : <p>当前无解析警告，仍须确认已核对本次解析结果。</p>}
     <form className="lc-form" onSubmit={event => { event.preventDefault(); onConfirm({ decision, reason: reason.trim(), warningsAcknowledged: acknowledged, originalAuthorized: authorized }) }}>
       <Field label="审核决定"><select value={decision} disabled={pending} onChange={event => setDecision(event.target.value as typeof decision)}><option value="approved">审核通过</option><option value="rejected">退回修改</option></select></Field>
       <Field label="处理说明"><textarea value={reason} onChange={event => setReason(event.target.value)} maxLength={1000} required={decision === "rejected"} disabled={pending} /></Field>
       {decision === "approved" && <><label className="lc-material-check"><input type="checkbox" checked={authorized} onChange={event => setAuthorized(event.target.checked)} disabled={pending} required />已核对整份原件在目标范围的阅读与下载授权</label>
-        {warnings.length > 0 && <label className="lc-material-check"><input type="checkbox" checked={acknowledged} onChange={event => setAcknowledged(event.target.checked)} disabled={pending} required />已逐项核对当前解析警告</label>}</>}
+        <label className="lc-material-check"><input type="checkbox" checked={acknowledged} onChange={event => setAcknowledged(event.target.checked)} disabled={pending} required />已逐项核对当前解析警告</label></>}
       {error && <Notice kind="error">{error}</Notice>}
       <div className="lc-actions"><Button variant="secondary" disabled={pending} onClick={onClose}>取消审核</Button><Button type="submit" pending={pending} disabled={decision === "approved" && !authorization}>确认审核决定</Button></div>
     </form>
