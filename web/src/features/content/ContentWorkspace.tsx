@@ -19,6 +19,8 @@ export type MaterialWorkspaceProps = Readonly<{
   canUpload: boolean; canManageLibrary: boolean
   searchPlaceholder?: string; scopeNotice?: string
   filterControls?: ReactNode; onClear?: () => void
+  hasFilters?: boolean
+  onJobs?: (item: MaterialItem) => void
   onSearch: (query: string, libraryId: string) => void; onPage: (offset: number) => void; onRefresh: () => void
   onUpload: () => void; onManageLibrary: () => void
   onAction: (action: "preview" | "download" | "edit" | "submit" | "review" | "publish", item: MaterialItem) => void
@@ -47,8 +49,8 @@ export function MaterialWorkspace(props: MaterialWorkspaceProps) {
           fields={[{ label: "原文件", value: item => item.originalName || "知识点文本" }, { label: "所属范围", value: item => item.libraryLabel },
             { label: "固定版本", value: item => `第 ${item.versionNo} 版` }, { label: "解析状态", value: item => extractionLabels[item.extraction] },
             { label: "发布状态", value: item => publicationLabels[item.publication] }, { label: "匹配与定位", value: item => item.snippet ? <><p className="lc-material-snippet">{item.snippet}</p><span>{item.locatorLabel || "无页段定位"}</span></> : "无匹配片段（未搜索或未提取）" }]}
-          actions={item => <>{(Object.keys(actionLabels) as (keyof typeof actionLabels)[]).filter(action => item.actions[action] && (props.audience !== "student" || action === "preview" || action === "download")).map(action => <Button key={action} variant="secondary" onClick={() => props.onAction(action, item)}>{actionLabels[action]}</Button>)}</>} />
-          : <StatePanel kind="empty" title={props.query || props.libraryId ? "没有匹配的资料" : "暂无可访问资料"} description="尝试调整关键词和资料范围，或联系教师确认发布与授权。" />}
+          actions={item => <>{(Object.keys(actionLabels) as (keyof typeof actionLabels)[]).filter(action => item.actions[action] && (props.audience !== "student" || action === "preview" || action === "download")).map(action => <Button key={action} variant="secondary" onClick={() => props.onAction(action, item)}>{actionLabels[action]}</Button>)}{props.audience === "staff" && props.onJobs && <Button variant="secondary" onClick={() => props.onJobs?.(item)}>本人解析任务</Button>}</>} />
+          : <StatePanel kind="empty" title={props.query || props.libraryId || props.hasFilters ? "没有匹配的资料" : "暂无可访问资料"} description="尝试调整关键词和资料范围，或联系教师确认发布与授权。" />}
           <Pagination total={props.total} offset={props.offset} pageSize={props.pageSize} onChange={props.onPage} /></>}
     </Panel>
   </PageContainer>

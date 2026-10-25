@@ -242,3 +242,50 @@ test("真实分页：资料库、提交候选、资料及本人任务均可读�
   await expect(tasks.locator(".lc-records>li")).toHaveCount(result.items.length)
   await info.attach("paging-scope", { body: JSON.stringify({ libraries: "20+1", submitTargets: "20+1", materials: "20+1", jobsOffset: 20 }), contentType: "application/json" })
 })
+
+test("管理员资料库scope与停用恢复按实际revision保存", async ({ page, request }) => {
+  const title = "D1校级范围" + Date.now().toString(36) + randomUUID().slice(0, 4)
+  const admin = await token(request, "admin"), school = (await call(request, admin, "GET", "/auth/me")).school.id
+  await login(page, "admin")
+  await page.getByRole("button", { name: "新建资料库", exact: true }).click()
+  await page.getByLabel("库范围", { exact: true }).selectOption("school")
+  await page.getByLabel("归属对象", { exact: true }).selectOption(school)
+  await page.getByLabel("资料库名称", { exact: true }).fill(title)
+  await page.getByRole("button", { name: "创建资料库", exact: true }).click()
+  await expect(page.getByRole("dialog")).toHaveCount(0)
+  for (const active of [false, true]) {
+    const before = (await call(request, admin, "GET", "/content/libraries?include_inactive=true&q=" + encodeURIComponent(title))).items[0]
+    await page.getByRole("button", { name: "查找资料库与管理权限", exact: true }).click()
+    await page.getByLabel("查找资料库", { exact: true }).fill(title)
+    await page.getByRole("dialog").getByRole("button", { name: "搜索", exact: true }).click()
+    await page.getByRole("dialog").getByRole("button", { name: "修改资料库", exact: true }).click()
+    await page.getByLabel("启用资料库", { exact: true }).setChecked(active)
+    await page.getByRole("button", { name: "保存信息", exact: true }).click()
+    await expect(page.getByRole("dialog")).toHaveCount(0)
+    const after = (await call(request, admin, "GET", "/content/libraries?include_inactive=true&q=" + encodeURIComponent(title))).items[0]
+    expect(after.scope).toBe("school")
+    expect(after.active).toBe(active)
+    expect(after.revision).toBe(before.revision + 1)
+  }
+})
+
+test("本人任务可重新打开已完成的关联资料", async ({ page, request }) => {
+  test.setTimeout(90_000)
+  const suffix = Date.now().toString(36) + randomUUID().slice(0, 4), teacher = await token(request, "teacher"), title = "D1任务恢复" + suffix
+  const teacherId = (await call(request, teacher, "GET", "/auth/me")).id
+  const college = (await call(request, teacher, "GET", "/courses/context")).colleges[0].id
+  const course = await call(request, teacher, "POST", "/courses", { college_id: college, teacher_id: teacherId, code: "D1J_" + suffix, title }, 201)
+  const libraryId = (await call(request, teacher, "POST", "/content/libraries", { scope: "course", parent_id: course.id, title, audience: "staff" }, 201)).library_id
+  const text = "合成任务关联正文" + suffix
+  const material = await call(request, teacher, "POST", "/content/materials/text", { library_id: libraryId, title, text }, 201)
+  await expect.poll(async () => (await call(request, teacher, "GET", "/content/versions/" + material.version_id)).extraction_state, { timeout: 45_000, intervals: [500, 1000] }).toBe("succeeded")
+  await login(page, "teacher")
+  await page.getByLabel("搜索资料", { exact: true }).fill(title)
+  await page.locator("main .lc-search").getByRole("button", { name: "搜索", exact: true }).click()
+  const materialRow = page.locator("main .lc-records>li").filter({ has: page.getByRole("heading", { level: 3, name: title, exact: true }) })
+  await materialRow.getByRole("button", { name: "本人解析任务", exact: true }).click()
+  const tasks = page.locator(".lc-content-product>.lc-panel")
+  await tasks.getByRole("button", { name: "查看任务资料", exact: true }).first().click()
+  await expect(page.getByRole("dialog")).toContainText(title)
+  await expect(page.getByRole("dialog")).toContainText(text)
+})

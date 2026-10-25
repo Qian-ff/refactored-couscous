@@ -7,7 +7,7 @@ import { locatorLabel } from "./material-adapter"
 import { SourceFields } from "./SourceFields"
 import { SubmitTargetChooser } from "./ScopeSelectors"
 
-type Done = { onClose: () => void; onDone: (message: string) => void }
+type Done = { onClose: () => void; onDone: (message: string, version?: { id: string; title: string }) => void }
 type Target = { id: string; label: string }
 export function ContentPreview({ version, onClose, onDownload }: { version: VersionView; onClose: () => void; onDownload: () => void }) {
   const match = version.search_match
@@ -41,7 +41,7 @@ export function ContentUpload({ targets, capabilities, version, onClose, onDone 
       return ContentService.uploadBytes({ path: { upload_id: uploadId.current }, body: input.file, signal: controller.current.signal,
         onUploadProgress: event => setProgress({ state: "uploading", sentBytes: event.loaded, totalBytes: input.file.size }) })
     })
-    if (result) onDone("原件已由服务端接收，解析任务已建立；请读取任务状态，尚未审核或发布。")
+    if (result) onDone("原件已由服务端接收，解析任务已建立；请读取任务状态，尚未审核或发布。", result.data.version_id ? { id: result.data.version_id, title: input.title } : undefined)
     else setProgress(previous => ({ ...previous, state: "uncertain", error: "本次结果尚未确认。保留原文件和参数重试，或确认取消。" }))
   }
   return <MaterialUpload initialTitle={version?.title} initialLibraryId={version?.library_id} selectedLibraryId={version?.library_id || target} targetControl={version ? undefined : <SubmitTargetChooser value={target} label={targetLabel} onChange={(id, label) => { setTarget(id); setTargetLabel(label) }} disabled={progress.state === "uploading" || progress.state === "uncertain"} />} targets={version ? [{ id: version.library_id, label: "原资料所属库 · 新固定版本" }] : targets} progress={{ ...progress, error: cancel.error || command.error || progress.error }} onClose={onClose} onSubmit={input => { void submit(input) }} onCancel={async () => {
@@ -95,7 +95,7 @@ export function TextMaterial({ targets, onClose, onDone }: Done & { targets: rea
   return <Dialog title="录入授权知识点" long busy={action.pending} onClose={onClose}><form className="lc-form" onSubmit={async e => { e.preventDefault(); if (!title.trim() || !text.trim()) return
     const body = { title: title.trim(), text, library_id: target, source_metadata: source }
     const result = await action.run(JSON.stringify(body), key => ContentService.createText({ body, headers: { "Idempotency-Key": key } }))
-    if (result) onDone("服务端已保存知识点固定版本；尚未审核或发布。")
+    if (result) onDone("服务端已保存知识点固定版本；尚未审核或发布。", result.data.version_id ? { id: result.data.version_id, title: title.trim() } : undefined)
   }}><Field label="知识点名称"><input value={title} onChange={e => setTitle(e.target.value)} required maxLength={200} disabled={action.pending} /></Field>
     <Field label="知识点内容" hint="最多1 MiB UTF-8文字。"><textarea value={text} onChange={e => setText(e.target.value)} required maxLength={1048576} disabled={action.pending} /></Field>
     <SubmitTargetChooser value={target} label={targetLabel} onChange={(id, label) => { setTarget(id); setTargetLabel(label) }} disabled={action.pending} />

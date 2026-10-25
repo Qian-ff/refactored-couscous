@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { ContentService, CoursesService, type LibraryView } from "../../client"
 import { Button, Dialog, Field, Pagination, RecordList, SearchFilters, StatePanel } from "../../components/labconnect"
 import { useResource } from "../../components/labconnect/hooks"
@@ -7,9 +7,10 @@ export function SubmitTargetChooser({ value, label, onChange, disabled = false, 
   value: string; label?: string; onChange: (id: string, label: string) => void; disabled?: boolean; fieldLabel?: string
 }) {
   const [input, setInput] = useState(""), [q, setQ] = useState(""), [offset, setOffset] = useState(0)
+  const composing = useRef(false)
   const resource = useResource(useCallback(async (signal: AbortSignal) => (await ContentService.submitTargets({ query: { q, offset, limit: 20 }, signal })).data, [q, offset]))
   const search = () => { setQ(input.trim()); setOffset(0) }
-  return <div className="lc-scope-picker"><Field label="查找可提交范围"><input value={input} maxLength={100} disabled={disabled} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); if (!e.nativeEvent.isComposing) search() } }} /></Field>
+  return <div className="lc-scope-picker"><Field label="查找可提交范围"><input value={input} maxLength={100} disabled={disabled} onChange={e => setInput(e.target.value)} onCompositionStart={() => { composing.current = true }} onCompositionEnd={() => { composing.current = false }} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); if (!composing.current && !e.nativeEvent.isComposing) search() } }} /></Field>
     <div className="lc-actions"><Button variant="secondary" onClick={search} disabled={disabled}>查找提交范围</Button><Button variant="secondary" disabled={disabled} onClick={() => { setInput(""); setQ(""); setOffset(0) }}>清空范围查找</Button></div>
     <Field label={fieldLabel}><select value={value} onChange={e => onChange(e.target.value, e.target.selectedOptions[0]?.text || "")} required disabled={disabled || resource.loading}>
       <option value="">请选择获准提交的范围</option>{value && !resource.data?.some(row => row.id === value) && <option value={value}>{label || "当前已选范围"}</option>}{resource.data?.map(row => <option key={row.id} value={row.id}>{row.title}</option>)}
@@ -37,9 +38,10 @@ export function LibraryBrowser({ includeInactive, onChoose, onEdit, onClose }: {
 
 export function CourseSelector({ value, label, onChange }: { value: string; label: string; onChange: (id: string, label: string) => void }) {
   const [input, setInput] = useState(""), [q, setQ] = useState(""), [offset, setOffset] = useState(0)
+  const composing = useRef(false)
   const resource = useResource(useCallback(async (signal: AbortSignal) => (await CoursesService.courses({ query: { q, offset, limit: 20 }, signal })).data, [q, offset]))
   const search = () => { setQ(input.trim()); setOffset(0) }
-  return <div className="lc-course-filter"><Field label="查找课程班级"><input value={input} maxLength={100} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); if (!e.nativeEvent.isComposing) search() } }} /></Field>
+  return <div className="lc-course-filter"><Field label="查找课程班级"><input value={input} maxLength={100} onChange={e => setInput(e.target.value)} onCompositionStart={() => { composing.current = true }} onCompositionEnd={() => { composing.current = false }} onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); if (!composing.current && !e.nativeEvent.isComposing) search() } }} /></Field>
     <Button variant="secondary" onClick={search}>查找课程候选</Button>
     <Field label="课程班级筛选"><select value={value} disabled={resource.loading} onChange={e => onChange(e.target.value, e.target.selectedOptions[0]?.text || "")}><option value="">全部有权课程</option>{value && !resource.data?.data.some(row => row.id === value) && <option value={value}>{label}</option>}{resource.data?.data.map(row => <option key={row.id} value={row.id}>{row.code} · {row.title}</option>)}</select></Field>
     {resource.error && <StatePanel kind="error" description={resource.error} retry={resource.reload} />}
