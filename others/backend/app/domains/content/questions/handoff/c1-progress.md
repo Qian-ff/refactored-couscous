@@ -72,3 +72,11 @@ M1领域候选现已具备提交A审查的代码与接缝，详见c1-m1-handoff.
 起点84355fec清洁，实际Default/gpt-6.1-sol/medium；已只读主树d4a328bb0fb9742d3d981c20c68f7cff3be5fa3a规范/模板/T1工作包。核对两域同类调用后，将题目及关卡修改、放弃、提审的六处草稿锁改用领域locked_draft，按既有DOMAINS的question_id/lesson_id查询，保留FOR UPDATE、populate_existing、缺失403。仍由原命令完成授权、事务及幂等，不给草稿伪造id，不改旧content.services.locked、公共模型/迁移/worker/依赖或前端。
 
 新增2项纯SQL构造/缺失对象回归，连同相关授权与关卡边界检查共17项通过；Ruff/diff通过。证据draft-lock-pure.txt/exit。该检查不连接数据库，不证明真实PG行锁/并发；15项领域PG仍待A给准确T1技术SHA及专用非owner入口，不提前跑或合移动main。普通局部修复结束交A，本轮不创建重复Goal，也不改变原C1集成blocked状态。
+
+## T1真实领域PG完成
+
+A发布准确db0ca18e5c0bf4fae1558755b702b7e4ddc2669a后，从清洁671普通快进合并；共享三类输入匹配。在既有全局pytest串行锁和指定私有管理配置下运行15项领域PG，全部通过。另用runtime只读连接确认safelab_c1_test/c1d0c000001、非superuser/owner成员且不拥有public表，没有输出连接凭据、使用主库或跑公共schema测试。
+
+首轮虽15 passed但有发布查询嵌套catalog EXISTS的笛卡尔积警告；将该已发布分支不必要的草稿creator列改为literal(None)，私有源分支和授权范围不变。规范导入完成态夹具的封存/停止/预留/计量/文件键/合成执行ID，不弱化生产保护。15项复验仍全过，最终夹具定向2项通过；只余既有TestClient弃用提示。Ruff/diff通过。完整结果、实际命令、先后证据及剩余边界见c1-t1-domain.md与忽略目录test-results/c1/t1-domain。
+
+本次T1领域阶段完成，不等于T2配额/runner/HTTP/SDK或C1整包完成，semantic夹具不作为真实队列计量证明。交A最终含db0ca的候选与临时handoff，等待其后续明确T2，不自动启动其他模块。
