@@ -5,7 +5,7 @@
       "executor": "A-executor",
       "approved_by": "A-main",
       "status": "active",
-      "baseline_sha": "2f07bd08893f5f0b0e6260068b1c3e9106a7db68",
+      "baseline_sha": "0266e0b13b6a74244d30f9b3a91ba0389c760f27",
       "candidate_sha": "ecb7129497d1f6a69daf09df6db3f2f30537d7ba",
       "work_package": "others/docs/ai/c02-public-integration.md",
       "activation_requirement": "Active only from this committed grant and A-main explicitly dispatched full execution SHA; baseline_sha is the pre-rollout ancestor, not a technical release.",
@@ -99,13 +99,20 @@
         "others/backend/app/domains/content/tests/test_validation.py",
         "others/backend/app/domains/content/upload_fence.py",
         "others/backend/app/domains/content/uploads.py",
-        "others/backend/app/domains/content/views.py"
+        "others/backend/app/domains/content/views.py",
+        "others/scripts/Start-Backend.ps1",
+        "others/scripts/Start-A1.ps1"
       ],
       "purpose": "Active C-02 successor work: frozen candidate receipt, delegated domain repairs, compatible migration/runtime DB role, private restricted parser, actual API/OpenAPI/SDK and verification. A-main alone accepts/releases main; no live ECS deployment or push.",
       "authorization_thread": "01a1544b-7eb1-77f1-9f83-52fa8510503c",
       "authorization_source": "Human-started workflow v3 Goal, 2026-10-24",
       "candidate_file_count": 49,
-      "responsibility_transfer": "A-executor owns all unfinished C-02 backend/worker repairs and checks; D owns material frontend. C plans separate questions/lessons and does not edit frozen C-02 files."
+      "responsibility_transfer": "A-executor owns all unfinished C-02 backend/worker repairs and checks; D owns material frontend. C plans separate questions/lessons and does not edit frozen C-02 files.",
+      "phase": "post_main_basic_validation",
+      "received_candidate_sha": "578d2e869393ac96a25a1a21e6d9619542287a1e",
+      "main_reception_sha": "0266e0b13b6a74244d30f9b3a91ba0389c760f27",
+      "post_main_handoff": "others/docs/c02-main-reception.md",
+      "validation_scope": "Essential demo checks only per human 2026-10-25: shared activation, preserved database migration, ordinary API/permissions/upload/download, affected client build/start. No new advanced security or stress work, Daybreak, paid audit, ECS deployment or push."
     },
     "coordination-v1-validation": {
       "executor": "A-executor",

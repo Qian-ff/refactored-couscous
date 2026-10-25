@@ -4,7 +4,7 @@
 
 ## 当前交接与开工
 
-原C-02尚未验收：冻结候选`ecb7129497d1f6a69daf09df6db3f2f30537d7ba`仅含content后端/worker的49个文件。40项纯检查通过不等于PG/HTTP/四格式/沙箱通过；9项PG候选检查未实跑，worker验证有跳过和缺依赖。公共契约仍0.3.2，迁移仍`b1c0e0a00001`；0.4.0仅为接入目标。云端旧版本另见[云端ASR交接](cloud-asr-handoff.md)，未因本流程升级。
+原C-02整包尚未验收。初始冻结候选`ecb7129497d1f6a69daf09df6db3f2f30537d7ba`的纯检查/未跑项保留历史原义；现已[接收后台返修578d2e86](c02-main-reception.md)，main源码真实契约0.4.0、迁移c02d0c00001。共享激活/三端基础检查仍待续办，D真实资料闭环尚未完成。云端旧版本另见[云端ASR交接](cloud-asr-handoff.md)，未随本机源码更新。
 
 - **A副1**承接C-02全部后端/worker遗留实现、修复、公共接入和实测；[生效工作包](ai/c02-public-integration.md)与[具体委托](../contracts/execution-delegations.json)共同限制写范围。
 - **D1**承接C-02资料管理、检索、定位预览和下载前端，按[D1工作包](ai/d1-content-ui.md)立即开发可独立验证的组件，真实API到达后接通。
