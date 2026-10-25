@@ -2,6 +2,11 @@ $ErrorActionPreference = 'Stop'
 $contentRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $contentRuntime = Join-Path $contentRoot 'others/runtime/c02-public'
 $contentPython = Join-Path $contentRuntime 'envs/backend/Scripts/python.exe'
+$contentSharedRuntime = Join-Path $contentRoot 'others/runtime/content-parser'
+if (Test-Path -LiteralPath (Join-Path $contentSharedRuntime 'control.json')) {
+    $contentRuntime = $contentSharedRuntime
+    $contentPython = Join-Path $contentRoot 'others/backend/.venv/Scripts/python.exe'
+}
 $contentConfig = Join-Path $contentRuntime 'control.json'
 $contentClient = Join-Path $contentRuntime 'parser-client.json'
 $contentControl = Join-Path $contentRoot 'others/deploy/content/control.py'
@@ -14,6 +19,7 @@ if ($contentListener) {
     return
 }
 $contentReports = Join-Path $contentRoot 'others/reports/c02-public'
+if ($contentRuntime -eq $contentSharedRuntime) { $contentReports = Join-Path $contentReports 'post-main' }
 New-Item -ItemType Directory -Force -Path $contentReports | Out-Null
 $contentProcess = Start-Process -FilePath $contentPython -ArgumentList @($contentControl, '--config', $contentConfig) -WorkingDirectory $contentRoot -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $contentReports 'control-stdout.txt') -RedirectStandardError (Join-Path $contentReports 'control-stderr.txt')
 $contentMarkerJson = @{ pid = $contentProcess.Id; startedUtc = $contentProcess.StartTime.ToUniversalTime().ToString('o'); source = $contentControl; config = $contentConfig } | ConvertTo-Json

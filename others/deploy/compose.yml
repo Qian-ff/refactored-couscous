@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     mem_limit: 512m
     image: postgres:18@sha256:74935e72241653ca55e0414067e6d8763aceb8a810eb51b452253ec3dcfc4336
-    env_file: ../../.env
+    env_file: ../runtime/postgres.env
     ports:
       - "127.0.0.1:55432:5432"
     volumes:

@@ -26,6 +26,7 @@
         "others/ai_worker/pyproject.toml",
         "others/ai_worker/uv.lock",
         "others/deploy/content/",
+        "others/deploy/compose.yml",
         "others/deploy/cloud/compose.yml",
         "others/deploy/cloud/Caddyfile",
         "others/deploy/.env.example",
