@@ -2966,6 +2966,66 @@
         "title": "Role",
         "type": "string"
       },
+      "SearchMatch": {
+        "properties": {
+          "chunk_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Chunk Id"
+          },
+          "kind": {
+            "enum": [
+              "chunk",
+              "input_text",
+              "title",
+              "filename"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "locator": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Locator"
+          },
+          "ordinal": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ordinal"
+          },
+          "snippet": {
+            "maxLength": 240,
+            "title": "Snippet",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "snippet"
+        ],
+        "title": "SearchMatch",
+        "type": "object"
+      },
       "SelfEnrollmentView": {
         "description": "Latest stored relationship, not an event ledger or a live-resource permission.",
         "properties": {
@@ -3805,6 +3865,40 @@
             "title": "Content Hash",
             "type": "string"
           },
+          "course_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Course Code"
+          },
+          "course_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Course Id"
+          },
+          "course_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Course Title"
+          },
           "created_at": {
             "format": "date-time",
             "title": "Created At",
@@ -3831,6 +3925,24 @@
               }
             ],
             "title": "File Bytes"
+          },
+          "file_type": {
+            "anyOf": [
+              {
+                "enum": [
+                  "pdf",
+                  "pptx",
+                  "docx",
+                  "txt",
+                  "text"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "File Type"
           },
           "input_kind": {
             "enum": [
@@ -3882,6 +3994,16 @@
               }
             ],
             "title": "Parser Version"
+          },
+          "search_match": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SearchMatch"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "source_metadata": {
             "anyOf": [
@@ -3947,7 +4069,7 @@
   },
   "info": {
     "title": "安研通——实验室安全智能协同管理平台",
-    "version": "0.4.0"
+    "version": "0.4.1"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -7563,6 +7685,80 @@
                 }
               ],
               "title": "Library Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "course_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Course Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "file_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "pdf",
+                    "pptx",
+                    "docx",
+                    "txt",
+                    "text"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "File Type"
+            }
+          },
+          {
+            "in": "query",
+            "name": "created_after",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Created After"
+            }
+          },
+          {
+            "in": "query",
+            "name": "created_before",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Created Before"
             }
           },
           {

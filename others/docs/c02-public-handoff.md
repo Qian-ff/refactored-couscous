@@ -1,10 +1,10 @@
-# C02 公共接入候选（A副，未接收）
+# C02 公共接入与检索增量交接
 
 执行树：`D:/codex/worktree/0aed/SafeLabPlatform`，分支 `codex/a-executor`。
 授权工作包：[c02-public-integration](ai/c02-public-integration.md)；执行起点
 `e42dee58eefdeadf1fb5bbd462fefe47c8331703`，原 C 候选
 `ecb7129497d1f6a69daf09df6db3f2f30537d7ba`，接收 merge `d5e566cae01c1ddae443e70ef483364087568224`。
-公共契约 0.4.0 是本树候选；main / ECS 的既有版本不因本文件改变。
+0.4.0后台已由A接收，main基础激活/构建来源为`40feea4e1ae02affd0dcfd7bdec333aaa69d528e`；本树0.4.1正文检索是随后兼容增量候选，仍待A接收。ECS未更新。
 
 ## 实现与运行
 
@@ -56,3 +56,19 @@ A 审查提交 `8ebaa7a2c3782fe3c1c1fc9ad1cfe1b01bbcef22`，代码修复提交
 
 Docker Desktop 安装位置为当前用户目录 `C:/Users/lenovo/AppData/Local/Programs/DockerDesktop/`。
 控制端启停脚本核验 PID、启动时间和源码路径；端口来源不符时保留进程。不要按进程名批量停止服务。
+
+## 主线基础激活与三端（40feea4）
+
+依据A续办`29d0d7f`、`e645234`与接收`40feea4`：复用shared_env/固定锁，主树业务与worker环境已激活。原本机`safelab`在可恢复pg_dump备份后升级至`c02d0c00001`，原10表字段/ID/行数摘要相同（含264账号、489课程），未重建或seed。PG容器配置存忽略的`others/runtime/postgres.env`；迁移owner在`others/runtime/content-parser/database-admin.json`，API通用`.env`只留运行配置和受限数据库账号。
+
+正常主树`Start-C02.ps1`复用`Start-A1/Start-Backend`与主库，API8000/Web5173真实identity均为40feea4；候选8002/测试库/seed不再冒称main。已有健康PG容器直接复用，不因配置拆分重建。解析控制使用主树源码、独立主库存储及配置。首次配置本机compose须准备上述忽略PG配置；不将owner重新放回API.env。
+
+主树40feea4的Web生产构建、Windows目录包、Android debug APK均重建并检查包内SHA。Web/真实Windows包/Android项目模拟器各完成学生登录、课程入口、退出，未测真机或九组合。Windows为隐藏窗口DOM与API实测，隐藏截图未作为通过项。小TXT真实上传解析、页段预览、原件下载哈希、常见无权反馈及隔离进程的未配置503检查通过。
+
+本轮证据单独存`others/reports/c02-public/post-main/manifest.json`，含主库迁移备份摘要、配置类型、运行来源、客户端及产物哈希；旧`final-manifest.json`及47附件保留。实际main API与本树增量API须分别看来源，不混用；D资料UI、A2整包与ECS仍未因此通过。
+
+## 0.4.1检索增量候选
+
+`GET /content/materials`在授权版本集合内匹配标题、文件名、成功SourceChunk正文与知识点输入原文；课程所属源/发布/审核库、类型和带时区版本日期筛选先于计数/最新匹配版本及稳定分页。每条最多240字符片段；正文命中保留稳定chunk_id/ordinal/locator，未提取知识点可按原文命中但不伪造页段。无新数据库迁移或付费依赖，不改写固定快照。
+
+参数、日期真实语义及新增DTO见[接口约定](../contracts/api-conventions.md)。片段只对当前有权分页生成，学生不读私有草稿或无权review。`post-main/search-pg.txt`记录9项针对性PG检查；真实OpenAPI/生成SDK与类型/构建检查分别运行。本树后续8002真实文件正文命中与定位验证、完整候选SHA和证据索引在`post-main/search-candidate.json`，不把main0.4.0当作搜索已上线。

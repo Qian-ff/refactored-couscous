@@ -1,8 +1,12 @@
 # API 约定
 
-## 本资料候选实际0.4.0（兼容0.3.2、0.3.1、0.3.0及A0的0.2.0）
+## 本资料检索候选实际0.4.1（兼容0.4.0及既有0.3.x/A0）
 
 唯一版本源为 ../config/application.json。OpenAPI 只导出实际接口；version.json 记录真实导出哈希，web/src/client 由工具生成，不手改。/courses 继续表示教学班，响应新增 catalog_id；旧创建请求兼容。
+
+0.4.1兼容增加`GET /content/materials`的正文及知识点输入文字匹配，保留标题/文件名字面匹配。`course_id`限定有权的课程所属源库、发布目标库或审核目标库；不因传入班级ID授予权限。`file_type`取pdf/pptx/docx/txt/text（text为输入知识点，区别TXT文件），`created_after/created_before`为包含时区的版本创建时间、两端包含。当前模型没有资料标题修改时间，不将版本创建时间伪称标题更新时间。所有范围、类型、日期及q先在有权集合内过滤计数，再选最新有权匹配版本和稳定分页（created_at倒序、version_id）。未提取文件仅可按标题/文件名命中；输入知识点的原文可匹配，尚无页段时不造定位。
+
+`VersionView`兼容新增file_type、course_id/course_code/course_title（实际有权目标的当前课程标签）和可空search_match。q非空时每版本最多一个匹配：优先成功快照SourceChunk，其次输入文字、标题、文件名；kind分别为chunk/input_text/title/filename，snippet最多240字符纯文本。chunk命中携带稳定chunk_id、ordinal和原locator，可用页段/版本接口配合响应library_id重新鉴权定位。非chunk命中无页段字段；q为空无匹配片段。片段仅从当前有权分页最多100个版本生成，不要求前端全量下载正文或使用付费搜索服务。此候选须A接收后才更新main运行基线。
 
 0.4.0在当前候选树接入真实`/content`资料接口；main/ECS是否已接收以A主正式发布为准。列表每页1–100，默认50，q最多100字且按字面匹配。上传是JSON创建会话、`PUT /content/uploads/{UUID}/bytes`原始application/octet-stream、GET会话/按version_id过滤的jobs恢复；封存重放重新核对完整正文，不能重新创建版本。一般文件20MiB，TXT/知识点1MiB；没有分片续传。下载返回原始字节、精确Content-Length及UTF-8 Content-Disposition，不能按JSON读取；CORS暴露这两个头。
 

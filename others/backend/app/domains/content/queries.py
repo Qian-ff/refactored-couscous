@@ -149,7 +149,7 @@ def project_version(db, identity, context, binding):
                        actions=VersionActions(edit_material=editable, retire_material=bool(source.active and source_access.review),
                            create_version=editable and not material.retired, submit_review=submittable,
                            preview=version.extraction_state == "succeeded", download=True), binding=binding,
-                       file_type=upload.format if upload else "text", course_id=course.id if course else None,
+                       file_type=upload.format if upload else ("text" if version.input_kind == "text" else None), course_id=course.id if course else None,
                        course_code=course.code if course else None, course_title=course.title if course else None)
 
 
@@ -168,7 +168,8 @@ def search_matches(db, contexts, q):
         func.row_number().over(partition_by=SourceChunk.material_version_id, order_by=SourceChunk.ordinal).label("rn"),
     ).where(SourceChunk.material_version_id.in_(ids), SourceChunk.text.ilike(keyword(q), escape="\\")).subquery()
     matches = {row.version_id: SearchMatch(kind="chunk", snippet=row.snippet, chunk_id=row.id,
-        ordinal=row.ordinal, locator=row.locator) for row in db.exec(select(ranked).where(ranked.c.rn == 1))} if ids else {}
+        ordinal=row.ordinal, locator=row.locator) for row in db.exec(select(ranked.c.id, ranked.c.version_id,
+            ranked.c.ordinal, ranked.c.locator, ranked.c.snippet).where(ranked.c.rn == 1))} if ids else {}
     for version, material, _projection in contexts:
         if version.id in matches:
             continue

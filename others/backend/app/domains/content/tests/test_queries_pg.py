@@ -1,5 +1,6 @@
 """Authorization/count/cursor integration cases, pending A's real C-02 migration."""
-from uuid import UUID
+from uuid import UUID, uuid4
+from datetime import timedelta
 import hashlib
 
 import pytest
@@ -117,3 +118,107 @@ def test_chinese_chunks_page_by_response_budget_without_losing_locator(db):
     assert second.items[0].ordinal == first.next_ordinal + 1
     assert second.items[0].locator["position"] == 1
     assert len(first.model_dump_json().encode()) <= 1024 * 1024
+
+
+def search_snapshot(db, library, teacher, text, title="检索示例", locator=None):
+    created = create_text_version(db, teacher, TextMaterialCreate(library_id=library, title=title, text=text),
+                                  str(uuid4()), 10 * 1024**3)
+    version = db.get(MaterialVersion, UUID(created["version_id"]))
+    version.extraction_state = "running"
+    db.add(version)
+    db.flush()
+    chunk = SourceChunk(material_version_id=version.id, ordinal=1,
+        locator=locator or {"kind": "paragraph", "position": 1, "part": 1}, text=text,
+        text_hash=hashlib.sha256(text.encode()).hexdigest())
+    db.add(chunk)
+    db.flush()
+    return completed_fixture(db, created), chunk
+
+
+def publish_search_version(db, admin, teacher, version, target):
+    from app.domains.content.schemas import ReviewDecision, ReviewSubmit, RevisionInput
+    from app.domains.content.services import decide_review, publish_review, submit_review, warnings_hash
+    review = submit_review(db, teacher, ReviewSubmit(version_id=version.id, target_library_id=target,
+        authorization_statement="Synthetic original text authorized for this course"), str(uuid4()))
+    decide_review(db, admin, UUID(review["review_id"]), ReviewDecision(revision=1, decision="approved",
+        warning_hash=warnings_hash(version), warnings_acknowledged=True, original_authorized=True), str(uuid4()))
+    publish_review(db, admin, UUID(review["review_id"]), RevisionInput(revision=2), str(uuid4()))
+
+
+def test_search_body_snippet_locator_and_input_text_before_extraction(db):
+    admin = identity(db, "admin", "administrator")
+    teacher = identity(db, "teacher", "teacher")
+    library = school_library(db, admin)
+    term = "正文匹配" + uuid4().hex[:8]
+    version, chunk = search_snapshot(db, library, teacher, "前言" * 100 + term + "结语" * 100,
+                                     locator={"kind": "page", "position": 4, "part": 2})
+    page = queries.versions(db, teacher, term, 0, 20, newest_only=True)
+    assert page.total == 1
+    match = page.items[0].search_match
+    assert match.kind == "chunk" and term in match.snippet and len(match.snippet) <= 240
+    assert match.chunk_id == chunk.id and match.ordinal == 1 and match.locator == chunk.locator
+    assert page.items[0].file_type == "text" and page.items[0].course_id is None
+    pending_term = "输入知识点" + uuid4().hex[:8]
+    created = create_text_version(db, teacher, TextMaterialCreate(library_id=library, title="待解析", text=pending_term),
+                                  str(uuid4()), 10 * 1024**3)
+    pending = queries.versions(db, teacher, pending_term, 0, 20)
+    assert str(pending.items[0].version_id) == created["version_id"]
+    assert pending.items[0].search_match.kind == "input_text" and pending.items[0].search_match.locator is None
+    assert not pending.items[0].actions.preview
+
+
+def test_search_authorization_precedes_count_and_paging(db):
+    admin = identity(db, "admin", "administrator")
+    teacher = identity(db, "teacher", "teacher")
+    student = identity(db, "student", "student")
+    library = school_library(db, admin)
+    term = "安全检索" + uuid4().hex[:8]
+    published = []
+    for index in range(2):
+        version, _chunk = search_snapshot(db, library, teacher, term + str(index))
+        publish_search_version(db, admin, teacher, version, library)
+        published.append(version.id)
+    search_snapshot(db, library, teacher, term + "私有草稿")
+    first = queries.versions(db, student, term, 0, 1, newest_only=True)
+    second = queries.versions(db, student, term, 1, 1, newest_only=True)
+    assert first.total == second.total == 2
+    assert {first.items[0].version_id, second.items[0].version_id} == set(published)
+    assert all(item.source_metadata is None and item.material_revision is None
+               and item.binding.review is None for item in first.items + second.items)
+    foreign = identity(db, "teacher_b", "teacher")
+    assert queries.versions(db, foreign, term, 0, 20).total == 0
+    assert queries.versions(db, student, term + "无结果", 0, 20).items == []
+
+
+def test_search_course_target_type_and_version_time_filters(db):
+    admin = identity(db, "admin", "administrator")
+    teacher = identity(db, "teacher", "teacher")
+    student = identity(db, "student", "student")
+    library = school_library(db, admin)
+    course = fixture_id("course-general")
+    target = UUID(create_library(db, admin, LibraryCreate(scope="course", parent_id=course,
+        title="课程检索库", audience="all"), str(uuid4()))["library_id"])
+    term = "课程关键词" + uuid4().hex[:8]
+    version, _chunk = search_snapshot(db, library, teacher, term)
+    publish_search_version(db, admin, teacher, version, target)
+    page = queries.versions(db, student, term, 0, 20, course_id=course, file_type="text",
+        created_after=version.created_at - timedelta(seconds=1), created_before=version.created_at + timedelta(seconds=1))
+    assert page.total == 1 and page.items[0].course_id == course and page.items[0].library_id == target
+    assert page.items[0].course_code and page.items[0].course_title
+    assert queries.versions(db, student, term, 0, 20, course_id=fixture_id("course-electrical")).total == 0
+    assert queries.versions(db, student, term, 0, 20, file_type="pdf").total == 0
+    assert queries.versions(db, student, term, 0, 20, created_after=version.created_at + timedelta(seconds=1)).total == 0
+    with pytest.raises(HTTPException) as error:
+        queries.versions(db, student, term, 0, 20, created_after=version.created_at.replace(tzinfo=None))
+    assert error.value.status_code == 422
+
+
+def test_search_keeps_literal_keywords_and_title_fallback(db):
+    admin = identity(db, "admin", "administrator")
+    teacher = identity(db, "teacher", "teacher")
+    library = school_library(db, admin)
+    term = "字面%_" + uuid4().hex[:8]
+    search_snapshot(db, library, teacher, "普通正文", title=term)
+    page = queries.versions(db, teacher, term, 0, 20)
+    assert page.total == 1 and page.items[0].search_match.kind == "title"
+    assert page.items[0].search_match.locator is None
