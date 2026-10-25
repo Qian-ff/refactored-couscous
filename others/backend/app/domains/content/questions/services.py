@@ -11,7 +11,7 @@ from app.domains.content.questions.budget import ContentBudget
 from app.domains.content.questions.models import (
     Question, QuestionDraft, QuestionDraftSource, QuestionPublication, QuestionReview, QuestionSource, QuestionVersion,
 )
-from app.domains.content.questions.policy import copy_source, draft_query, has_retained_public_grant, public_source_ids, require_draft, require_parent, require_version, review_manager, staff
+from app.domains.content.questions.policy import copy_source, draft_query, has_retained_public_grant, locked_draft, public_source_ids, require_draft, require_parent, require_version, review_manager, staff
 from app.domains.content.questions.schemas import DraftContent, QuestionPayload, SourcePointer, canonical_bytes, fingerprint
 from app.domains.content.questions.sources import check_publication, resolve_sources, retained_sources
 from app.domains.content.services import execute_command, locked, require_key
@@ -129,7 +129,7 @@ def change_question(db, identity, question_id, request, key, budget=ContentBudge
 
     def action():
         _current, parent, library = require_draft(db, identity, "question", question_id, edit=True)
-        draft = locked(db, QuestionDraft, question_id)
+        draft = locked_draft(db, "question", question_id)
         check_revision(draft, request.revision)
         duplicate(db, identity, library.id, request.payload, question_id)
         sources = _sources_for_draft(db, identity, request.sources, draft.copied_from_version_id)
@@ -157,7 +157,7 @@ def discard_draft(db, identity, question_id, request, key):
         require_parent(db, identity, "question", question_id, edit=True)
 
     def action():
-        draft = locked(db, QuestionDraft, question_id)
+        draft = locked_draft(db, "question", question_id)
         check_revision(draft, request.revision)
         _replace_sources(db, question_id, [])
         db.delete(draft)
@@ -202,7 +202,7 @@ def submit_question(db, identity, question_id, request, key, budget=ContentBudge
 
     def action():
         _current, parent, source = require_draft(db, identity, "question", question_id, edit=True)
-        draft = locked(db, QuestionDraft, question_id)
+        draft = locked_draft(db, "question", question_id)
         check_revision(draft, request.revision)
         version, sources = _freeze(db, identity, parent, draft)
         target = require_library(db, identity, request.target_library_id, "submit")

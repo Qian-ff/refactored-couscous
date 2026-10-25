@@ -15,7 +15,7 @@ from app.domains.content.lessons.scenes import UnsafeScene, validate_svg
 from app.domains.content.lessons.schemas import Choice, LessonContent
 from app.domains.content.questions.budget import ContentBudget
 from app.domains.content.questions.models import Question, QuestionVersion
-from app.domains.content.questions.policy import copy_source, has_retained_public_grant, public_source_ids, require_draft, require_parent, require_version, review_manager, staff, version_query
+from app.domains.content.questions.policy import copy_source, has_retained_public_grant, locked_draft, public_source_ids, require_draft, require_parent, require_version, review_manager, staff, version_query
 from app.domains.content.questions.schemas import canonical_bytes, fingerprint
 from app.domains.content.questions.services import check_lineage as check_question_lineage, checked_version as checked_question
 from app.domains.content.questions.sources import check_publication, resolve_sources, retained_sources
@@ -289,7 +289,7 @@ def change_lesson(db, identity, lesson_id, request, key, budget=ContentBudget())
 
     def action():
         _current, parent, library = require_draft(db, identity, "lesson", lesson_id, edit=True)
-        draft = locked(db, LessonDraft, lesson_id)
+        draft = locked_draft(db, "lesson", lesson_id)
         check_revision(draft, request.revision)
         asset, sources, questions = _context(db, identity, request.content, library,
                                             existing_asset_id=draft.scene_asset_id, copied_from=draft.copied_from_version_id)
@@ -315,7 +315,7 @@ def discard_lesson(db, identity, lesson_id, request, key):
     _parent, initial = require_parent(db, identity, "lesson", lesson_id, edit=True)
 
     def action():
-        draft = locked(db, LessonDraft, lesson_id)
+        draft = locked_draft(db, "lesson", lesson_id)
         check_revision(draft, request.revision)
         _replace_draft_links(db, lesson_id, {}, [])
         db.execute(delete(LessonDraftQuestionOrigin).where(LessonDraftQuestionOrigin.lesson_id == lesson_id))
@@ -382,7 +382,7 @@ def submit_lesson(db, identity, lesson_id, request, key, budget=ContentBudget())
 
     def action():
         _current, parent, source = require_draft(db, identity, "lesson", lesson_id, edit=True)
-        draft = locked(db, LessonDraft, lesson_id)
+        draft = locked_draft(db, "lesson", lesson_id)
         check_revision(draft, request.revision)
         version, content, asset, sources = _freeze(db, identity, parent, draft, source)
         target = require_library(db, identity, request.target_library_id, "submit")

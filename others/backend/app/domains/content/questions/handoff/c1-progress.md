@@ -66,3 +66,9 @@ M1领域候选现已具备提交A审查的代码与接缝，详见c1-m1-handoff.
 已只读核对main cff0d654b1801671fba453dd728c0ba3d3a4e3c4规范，实际Default/gpt-6.1-sol/medium，起点91bd07d清洁。receiving_count改按import、未封存、lease_owner非空统计，不再按receiving状态过滤：取消/租约到期不能提前释放仍在接收或清理的占用；已封存后的解析租约排除。未改模型、旧C02、公共文件、worker、依赖或transfer_cli。
 
 新增真实PG候选test_receiving_slots.py：真实临时文件写入期间取消并使租约过期，计数仍保持；关闭写文件后调用实际cleanup_upload，在物理删除过程中仍保持占用，最终文件清理且DB清lease后才回到基线。尚无T1表/入口，明确未跑，不用模拟计数或SQLite代替；累计PG候选15项未跑。本轮仅Ruff及已有3项本地实际文件I/O检查通过，证据receiving-slot-local.txt/exit。原C1公共集成阻塞保持；本局部修复交A后不空轮询、不创建或完成另一个Goal。
+
+## A委托的草稿主键行锁返工
+
+起点84355fec清洁，实际Default/gpt-6.1-sol/medium；已只读主树d4a328bb0fb9742d3d981c20c68f7cff3be5fa3a规范/模板/T1工作包。核对两域同类调用后，将题目及关卡修改、放弃、提审的六处草稿锁改用领域locked_draft，按既有DOMAINS的question_id/lesson_id查询，保留FOR UPDATE、populate_existing、缺失403。仍由原命令完成授权、事务及幂等，不给草稿伪造id，不改旧content.services.locked、公共模型/迁移/worker/依赖或前端。
+
+新增2项纯SQL构造/缺失对象回归，连同相关授权与关卡边界检查共17项通过；Ruff/diff通过。证据draft-lock-pure.txt/exit。该检查不连接数据库，不证明真实PG行锁/并发；15项领域PG仍待A给准确T1技术SHA及专用非owner入口，不提前跑或合移动main。普通局部修复结束交A，本轮不创建重复Goal，也不改变原C1集成blocked状态。
