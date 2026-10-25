@@ -32,15 +32,27 @@
 - `web-tests.json`、`browser-services.json`：真实浏览器生成SDK原始上传下载字节/哈希、Blob、长度、UTF-8文件名、旧请求取消及无权JSON错误；测试时API源码为`e3fd83d34b6507b17aba84abebeba79d753823ad`。
 - 2026-10-25 本轮 `pnpm run check`、`pnpm run build:web`、真实contracts check、本轮 Python Ruff、候选环境工具2项与 `git diff --check` 通过。
 
-## 尚未完成
+## A 第一轮审查返修
 
-后台候选最后核验后交 A，禁止当作 C02/A2 完成：
+A 审查提交 `8ebaa7a2c3782fe3c1c1fc9ad1cfe1b01bbcef22`，代码修复提交
+`d56191b2b743504dd7f09d0503f6e4d377680395`。原候选存在不安全输出读取和分片管道截断，原有测试不能覆盖这两项。
 
-1. 最终提交后的 API 来源和共享会话回归，结果见同证据根及`others/reports/c02-session/`。
-2. 原候选逐文件 blob、授权修复差异及最终源码指纹归档至本树忽略证据根，不能把旧镜像构建SHA称为API SHA。
+- `output_files.py` 统一读取 status/result/accepted。Linux 用逐级 `dir_fd`、`O_NOFOLLOW`、`O_NONBLOCK`；Windows 用禁止删除共享的目录句柄固定路径、`FILE_FLAG_OPEN_REPARSE_POINT`、磁盘文件类型和句柄元数据检查。拒绝重解析点/符号链接、硬链接及特殊文件；同一已校验句柄限量读取并核对前后 inode/大小/链接数/时间。result 发送前重新验证，发送期间保持 release 互斥。
+- 容器接收凭据改为临时文件 fsync 后原子替换，控制端检查实际输入哈希、长度和 kernel seals，避免读取未完成的接收凭据。
+- Docker stdout/stderr 独立循环读至 EOF，各自累计上限仍为64KiB；超限或12秒超时终止、关闭管道并回收子进程，避免满管道导致 wait 挂起。缺对象仍须 Docker 健康才能确认不存在。
+- 长期回归：`others/deploy/content/test_control_boundary.py`。可用独立候选 Python 执行 `-m unittest discover -s others/deploy/content -p test_control_boundary.py -v`。Linux验证只读挂载五个必要源码，无配置/资料库，用隔离tmpfs生成合成链接/FIFO/设备。
+- `review-fix-windows.txt`：15项中13项适用并通过，2项POSIX特殊文件不适用；实际Windows文件/目录符号链接、硬链接和替换测试均执行。`review-fix-linux.txt`：15项全部通过。输出协议测试仅桩表示容器退出，真实内核文件句柄与真实分片/超限/超时子进程均执行，不冒称真实恶意容器攻击。
+- 新镜像 `sha256:8f03fd2feddb4df71cef70c4f7a8c0520aba2e716f8736d77f668b6833ea25b3` 来自修复提交 `d56191b2`，闭包指纹 `22d6db8962f16d34f7eac8b60044ab5cff9c44097a383e5c3b8b6add2750bd51`。`sandbox.json` 已更新到新镜像；`stress-review-fix.json`、`faults-review-fix.json`分别记录本轮资源和恢复复测，历史报告保留。
+- 最终提交的真实API、HTTP/浏览器和源码索引，以 `final-manifest.json` 为准；不把旧API来源或镜像构建SHA冒称最终运行SHA。
+
+## 接收与剩余边界
+
+后台技术候选交 A 审核，禁止当作 C02/A2 完成：
+
+1. 最终提交后的 API 来源、真实HTTP及共享会话回归见同证据根和`others/reports/c02-review-final/`；原候选逐文件 blob、授权修复差异及最终源码指纹归档至本树忽略证据根。
 3. A 接收后才激活共享依赖、重建/验证 main 三端。正式 ECS、D 资料 UI、原生资料保存不在当前已完成结论中。
 
-镜像`sha256:85b4a147c6a394ccad23873c1b7bdf04a27aac3a65f210261d0c9e5cf5d3f4ab`来自`a3f0d8300b92bb8f20003dba771176b6d64aece7`构建，解析闭包指纹见`image.json`；后续提交仅变化于公共接入/测试，不自动重标镜像来源。
+历史镜像`sha256:85b4a147c6a394ccad23873c1b7bdf04a27aac3a65f210261d0c9e5cf5d3f4ab`来自`a3f0d8300b92bb8f20003dba771176b6d64aece7`构建，不再作为本轮控制端解析镜像；原Linux边界单测曾使用此镜像的Python和隔离tmpfs运行修复后只读源码，与新解析镜像集成验证区分。
 
 Docker Desktop 安装位置为当前用户目录 `C:/Users/lenovo/AppData/Local/Programs/DockerDesktop/`。
 控制端启停脚本核验 PID、启动时间和源码路径；端口来源不符时保留进程。不要按进程名批量停止服务。
