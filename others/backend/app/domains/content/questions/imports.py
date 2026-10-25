@@ -49,6 +49,11 @@ class ImportRowView(StrictModel):
     duplicate_of: int | None
 
 
+class CreatedQuestion(StrictModel):
+    row: int
+    question_id: UUID
+
+
 def require_batch(db, identity, batch_id):
     staff(identity)
     row = db.get(ImportBatch, batch_id, populate_existing=True)

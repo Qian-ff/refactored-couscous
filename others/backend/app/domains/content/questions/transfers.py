@@ -1,7 +1,7 @@
 """Persisted C1 task commands; A supplies the one shared queue, storage and runner."""
 from collections.abc import Callable
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta
 import hashlib
 import re
 from typing import Literal
@@ -73,6 +73,28 @@ class ExportCreate(StrictModel):
 
 class TaskGeneration(StrictModel):
     generation: int = Field(ge=1, strict=True)
+
+
+class TransferResult(StrictModel):
+    task_id: UUID | None = None
+    batch_id: UUID | None = None
+    state: str
+    generation: int | None = None
+    revision: int | None = None
+    created_count: int | None = None
+
+
+class TransferView(StrictModel):
+    task_id: UUID
+    batch_id: UUID | None
+    kind: Literal["import", "export"]
+    format: Literal["csv", "xlsx"]
+    state: str
+    stage: str
+    generation: int
+    error_code: str | None
+    expires_at: datetime
+    result_bytes: int
 
 
 def require_task(db, identity, task_id, *, allow_expired=False):
