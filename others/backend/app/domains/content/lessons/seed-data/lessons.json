@@ -1,0 +1,302 @@
+{
+  "schema_version": "labconnect.c1-lesson-seeds/1",
+  "status": "draft",
+  "content_hash": "01921bbfe51f2eba3f020901f7a19301941ef63b8906a9a7f77e737ff4e00a7b",
+  "lessons": [
+    {
+      "key": "entry",
+      "group": "general",
+      "title": "入室防护",
+      "status": "draft",
+      "scene_file": "entry.svg",
+      "scene_hash": "3d65f6621ab062d2bb315ef4b0bb9fefc89c2276a783e556dbd143f43f88f7cc",
+      "requires_actual_scene_binding": true,
+      "provenance": {
+        "origin": "derived",
+        "author": "安研通项目组（AI辅助起草，待教师审核）",
+        "original_url": "https://ehs.princeton.edu/laboratory-research/laboratory-safety/laboratory-safety-manual/sec7",
+        "license": "原创教学草稿；公开授权待项目组确认",
+        "license_url": null,
+        "acquired_date": "2026-10-25",
+        "source_version": "c1-original-draft/1",
+        "adapted": true,
+        "public_reuse_allowed": false,
+        "source_hash": null,
+        "teaching_reuse_allowed": false
+      },
+      "reference_keys": [
+        "preparation",
+        "ppe"
+      ],
+      "draft_definition": {
+        "labels": [
+          "防护用品领取台",
+          "实验台上的饮料瓶",
+          "洗手与整理区",
+          "应急通行区域"
+        ],
+        "target": 1,
+        "locate": "按本关情境，点击需要移出实验操作区的饮料瓶所在区域。",
+        "short": "入室前先确认本次任务的风险、授权和防护要求。所需防护不齐时暂停，向教师核对；防护不能代替规程和工程控制。应急设施及通道要保持可达。本关饮料瓶是情境中的无关个人物品，不应留在实验操作台。",
+        "choice": [
+          "面对尚未确认的防护要求，本关的选择是什么？",
+          "暂停并向教师核对",
+          "按以前经验直接开工",
+          "让同伴替自己承担风险"
+        ],
+        "order": [
+          "确认本次任务",
+          "核对准入与防护",
+          "获准后按规程操作",
+          "按要求离室整理"
+        ]
+      }
+    },
+    {
+      "key": "electric",
+      "group": "general",
+      "title": "设备用电",
+      "status": "draft",
+      "scene_file": "electric.svg",
+      "scene_hash": "24bd558e8c9403591530eca9fa26fa751bed6ebcd9fd3a9936a8db5af5634f6b",
+      "requires_actual_scene_binding": true,
+      "provenance": {
+        "origin": "derived",
+        "author": "安研通项目组（AI辅助起草，待教师审核）",
+        "original_url": "https://ehs.princeton.edu/laboratory-research/laboratory-safety/laboratory-safety-manual/sec7g",
+        "license": "原创教学草稿；公开授权待项目组确认",
+        "license_url": null,
+        "acquired_date": "2026-10-25",
+        "source_version": "c1-original-draft/1",
+        "adapted": true,
+        "public_reuse_allowed": false,
+        "source_hash": null,
+        "teaching_reuse_allowed": false
+      },
+      "reference_keys": [
+        "electrical",
+        "inspection"
+      ],
+      "draft_definition": {
+        "labels": [
+          "经核对的供电区",
+          "电源线破损的仪器",
+          "设备操作记录台",
+          "工具存放区"
+        ],
+        "target": 1,
+        "locate": "点击情境中应暂停使用并报告的电源线破损仪器所在区域。",
+        "short": "上电前核对设备要求、供电适配和外观状态。破损线缆、异常发热或保护动作需要停用报告，不能绕过保护。断开电源并不保证内部储能已经消失，拆修由受训授权人员完成。本关只练习异常识别，不要求学生维修。",
+        "choice": [
+          "设备保护频繁动作时，本关要求怎样处理？",
+          "停止使用并报告排查",
+          "绕过保护继续运行",
+          "只遮挡提示灯"
+        ],
+        "order": [
+          "阅读设备要求",
+          "核对供电与外观",
+          "确认后按规程使用",
+          "完成规定的结束检查"
+        ]
+      }
+    },
+    {
+      "key": "emergency",
+      "group": "general",
+      "title": "应急处置",
+      "status": "draft",
+      "scene_file": "emergency.svg",
+      "scene_hash": "f79685da36d2171b63e4043947561dae0fe52f80bd8a0cbac8f55f96d533cf59",
+      "requires_actual_scene_binding": true,
+      "provenance": {
+        "origin": "derived",
+        "author": "安研通项目组（AI辅助起草，待教师审核）",
+        "original_url": "https://ehs.princeton.edu/laboratory-research/laboratory-safety/laboratory-safety-manual/sec3",
+        "license": "原创教学草稿；公开授权待项目组确认",
+        "license_url": null,
+        "acquired_date": "2026-10-25",
+        "source_version": "c1-original-draft/1",
+        "adapted": true,
+        "public_reuse_allowed": false,
+        "source_hash": null,
+        "teaching_reuse_allowed": false
+      },
+      "reference_keys": [
+        "incident",
+        "preparation"
+      ],
+      "draft_definition": {
+        "labels": [
+          "示意出口方向",
+          "实验工作台",
+          "应急信息板",
+          "预案指定集合区"
+        ],
+        "target": 3,
+        "locate": "本图只是一张教学示意图，请点击预案指定集合区。",
+        "short": "到岗前了解本楼报警方式、疏散路线和集合点。实际事件按现场预案与应急人员指令行动，在安全位置准确报告已知信息；未受训者不承担超出能力的处置。撤离后参加人员清点，不为取回物品擅自返场。图中位置不是校园真实疏散地图。",
+        "choice": [
+          "已撤离后怀疑有人滞留，本关建议怎样做？",
+          "向应急人员提供已知线索",
+          "未经授权自行返回",
+          "把猜测发布成确定结论"
+        ],
+        "order": [
+          "演练前查阅本楼预案",
+          "辨认路线与集合点",
+          "参加指导下的演练",
+          "演练后记录改进事项"
+        ]
+      }
+    },
+    {
+      "key": "storage",
+      "group": "chemistry",
+      "title": "试剂标签储存",
+      "status": "draft",
+      "scene_file": "storage.svg",
+      "scene_hash": "8895d2571dbb6818205abdf27e4ea09a3257eb1bb92085f840a2a1badb26131e",
+      "requires_actual_scene_binding": true,
+      "provenance": {
+        "origin": "derived",
+        "author": "安研通项目组（AI辅助起草，待教师审核）",
+        "original_url": "https://www.osha.gov/laws-regs/regulations/standardnumber/1910/1910.1450",
+        "license": "原创教学草稿；公开授权待项目组确认",
+        "license_url": null,
+        "acquired_date": "2026-10-25",
+        "source_version": "c1-original-draft/1",
+        "adapted": true,
+        "public_reuse_allowed": false,
+        "source_hash": null,
+        "teaching_reuse_allowed": false
+      },
+      "reference_keys": [
+        "labels",
+        "sds"
+      ],
+      "draft_definition": {
+        "labels": [
+          "已标识的储存柜",
+          "待确认的无标签容器",
+          "安全资料查阅台",
+          "相容性核对区"
+        ],
+        "target": 1,
+        "locate": "点击情境中不能直接选用、需要交由负责人员确认身份的容器所在区域。",
+        "short": "先确认产品身份，再查阅对应安全数据表并开展任务风险评估。安全数据表提供危害、操作和储存信息，但不等于完成了本次风险评估。标签不清的物品不靠气味、颜色或记忆猜测；储存条件按相容性和本地要求核对。",
+        "choice": [
+          "两个瓶子标签不清但颜色一样，可以据此混放吗？",
+          "不能，须先确认内容与相容性",
+          "可以，颜色足够说明性质",
+          "可以，只要瓶子一样大"
+        ],
+        "order": [
+          "确认产品身份",
+          "查阅对应安全数据表",
+          "核对相容性与储存条件",
+          "按规定放置并更新记录"
+        ]
+      }
+    },
+    {
+      "key": "ventilation",
+      "group": "chemistry",
+      "title": "操作通风",
+      "status": "draft",
+      "scene_file": "ventilation.svg",
+      "scene_hash": "e7334290a044325fb9451b1430fb4519b43fae950a18b43725c2e8efa0b9a9f3",
+      "requires_actual_scene_binding": true,
+      "provenance": {
+        "origin": "derived",
+        "author": "安研通项目组（AI辅助起草，待教师审核）",
+        "original_url": "https://ehs.princeton.edu/laboratory-research/laboratory-safety/laboratory-equipment-and-engineering/fume-hoods",
+        "license": "原创教学草稿；公开授权待项目组确认",
+        "license_url": null,
+        "acquired_date": "2026-10-25",
+        "source_version": "c1-original-draft/1",
+        "adapted": true,
+        "public_reuse_allowed": false,
+        "source_hash": null,
+        "teaching_reuse_allowed": false
+      },
+      "reference_keys": [
+        "hood",
+        "ventilation"
+      ],
+      "draft_definition": {
+        "labels": [
+          "状态报警的通风柜",
+          "普通工作台",
+          "规程查阅台",
+          "设备检查记录区"
+        ],
+        "target": 0,
+        "locate": "点击情境中需要暂停相关操作并报告检查的报警设备所在区域。",
+        "short": "根据实验风险选择适用的工程控制设备，使用前确认状态和操作条件。照明不代表通风正常，普通风扇不直接等同于局部排风。设备报警不靠静音解决；不同类型柜体不能仅凭名称互相替代。按设备标识和本地规程使用，不把通风柜作为废物处置设施。",
+        "choice": [
+          "发现通风柜状态不明时，本关要求什么？",
+          "暂停并请负责人员确认",
+          "只要灯亮就直接用",
+          "增加风扇代替检查"
+        ],
+        "order": [
+          "确认操作的控制需求",
+          "选择适用设备",
+          "核对设备状态与要求",
+          "获准后按规程操作"
+        ]
+      }
+    },
+    {
+      "key": "waste",
+      "group": "chemistry",
+      "title": "废物泄漏",
+      "status": "draft",
+      "scene_file": "waste.svg",
+      "scene_hash": "eec05fe0dc78aec90f503a713da7d285c17557ddc91951d193de0979832e57a3",
+      "requires_actual_scene_binding": true,
+      "provenance": {
+        "origin": "derived",
+        "author": "安研通项目组（AI辅助起草，待教师审核）",
+        "original_url": "https://ehs.princeton.edu/laboratory-research/chemical-waste-management",
+        "license": "原创教学草稿；公开授权待项目组确认",
+        "license_url": null,
+        "acquired_date": "2026-10-25",
+        "source_version": "c1-original-draft/1",
+        "adapted": true,
+        "public_reuse_allowed": false,
+        "source_hash": null,
+        "teaching_reuse_allowed": false
+      },
+      "reference_keys": [
+        "waste",
+        "inspection",
+        "incident"
+      ],
+      "draft_definition": {
+        "labels": [
+          "有标识的收集容器",
+          "未知液体泄漏区域",
+          "交接记录台",
+          "收集用品准备区"
+        ],
+        "target": 1,
+        "locate": "请在示意图中标记未知液体泄漏所在区域，不代表要求靠近现场。",
+        "short": "操作前规划废物种类、相容性、容器、标识和指定交接路径。未知内容不凭外观合并，不以通风蒸发代替规范处理。未经训练、超出能力或情况不明的泄漏，应避免暴露、警示他人并按本地预案报告。本关不教授未知化学品的中和或清理配方。",
+        "choice": [
+          "面对未知泄漏且没有处置训练，本关要求什么？",
+          "避免暴露并按预案报告",
+          "凑近闻气味",
+          "随意混入其他液体"
+        ],
+        "order": [
+          "预估本次废物类型",
+          "确认分类与收集要求",
+          "备妥合规标识容器",
+          "按规定收集交接"
+        ]
+      }
+    }
+  ]
+}
