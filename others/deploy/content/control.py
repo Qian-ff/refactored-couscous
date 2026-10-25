@@ -15,6 +15,8 @@ import sys
 import time
 from uuid import UUID
 
+from output_files import UnsafeOutput, read_output
+
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "others/backend"))
 from app.core.content_runner import (FRAME, MAX_INPUT, MAX_OUTPUT, PROTOCOL, json_bytes,  # noqa: E402
@@ -96,14 +98,17 @@ class Controller:
             stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, env=self.docker_environment())
 
         async def bounded(stream):
-            result = await stream.read(FRAME + 1)
-            if len(result) > FRAME:
-                raise RunnerUnavailable()
-            return result
+            result = bytearray()
+            while chunk := await stream.read(min(16384, FRAME + 1 - len(result))):
+                result.extend(chunk)
+                if len(result) > FRAME:
+                    raise RunnerUnavailable()
+            return bytes(result)
 
+        tasks = [asyncio.create_task(bounded(process.stdout)), asyncio.create_task(bounded(process.stderr)),
+                 asyncio.create_task(process.wait())]
         try:
-            stdout, stderr, code = await asyncio.wait_for(asyncio.gather(
-                bounded(process.stdout), bounded(process.stderr), process.wait()), 12)
+            stdout, stderr, code = await asyncio.wait_for(asyncio.gather(*tasks), 12)
             if code:
                 if allow_absent and (b"No such object:" in stderr or b"No such container:" in stderr):
                     # Distinguish confirmed absence from an unavailable Docker daemon.
@@ -111,10 +116,22 @@ class Controller:
                     return None
                 raise RunnerUnavailable()
             return stdout
+        except TimeoutError:
+            raise RunnerUnavailable() from None
         finally:
             if process.returncode is None:
-                process.kill()
-                await process.wait()
+                try:
+                    process.kill()
+                except ProcessLookupError:
+                    pass
+            for task in tasks:
+                if not task.done():
+                    task.cancel()
+            # asyncio has no public PIPE close: close transports before wait to avoid a full-pipe deadlock.
+            for stream in (process.stdout, process.stderr):
+                stream._transport.close()
+            await asyncio.gather(*tasks, return_exceptions=True)
+            await process.wait()
 
     async def container(self, execution_id):
         raw = await self.docker_call("inspect", "--type", "container", "--format", "{{json .}}",
@@ -146,20 +163,25 @@ class Controller:
             return record
         record.update(state="stopped" if record.get("stopped") else "failed", stop_confirmed=True)
         if not record.get("stopped"):
-            status = self.directory(execution_id) / "status.json"
-            if status.is_file() and status.stat().st_size <= 4096:
-                result = json.loads(status.read_text())
-                output = self.directory(execution_id) / "result.json"
+            status = self.output(execution_id, "status.json", 4096, missing_ok=True)
+            if status is not None:
+                result = json.loads(status)
                 if (container is not None and container["State"]["ExitCode"] == 0
-                        and result == {"state": "succeeded"} and output.is_file()
-                        and output.stat().st_size <= MAX_OUTPUT):
-                    record.update(state="succeeded", output_bytes=output.stat().st_size, error_code=None)
+                        and result == {"state": "succeeded"}):
+                    output = self.output(execution_id, "result.json", MAX_OUTPUT)
+                    record.update(state="succeeded", output_bytes=len(output), error_code=None)
                 else:
                     record["error_code"] = result.get("error_code", "WORKER_INTERRUPTED")
             else:
                 record["error_code"] = "WORKER_INTERRUPTED"
         self.save(record)
         return record
+
+    def output(self, execution_id, name, maximum, *, missing_ok=False):
+        try:
+            return read_output(self.tasks, execution_id, name, maximum, missing_ok=missing_ok)
+        except UnsafeOutput:
+            raise RunnerUnavailable() from None
 
     async def stop_locked(self, execution_id, record=None):
         record = record or self.load(execution_id) or {"execution_id": execution_id, "task": None,
@@ -256,9 +278,12 @@ class Controller:
                 if process:
                     await write_frame(process.stdin, b"")
                     process.stdin.close()
-                    accepted = self.directory(execution_id) / "accepted"
                     for _attempt in range(50):
-                        if accepted.is_file():
+                        accepted = self.output(execution_id, "accepted", 4096, missing_ok=True)
+                        if accepted is not None:
+                            receipt = json.loads(accepted)
+                            if receipt != {"kernel_seals": 15, "input_bytes": size, "input_sha256": digest.hexdigest()}:
+                                raise RunnerUnavailable()
                             break
                         await asyncio.sleep(.1)
                     else:
@@ -352,15 +377,11 @@ class Controller:
                         self.result_readers.add(execution_id)
                 if operation == "result":
                     try:
-                        with (self.directory(execution_id) / "result.json").open("rb") as stream:
-                            await write_frame(writer, json_bytes({"ok": True}))
-                            total = 0
-                            while frame := stream.read(FRAME):
-                                total += len(frame)
-                                if total > MAX_OUTPUT:
-                                    raise RunnerUnavailable()
-                                await write_frame(writer, frame)
-                            await write_frame(writer, b"")
+                        output = self.output(execution_id, "result.json", MAX_OUTPUT)
+                        await write_frame(writer, json_bytes({"ok": True}))
+                        for offset in range(0, len(output), FRAME):
+                            await write_frame(writer, output[offset:offset + FRAME])
+                        await write_frame(writer, b"")
                     finally:
                         self.result_readers.discard(execution_id)
                 else:

@@ -57,11 +57,12 @@ def receive(args):
         os.fsync(output.fileno())
     fcntl.fcntl(descriptor, fcntl.F_ADD_SEALS,
                 fcntl.F_SEAL_WRITE | fcntl.F_SEAL_GROW | fcntl.F_SEAL_SHRINK | fcntl.F_SEAL_SEAL)
-    with (OUTPUT / "accepted").open("x") as accepted:
+    with (OUTPUT / "accepted.new").open("x") as accepted:
         json.dump({"kernel_seals": fcntl.fcntl(descriptor, fcntl.F_GET_SEALS),
                    "input_bytes": size, "input_sha256": digest.hexdigest()}, accepted)
         accepted.flush()
         os.fsync(accepted.fileno())
+    (OUTPUT / "accepted.new").replace(OUTPUT / "accepted")
     signal.alarm(0)
     return descriptor
 
