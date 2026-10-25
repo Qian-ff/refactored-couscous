@@ -17,6 +17,12 @@ D产品与回归源码 `5655b017a1538052194258471e39b5b08fdd7b1e`，指纹 `247c
 
 ## 本轮运行与演示
 
+2026-10-26实际接续：main准确 `d4a328bb0fb9742d3d981c20c68f7cff3be5fa3a` 的8000/5173身份、0.4.1/迁移c02d0c00001与 `Open-Materials.cmd -NoOpen` 已核验；只跑1条真实上传解析—审核发布—学生正文定位—下载摘要/基础403与离线，1 passed。Web生产、Windows测试包、安卓debug从该SHA构建并核对metadata，三端真实学生登录资料/预览通过；Windows为隐藏DOM，安卓仅项目模拟器。原库、解析器、迁移和seed均未改，未重跑旧全矩阵。
+
+A核对2个原生文件、149个生产网页文件hash及3份实际包内metadata均匹配；20附件清单hash `6da057216b6bc1b386e31b15cbed06add55270dae239dc5a94dec4667a61e6ba`。其中19个完整文件匹配，活跃backend日志继续追加，但原25635字节前缀hash匹配，A另存不可变前缀；没有重写旧清单。独立证据在A副树 `others/reports/c02-public/post-main/material-ui/`，A回执在本机 `others/reports/material-main-receipt/receipt.json`。native debug与独立production网页资产按各自模式记录，不假称相同JS文件。
+
+默认保存未验证：Windows隐藏窗口下载pending 12秒后由测试取消，路径空；未排除等待系统保存对话框，不能据此断言Electron默认能力缺失。安卓点击后无下载事件、Download目录未变，非真机。后续先做最小验证/适配，不把网页下载字节正确写成三端已落盘。以下调度段是本轮开始时的计划，已有通过不重复执行：
+
 本文件提交后，A发送准确的最终main SHA，由A副按 `c02-public-integration` 复验：核验进程归属后激活8000/5173，保留原库和原解析器；运行本轮入口，完成一条正常资料闭环与受影响三端构建/基本访问。新结果单独写 `others/reports/c02-public/post-main/material-ui/`，包含源码、运行身份、产物与真实结果；本段不是这些检查已通过的声明。开始验证后main再次冻结，避免文档提交使来源校验失效。
 
 主树双击 [Open-Materials.cmd](../../Open-Materials.cmd) 启动正式网页并打开 `http://127.0.0.1:5173/#/content/materials`。自动验证可带 `-NoOpen`，仅验证启动，不弹浏览器；旧入口保持。使用本机忽略区合成账号：教师上传有许可TXT并等待解析、提交审核；管理员按有权目标批准发布；学生搜索正文、定位预览、下载核对字节。可切换工作身份观察有权动作，不向仓库写账号口令。

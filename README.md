@@ -6,7 +6,7 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：[主线资料页源码已接收](others/docs/material-ui-main-reception.md)，契约0.4.1；原库保留、正文检索及先前的三端基本流程已核验，本轮合并版本正在重新激活、构建和复验。** [v3流程](others/docs/delivery-workflow.md)保留完整路线，C1最新领域候选进入[专用数据库接入T1](others/docs/ai/c1-schema-pg-integration.md)，B2仍未放行。云端仍以[c-start-ready交接](others/docs/cloud-asr-handoff.md)记录的旧部署为准，不能把本机源码接收当云端更新。[Open-Materials.cmd](Open-Materials.cmd)为本轮资料页入口；Open-DUI.cmd保留，Start-CloudASR.cmd恢复既有识别节点。题库、考试、助手、监控及完整新工作台尚未开放。[既有UI](others/docs/existing-ui-acceptance.md)、[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
+**当前阶段：[资料页主线基础复验通过](others/docs/material-ui-main-reception.md)，契约0.4.1；三端登录/资料预览及网页上传发布下载已核验，Windows/安卓实际保存仍未验证。** [C1 T1与15项真实领域PG已接收为候选](others/docs/c1-domain-reception.md)，接下来由A副做[T2真实任务及公共接口接入](others/docs/ai/c1-runtime-public-integration.md)，B2仍未放行。云端仍以[c-start-ready交接](others/docs/cloud-asr-handoff.md)记录的旧部署为准，不能把本机源码接收当云端更新。[Open-Materials.cmd](Open-Materials.cmd)为本轮资料页入口；Open-DUI.cmd保留，Start-CloudASR.cmd恢复既有识别节点。题库、考试、助手、监控及完整新工作台尚未开放。[既有UI](others/docs/existing-ui-acceptance.md)、[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
 
 ## 从这里开始
 
