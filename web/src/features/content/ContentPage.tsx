@@ -7,11 +7,13 @@ import { useCommand, useResource } from "../../components/labconnect/hooks"
 import { MaterialPublish, MaterialReview, MaterialWorkspace, type MaterialItem, type MaterialWorkspaceProps } from "./ContentWorkspace"
 import { materialItem } from "./material-adapter"
 import { ContentPreview, ContentUpload, ContentEdit, ContentSubmit, LibraryEdit, TextMaterial } from "./ContentDialogs"
+import { LibraryCreate } from "./LibraryCreate"
 
 export function ContentPage({ session }: PageProps) {
   const student = session.workRole === "student"
   const [query, setQuery] = useState(""), [library, setLibrary] = useState(""), [offset, setOffset] = useState(0), [round, setRound] = useState(0)
-  const [dialog, setDialog] = useState<"upload" | "text" | "preview" | "edit" | "submit" | "review" | "publish" | "libraries">()
+  const [dialog, setDialog] = useState<"upload" | "text" | "preview" | "edit" | "submit" | "review" | "publish" | "libraries" | "create-library">()
+  const [uploadVersion, setUploadVersion] = useState<VersionView>()
   const [selected, setSelected] = useState<VersionView>(), [review, setReview] = useState<ReviewView>(), [editingLibrary, setEditingLibrary] = useState<LibraryView>()
   const [notice, setNotice] = useState("")
   const libraries = useResource(useCallback(async (signal: AbortSignal) => (await ContentService.listLibraries({ query: { limit: 100, include_inactive: !student }, signal })).data, [student, round]))
@@ -55,8 +57,9 @@ export function ContentPage({ session }: PageProps) {
       canUpload={!student && uploads.length > 0 && !!capabilities.data?.storage_available && !!capabilities.data?.parser_available}
       canManageLibrary={!student && (libraries.data?.items.some(row => row.can_manage) || false)} searchPlaceholder="资料标题或原文件名"
       scopeNotice="当前搜索匹配标题和文件名；正文、知识点匹配尚未接通。选择具体范围后，审核与发布状态仅针对该目标；定位预览和下载会重新校验权限。"
-      onSearch={(text, id) => { setQuery(text); setLibrary(id); setOffset(0) }} onPage={setOffset} onRefresh={refresh} onUpload={() => setDialog("upload")} onManageLibrary={() => setDialog("libraries")} onAction={choose} />
+      onSearch={(text, id) => { setQuery(text); setLibrary(id); setOffset(0) }} onPage={setOffset} onRefresh={refresh} onUpload={() => { setUploadVersion(undefined); setDialog("upload") }} onManageLibrary={() => setDialog("libraries")} onAction={choose} />
     {!student && <Panel title="资料处理与提交">
+      <Button variant="secondary" onClick={() => setDialog("create-library")}>新建资料库</Button>
       {targets.error && <Notice kind="error" retry={targets.reload}>{targets.error}</Notice>}
       {capabilities.error && <Notice kind="error" retry={capabilities.reload}>{capabilities.error}</Notice>}
       {capabilities.data && (!capabilities.data.parser_available || !capabilities.data.storage_available) && <Notice kind="warning">{!capabilities.data.parser_available ? "解析服务尚未就绪。" : ""}{!capabilities.data.storage_available ? "资料存储尚未配置。" : ""}当前不能上传解析文件。</Notice>}
@@ -67,9 +70,9 @@ export function ContentPage({ session }: PageProps) {
       <p>任务状态来自服务器；点击“刷新资料”可重新读取。已发布资料的阅读权限不授予草稿编辑或整库管理权。</p>
     </Panel>}
     {dialog === "preview" && selected && <ContentPreview version={selected} onClose={() => setDialog(undefined)} onDownload={() => { void download(selected) }} />}
-    {dialog === "upload" && <ContentUpload targets={uploads} capabilities={capabilities.data} onClose={() => setDialog(undefined)} onDone={done} />}
+    {dialog === "upload" && <ContentUpload version={uploadVersion} targets={uploads} capabilities={capabilities.data} onClose={() => setDialog(undefined)} onDone={done} />}
     {dialog === "text" && <TextMaterial targets={uploads} onClose={() => setDialog(undefined)} onDone={done} />}
-    {dialog === "edit" && selected && <ContentEdit version={selected} onClose={() => setDialog(undefined)} onDone={done} />}
+    {dialog === "edit" && selected && <ContentEdit version={selected} onClose={() => setDialog(undefined)} onDone={done} onNewVersion={version => { setUploadVersion(version); setDialog("upload") }} />}
     {dialog === "submit" && selected && <ContentSubmit version={selected} targets={uploads} targetLabel={names.get(targetId(selected)) || "当前授权范围"} onClose={() => setDialog(undefined)} onDone={done} />}
     {dialog === "review" && selected && review && <MaterialReview key={review.id} title={selected.title} versionLabel={`第 ${selected.version_no} 版 · ${names.get(review.target_library_id) || review.target_library_id}`} authorization={review.authorization_statement} warnings={selected.warnings} pending={action.pending} error={action.error}
       onClose={() => setDialog(undefined)} onConfirm={async input => { const result = await action.run("review:" + review.id + JSON.stringify(input), key => ContentService.decideReview({ path: { review_id: review.id }, body: { revision: review.revision, decision: input.decision, reason: input.reason || null, warning_hash: review.warning_hash, warnings_acknowledged: input.warningsAcknowledged, original_authorized: input.originalAuthorized }, headers: { "Idempotency-Key": key } })); if (result) done("服务端已确认审核决定，尚未执行发布。") }} />}
@@ -78,6 +81,7 @@ export function ContentPage({ session }: PageProps) {
     }} />}
     {dialog === "libraries" && !editingLibrary && <LibraryEdit libraries={libraries.data?.items.filter(row => row.can_manage) || []} onSelect={setEditingLibrary} onClose={() => setDialog(undefined)} />}
     {dialog === "libraries" && editingLibrary && <ContentEdit library={editingLibrary} onClose={() => { setEditingLibrary(undefined); setDialog(undefined) }} onDone={done} />}
+    {dialog === "create-library" && <LibraryCreate user={session.user!} onClose={() => setDialog(undefined)} onDone={done} />}
   </div>
 }
 export const contentPages: readonly PageRegistration[] = [

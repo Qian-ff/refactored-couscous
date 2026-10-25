@@ -16,8 +16,8 @@ export function ContentPreview({ version, onClose, onDownload }: { version: Vers
     hasMore={resource.data?.next_ordinal != null} onMore={() => { if (resource.data?.next_ordinal != null) setAfter(resource.data.next_ordinal) }} />
 }
 
-export function ContentUpload({ targets, capabilities, onClose, onDone }: Done & { targets: readonly Target[]; capabilities?: Capabilities }) {
-  const [source, setSource] = useState<SourceMetadata>({ origin: "upload" }), [encoding, setEncoding] = useState<"utf-8" | "gb18030">("utf-8"), [progress, setProgress] = useState<UploadProgress>({ state: "idle", sentBytes: 0, totalBytes: 0 })
+export function ContentUpload({ targets, capabilities, version, onClose, onDone }: Done & { targets: readonly Target[]; capabilities?: Capabilities; version?: VersionView }) {
+  const [source, setSource] = useState<SourceMetadata>(version?.source_metadata || { origin: "upload" }), [encoding, setEncoding] = useState<"utf-8" | "gb18030">("utf-8"), [progress, setProgress] = useState<UploadProgress>({ state: "idle", sentBytes: 0, totalBytes: 0 })
   const uploadId = useRef<string | undefined>(undefined), controller = useRef<AbortController | undefined>(undefined), command = useCommand(), cancel = useCommand()
   useEffect(() => () => controller.current?.abort(), [])
   async function submit(input: { file: File; title: string; libraryId: string }) {
@@ -28,7 +28,7 @@ export function ContentUpload({ targets, capabilities, onClose, onDone }: Done &
     let hash: string
     try { hash = [...new Uint8Array(await crypto.subtle.digest("SHA-256", await input.file.arrayBuffer()))].map(byte => byte.toString(16).padStart(2, "0")).join("") }
     catch { setProgress({ state: "failed", sentBytes: 0, totalBytes: input.file.size, error: "无法读取文件并计算摘要，请重新选择可读取的文件。" }); return }
-    const body = { library_id: input.libraryId, title: input.title, original_name: input.file.name, format, encoding, expected_bytes: input.file.size, expected_hash: hash, source_metadata: source }
+    const body = { library_id: input.libraryId, material_id: version?.material_id, title: input.title, original_name: input.file.name, format, encoding, expected_bytes: input.file.size, expected_hash: hash, source_metadata: source }
     const result = await command.run(JSON.stringify(body), async key => {
       controller.current = new AbortController()
       const created = await ContentService.createUpload({ body, signal: controller.current.signal, headers: { "Idempotency-Key": key } })
@@ -41,7 +41,7 @@ export function ContentUpload({ targets, capabilities, onClose, onDone }: Done &
     if (result) onDone("原件已由服务端接收，解析任务已建立；请读取任务状态，尚未审核或发布。")
     else setProgress(previous => ({ ...previous, state: "uncertain", error: "本次结果尚未确认。保留原文件和参数重试，或确认取消。" }))
   }
-  return <MaterialUpload targets={targets} progress={{ ...progress, error: cancel.error || command.error || progress.error }} onClose={onClose} onSubmit={input => { void submit(input) }} onCancel={async () => {
+  return <MaterialUpload initialTitle={version?.title} initialLibraryId={version?.library_id} targets={version ? [{ id: version.library_id, label: "原资料所属库 · 新固定版本" }] : targets} progress={{ ...progress, error: cancel.error || command.error || progress.error }} onClose={onClose} onSubmit={input => { void submit(input) }} onCancel={async () => {
     controller.current?.abort()
     if (!uploadId.current) { setProgress(previous => ({ ...previous, state: "uncertain", error: "上传标识尚未确认。请保留原参数重试，再核对取消结果。" })); return }
     const result = await cancel.run("cancel-upload:" + uploadId.current, key => ContentService.cancelUpload({ path: { upload_id: uploadId.current! }, headers: { "Idempotency-Key": key } }))
@@ -49,10 +49,18 @@ export function ContentUpload({ targets, capabilities, onClose, onDone }: Done &
   }}><Field label="TXT文字编码" hint="PDF、PPTX、DOCX不使用此选项。"><select value={encoding} onChange={e => setEncoding(e.target.value as typeof encoding)} disabled={progress.state === "uploading" || progress.state === "uncertain"}><option value="utf-8">UTF-8</option><option value="gb18030">GB18030</option></select></Field><SourceFields value={source} onChange={setSource} disabled={progress.state === "uploading" || progress.state === "uncertain"} /></MaterialUpload>
 }
 
-export function ContentEdit({ version, library, onClose, onDone }: Done & { version?: VersionView; library?: LibraryView }) {
+export function ContentEdit({ version, library, onClose, onDone, onNewVersion }: Done & { version?: VersionView; library?: LibraryView; onNewVersion?: (version: VersionView) => void }) {
   const [title, setTitle] = useState(version?.title || library?.title || ""), [active, setActive] = useState(library?.active ?? true), action = useCommand()
   return <Dialog title={library ? "修改资料库" : "修改资料名称"} busy={action.pending} onClose={onClose}>
     <p>按当前资源 revision 保存；发生冲突请关闭窗口、刷新资料后重新核对，不覆盖新修改。</p>
+    {version?.actions?.create_version && onNewVersion && <><Notice>已存在版本的原文不能覆盖。替换原件会建立新固定版本，并重新解析、审核和发布。</Notice><Button variant="secondary" pending={action.pending} onClick={async () => {
+      const result = await action.run("new-version:" + version.version_id, async () => {
+        const response = await ContentService.versionDetail({ path: { version_id: version.version_id } })
+        if (!response.data.actions?.create_version) throw new Error("当前已无权创建新版本，请关闭窗口重新读取。")
+        return response
+      })
+      if (result) onNewVersion(result.data)
+    }}>上传新固定版本</Button></>}
     <form className="lc-form" onSubmit={async event => { event.preventDefault(); if (!title.trim()) return
       const result = await action.run("edit:" + (library?.id || version?.material_id) + ":" + JSON.stringify({ title: title.trim(), active, revision: library?.revision ?? version?.material_revision }), key => library
         ? ContentService.changeLibrary({ path: { library_id: library.id }, body: { revision: library.revision, title: title.trim(), active }, headers: { "Idempotency-Key": key } })

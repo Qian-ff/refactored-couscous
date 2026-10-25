@@ -65,12 +65,13 @@ export function MaterialPreview({ title, versionLabel, state, chunks, error, can
 }
 
 export type UploadProgress = Readonly<{ state: "idle" | "uploading" | "queued" | "running" | "failed" | "uncertain"; sentBytes: number; totalBytes: number; error?: string }>
-export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose, children }: {
+export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose, children, initialTitle = "", initialLibraryId }: {
   targets: readonly { id: string; label: string }[]; progress: UploadProgress
   onSubmit: (input: { file: File; title: string; libraryId: string }) => void; onCancel: () => void; onClose: () => void
   children?: ReactNode
+  initialTitle?: string; initialLibraryId?: string
 }) {
-  const [title, setTitle] = useState(""), [library, setLibrary] = useState(targets[0]?.id || ""), [file, setFile] = useState<File>(), [error, setError] = useState("")
+  const [title, setTitle] = useState(initialTitle), [library, setLibrary] = useState(initialLibraryId || targets[0]?.id || ""), [file, setFile] = useState<File>(), [error, setError] = useState("")
   const busy = ["uploading", "queued", "running"].includes(progress.state), uncertain = progress.state === "uncertain"
   const percent = progress.totalBytes > 0 ? Math.max(0, Math.min(100, Math.floor(100 * progress.sentBytes / progress.totalBytes))) : 0
   return <Dialog title="上传授权资料" long busy={busy || uncertain} onClose={onClose}>
