@@ -95,7 +95,9 @@ def version_query(identity, kind: Kind, library_id=None, *, published_only=False
         applies_to_course(target, course) if course is not None else true(),
         covers_library(target, target_library) if target_library is not None else true(),
         target.audience == "all" if course is not None and kind == "lesson" else true(),
-        read_resource_predicate(identity, columns(target, creator_id=t.parent.creator_id, published=true())),
+        # Published reads do not need draft ownership; an outer creator column would
+        # become an unrelated FROM inside the policy's nested catalog EXISTS.
+        read_resource_predicate(identity, columns(target, creator_id=literal(None), published=true())),
     ).correlate(t.version, t.parent).exists()
     allowed = publication
     if not published_only:

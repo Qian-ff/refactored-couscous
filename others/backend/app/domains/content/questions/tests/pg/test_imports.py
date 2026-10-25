@@ -10,6 +10,7 @@ from sqlmodel import select
 from app.domains.content.models import now
 from app.domains.content.questions.imports import ImportConfirm, confirm_import, preview_hash
 from app.domains.content.questions.models import ImportBatch, ImportCreatedQuestion, Question, TransferTask
+from app.domains.content.questions.schemas import canonical_bytes
 from app.domains.content.questions.tests.pg.test_workflows import SEMANTIC_BUDGET, bank, identity
 from app.domains.content.questions.tests.unit.test_transfer_codec import content
 from app.domains.content.questions.transfer_codec import export_template, parse_template
@@ -21,12 +22,16 @@ def ready_batch(db, teacher, library_id):
     batch = ImportBatch(library_id=library_id, actor_id=teacher.user.id, login_session_id=teacher.login.id,
         work_role=teacher.work_role, input_hash=preview.input_hash, state="ready", revision=2, row_count=1,
         normalized_rows=[row.model_dump(mode="json") for row in preview.rows], expires_at=now() + timedelta(hours=1))
+    batch.retained_bytes = len(canonical_bytes({"rows": batch.normalized_rows, "errors": batch.errors}))
     db.add(batch)
     db.flush()
-    task = TransferTask(batch_id=batch.id, kind="import", format="csv", library_id=library_id,
+    task_id = uuid4()
+    task = TransferTask(id=task_id, batch_id=batch.id, kind="import", format="csv", library_id=library_id,
         school_id=teacher.user.school_id, owner_id=teacher.user.id, login_session_id=teacher.login.id,
-        work_role=teacher.work_role, input_hash=preview.input_hash, expected_bytes=len(raw), file_key=uuid4().hex,
-        state="succeeded", result_hash=preview.digest(), expires_at=batch.expires_at)
+        work_role=teacher.work_role, input_hash=preview.input_hash, expected_bytes=len(raw), file_key=task_id.hex + ".blob",
+        # Synthetic completed-task fixture, not evidence of real upload/runner execution.
+        state="succeeded", input_sealed=True, result_hash=preview.digest(), result_bytes=len(canonical_bytes(preview)),
+        execution_id=uuid4(), stop_confirmed=True, reserved_bytes=0, retained_bytes=len(raw), finished_at=now(), expires_at=batch.expires_at)
     db.add(task)
     db.flush()
     batch.preview_hash = preview_hash(batch, task)
