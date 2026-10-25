@@ -1,0 +1,88 @@
+{
+  "scope": "A-main verified 40fe mainline basic runtime and three student client combinations only",
+  "date": "2026-10-25",
+  "source_sha": "40feea4e1ae02affd0dcfd7bdec333aaa69d528e",
+  "contract": "0.4.0",
+  "migration": "c02d0c00001",
+  "api_origin": "http://127.0.0.1:8000",
+  "evidence_owner": "A-executor",
+  "evidence_directory": "others/reports/c02-public/post-main/",
+  "manifest_sha256": "e1e234aaa10e62f3bd773c8e6673f6a83b6bd2c2e1179de229cbd3e6635876d9",
+  "verification": {
+    "report_hashes_matched": 15,
+    "client_artifact_hashes_matched": 3,
+    "production_web_hashes_matched": 149,
+    "hash_errors": [],
+    "original_database_summaries_preserved": true,
+    "backup_hash_matched": true
+  },
+  "checks": [
+    {
+      "surface": "web-main-basic",
+      "source_sha": "40feea4e1ae02affd0dcfd7bdec333aaa69d528e",
+      "contract": "0.4.0",
+      "api_origin": "http://127.0.0.1:8000",
+      "login_course_entry_logout": "passed"
+    },
+    {
+      "surface": "windows-main-basic",
+      "source_sha": "40feea4e1ae02affd0dcfd7bdec333aaa69d528e",
+      "contract": "0.4.0",
+      "api_origin": "http://127.0.0.1:8000",
+      "login_course_entry_logout": "passed"
+    },
+    {
+      "surface": "android-emulator-main-basic",
+      "source_sha": "40feea4e1ae02affd0dcfd7bdec333aaa69d528e",
+      "contract": "0.4.0",
+      "api_origin": "http://10.0.2.2:8000",
+      "login_course_entry_logout": "passed"
+    }
+  ],
+  "artifact_receipts": {
+    "windows_exe": {
+      "bytes": 247185408,
+      "sha256": "cf5fa87e35a203b813d37a8f6795f81762bc8908910dc647c8724e4fdd88e746"
+    },
+    "windows_asar": {
+      "bytes": 3226,
+      "sha256": "442a8c89918a621312893e92d8ad3e223812471fdc01b42dd225b0689b12ecb9"
+    },
+    "android_debug_apk": {
+      "bytes": 16439409,
+      "sha256": "6195af1a8bc158dee4813250e94d109a47926220088bfb89ae294cd176cbac14"
+    }
+  },
+  "report_hashes": {
+    "android-emulator-main-basic.png": "be2a9f344eb6e492e364ca2b928a9e6c9204b0b508f001ea67106103b11f59c6",
+    "artifacts.json": "0e2adc1ee98ac286e55aaa19a0110df10cb6f166f7aa0f6dd264697c117a4ae5",
+    "basic-clients.cjs": "f9fd9e57a00cec22cfedd47cc02c65d66438e56d8bcbaf1912c1831943738c24",
+    "clients-basic-summary.json": "410ad2e5dfb14cff33da22a3000d48ce8bc4aee71eb1e992a6b018d773cc4c63",
+    "clients-basic.json": "dee339b437a551cf2dd6f90192abb9f5603a44c3b1846012ccf174b0177caecd",
+    "configuration.json": "4a712370afc1a24754f2c53cbe55d3df5dc309d554d806fba7dc14020427eb4c",
+    "main-api-initial.json": "d2e15934ac8e57e8b3da73c962f29ccde1172f3d7b11099d90fa7f6d33507aa6",
+    "main-basic-smoke.json": "1581e7f3867d82a7687a64314c6714be3e3921bb30b10051d7f59abd7d3bdaf7",
+    "main-database-migration.json": "4e1e0a9e4e88acc5176f175c9db79feb2567eb2619bd9dd37da04a3be30d2614",
+    "main-launcher.json": "8d943e62bcffe9bc05d13e8f83fce869c9361f0d979e70770ebefbb5cbc2b041",
+    "unconfigured-basic.json": "c42a91fc373000cf82029addfc7b1d42473077213a05f5ed2dcdfc1052d7259c",
+    "web-basic.json": "39cc3eacca5491c2314ed8970d5d15f631d5e133a71015e4a1f8bb748db50d4c",
+    "web-main-basic.png": "e465ab4afa349dda32372562ed48b7e21383c2184cfd65fea8d1bd2b0ef5e53c",
+    "windows-main-basic-diagnostic.json": "958ee0a72a7135ba6a44b07d2e5c316b981b322f7f1b6936b146600255668953",
+    "windows-main-basic-failure.png": "1a2a54526b5607023abc2f3d43cc62ee1854ff9ba55f851d101baec0e09ec9ab"
+  },
+  "windows_hidden_native_DOM_verified": true,
+  "windows_screenshot_verified": false,
+  "physical_android_tested": false,
+  "nine_combinations_tested": false,
+  "D_material_UI_accepted": false,
+  "search_0_4_1_released": false,
+  "C02_whole_accepted": false,
+  "C1_or_B2_released": false,
+  "ecs_updated": false,
+  "pushed": false,
+  "notes": [
+    "Artifact hashes were checked at receipt; later builds may replace ignored outputs.",
+    "The e645 small-sample HTTP report has the same backend fingerprint as 40fe; launcher and client checks used actual 40fe.",
+    "Windows hidden screenshot timeout was retained; ordinary function checks passed without a product change."
+  ]
+}

@@ -70,7 +70,10 @@
         "C02_backend_received_by_A": true,
         "C02_backend_candidate": "578d2e869393ac96a25a1a21e6d9619542287a1e",
         "C02_backend_main_merge": "0266e0b13b6a74244d30f9b3a91ba0389c760f27",
-        "D_material_api_runtime_ready": false,
+        "D_material_api_runtime_ready": true,
+        "D_material_api_source_sha": "40feea4e1ae02affd0dcfd7bdec333aaa69d528e",
+        "D_material_api_origin": "http://127.0.0.1:8000",
+        "C02_main_basic_checks_receipt": "others/docs/reviews/c02-main-basic-receipt.json",
         "C02_backend_main_contract": "0.4.0",
         "C02_backend_handoff": "others/docs/c02-main-reception.md"
       }
@@ -144,10 +147,11 @@
       "baseline_sha": "2f07bd08893f5f0b0e6260068b1c3e9106a7db68",
       "workflow": "others/docs/delivery-workflow.md",
       "rollout": "others/docs/workflow-v3-rollout.md",
-      "C02_status": "transferred_unfinished",
+      "C02_status": "main_basic_runtime_verified_UI_and_search_pending",
       "A_executor_package": "c02-public-integration",
       "D_package": "others/docs/ai/d1-content-ui.md",
-      "C1_status": "prepare_first_goal_only",
+      "C1_status": "M1_candidate_waiting_public_integration",
+      "C1_candidate_sha": "91bd07d068bec252da596d1ac390b7a1c75c15ae",
       "B2_status": "waiting_real_content_baseline_and_A_release",
       "G_status": "manual_chat_creation_and_registration_required_at_milestone",
       "frontend_transferred_to_D": [
