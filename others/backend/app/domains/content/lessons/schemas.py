@@ -126,6 +126,12 @@ class LessonChange(StrictModel):
     content: LessonContent
 
 
+class SceneCreate(StrictModel):
+    library_id: UUID
+    svg: str = Field(min_length=1, max_length=262144)
+    provenance: Provenance = Field(default_factory=Provenance)
+
+
 class StudentReference(StrictModel):
     material_id: UUID
     version_id: UUID

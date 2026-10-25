@@ -119,3 +119,23 @@ def test_cross_school_direct_reference_is_not_a_publication_permission(db):
     _created, submitted, _published = publication(db, teacher, admin, a)
     with pytest.raises(HTTPException):
         require_version(db, admin_b, "question", UUID(submitted["version_id"]), b, published_only=True)
+
+
+def test_cross_school_copy_from_an_approved_public_binding_keeps_the_original_private_school_hidden(db):
+    admin, teacher = identity(db, "admin", "administrator"), identity(db, "teacher", "teacher")
+    platform = identity(db, "platform", "administrator")
+    admin_b, teacher_b = identity(db, "admin_b", "administrator"), identity(db, "teacher_b", "teacher")
+    private_id, public_id, target_id = bank(db, admin), bank(db, platform, public=True), bank(db, admin_b)
+    request = QuestionCreate(library_id=private_id, payload=sample_question(), provenance=Provenance(
+        license="Synthetic public reuse", teaching_reuse_allowed=True, public_reuse_allowed=True,
+        license_url="https://example.test/license"))
+    created = create_question(db, teacher, request, "c1-shared-private-create", SEMANTIC_BUDGET)
+    submitted = submit_question(db, platform, UUID(created["question_id"]), Submit(revision=1,
+        target_library_id=public_id, authorization_statement="Synthetic public authorization"), "c1-shared-public-submit", SEMANTIC_BUDGET)
+    decide_question(db, platform, UUID(submitted["review_id"]), Decision(revision=1, decision="approved"),
+                    "c1-shared-public-decide", SEMANTIC_BUDGET)
+    publish_question(db, platform, UUID(submitted["review_id"]), Revision(revision=2), "c1-shared-public-publish", SEMANTIC_BUDGET)
+    copied = copy_question(db, teacher_b, CopyOrReference(source_version_id=UUID(submitted["version_id"]),
+        target_library_id=target_id, authorization_statement="Synthetic public reuse"), "c1-shared-cross-copy", SEMANTIC_BUDGET)
+    assert UUID(copied["question_id"]) != UUID(created["question_id"])
+    assert version_view(db, teacher_b, UUID(submitted["version_id"])).library_id == public_id

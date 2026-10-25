@@ -11,7 +11,7 @@ from app.domains.content.questions.budget import ContentBudget
 from app.domains.content.questions.models import (
     Question, QuestionDraft, QuestionDraftSource, QuestionPublication, QuestionReview, QuestionSource, QuestionVersion,
 )
-from app.domains.content.questions.policy import draft_query, require_draft, require_parent, require_version, review_manager, staff
+from app.domains.content.questions.policy import copy_source, draft_query, has_retained_public_grant, public_source_ids, require_draft, require_parent, require_version, review_manager, staff
 from app.domains.content.questions.schemas import DraftContent, QuestionPayload, SourcePointer, canonical_bytes, fingerprint
 from app.domains.content.questions.sources import check_publication, resolve_sources, retained_sources
 from app.domains.content.services import execute_command, locked, require_key
@@ -76,7 +76,9 @@ def check_lineage(db, version_id, target, statement):
             raise HTTPException(409, "复制来源固定版本不可用")
         _payload, sources = checked_version(db, version)
         parent = db.get(Question, version.question_id)
-        check_publication(version.provenance, db.get(Library, parent.library_id), target, statement, sources, reusing=True)
+        check_publication(version.provenance, db.get(Library, parent.library_id), target, statement, sources,
+                          reusing=True, public_origin=has_retained_public_grant(db, "question", version.id),
+                          public_source_ids=public_source_ids(db, "question", version.copied_from_version_id))
         version_id = version.copied_from_version_id
 
 
@@ -205,7 +207,9 @@ def submit_question(db, identity, question_id, request, key, budget=ContentBudge
         version, sources = _freeze(db, identity, parent, draft)
         target = require_library(db, identity, request.target_library_id, "submit")
         check_publication(version.provenance, source, target, request.authorization_statement, sources,
-                          reusing=source.id != target.id or draft.copied_from_version_id is not None)
+                          reusing=source.id != target.id or draft.copied_from_version_id is not None,
+                          public_origin=has_retained_public_grant(db, "question", version.id),
+                          public_source_ids=public_source_ids(db, "question", version.copied_from_version_id))
         check_lineage(db, draft.copied_from_version_id, target, request.authorization_statement)
         review = QuestionReview(version_id=version.id, target_library_id=target.id, submitter_id=identity.user.id,
                                 authorization_statement=request.authorization_statement)
@@ -236,7 +240,9 @@ def decide_question(db, identity, review_id, request, key, budget=ContentBudget(
             _payload, sources = checked_version(db, version)
             source = db.get(Library, parent.library_id)
             check_publication(version.provenance, source, target, review.authorization_statement, sources,
-                              reusing=source.id != target.id or version.copied_from_version_id is not None)
+                              reusing=source.id != target.id or version.copied_from_version_id is not None,
+                              public_origin=has_retained_public_grant(db, "question", version.id),
+                              public_source_ids=public_source_ids(db, "question", version.copied_from_version_id))
             check_lineage(db, version.copied_from_version_id, target, review.authorization_statement)
         review.state, review.reason = request.decision, request.reason
         review.reviewer_id, review.decided_at = identity.user.id, now()
@@ -267,7 +273,9 @@ def publish_question(db, identity, review_id, request, key, budget=ContentBudget
             raise HTTPException(409, "题目已停用，不能新发布")
         source = db.get(Library, parent.library_id)
         check_publication(version.provenance, source, target, review.authorization_statement, sources,
-                          reusing=source.id != target.id or version.copied_from_version_id is not None)
+                          reusing=source.id != target.id or version.copied_from_version_id is not None,
+                          public_origin=has_retained_public_grant(db, "question", version.id),
+                          public_source_ids=public_source_ids(db, "question", version.copied_from_version_id))
         check_lineage(db, version.copied_from_version_id, target, review.authorization_statement)
         previous = db.exec(select(QuestionPublication).where(QuestionPublication.review_id == review.id)).first()
         if previous:
@@ -291,17 +299,19 @@ def copy_question(db, identity, request, key, budget=ContentBudget()):
     initial = require_library(db, identity, request.target_library_id, "submit")
 
     def authorize():
-        require_library(db, identity, request.target_library_id, "submit")
-        require_version(db, identity, "question", request.source_version_id, published_only=True)
+        target = require_library(db, identity, request.target_library_id, "submit")
+        copy_source(db, identity, "question", request.source_version_id, target)
 
     def action():
-        version, parent, _projection = require_version(db, identity, "question", request.source_version_id, published_only=True)
+        target = require_library(db, identity, request.target_library_id, "submit")
+        version, parent, projection = copy_source(db, identity, "question", request.source_version_id, target)
         if parent.retired:
             raise HTTPException(409, "源题目已停用")
         payload, sources = checked_version(db, version)
         target = require_library(db, identity, request.target_library_id, "submit")
         check_publication(version.provenance, db.get(Library, parent.library_id), target,
-                          request.authorization_statement, sources, reusing=True)
+                          request.authorization_statement, sources, reusing=True, public_origin=projection.scope == "platform_public",
+                          public_source_ids=public_source_ids(db, "question", version.copied_from_version_id))
         check_lineage(db, version.copied_from_version_id, target, request.authorization_statement)
         content = DraftContent(payload=payload, provenance=version.provenance,
                                sources=tuple(SourcePointer(material_version_id=row.material_version_id, chunk_id=row.chunk_id) for row in sources))
@@ -320,13 +330,15 @@ def reference_question(db, identity, request, key, budget=ContentBudget()):
     initial = require_library(db, identity, request.target_library_id, "submit")
 
     def action():
-        version, parent, _projection = require_version(db, identity, "question", request.source_version_id, published_only=True)
+        target = require_library(db, identity, request.target_library_id, "submit")
+        version, parent, projection = copy_source(db, identity, "question", request.source_version_id, target)
         if parent.retired:
             raise HTTPException(409, "源题目已停用")
         _payload, sources = checked_version(db, version)
         target = require_library(db, identity, request.target_library_id, "submit")
         check_publication(version.provenance, db.get(Library, parent.library_id), target,
-                          request.authorization_statement, sources, reusing=True)
+                          request.authorization_statement, sources, reusing=True, public_origin=projection.scope == "platform_public",
+                          public_source_ids=public_source_ids(db, "question", version.copied_from_version_id))
         check_lineage(db, version.copied_from_version_id, target, request.authorization_statement)
         review = QuestionReview(version_id=version.id, target_library_id=target.id, submitter_id=identity.user.id,
                                 authorization_statement=request.authorization_statement)

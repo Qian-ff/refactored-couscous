@@ -3,8 +3,7 @@ from uuid import UUID
 
 from fastapi import HTTPException
 
-from app.domains.content.background_identity import load_identity
-from app.domains.content.questions.policy import require_teaching_course, require_version
+from app.domains.content.questions.policy import live_identity, require_teaching_course, require_version
 from app.domains.content.questions.schemas import QuestionPayload, StrictModel, canonical_bytes
 from app.domains.content.questions.services import checked_version
 
@@ -22,7 +21,7 @@ def resolve_assessment_questions(db, identity, course_id, version_ids):
     An existing exam scores its own snapshot; retirement never rewrites that snapshot.
     HTTP handlers must never let a student choose a `purpose` to call this interface.
     """
-    current = load_identity(db, identity.user.id, identity.login.id, identity.work_role)
+    current = live_identity(db, identity)
     course = require_teaching_course(db, current, course_id)
     if not 1 <= len(version_ids) <= 1000 or any(not isinstance(value, UUID) for value in version_ids):
         raise HTTPException(422, "须指定1至1000个固定版本UUID")

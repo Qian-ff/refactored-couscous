@@ -110,6 +110,24 @@ class LessonQuestion(SQLModel, table=True):
     question_version_id: UUID = Field(foreign_key="content_question_version.id")
 
 
+class LessonDraftQuestionOrigin(SQLModel, table=True):
+    __tablename__ = "content_lesson_draft_question_origin"
+    __table_args__ = (UniqueConstraint("lesson_id", "activity_id", "question_version_id", name="uq_lesson_draft_question_origin"),)
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    lesson_id: UUID = Field(foreign_key="content_lesson_draft.lesson_id", index=True)
+    activity_id: str = Field(max_length=64)
+    question_version_id: UUID = Field(foreign_key="content_question_version.id")
+
+
+class LessonQuestionOrigin(SQLModel, table=True):
+    __tablename__ = "content_lesson_question_origin"
+    __table_args__ = (UniqueConstraint("lesson_version_id", "activity_id", "question_version_id", name="uq_lesson_question_origin"),)
+    id: UUID = Field(default_factory=uuid4, primary_key=True)
+    lesson_version_id: UUID = Field(foreign_key="content_lesson_version.id", index=True)
+    activity_id: str = Field(max_length=64)
+    question_version_id: UUID = Field(foreign_key="content_question_version.id")
+
+
 class LessonReview(SQLModel, table=True):
     __tablename__ = "content_lesson_review"
     __table_args__ = (

@@ -54,19 +54,24 @@ def retained_sources(db, rows):
     return result
 
 
-def check_publication(provenance, source_library, target_library, statement, sources=(), *, reusing=False):
+def check_publication(provenance, source_library, target_library, statement, sources=(), *, reusing=False,
+                      public_origin=False, public_source_ids=frozenset()):
     if not statement.strip():
         raise HTTPException(422, "须声明本次教学使用和共享授权")
     if (source_library.school_id is not None and target_library.school_id is not None
-            and source_library.school_id != target_library.school_id):
+            and source_library.school_id != target_library.school_id and not public_origin):
         raise HTTPException(403, "学校私库不能直接跨校共享")
     for ref in sources:
-        if ref.school_id is not None and target_library.school_id is not None and ref.school_id != target_library.school_id:
+        public_ref = (ref.material_version_id, ref.chunk_id) in public_source_ids
+        if public_ref and not (ref.provenance.get("public_reuse_allowed") is True and ref.provenance.get("license")
+                               and ref.provenance.get("license_url")):
+            raise HTTPException(409, "保留公共来源缺少明确公开许可")
+        if ref.school_id is not None and target_library.school_id is not None and ref.school_id != target_library.school_id and not (public_origin or public_ref):
             raise HTTPException(403, "不能通过引用穿透学校私库")
     if reusing and not (provenance.get("license") and (
             provenance.get("teaching_reuse_allowed") is True or provenance.get("public_reuse_allowed") is True)):
         raise HTTPException(409, "来源没有明确的教学复用许可")
-    if target_library.scope == "platform_public":
+    if target_library.scope == "platform_public" or public_origin:
         for metadata in (provenance, *(ref.provenance for ref in sources)):
             if not (metadata.get("public_reuse_allowed") is True and metadata.get("license") and metadata.get("license_url")):
                 raise HTTPException(409, "公开复用须有明确许可和许可来源")
