@@ -319,7 +319,7 @@ for (const interruption of ["session", "unmount", "cancel"] as const) {
     await page.getByLabel("资料名称", { exact: true }).fill("D1取消文件准备")
     await page.getByLabel("资料文件", { exact: true }).setInputFiles({ name: "合成小文件.txt", mimeType: "text/plain", buffer: Buffer.from("仅用于摘要等待取消验证。") })
     await page.getByRole("button", { name: "上传并解析", exact: true }).click()
-    await expect(page.getByRole("status")).toContainText("正在读取文件并校验完整性")
+    await expect(page.locator(".lc-material-progress[role=status]")).toContainText("正在读取文件并校验完整性")
     await expect(page.getByRole("button", { name: "上传并解析", exact: true })).toBeDisabled()
     await expect.poll(() => page.evaluate(() => (window as unknown as { uploadGuard: { started: boolean } }).uploadGuard.started)).toBe(true)
     if (interruption === "session") {
