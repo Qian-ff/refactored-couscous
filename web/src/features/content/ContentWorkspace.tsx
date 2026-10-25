@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import { Button, Dialog, Field, Notice, PageContainer, Pagination, Panel, RecordList, SearchFilters, StatePanel } from "../../components/labconnect"
 import "./content.css"
 
@@ -6,7 +6,8 @@ import "./content.css"
 export type MaterialItem = Readonly<{
   versionId: string; title: string; originalName: string | null; libraryLabel: string; versionNo: number
   extraction: "queued" | "running" | "succeeded" | "failed" | "canceled"
-  publication: "draft" | "submitted" | "approved" | "rejected" | "published"
+  publication: "draft" | "submitted" | "approved" | "rejected" | "published" | "unpublished"
+  targetLibraryId?: string
   snippet?: string; locatorLabel?: string
   actions: Readonly<{ preview: boolean; download: boolean; edit: boolean; submit: boolean; review: boolean; publish: boolean }>
 }>
@@ -16,12 +17,13 @@ export type MaterialWorkspaceProps = Readonly<{
   items: readonly MaterialItem[]; total: number; offset: number; pageSize: number
   query: string; libraryId: string; libraries: readonly { id: string; label: string }[]
   canUpload: boolean; canManageLibrary: boolean
+  searchPlaceholder?: string; scopeNotice?: string
   onSearch: (query: string, libraryId: string) => void; onPage: (offset: number) => void; onRefresh: () => void
   onUpload: () => void; onManageLibrary: () => void
   onAction: (action: "preview" | "download" | "edit" | "submit" | "review" | "publish", item: MaterialItem) => void
 }>
 const extractionLabels = { queued: "排队解析", running: "正在解析", succeeded: "解析完成", failed: "解析失败", canceled: "解析已取消" }
-const publicationLabels = { draft: "草稿", submitted: "待审核", approved: "审核通过，待发布", rejected: "审核未通过", published: "已发布" }
+const publicationLabels = { draft: "草稿", submitted: "待审核", approved: "审核通过，待发布", rejected: "审核未通过", published: "已发布", unpublished: "本范围尚未发布" }
 const actionLabels = { preview: "定位预览", download: "下载原件", edit: "编辑草稿", submit: "提交审核", review: "审核资料", publish: "发布版本" }
 
 export function MaterialWorkspace(props: MaterialWorkspaceProps) {
@@ -30,15 +32,15 @@ export function MaterialWorkspace(props: MaterialWorkspaceProps) {
   const unsafe = props.audience === "student" && props.items.some(item => item.publication !== "published")
   return <PageContainer title="资料中心" description={props.audience === "student" ? "查找当前有权阅读的已发布资料与来源。" : "在获准范围提交资料，按固定版本审核与发布。"}
     actions={<>{props.audience === "staff" && props.canManageLibrary && <Button variant="secondary" onClick={props.onManageLibrary}>管理资料库</Button>}{props.audience === "staff" && props.canUpload && <Button onClick={props.onUpload}>上传资料</Button>}<Button variant="secondary" pending={props.state === "loading"} onClick={props.onRefresh}>刷新资料</Button></>}>
-    <Notice>只检索当前授权范围。扫描件、未解析或解析失败的文件没有可搜索正文；原件及定位内容打开时仍需校验权限。</Notice>
+    <Notice>{props.scopeNotice || "只检索当前授权范围。扫描件、未解析或解析失败的文件没有可搜索正文；原件及定位内容打开时仍需校验权限。"}</Notice>
     <Panel title={props.audience === "student" ? "可阅读资料" : "授权资料与版本"}>
-      <SearchFilters value={input} onChange={setInput} label="搜索资料" placeholder="标题、文件名、知识点或已提取正文" pending={props.state === "loading"}
+      <SearchFilters value={input} onChange={setInput} label="搜索资料" placeholder={props.searchPlaceholder || "标题、文件名、知识点或已提取正文"} pending={props.state === "loading"}
         onSearch={() => props.onSearch(input.trim(), library)} onClear={() => { setInput(""); setLibrary(""); props.onSearch("", "") }}>
         <Field label="资料范围"><select value={library} onChange={event => setLibrary(event.target.value)}><option value="">全部有权范围</option>{props.libraries.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></Field>
       </SearchFilters>
       {unsafe ? <StatePanel kind="forbidden" title="资料范围需要重新确认" description="当前返回的资料不符合学生阅读范围，请重新读取。" retry={props.onRefresh} />
         : props.state !== "ready" ? <StatePanel kind={props.state} description={props.error} retry={["error", "offline"].includes(props.state) ? props.onRefresh : undefined} />
-        : <>{props.items.length ? <RecordList items={props.items} itemKey={item => item.versionId} title={item => item.title}
+        : <>{props.items.length ? <RecordList items={props.items} itemKey={item => item.versionId + ":" + (item.targetLibraryId || "")} title={item => item.title}
           fields={[{ label: "原文件", value: item => item.originalName || "知识点文本" }, { label: "所属范围", value: item => item.libraryLabel },
             { label: "固定版本", value: item => `第 ${item.versionNo} 版` }, { label: "解析状态", value: item => extractionLabels[item.extraction] },
             { label: "发布状态", value: item => publicationLabels[item.publication] }, { label: "匹配与定位", value: item => item.snippet ? <><p className="lc-material-snippet">{item.snippet}</p><span>{item.locatorLabel || "定位待核对"}</span></> : "没有可用的正文匹配片段" }]}
@@ -50,21 +52,23 @@ export function MaterialWorkspace(props: MaterialWorkspaceProps) {
 }
 
 export type PreviewChunk = Readonly<{ id: string; locatorLabel: string; text: string }>
-export function MaterialPreview({ title, versionLabel, state, chunks, error, canDownload, onDownload, onRetry, onClose }: {
+export function MaterialPreview({ title, versionLabel, state, chunks, error, canDownload, onDownload, onRetry, onClose, hasMore, loadingMore, onMore }: {
   title: string; versionLabel: string; state: WorkspaceState; chunks: readonly PreviewChunk[]; error?: string
   canDownload: boolean; onDownload: () => void; onRetry: () => void; onClose: () => void
+  hasMore?: boolean; loadingMore?: boolean; onMore?: () => void
 }) {
   return <Dialog title="资料定位预览" long onClose={onClose}><h3 className="lc-material-title">{title}</h3><p>{versionLabel}</p>
     <Notice>预览为提取文字及原始页段定位。查看版式、图表和公式请下载有权原件；不在此渲染 Office 或执行文件内容。</Notice>
     {state !== "ready" ? <StatePanel kind={state} description={error} retry={["error", "offline"].includes(state) ? onRetry : undefined} /> : chunks.length ? <ol className="lc-material-chunks">{chunks.map(chunk => <li key={chunk.id}><h3>{chunk.locatorLabel}</h3><p>{chunk.text}</p></li>)}</ol> : <StatePanel kind="empty" title="暂无可预览文字" description="扫描件或未成功解析的资料不提供正文定位。" />}
-    <div className="lc-actions"><Button variant="secondary" onClick={onClose}>关闭预览</Button>{canDownload && <Button onClick={onDownload}>下载有权原件</Button>}</div>
+    <div className="lc-actions">{hasMore && onMore && <Button variant="secondary" pending={loadingMore} onClick={onMore}>读取后续页段</Button>}<Button variant="secondary" onClick={onClose}>关闭预览</Button>{canDownload && <Button onClick={onDownload}>下载有权原件</Button>}</div>
   </Dialog>
 }
 
 export type UploadProgress = Readonly<{ state: "idle" | "uploading" | "queued" | "running" | "failed" | "uncertain"; sentBytes: number; totalBytes: number; error?: string }>
-export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose }: {
+export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose, children }: {
   targets: readonly { id: string; label: string }[]; progress: UploadProgress
   onSubmit: (input: { file: File; title: string; libraryId: string }) => void; onCancel: () => void; onClose: () => void
+  children?: ReactNode
 }) {
   const [title, setTitle] = useState(""), [library, setLibrary] = useState(targets[0]?.id || ""), [file, setFile] = useState<File>(), [error, setError] = useState("")
   const busy = ["uploading", "queued", "running"].includes(progress.state), uncertain = progress.state === "uncertain"
@@ -81,6 +85,7 @@ export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose 
       <Field label="资料名称"><input value={title} onChange={event => setTitle(event.target.value)} required maxLength={200} disabled={busy || uncertain} /></Field>
       <Field label="提交范围"><select value={library} onChange={event => setLibrary(event.target.value)} required disabled={busy || uncertain || !targets.length}>{!targets.length && <option value="">暂无可提交范围</option>}{targets.map(target => <option key={target.id} value={target.id}>{target.label}</option>)}</select></Field>
       <Field label="资料文件" hint="PDF / PPTX / DOCX 最多 20 MiB，TXT 最多 1 MiB。扫描件暂不支持 OCR。"><input type="file" accept=".pdf,.pptx,.docx,.txt" disabled={busy || uncertain} onChange={event => setFile(event.target.files?.[0])} /></Field>
+      {children}
       {(error || progress.error) && <Notice kind="error">{error || progress.error}</Notice>}
       {progress.state !== "idle" && <div className="lc-material-progress" role="status"><p>{({ uploading: "正在传输原件", queued: "原件已接收，排队解析", running: "正在解析资料", failed: "处理失败，请核对原因后重试", uncertain: "结果尚未确认，保留本次文件与参数重试" })[progress.state]}</p>
         {progress.state === "uploading" && <><progress aria-label="文件上传进度" value={percent} max={100} /><span>{percent}%（{progress.sentBytes} / {progress.totalBytes} 字节）</span></>}</div>}
