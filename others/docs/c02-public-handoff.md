@@ -25,7 +25,7 @@
 - `stress.json`：真实 384MiB OOM、pids64、1CPU 节流、封存输入20MiB及44MiB临时区、stdout16MiB/stderr64KiB上限。
 - `linux-lock.json`：真实 Linux Docker 数据卷，独立进程互斥、释放接管、稳定锁 inode。
 - `faults.json`：真实暂停解析61秒触发60秒期限、确认停止；强制退出本树控制端后恢复、拒绝旧任务迟到启动、新任务成功。
-- `sandbox.json`：当前锁定镜像四格式、同绑定重放/异绑定拒绝、实际权限拒绝、双客户端互斥、接收中停止、重启终止凭据。此报告仅标记自身检查范围；资源/HTTP由独立报告证明。
+- `sandbox.json`：原候选镜像四格式、同绑定重放/异绑定拒绝、实际权限拒绝、双客户端互斥、接收中停止、重启终止凭据。此报告仅标记自身检查范围；资源/HTTP由独立报告证明；返修后新镜像见 `sandbox-review-fix.json`。
 - `gateway.json`：真实 Caddy 与合成消费正文上游，11项路径/方法/上传22020096字节与其他路径2000000字节边界、公开文档404。仅本机测试，非 ECS 证据。
 - `compose-check.json`：Docker compose真实解析（空占位env、tools profile），未部署。
 - `backend-regression.txt`：完整公共、core、content共152项及55 subtests；`asr-regression.txt`：既有ASR传输回归4项（不等同真实语音推理）。
@@ -42,7 +42,7 @@ A 审查提交 `8ebaa7a2c3782fe3c1c1fc9ad1cfe1b01bbcef22`，代码修复提交
 - Docker stdout/stderr 独立循环读至 EOF，各自累计上限仍为64KiB；超限或12秒超时终止、关闭管道并回收子进程，避免满管道导致 wait 挂起。缺对象仍须 Docker 健康才能确认不存在。
 - 长期回归：`others/deploy/content/test_control_boundary.py`。可用独立候选 Python 执行 `-m unittest discover -s others/deploy/content -p test_control_boundary.py -v`。Linux验证只读挂载五个必要源码，无配置/资料库，用隔离tmpfs生成合成链接/FIFO/设备。
 - `review-fix-windows.txt`：15项中13项适用并通过，2项POSIX特殊文件不适用；实际Windows文件/目录符号链接、硬链接和替换测试均执行。`review-fix-linux.txt`：15项全部通过。输出协议测试仅桩表示容器退出，真实内核文件句柄与真实分片/超限/超时子进程均执行，不冒称真实恶意容器攻击。
-- 新镜像 `sha256:8f03fd2feddb4df71cef70c4f7a8c0520aba2e716f8736d77f668b6833ea25b3` 来自修复提交 `d56191b2`，闭包指纹 `22d6db8962f16d34f7eac8b60044ab5cff9c44097a383e5c3b8b6add2750bd51`。`sandbox.json` 已更新到新镜像；`stress-review-fix.json`、`faults-review-fix.json`分别记录本轮资源和恢复复测，历史报告保留。
+- 新镜像 `sha256:8f03fd2feddb4df71cef70c4f7a8c0520aba2e716f8736d77f668b6833ea25b3` 来自修复提交 `d56191b2`，闭包指纹 `22d6db8962f16d34f7eac8b60044ab5cff9c44097a383e5c3b8b6add2750bd51`。`sandbox-review-fix.json`、`stress-review-fix.json`、`faults-review-fix.json`分别记录本轮四格式/屏障、资源和恢复复测。历史 `sandbox.json` 按上一轮索引哈希逐字节保留，历史manifest另存 `final-manifest-e43da754.json`。
 - 最终提交的真实API、HTTP/浏览器和源码索引，以 `final-manifest.json` 为准；不把旧API来源或镜像构建SHA冒称最终运行SHA。
 
 ## 接收与剩余边界
