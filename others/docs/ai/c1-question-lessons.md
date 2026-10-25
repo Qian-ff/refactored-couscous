@@ -1,6 +1,6 @@
 # C1：题库与固定关卡版本，先规划后实施
 
-当前只准备与只读核对；业务尚未开工。原C-02资料后端/worker由A副接续、前端由D接续，不再等待C收尾。全局交接见[首版流程](../delivery-workflow.md)。**先在C副2切Plan、强度max，只发送第一段规划提示；方案定案后切Default、强度medium，才手动发送第二段实现Goal。** 工具不能切模式时如实说明具体待切项。
+当前C1已由用户完成首次规划并手动启动，最新领域候选84355fec等待[A副T1迁移与真实PG入口](c1-schema-pg-integration.md)，随后C续办15项领域PG；不重复首次Plan或另开Goal。原C-02资料后端/worker由A副接续、前端由D接续。全局交接见[首版流程](../delivery-workflow.md)。以下两段保留为历史首次启动模板：当时要求先Plan/max规划，定案后Default/medium手动实现；不是当前未开工或重启指令。
 
 `/plan`用于切换计划模式，`/goal`用于设置持续目标，两者不是互相替代的命令；max/medium是另一个推理强度设置。命令依据：[OpenAI Plan说明](https://developers.openai.com/blog/run-long-horizon-tasks-with-codex)、[Goals说明](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)。先max规划、再medium实施是本项目安排。
 
@@ -38,4 +38,4 @@ C02资料遗留由A副/D接续；C1只规划content/questions与content/lessons�
 
 </details>
 
-本文件是可复制首次启动材料，不是C1已运行或已完成的证据。当前只读核对可指出必要遗漏，责任方普通续办不重复全文送审。若旧C02系统Goal占用而客户端拒绝创建C1，先保留Git候选/未完成交接，由用户手动`/goal clear`清除当前系统目标后再启动C1；不伪报旧C02已完成，也不修改应用内部数据库。
+本文件下方模板是历史首次启动材料，不是C1完成证据；当前执行状态见顶部及实际Git/交接。责任方普通续办不重复全文送审。历史首次启动若被旧C02系统Goal占用，先保留Git候选/未完成交接，再由用户手动处理系统目标；不能伪报旧C02完成或修改应用内部数据库。

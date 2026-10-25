@@ -1,6 +1,6 @@
 # 六个协作身份与阶段Goal
 
-**v3当前任务入口**：[全项目路线/逐聊天交接](../delivery-workflow.md)、[A副1生效包](c02-public-integration.md)、[D1资料前端](d1-content-ui.md)、[C1首次启动词](c1-question-lessons.md)、[G后续验收](qa-final-acceptance.md)。B2按固定内容版本/学生DTO/受控答案服务放行；以下旧Goal为历史/后续参考，角色与顺序以v3为准。
+**v3当前任务入口**：[全项目路线/逐聊天交接](../delivery-workflow.md)、[A副1生效包](c02-public-integration.md)、[D1资料页主线接收](../material-ui-main-reception.md)、[C1专用迁移与PG接入T1](c1-schema-pg-integration.md)、[C1历史首次启动词](c1-question-lessons.md)、[G后续验收](qa-final-acceptance.md)。B2按固定内容版本/学生DTO/受控答案服务放行；以下旧Goal为历史/后续参考，角色与顺序以v3为准。
 
 先读[统一协作规范](../coordination.md)与[工作包模板](work-package-template.md)。v2由责任角色自查及编制工作包，普通已授权任务自主续办，重大事项判断后集中交A决策；C-01/C-02业务证据保留，C02剩余工作转A副/D，C后续新模块首次手动启动。E监控backend/worker并C、前端并D，F原生已并A副，旧任务书仅历史保留；G按里程碑启用，A副计入四聊天并行上限。
 

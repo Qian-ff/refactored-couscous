@@ -4,16 +4,16 @@
 
 ## 当前交接与开工
 
-原C-02整包尚未验收。初始冻结候选`ecb7129497d1f6a69daf09df6db3f2f30537d7ba`的纯检查/未跑项保留历史原义；现已[接收后台返修及40feea4基础运行里程碑](c02-main-reception.md)，40fe基础验证对应契约0.4.0；现行源码契约0.4.1、迁移仍为c02d0c00001。共享激活、原库保留、一键入口和三端学生基本流程已核验，D已接真实API，资料UI及正文检索增量尚未完成。云端旧版本另见[云端ASR交接](cloud-asr-handoff.md)，未随本机源码更新。
+原C-02整包尚未验收。初始冻结候选`ecb7129497d1f6a69daf09df6db3f2f30537d7ba`的纯检查/未跑项保留历史原义；现已[接收后台及正文检索](c02-main-reception.md)，40fe与cff分别保留基础运行/检索增量证据。2026-10-26已[接收D资料页源码](material-ui-main-reception.md)，本轮合并版本待激活和三端增量复验，原生保存未验；现行源码契约0.4.1、迁移仍为c02d0c00001。云端旧版本另见[云端ASR交接](cloud-asr-handoff.md)，未随本机源码更新。
 
 - **A副1**承接C-02全部后端/worker遗留实现、修复、公共接入和实测；[生效工作包](ai/c02-public-integration.md)与[具体委托](../contracts/execution-delegations.json)共同限制写范围。
 - **D1**承接C-02资料管理、检索、定位预览和下载前端，按[D1工作包](ai/d1-content-ui.md)立即开发可独立验证的组件，真实API到达后接通。
-- **C1领域候选**已冻结91bd07d068bec252da596d1ac390b7a1c75c15ae，65项纯/本地检查通过、1项XLSX缺依赖跳过，14项PG候选未跑；当前等待A副2具体委托及实际公共技术基线，非C1整包验收，不恢复旧C-02或自动启动后续模块。
+- **C1领域候选**最新84355fecf0ddb0edb1dc9bcfd030c2f8ee7cd695，保留91bd历史、65项纯/本地检查及1项XLSX缺依赖跳过；接收槽修复另有3项本地I/O通过，15项PG未跑。A副先按[T1生效委托](ai/c1-schema-pg-integration.md)交迁移/专用非owner入口，再由C跑领域PG；T2仍须具体委托，非C1整包完成。
 - **B**接收新版B2输入和门禁，当前只读准备。**规范编制聊天**只读归档，不并行改main。
 
 执行SHA由A在提交生效规则后逐一实际发送，见[落地记录](workflow-v3-rollout.md)。委托中的baseline_sha为发布前已有祖先，不能当成业务验收基线；执行方还须包含A消息明确的完整发布SHA。保留本树提交后普通合并，不重置、清理或改写历史。
 
-D1已交[组件候选及接口接缝](d1-component-candidate.md)，尚未作为真实UI闭环验收。A已向D正式放行40feea4主线8000 API；D正在继续真实资料流程，A副同包补正文检索，后续按A接收的完整SHA消费SDK。
+D1的[早期组件候选](d1-component-candidate.md)保留历史；最新af3ccf6候选已接收，真实闭环/取消修复证据及合并后复验边界见[资料页主线记录](material-ui-main-reception.md)。A发送最终main SHA后由A副激活、重建，主线验证期间保持该HEAD，避免无关文档提交使来源校验失效。
 
 ## 文件责任与接口
 

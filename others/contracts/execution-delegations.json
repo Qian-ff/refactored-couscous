@@ -109,13 +109,46 @@
       "authorization_source": "Human-started workflow v3 Goal, 2026-10-24",
       "candidate_file_count": 49,
       "responsibility_transfer": "A-executor owns all unfinished C-02 backend/worker repairs and checks; D owns material frontend. C plans separate questions/lessons and does not edit frozen C-02 files.",
-      "phase": "post_main_search_activation",
+      "phase": "post_main_material_validation",
+      "received_material_ui_candidate_sha": "af3ccf62443b892c42f378e6fdc17ff8c2a9cc7a",
+      "material_ui_main_reception_sha": "9978087a6be8aaca8bc4ceff4f52dcc3e988f5e5",
+      "material_validation_scope": "Activate A-dispatched final main SHA, verify Open-Materials.cmd and one ordinary material workflow; rebuild affected clients and validate current default native save without implementing new native capability. Reuse prior checks; preserve services and data. C1-T1 is a separate package after this milestone.",
       "received_candidate_sha": "578d2e869393ac96a25a1a21e6d9619542287a1e",
       "main_reception_sha": "0266e0b13b6a74244d30f9b3a91ba0389c760f27",
       "post_main_handoff": "others/docs/c02-main-reception.md",
       "validation_scope": "Essential demo checks only per human 2026-10-25: shared activation, preserved database migration, ordinary API/permissions/upload/download, affected client build/start. No new advanced security or stress work, Daybreak, paid audit, ECS deployment or push.",
       "received_search_candidate_sha": "d2ec17e842fe8af231e94d974469fb3912da4425",
       "search_main_reception_sha": "7c7570dee7680e0356517a4e8ddb71d2cbe307d1"
+    },
+    "c1-schema-pg-integration": {
+      "executor": "A-executor",
+      "approved_by": "A-main",
+      "status": "active",
+      "baseline_sha": "cff0d654b1801671fba453dd728c0ba3d3a4e3c4",
+      "candidate_sha": "84355fecf0ddb0edb1dc9bcfd030c2f8ee7cd695",
+      "work_package": "others/docs/ai/c1-schema-pg-integration.md",
+      "activation_requirement": "A-main dispatches the committed full execution SHA. Begin after the material-main validation milestone; no shared-runtime mutation while D/main acceptance is active.",
+      "allowed_paths": [
+        "others/backend/app/domains/content/questions/",
+        "others/backend/app/domains/content/lessons/",
+        "others/backend/app/models.py",
+        "others/backend/app/alembic/versions/c1d0c000001_questions_lessons.py",
+        "others/backend/conftest.py",
+        "others/backend/tests/test_c1_schema.py",
+        "others/deploy/content/database.py",
+        "others/docs/c1-public-handoff.md",
+        "others/reports/c1-public/t1/"
+      ],
+      "receive_only_paths": [
+        "others/backend/app/domains/content/questions/",
+        "others/backend/app/domains/content/lessons/"
+      ],
+      "domain_edit_rule": "Receive the exact frozen candidate unchanged. C retains all question/lesson source and fixture repairs after T1; A-executor edits only the listed public files.",
+      "purpose": "Register 23 tables, add compatible static migration and necessary immutable-version integrity, establish safelab_c1_test with a separate non-owner runtime, then deliver a technical SHA for C's 15 domain PG checks. No main schema activation, public release, dependencies, runner, HTTP/SDK, native implementation or push.",
+      "authorization_thread": "01a1544b-7eb1-77f1-9f83-52fa8510503c",
+      "authorization_source": "Human-started C1 and workflow v3; A-main authorized public successor work on unified resume 2026-10-26",
+      "phase": "schema_and_pg_entry",
+      "validation_scope": "Relevant ordinary migration, non-owner DML and version/draft/review integrity only. No main database reset or test, repeated full matrices, advanced security, stress, Daybreak, cloud deployment or paid resources. T2 requires a separate explicit grant."
     },
     "coordination-v1-validation": {
       "executor": "A-executor",
