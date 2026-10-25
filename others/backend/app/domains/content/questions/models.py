@@ -185,6 +185,7 @@ class TransferTask(SQLModel, table=True):
     work_role: str = Field(max_length=20)
     input_hash: str = Field(max_length=64)
     expected_bytes: int = Field(default=0, sa_column=Column(BigInteger, nullable=False))
+    input_sealed: bool = False
     file_key: str = Field(max_length=100, unique=True)
     result_hash: str | None = Field(default=None, max_length=64)
     result_bytes: int = Field(default=0, sa_column=Column(BigInteger, nullable=False))
@@ -205,7 +206,11 @@ class TransferTask(SQLModel, table=True):
 
 class ExportVersion(SQLModel, table=True):
     __tablename__ = "content_question_export_version"
-    __table_args__ = (UniqueConstraint("task_id", "version_id", name="uq_question_export_version"),)
+    __table_args__ = (
+        UniqueConstraint("task_id", "version_id", name="uq_question_export_version"),
+        UniqueConstraint("task_id", "ordinal", name="uq_question_export_ordinal"),
+        CheckConstraint("ordinal BETWEEN 0 AND 999", name="ck_question_export_ordinal"),
+    )
     id: UUID = Field(default_factory=uuid4, primary_key=True)
     task_id: UUID = Field(foreign_key="content_question_transfer_task.id", index=True)
     version_id: UUID = Field(foreign_key="content_question_version.id")
