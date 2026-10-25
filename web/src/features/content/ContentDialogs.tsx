@@ -1,22 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { ContentService, type Capabilities, type LibraryView, type SourceMetadata, type VersionView } from "../../client"
-import { Button, Dialog, Field, Notice, RecordList } from "../../components/labconnect"
+import { Button, Dialog, Field, Notice } from "../../components/labconnect"
 import { useCommand, useResource } from "../../components/labconnect/hooks"
 import { MaterialPreview, MaterialUpload, type UploadProgress } from "./ContentWorkspace"
 import { locatorLabel } from "./material-adapter"
 import { SourceFields } from "./SourceFields"
+import { SubmitTargetChooser } from "./ScopeSelectors"
 
 type Done = { onClose: () => void; onDone: (message: string) => void }
 type Target = { id: string; label: string }
 export function ContentPreview({ version, onClose, onDownload }: { version: VersionView; onClose: () => void; onDownload: () => void }) {
-  const [after, setAfter] = useState(0)
+  const match = version.search_match
+  const [after, setAfter] = useState(match?.kind === "chunk" && match.chunk_id && match.ordinal != null ? Math.max(0, match.ordinal - 1) : 0)
   const resource = useResource(useCallback(async (signal: AbortSignal) => (await ContentService.versionChunks({ path: { version_id: version.version_id }, query: { library_id: version.binding?.target_library_id || version.library_id, after, limit: 30 }, signal })).data, [version.version_id, version.library_id, version.binding?.target_library_id, after]))
   return <MaterialPreview title={version.title} versionLabel={`第 ${version.version_no} 版 · 按原文顺序分页读取`} state={resource.loading ? "loading" : resource.error ? resource.status === 403 ? "forbidden" : "error" : "ready"}
-    chunks={(resource.data?.items || []).map(chunk => ({ id: chunk.id, text: chunk.text, locatorLabel: locatorLabel(chunk.locator) }))} error={resource.error} canDownload={!!version.actions?.download} onDownload={onDownload} onClose={onClose} onRetry={resource.reload}
+    chunks={(resource.data?.items || []).map(chunk => ({ id: chunk.id, text: chunk.text, locatorLabel: locatorLabel(chunk.locator), isMatch: match?.kind === "chunk" && match.chunk_id === chunk.id }))} error={resource.error} canDownload={!!version.actions?.download} onDownload={onDownload} onClose={onClose} onRetry={resource.reload}
     hasMore={resource.data?.next_ordinal != null} onMore={() => { if (resource.data?.next_ordinal != null) setAfter(resource.data.next_ordinal) }} />
 }
 
 export function ContentUpload({ targets, capabilities, version, onClose, onDone }: Done & { targets: readonly Target[]; capabilities?: Capabilities; version?: VersionView }) {
+  const [target, setTarget] = useState(targets[0]?.id || ""), [targetLabel, setTargetLabel] = useState(targets[0]?.label || "")
   const [source, setSource] = useState<SourceMetadata>(version?.source_metadata || { origin: "upload" }), [encoding, setEncoding] = useState<"utf-8" | "gb18030">("utf-8"), [progress, setProgress] = useState<UploadProgress>({ state: "idle", sentBytes: 0, totalBytes: 0 })
   const uploadId = useRef<string | undefined>(undefined), controller = useRef<AbortController | undefined>(undefined), command = useCommand(), cancel = useCommand()
   useEffect(() => () => controller.current?.abort(), [])
@@ -41,7 +44,7 @@ export function ContentUpload({ targets, capabilities, version, onClose, onDone 
     if (result) onDone("原件已由服务端接收，解析任务已建立；请读取任务状态，尚未审核或发布。")
     else setProgress(previous => ({ ...previous, state: "uncertain", error: "本次结果尚未确认。保留原文件和参数重试，或确认取消。" }))
   }
-  return <MaterialUpload initialTitle={version?.title} initialLibraryId={version?.library_id} targets={version ? [{ id: version.library_id, label: "原资料所属库 · 新固定版本" }] : targets} progress={{ ...progress, error: cancel.error || command.error || progress.error }} onClose={onClose} onSubmit={input => { void submit(input) }} onCancel={async () => {
+  return <MaterialUpload initialTitle={version?.title} initialLibraryId={version?.library_id} selectedLibraryId={version?.library_id || target} targetControl={version ? undefined : <SubmitTargetChooser value={target} label={targetLabel} onChange={(id, label) => { setTarget(id); setTargetLabel(label) }} disabled={progress.state === "uploading" || progress.state === "uncertain"} />} targets={version ? [{ id: version.library_id, label: "原资料所属库 · 新固定版本" }] : targets} progress={{ ...progress, error: cancel.error || command.error || progress.error }} onClose={onClose} onSubmit={input => { void submit(input) }} onCancel={async () => {
     controller.current?.abort()
     if (!uploadId.current) { setProgress(previous => ({ ...previous, state: "uncertain", error: "上传标识尚未确认。请保留原参数重试，再核对取消结果。" })); return }
     const result = await cancel.run("cancel-upload:" + uploadId.current, key => ContentService.cancelUpload({ path: { upload_id: uploadId.current! }, headers: { "Idempotency-Key": key } }))
@@ -72,31 +75,30 @@ export function ContentEdit({ version, library, onClose, onDone, onNewVersion }:
     </form>
   </Dialog>
 }
-export function ContentSubmit({ version, targetLabel, targets, onClose, onDone }: Done & { version: VersionView; targetLabel: string; targets: readonly Target[] }) {
+export function ContentSubmit({ version, targetLabel, onClose, onDone }: Done & { version: VersionView; targetLabel: string }) {
   const [statement, setStatement] = useState(""), [targetId, setTargetId] = useState(version.binding?.target_library_id || version.library_id), action = useCommand()
+  const [selectedLabel, setSelectedLabel] = useState(targetLabel)
   return <Dialog title="提交当前版本审核" busy={action.pending} onClose={onClose}><p>{version.title} · 第 {version.version_no} 版</p><p>目标范围：{targetLabel}</p>
     <Notice>审核和发布仅绑定当前版本与这个目标。向其他范围共享须选择获准范围，并重新审核整份原件授权。</Notice>
     <form className="lc-form" onSubmit={async e => { e.preventDefault(); if (!statement.trim()) return
       const body = { version_id: version.version_id, target_library_id: targetId, authorization_statement: statement.trim() }
       const result = await action.run(JSON.stringify(body), key => ContentService.submitReview({ body, headers: { "Idempotency-Key": key } }))
       if (result) onDone("服务端已接收该版本的审核申请，尚未发布。")
-    }}><Field label="提审目标范围"><select value={targetId} onChange={e => setTargetId(e.target.value)} required disabled={action.pending}>{!targets.some(row => row.id === targetId) && <option value={targetId}>{targetLabel}</option>}{targets.map(row => <option key={row.id} value={row.id}>{row.label}</option>)}</select></Field>
+    }}><SubmitTargetChooser fieldLabel="提审目标范围" value={targetId} label={selectedLabel} onChange={(id, label) => { setTargetId(id); setSelectedLabel(label) }} disabled={action.pending} />
       <Field label="整份原件授权说明"><textarea value={statement} onChange={e => setStatement(e.target.value)} required maxLength={2000} disabled={action.pending} /></Field>
       {action.error && <Notice kind="error">{action.error}</Notice>}<div className="lc-actions"><Button variant="secondary" disabled={action.pending} onClick={onClose}>取消提审</Button><Button type="submit" pending={action.pending}>提交审核申请</Button></div></form>
   </Dialog>
 }
-export function LibraryEdit({ libraries, onSelect, onClose }: { libraries: readonly LibraryView[]; onSelect: (library: LibraryView) => void; onClose: () => void }) {
-  return <Dialog title="可管理的资料库" long onClose={onClose}><RecordList items={libraries} itemKey={row => row.id} title={row => row.title} fields={[{ label: "范围", value: row => row.scope }, { label: "状态", value: row => row.active ? "启用" : "停用" }]} actions={row => <Button variant="secondary" onClick={() => onSelect(row)}>修改资料库</Button>} /><Button variant="secondary" onClick={onClose}>关闭资料库管理</Button></Dialog>
-}
 export function TextMaterial({ targets, onClose, onDone }: Done & { targets: readonly Target[] }) {
   const [title, setTitle] = useState(""), [text, setText] = useState(""), [target, setTarget] = useState(targets[0]?.id || ""), [source, setSource] = useState<SourceMetadata>({ origin: "upload" }), action = useCommand()
+  const [targetLabel, setTargetLabel] = useState(targets[0]?.label || "")
   return <Dialog title="录入授权知识点" long busy={action.pending} onClose={onClose}><form className="lc-form" onSubmit={async e => { e.preventDefault(); if (!title.trim() || !text.trim()) return
     const body = { title: title.trim(), text, library_id: target, source_metadata: source }
     const result = await action.run(JSON.stringify(body), key => ContentService.createText({ body, headers: { "Idempotency-Key": key } }))
     if (result) onDone("服务端已保存知识点固定版本；尚未审核或发布。")
   }}><Field label="知识点名称"><input value={title} onChange={e => setTitle(e.target.value)} required maxLength={200} disabled={action.pending} /></Field>
     <Field label="知识点内容" hint="最多1 MiB UTF-8文字。"><textarea value={text} onChange={e => setText(e.target.value)} required maxLength={1048576} disabled={action.pending} /></Field>
-    <Field label="提交范围"><select value={target} onChange={e => setTarget(e.target.value)} required disabled={action.pending}>{targets.map(row => <option key={row.id} value={row.id}>{row.label}</option>)}</select></Field>
+    <SubmitTargetChooser value={target} label={targetLabel} onChange={(id, label) => { setTarget(id); setTargetLabel(label) }} disabled={action.pending} />
     <SourceFields value={source} onChange={setSource} disabled={action.pending} />{action.error && <Notice kind="error">{action.error}</Notice>}
     <div className="lc-actions"><Button variant="secondary" disabled={action.pending} onClick={onClose}>取消录入</Button><Button type="submit" pending={action.pending}>保存知识点</Button></div></form></Dialog>
 }

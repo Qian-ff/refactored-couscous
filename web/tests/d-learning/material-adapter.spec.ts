@@ -24,3 +24,13 @@ test("页段定位仅呈现标量字段，不拼接HTML", () => {
   expect(locatorLabel({ kind: "paragraph", position: 2, part: 1 })).toBe("第 2 段 · 分片 1")
   expect(locatorLabel({ page: { html: "untrusted" } })).toBe("原文定位")
 })
+test("仅chunk命中携带页段，输入文字、标题与文件名命中不造定位", () => {
+  const row = version()
+  row.search_match = { kind: "chunk", snippet: "真实正文片段", chunk_id: "chunk-2", ordinal: 2, locator: { kind: "paragraph", position: 2, part: 1 } }
+  expect(materialItem(row, "范围")).toMatchObject({ snippet: "真实正文片段", locatorLabel: "第 2 段 · 分片 1" })
+  for (const kind of ["input_text", "title", "filename"] as const) {
+    row.search_match = { kind, snippet: "实际匹配片段", locator: { kind: "paragraph", position: 999 } }
+    expect(materialItem(row, "范围").locatorLabel).toContain("无页段定位")
+    expect(materialItem(row, "范围").locatorLabel).not.toContain("999")
+  }
+})

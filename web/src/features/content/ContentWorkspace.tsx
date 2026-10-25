@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import { Button, Dialog, Field, Notice, PageContainer, Pagination, Panel, RecordList, SearchFilters, StatePanel } from "../../components/labconnect"
 import "./content.css"
 
@@ -18,6 +18,7 @@ export type MaterialWorkspaceProps = Readonly<{
   query: string; libraryId: string; libraries: readonly { id: string; label: string }[]
   canUpload: boolean; canManageLibrary: boolean
   searchPlaceholder?: string; scopeNotice?: string
+  filterControls?: ReactNode; onClear?: () => void
   onSearch: (query: string, libraryId: string) => void; onPage: (offset: number) => void; onRefresh: () => void
   onUpload: () => void; onManageLibrary: () => void
   onAction: (action: "preview" | "download" | "edit" | "submit" | "review" | "publish", item: MaterialItem) => void
@@ -28,6 +29,7 @@ const actionLabels = { preview: "定位预览", download: "下载原件", edit: 
 
 export function MaterialWorkspace(props: MaterialWorkspaceProps) {
   const [input, setInput] = useState(props.query), [library, setLibrary] = useState(props.libraryId)
+  useEffect(() => { setLibrary(props.libraryId) }, [props.libraryId])
   // Fail closed if a future adapter accidentally passes staff-only records to the student view.
   const unsafe = props.audience === "student" && props.items.some(item => item.publication !== "published")
   return <PageContainer title="资料中心" description={props.audience === "student" ? "查找当前有权阅读的已发布资料与来源。" : "在获准范围提交资料，按固定版本审核与发布。"}
@@ -35,15 +37,16 @@ export function MaterialWorkspace(props: MaterialWorkspaceProps) {
     <Notice>{props.scopeNotice || "只检索当前授权范围。扫描件、未解析或解析失败的文件没有可搜索正文；原件及定位内容打开时仍需校验权限。"}</Notice>
     <Panel title={props.audience === "student" ? "可阅读资料" : "授权资料与版本"}>
       <SearchFilters value={input} onChange={setInput} label="搜索资料" placeholder={props.searchPlaceholder || "标题、文件名、知识点或已提取正文"} pending={props.state === "loading"}
-        onSearch={() => props.onSearch(input.trim(), library)} onClear={() => { setInput(""); setLibrary(""); props.onSearch("", "") }}>
+        onSearch={() => props.onSearch(input.trim(), library)} onClear={() => { setInput(""); setLibrary(""); if (props.onClear) props.onClear(); else props.onSearch("", "") }}>
         <Field label="资料范围"><select value={library} onChange={event => setLibrary(event.target.value)}><option value="">全部有权范围</option>{props.libraries.map(item => <option key={item.id} value={item.id}>{item.label}</option>)}</select></Field>
+        {props.filterControls}
       </SearchFilters>
       {unsafe ? <StatePanel kind="forbidden" title="资料范围需要重新确认" description="当前返回的资料不符合学生阅读范围，请重新读取。" retry={props.onRefresh} />
         : props.state !== "ready" ? <StatePanel kind={props.state} description={props.error} retry={["error", "offline"].includes(props.state) ? props.onRefresh : undefined} />
         : <>{props.items.length ? <RecordList items={props.items} itemKey={item => item.versionId + ":" + (item.targetLibraryId || "")} title={item => item.title}
           fields={[{ label: "原文件", value: item => item.originalName || "知识点文本" }, { label: "所属范围", value: item => item.libraryLabel },
             { label: "固定版本", value: item => `第 ${item.versionNo} 版` }, { label: "解析状态", value: item => extractionLabels[item.extraction] },
-            { label: "发布状态", value: item => publicationLabels[item.publication] }, { label: "匹配与定位", value: item => item.snippet ? <><p className="lc-material-snippet">{item.snippet}</p><span>{item.locatorLabel || "定位待核对"}</span></> : "没有可用的正文匹配片段" }]}
+            { label: "发布状态", value: item => publicationLabels[item.publication] }, { label: "匹配与定位", value: item => item.snippet ? <><p className="lc-material-snippet">{item.snippet}</p><span>{item.locatorLabel || "无页段定位"}</span></> : "无匹配片段（未搜索或未提取）" }]}
           actions={item => <>{(Object.keys(actionLabels) as (keyof typeof actionLabels)[]).filter(action => item.actions[action] && (props.audience !== "student" || action === "preview" || action === "download")).map(action => <Button key={action} variant="secondary" onClick={() => props.onAction(action, item)}>{actionLabels[action]}</Button>)}</>} />
           : <StatePanel kind="empty" title={props.query || props.libraryId ? "没有匹配的资料" : "暂无可访问资料"} description="尝试调整关键词和资料范围，或联系教师确认发布与授权。" />}
           <Pagination total={props.total} offset={props.offset} pageSize={props.pageSize} onChange={props.onPage} /></>}
@@ -51,7 +54,7 @@ export function MaterialWorkspace(props: MaterialWorkspaceProps) {
   </PageContainer>
 }
 
-export type PreviewChunk = Readonly<{ id: string; locatorLabel: string; text: string }>
+export type PreviewChunk = Readonly<{ id: string; locatorLabel: string; text: string; isMatch?: boolean }>
 export function MaterialPreview({ title, versionLabel, state, chunks, error, canDownload, onDownload, onRetry, onClose, hasMore, loadingMore, onMore }: {
   title: string; versionLabel: string; state: WorkspaceState; chunks: readonly PreviewChunk[]; error?: string
   canDownload: boolean; onDownload: () => void; onRetry: () => void; onClose: () => void
@@ -59,17 +62,18 @@ export function MaterialPreview({ title, versionLabel, state, chunks, error, can
 }) {
   return <Dialog title="资料定位预览" long onClose={onClose}><h3 className="lc-material-title">{title}</h3><p>{versionLabel}</p>
     <Notice>预览为提取文字及原始页段定位。查看版式、图表和公式请下载有权原件；不在此渲染 Office 或执行文件内容。</Notice>
-    {state !== "ready" ? <StatePanel kind={state} description={error} retry={["error", "offline"].includes(state) ? onRetry : undefined} /> : chunks.length ? <ol className="lc-material-chunks">{chunks.map(chunk => <li key={chunk.id}><h3>{chunk.locatorLabel}</h3><p>{chunk.text}</p></li>)}</ol> : <StatePanel kind="empty" title="暂无可预览文字" description="扫描件或未成功解析的资料不提供正文定位。" />}
+    {state !== "ready" ? <StatePanel kind={state} description={error} retry={["error", "offline"].includes(state) ? onRetry : undefined} /> : chunks.length ? <ol className="lc-material-chunks">{chunks.map(chunk => <li key={chunk.id} className={chunk.isMatch ? "lc-material-match" : undefined}><h3>{chunk.locatorLabel}{chunk.isMatch && " · 命中页段"}</h3><p>{chunk.text}</p></li>)}</ol> : <StatePanel kind="empty" title="暂无可预览文字" description="扫描件或未成功解析的资料不提供正文定位。" />}
     <div className="lc-actions">{hasMore && onMore && <Button variant="secondary" pending={loadingMore} onClick={onMore}>读取后续页段</Button>}<Button variant="secondary" onClick={onClose}>关闭预览</Button>{canDownload && <Button onClick={onDownload}>下载有权原件</Button>}</div>
   </Dialog>
 }
 
 export type UploadProgress = Readonly<{ state: "idle" | "uploading" | "queued" | "running" | "failed" | "uncertain"; sentBytes: number; totalBytes: number; error?: string }>
-export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose, children, initialTitle = "", initialLibraryId }: {
+export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose, children, initialTitle = "", initialLibraryId, targetControl, selectedLibraryId }: {
   targets: readonly { id: string; label: string }[]; progress: UploadProgress
   onSubmit: (input: { file: File; title: string; libraryId: string }) => void; onCancel: () => void; onClose: () => void
   children?: ReactNode
   initialTitle?: string; initialLibraryId?: string
+  targetControl?: ReactNode; selectedLibraryId?: string
 }) {
   const [title, setTitle] = useState(initialTitle), [library, setLibrary] = useState(initialLibraryId || targets[0]?.id || ""), [file, setFile] = useState<File>(), [error, setError] = useState("")
   const busy = ["uploading", "queued", "running"].includes(progress.state), uncertain = progress.state === "uncertain"
@@ -81,10 +85,10 @@ export function MaterialUpload({ targets, progress, onSubmit, onCancel, onClose,
       const format = file.name.split(".").pop()?.toLowerCase()
       if (!format || !["pdf", "pptx", "docx", "txt"].includes(format)) { setError("仅接收 PDF、PPTX、DOCX 和 TXT。"); return }
       if (!file.size || file.size > (format === "txt" ? 1048576 : 20971520)) { setError(format === "txt" ? "TXT 须非空且不超过 1 MiB。" : "文件须非空且不超过 20 MiB。"); return }
-      onSubmit({ file, title: title.trim(), libraryId: library })
+      onSubmit({ file, title: title.trim(), libraryId: selectedLibraryId ?? library })
     }}>
       <Field label="资料名称"><input value={title} onChange={event => setTitle(event.target.value)} required maxLength={200} disabled={busy || uncertain} /></Field>
-      <Field label="提交范围"><select value={library} onChange={event => setLibrary(event.target.value)} required disabled={busy || uncertain || !targets.length}>{!targets.length && <option value="">暂无可提交范围</option>}{targets.map(target => <option key={target.id} value={target.id}>{target.label}</option>)}</select></Field>
+      {targetControl || <Field label="提交范围"><select value={library} onChange={event => setLibrary(event.target.value)} required disabled={busy || uncertain || !targets.length}>{!targets.length && <option value="">暂无可提交范围</option>}{targets.map(target => <option key={target.id} value={target.id}>{target.label}</option>)}</select></Field>}
       <Field label="资料文件" hint="PDF / PPTX / DOCX 最多 20 MiB，TXT 最多 1 MiB。扫描件暂不支持 OCR。"><input type="file" accept=".pdf,.pptx,.docx,.txt" disabled={busy || uncertain} onChange={event => setFile(event.target.files?.[0])} /></Field>
       {children}
       {(error || progress.error) && <Notice kind="error">{error || progress.error}</Notice>}
