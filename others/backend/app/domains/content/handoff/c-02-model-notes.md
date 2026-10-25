@@ -1,0 +1,54 @@
+# C-02 M1 模型/执行接口草稿（尚未交付）
+
+当前模块不在公共models.py注册、不挂路由、不创建表。下一步仍须补服务、上传、审核、调度、测试及完整c-02-integration.md，不能把本草稿视为M1完成。
+
+## 数据约束接入
+
+八张表均在content/models.py：content_library、content_material、content_upload、content_material_version、content_source_chunk、content_material_review、content_material_publication、content_job。
+
+- MaterialVersion使用upload_id真实FK，不以file_key授权；input_kind约束文件/文字互斥。
+- Publication使用review/version/target三列复合FK避免串绑；approved状态仍需命令事务和数据库保护。
+- Upload活跃会话按owner唯一；Job活跃尝试按version唯一。全局流数量、任务数量和配额仍需短事务及运行适配器共同执行，索引不代替这些规则。
+- 组织复合FK目前约束同校，实际学院、目录和班级组合必须从真实父级推导并校验。不得要求Course.college_id=CourseCatalog.college_id。A迁移接入时还需固定归属、原始输入、成功快照及已决定审核不可覆盖的数据库保护；本轮尚未提供完整迁移说明/保护SQL。
+- 上传/版本之间存在封存回指，A处理建表顺序与命名循环外键。首次创建上传时sealed_version_id为空，封存版本后才写回；所有删除保持NO ACTION/RESTRICT语义。
+- 计量字段仅存预算，不证明实际已清理。清理确认后才可结算；不得仅因终态自动把预留清零。
+
+## 解析适配器接口
+
+content/parse_runner.py定义C/A候选接口。start接ParseTask及AsyncIterator[bytes]；C只传已授权不可变输入字节，不传任意宿主路径/命令。A复制到本任务专用只读输入，核对哈希和格式，使用固定模板启动。A须对输入总量也执行格式对应上限，失败清理后再释放排他执行。重复job_id/generation启动须幂等，失去响应先inspect，不盲目重启。
+
+inspect/stop/result通过不透明execution_id定位。stop必须确认完整执行单元已结束，无法确认则不能启动替代任务。result读取过程中执行16MiB上限，不信任结果中的路径。能力声明只用于拒绝明显不满足的适配器，不是实际沙箱/隔离证据；A仍须实测网络、挂载、密钥、硬资源、取消和跨实例排他。
+
+UnavailableRunner显式报PARSER_UNAVAILABLE，不尝试普通子进程降级，也不虚构停止成功。
+
+## 当前检查范围
+
+业务解释器下4项模型/SQL编译检查和2项runner能力检查通过，未连接数据库。查询使用真实B授权SQL及详情二次判权，多个发布绑定通过EXISTS避免版本重复。尚未进行真实PG权限/并发/快照保护验收，不能作业务完成证据。
+
+新增服务候选见services.py、schemas.py、quota.py。配额计量不按终态过滤，未清理残留/保留快照继续占额；全局锁只包短事务，调用方须在事务外采集真实free_disk_bytes。当前缺容量探针返回503。尚需上传、调度和最终结算路径全部采用同一锁序并以PG竞争实测。
+
+待审核版本的目标V必须能核对原件；readable_versions新增对应submitted/approved Review的目标V分支（B未发布资源R语义，creator为空），详情再次确认目标review能力。S和学生不能通过提审绑定获得草稿权限。输出投影只能带授权目标，不泄露源库字段；正式DTO/HTTP和PG隔离验收仍待补齐。
+
+上传新增title/source_metadata字段，仍在M1模型候选中，未迁移。PrivateStorage使用本任务不透明UUID key，临时与原件同私有卷，以不覆盖硬链接封存，文件fsync后提交版本；Linux同时同步目录。A应核验实际文件卷支持与部署权限。取消后的文件清理与配额结算分开，清理失败仍占额。
+
+上传服务receive_upload接受服务端身份三元组与AsyncIterator字节；传输阶段每个DB事务独立关闭。请求取消必须等已提交线程中的写入/封存事务完成才清理，不能因await取消便当作底层I/O停止。cleanup_idle_upload只处理明确没有writer且未被版本引用的终止/过期会话；失联writer不能只凭lease超时清除。后续恢复需记录/核对权威writer执行归属，无法确认停止时保持占额和接收槽位，不触碰保留版本。
+
+## 调度接入补充
+
+ParseTask新增execution_id，由C在向runner发送请求前持久化并建立唯一约束。A start必须以此ID幂等，先完整接收并核对输入、再启动固定执行单元；start返回前不得留下仍在消费C输入迭代器的独立任务。响应丢失时通过同一ID查询/停止，不能另起一个ID冒充恢复。
+
+A stop对从未启动的ID也须记录拒绝后续延迟start的终止凭据，返回stop_confirmed仅表示整个执行单元已停止。不得用“此刻未查到”冒充停止。release返回true须确认任务输入、输出及临时区已清理；false/失败继续占额。C先保存不可变快照，随后释放运行临时区；清理失败不改写已成功版本。
+
+scheduler.ContentScheduler(factory, storage, runner).serve(stop_event)由A lifespan唯一挂接。可以多API实例，但数据库全局短锁/活动任务屏障与A实际全部署单执行共同生效；运行阶段不持有连接。关闭须等待当前任务stop/release路径，不能只取消协程就宣称执行单元结束。硬终止后的旧任务由持久化ID和runner权威停止恢复。
+
+task_store负责短事务、当前发起身份及学校/父级重验、5秒心跳/20秒租约、旧generation拒绝提交、原子快照和占额。租约过期仅获得恢复处理权，不作为进程停止证明。恢复先失效旧generation，普通查询不受停机屏障影响。M1尚缺完整HTTP、PG竞争与真实runner验证，不据此发布SDK或放行B2。
+
+## 读取/路由候选
+
+router位于content/routes.py，prefix=/content，tag=content，A后续以/api/v1挂载。当前没有修改app/main.py、正式OpenAPI或SDK。runtime.ContentRuntime由A注入app.state.content_runtime，包含本树Session factory、私有存储及受限ParseRunner。未注入时存储不可用、parser显式unavailable，不自行读取新环境变量或运行普通解析子进程。
+
+二进制PUT固定/content/uploads/{upload_id}/bytes，原始application/octet-stream，Content-Length超20MiB返回413，未知长度仍流式计数。代理仅对该精确路由给21MiB例外。SDK须保留内存会话代次/身份取消行为；download作为binary响应，不生成JSON伪下载。
+
+下载路由在响应前释放请求鉴权DB会话，使用runtime.factory独立短会话逐块验证当前登录/工作身份/版本权限；文件I/O不持连接。中途失效终止传输，Content-Length使客户端辨识截断；不返回错误文本冒充原件。A应暴露Content-Disposition/Content-Length头并验证三端浏览器/原生后续路径。
+
+流式HTTP测试不能用会被close的共享外层回滚Session冒充独立连接；须在同一专用测试库和共享串行锁内，用可被独立Session读取的受控合成数据与独立文件根真实测试。数据库不可变保护与迁移尚未接入，因此当前没有HTTP/PG运行通过结论。

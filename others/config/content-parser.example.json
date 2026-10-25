@@ -1,0 +1,7 @@
+{
+  "note": "Create separate ignored runtime/client/control files; never give the API Docker or migration credentials.",
+  "runtime": {"storage_root": "<private-absolute-material-root>", "parser_client": "<private-absolute-client-config>"},
+  "client": {"protocol": "labconnect.parse-control/1", "key": "<independent-random-service-key>", "host": "127.0.0.1", "port": 18767},
+  "control": {"protocol": "labconnect.parse-control/1", "key": "<same-independent-service-key>", "host": "127.0.0.1", "port": 18767, "root": "<private-task-journal-root>", "image": "sha256:<verified-immutable-parser-image-id>", "instance": "<random-32-lowercase-hex-id>"},
+  "linux": "Use a permission-controlled Unix socket instead of host/port. Never expose the control service publicly."
+}
