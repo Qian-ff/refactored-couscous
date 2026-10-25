@@ -387,9 +387,25 @@ async def serve(config):
         if path.exists():
             if not path.is_socket():
                 raise RunnerUnavailable()
+            # Never unlink another live controller's socket, even when its installation root differs.
+            try:
+                _reader, existing = await asyncio.wait_for(asyncio.open_unix_connection(path), 1)
+            except ConnectionRefusedError:
+                if path.stat().st_uid != os.geteuid():
+                    raise RunnerUnavailable() from None
+            else:
+                existing.close()
+                raise RunnerUnavailable()
             path.unlink()
         server = await asyncio.start_unix_server(controller.handle, path=path)
-        path.chmod(0o600)
+        group = config.get("client_gid")
+        if group is not None:
+            if type(group) is not int or not 0 <= group <= 2147483647:
+                raise RunnerUnavailable()
+            os.chown(path, -1, group)
+            path.chmod(0o660)
+        else:
+            path.chmod(0o600)
     else:
         if config.get("host") != "127.0.0.1" or config.get("port") != 18767:
             raise RunnerUnavailable()

@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { authLoginData, authLoginErrors, authLoginResponses, authLogoutData, authLogoutResponses, authMeData, authMeErrors, authMeResponses, coursesContextData, coursesContextErrors, coursesContextResponses, coursesCourseData, coursesCourseErrors, coursesCourseResponses, coursesCoursesData, coursesCoursesErrors, coursesCoursesResponses, coursesCreateCourseData, coursesCreateCourseErrors, coursesCreateCourseResponses, importsCommitImportData, importsCommitImportErrors, importsCommitImportResponses, importsPreviewImportData, importsPreviewImportErrors, importsPreviewImportResponses, importsTemplateData, importsTemplateErrors, importsTemplateResponses, managementChangePasswordData, managementChangePasswordErrors, managementChangePasswordResponses, managementCreateAccountData, managementCreateAccountErrors, managementCreateAccountResponses, managementCreateCollegeData, managementCreateCollegeErrors, managementCreateCollegeResponses, managementCreateInvitationData, managementCreateInvitationErrors, managementCreateInvitationResponses, managementCreateMajorData, managementCreateMajorErrors, managementCreateMajorResponses, managementCreateSchoolData, managementCreateSchoolErrors, managementCreateSchoolResponses, managementGetAccountData, managementGetAccountErrors, managementGetAccountResponses, managementGetProfileData, managementGetProfileErrors, managementGetProfileResponses, managementGrantRoleData, managementGrantRoleErrors, managementGrantRoleResponses, managementInvitationContextData, managementInvitationContextErrors, managementInvitationContextResponses, managementListAccountsData, managementListAccountsErrors, managementListAccountsResponses, managementListCollegesData, managementListCollegesErrors, managementListCollegesResponses, managementListInvitationsData, managementListInvitationsErrors, managementListInvitationsResponses, managementListMajorsData, managementListMajorsErrors, managementListMajorsResponses, managementListSchoolsData, managementListSchoolsErrors, managementListSchoolsResponses, managementRegisterAccountData, managementRegisterAccountErrors, managementRegisterAccountResponses, managementResetPasswordData, managementResetPasswordErrors, managementResetPasswordResponses, managementRevokeInvitationData, managementRevokeInvitationErrors, managementRevokeInvitationResponses, managementRevokeRoleData, managementRevokeRoleErrors, managementRevokeRoleResponses, managementUpdateAccountData, managementUpdateAccountErrors, managementUpdateAccountResponses, managementUpdateCollegeData, managementUpdateCollegeErrors, managementUpdateCollegeResponses, managementUpdateMajorData, managementUpdateMajorErrors, managementUpdateMajorResponses, managementUpdateProfileData, managementUpdateProfileErrors, managementUpdateProfileResponses, managementUpdateSchoolData, managementUpdateSchoolErrors, managementUpdateSchoolResponses, systemHealthData, systemHealthResponses, teachingAddMemberData, teachingAddMemberErrors, teachingAddMemberResponses, teachingAddStaffData, teachingAddStaffErrors, teachingAddStaffResponses, teachingArchiveClassData, teachingArchiveClassErrors, teachingArchiveClassResponses, teachingCancelMyRequestData, teachingCancelMyRequestErrors, teachingCancelMyRequestResponses, teachingCatalogData, teachingCatalogErrors, teachingCatalogResponses, teachingCatalogsData, teachingCatalogsErrors, teachingCatalogsResponses, teachingCatalogTeacherOptionsData, teachingCatalogTeacherOptionsErrors, teachingCatalogTeacherOptionsResponses, teachingClassManagementData, teachingClassManagementErrors, teachingClassManagementResponses, teachingCreateCatalogData, teachingCreateCatalogErrors, teachingCreateCatalogResponses, teachingDecideRequestData, teachingDecideRequestErrors, teachingDecideRequestResponses, teachingJoinClassData, teachingJoinClassErrors, teachingJoinClassResponses, teachingLeaveClassData, teachingLeaveClassErrors, teachingLeaveClassResponses, teachingListStaffData, teachingListStaffErrors, teachingListStaffResponses, teachingMembersData, teachingMembersErrors, teachingMembersResponses, teachingMyEnrollmentsData, teachingMyEnrollmentsErrors, teachingMyEnrollmentsResponses, teachingMyRequestsData, teachingMyRequestsErrors, teachingMyRequestsResponses, teachingRemoveMemberData, teachingRemoveMemberErrors, teachingRemoveMemberResponses, teachingRemoveStaffData, teachingRemoveStaffErrors, teachingRemoveStaffResponses, teachingRequestsData, teachingRequestsErrors, teachingRequestsResponses, teachingRotateJoinCodeData, teachingRotateJoinCodeErrors, teachingRotateJoinCodeResponses, teachingTeacherOptionsData, teachingTeacherOptionsErrors, teachingTeacherOptionsResponses, teachingTransferClassData, teachingTransferClassErrors, teachingTransferClassResponses, teachingUpdateCatalogData, teachingUpdateCatalogErrors, teachingUpdateCatalogResponses, teachingUpdateSettingsData, teachingUpdateSettingsErrors, teachingUpdateSettingsResponses } from './types.gen';
+import type { authLoginData, authLoginErrors, authLoginResponses, authLogoutData, authLogoutResponses, authMeData, authMeErrors, authMeResponses, contentCancelJobData, contentCancelJobErrors, contentCancelJobResponses, contentCancelUploadData, contentCancelUploadErrors, contentCancelUploadResponses, contentCapabilitiesData, contentCapabilitiesErrors, contentCapabilitiesResponses, contentChangeLibraryData, contentChangeLibraryErrors, contentChangeLibraryResponses, contentChangeMaterialData, contentChangeMaterialErrors, contentChangeMaterialResponses, contentCreateLibraryData, contentCreateLibraryErrors, contentCreateLibraryResponses, contentCreateTextData, contentCreateTextErrors, contentCreateTextResponses, contentCreateUploadData, contentCreateUploadErrors, contentCreateUploadResponses, contentDecideReviewData, contentDecideReviewErrors, contentDecideReviewResponses, contentDownloadVersionData, contentDownloadVersionErrors, contentDownloadVersionResponses, contentJobStatusData, contentJobStatusErrors, contentJobStatusResponses, contentListJobsData, contentListJobsErrors, contentListJobsResponses, contentListLibrariesData, contentListLibrariesErrors, contentListLibrariesResponses, contentListMaterialsData, contentListMaterialsErrors, contentListMaterialsResponses, contentListPublicationsData, contentListPublicationsErrors, contentListPublicationsResponses, contentListReviewsData, contentListReviewsErrors, contentListReviewsResponses, contentMaterialVersionsData, contentMaterialVersionsErrors, contentMaterialVersionsResponses, contentPublishReviewData, contentPublishReviewErrors, contentPublishReviewResponses, contentReparseVersionData, contentReparseVersionErrors, contentReparseVersionResponses, contentRetirePublicationData, contentRetirePublicationErrors, contentRetirePublicationResponses, contentRetryJobData, contentRetryJobErrors, contentRetryJobResponses, contentReviewDetailData, contentReviewDetailErrors, contentReviewDetailResponses, contentSubmitReviewData, contentSubmitReviewErrors, contentSubmitReviewResponses, contentSubmitTargetsData, contentSubmitTargetsErrors, contentSubmitTargetsResponses, contentUploadBytesData, contentUploadBytesErrors, contentUploadBytesResponses, contentUploadStatusData, contentUploadStatusErrors, contentUploadStatusResponses, contentVersionChunksData, contentVersionChunksErrors, contentVersionChunksResponses, contentVersionDetailData, contentVersionDetailErrors, contentVersionDetailResponses, coursesContextData, coursesContextErrors, coursesContextResponses, coursesCourseData, coursesCourseErrors, coursesCourseResponses, coursesCoursesData, coursesCoursesErrors, coursesCoursesResponses, coursesCreateCourseData, coursesCreateCourseErrors, coursesCreateCourseResponses, importsCommitImportData, importsCommitImportErrors, importsCommitImportResponses, importsPreviewImportData, importsPreviewImportErrors, importsPreviewImportResponses, importsTemplateData, importsTemplateErrors, importsTemplateResponses, managementChangePasswordData, managementChangePasswordErrors, managementChangePasswordResponses, managementCreateAccountData, managementCreateAccountErrors, managementCreateAccountResponses, managementCreateCollegeData, managementCreateCollegeErrors, managementCreateCollegeResponses, managementCreateInvitationData, managementCreateInvitationErrors, managementCreateInvitationResponses, managementCreateMajorData, managementCreateMajorErrors, managementCreateMajorResponses, managementCreateSchoolData, managementCreateSchoolErrors, managementCreateSchoolResponses, managementGetAccountData, managementGetAccountErrors, managementGetAccountResponses, managementGetProfileData, managementGetProfileErrors, managementGetProfileResponses, managementGrantRoleData, managementGrantRoleErrors, managementGrantRoleResponses, managementInvitationContextData, managementInvitationContextErrors, managementInvitationContextResponses, managementListAccountsData, managementListAccountsErrors, managementListAccountsResponses, managementListCollegesData, managementListCollegesErrors, managementListCollegesResponses, managementListInvitationsData, managementListInvitationsErrors, managementListInvitationsResponses, managementListMajorsData, managementListMajorsErrors, managementListMajorsResponses, managementListSchoolsData, managementListSchoolsErrors, managementListSchoolsResponses, managementRegisterAccountData, managementRegisterAccountErrors, managementRegisterAccountResponses, managementResetPasswordData, managementResetPasswordErrors, managementResetPasswordResponses, managementRevokeInvitationData, managementRevokeInvitationErrors, managementRevokeInvitationResponses, managementRevokeRoleData, managementRevokeRoleErrors, managementRevokeRoleResponses, managementUpdateAccountData, managementUpdateAccountErrors, managementUpdateAccountResponses, managementUpdateCollegeData, managementUpdateCollegeErrors, managementUpdateCollegeResponses, managementUpdateMajorData, managementUpdateMajorErrors, managementUpdateMajorResponses, managementUpdateProfileData, managementUpdateProfileErrors, managementUpdateProfileResponses, managementUpdateSchoolData, managementUpdateSchoolErrors, managementUpdateSchoolResponses, systemHealthData, systemHealthResponses, teachingAddMemberData, teachingAddMemberErrors, teachingAddMemberResponses, teachingAddStaffData, teachingAddStaffErrors, teachingAddStaffResponses, teachingArchiveClassData, teachingArchiveClassErrors, teachingArchiveClassResponses, teachingCancelMyRequestData, teachingCancelMyRequestErrors, teachingCancelMyRequestResponses, teachingCatalogData, teachingCatalogErrors, teachingCatalogResponses, teachingCatalogsData, teachingCatalogsErrors, teachingCatalogsResponses, teachingCatalogTeacherOptionsData, teachingCatalogTeacherOptionsErrors, teachingCatalogTeacherOptionsResponses, teachingClassManagementData, teachingClassManagementErrors, teachingClassManagementResponses, teachingCreateCatalogData, teachingCreateCatalogErrors, teachingCreateCatalogResponses, teachingDecideRequestData, teachingDecideRequestErrors, teachingDecideRequestResponses, teachingJoinClassData, teachingJoinClassErrors, teachingJoinClassResponses, teachingLeaveClassData, teachingLeaveClassErrors, teachingLeaveClassResponses, teachingListStaffData, teachingListStaffErrors, teachingListStaffResponses, teachingMembersData, teachingMembersErrors, teachingMembersResponses, teachingMyEnrollmentsData, teachingMyEnrollmentsErrors, teachingMyEnrollmentsResponses, teachingMyRequestsData, teachingMyRequestsErrors, teachingMyRequestsResponses, teachingRemoveMemberData, teachingRemoveMemberErrors, teachingRemoveMemberResponses, teachingRemoveStaffData, teachingRemoveStaffErrors, teachingRemoveStaffResponses, teachingRequestsData, teachingRequestsErrors, teachingRequestsResponses, teachingRotateJoinCodeData, teachingRotateJoinCodeErrors, teachingRotateJoinCodeResponses, teachingTeacherOptionsData, teachingTeacherOptionsErrors, teachingTeacherOptionsResponses, teachingTransferClassData, teachingTransferClassErrors, teachingTransferClassResponses, teachingUpdateCatalogData, teachingUpdateCatalogErrors, teachingUpdateCatalogResponses, teachingUpdateSettingsData, teachingUpdateSettingsErrors, teachingUpdateSettingsResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -782,6 +782,385 @@ export class TeachingService {
             responseType: 'json',
             security: [{ scheme: 'bearer', type: 'http' }],
             url: '/api/v1/enrollments/requests/{request_id}/cancel',
+            ...options
+        });
+    }
+}
+
+export class ContentService {
+    /**
+     * Capabilities
+     */
+    public static capabilities<ThrowOnError extends boolean = true>(options?: Options<contentCapabilitiesData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentCapabilitiesResponses, contentCapabilitiesErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/capabilities',
+            ...options
+        });
+    }
+
+    /**
+     * List Jobs
+     */
+    public static listJobs<ThrowOnError extends boolean = true>(options?: Options<contentListJobsData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentListJobsResponses, contentListJobsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/jobs',
+            ...options
+        });
+    }
+
+    /**
+     * Job Status
+     */
+    public static jobStatus<ThrowOnError extends boolean = true>(options: Options<contentJobStatusData, ThrowOnError>) {
+        return (options.client ?? client).get<contentJobStatusResponses, contentJobStatusErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/jobs/{job_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Cancel Job
+     */
+    public static cancelJob<ThrowOnError extends boolean = true>(options: Options<contentCancelJobData, ThrowOnError>) {
+        return (options.client ?? client).post<contentCancelJobResponses, contentCancelJobErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/jobs/{job_id}/cancel',
+            ...options
+        });
+    }
+
+    /**
+     * Retry Job
+     */
+    public static retryJob<ThrowOnError extends boolean = true>(options: Options<contentRetryJobData, ThrowOnError>) {
+        return (options.client ?? client).post<contentRetryJobResponses, contentRetryJobErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/jobs/{job_id}/retry',
+            ...options
+        });
+    }
+
+    /**
+     * List Libraries
+     */
+    public static listLibraries<ThrowOnError extends boolean = true>(options?: Options<contentListLibrariesData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentListLibrariesResponses, contentListLibrariesErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/libraries',
+            ...options
+        });
+    }
+
+    /**
+     * Create Library
+     */
+    public static createLibrary<ThrowOnError extends boolean = true>(options: Options<contentCreateLibraryData, ThrowOnError>) {
+        return (options.client ?? client).post<contentCreateLibraryResponses, contentCreateLibraryErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/libraries',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Change Library
+     */
+    public static changeLibrary<ThrowOnError extends boolean = true>(options: Options<contentChangeLibraryData, ThrowOnError>) {
+        return (options.client ?? client).patch<contentChangeLibraryResponses, contentChangeLibraryErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/libraries/{library_id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * List Publications
+     */
+    public static listPublications<ThrowOnError extends boolean = true>(options: Options<contentListPublicationsData, ThrowOnError>) {
+        return (options.client ?? client).get<contentListPublicationsResponses, contentListPublicationsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/material-publications',
+            ...options
+        });
+    }
+
+    /**
+     * Publish Review
+     */
+    public static publishReview<ThrowOnError extends boolean = true>(options: Options<contentPublishReviewData, ThrowOnError>) {
+        return (options.client ?? client).post<contentPublishReviewResponses, contentPublishReviewErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/material-publications',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Retire Publication
+     */
+    public static retirePublication<ThrowOnError extends boolean = true>(options: Options<contentRetirePublicationData, ThrowOnError>) {
+        return (options.client ?? client).post<contentRetirePublicationResponses, contentRetirePublicationErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/material-publications/{publication_id}/retire',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * List Reviews
+     */
+    public static listReviews<ThrowOnError extends boolean = true>(options?: Options<contentListReviewsData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentListReviewsResponses, contentListReviewsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/material-reviews',
+            ...options
+        });
+    }
+
+    /**
+     * Submit Review
+     */
+    public static submitReview<ThrowOnError extends boolean = true>(options: Options<contentSubmitReviewData, ThrowOnError>) {
+        return (options.client ?? client).post<contentSubmitReviewResponses, contentSubmitReviewErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/material-reviews',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Review Detail
+     */
+    public static reviewDetail<ThrowOnError extends boolean = true>(options: Options<contentReviewDetailData, ThrowOnError>) {
+        return (options.client ?? client).get<contentReviewDetailResponses, contentReviewDetailErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/material-reviews/{review_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Decide Review
+     */
+    public static decideReview<ThrowOnError extends boolean = true>(options: Options<contentDecideReviewData, ThrowOnError>) {
+        return (options.client ?? client).post<contentDecideReviewResponses, contentDecideReviewErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/material-reviews/{review_id}/decision',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * List Materials
+     */
+    public static listMaterials<ThrowOnError extends boolean = true>(options?: Options<contentListMaterialsData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentListMaterialsResponses, contentListMaterialsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/materials',
+            ...options
+        });
+    }
+
+    /**
+     * Create Text
+     */
+    public static createText<ThrowOnError extends boolean = true>(options: Options<contentCreateTextData, ThrowOnError>) {
+        return (options.client ?? client).post<contentCreateTextResponses, contentCreateTextErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/materials/text',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Change Material
+     */
+    public static changeMaterial<ThrowOnError extends boolean = true>(options: Options<contentChangeMaterialData, ThrowOnError>) {
+        return (options.client ?? client).patch<contentChangeMaterialResponses, contentChangeMaterialErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/materials/{material_id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Material Versions
+     */
+    public static materialVersions<ThrowOnError extends boolean = true>(options: Options<contentMaterialVersionsData, ThrowOnError>) {
+        return (options.client ?? client).get<contentMaterialVersionsResponses, contentMaterialVersionsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/materials/{material_id}/versions',
+            ...options
+        });
+    }
+
+    /**
+     * Submit Targets
+     */
+    public static submitTargets<ThrowOnError extends boolean = true>(options?: Options<contentSubmitTargetsData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentSubmitTargetsResponses, contentSubmitTargetsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/submit-targets',
+            ...options
+        });
+    }
+
+    /**
+     * Create Upload
+     */
+    public static createUpload<ThrowOnError extends boolean = true>(options: Options<contentCreateUploadData, ThrowOnError>) {
+        return (options.client ?? client).post<contentCreateUploadResponses, contentCreateUploadErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/uploads',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Upload Status
+     */
+    public static uploadStatus<ThrowOnError extends boolean = true>(options: Options<contentUploadStatusData, ThrowOnError>) {
+        return (options.client ?? client).get<contentUploadStatusResponses, contentUploadStatusErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/uploads/{upload_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Upload Bytes
+     */
+    public static uploadBytes<ThrowOnError extends boolean = true>(options: Options<contentUploadBytesData, ThrowOnError>) {
+        return (options.client ?? client).put<contentUploadBytesResponses, contentUploadBytesErrors, ThrowOnError>({
+            bodySerializer: null,
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/uploads/{upload_id}/bytes',
+            ...options,
+            headers: {
+                'content-type': 'application/octet-stream',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Cancel Upload
+     */
+    public static cancelUpload<ThrowOnError extends boolean = true>(options: Options<contentCancelUploadData, ThrowOnError>) {
+        return (options.client ?? client).post<contentCancelUploadResponses, contentCancelUploadErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/uploads/{upload_id}/cancel',
+            ...options
+        });
+    }
+
+    /**
+     * Version Detail
+     */
+    public static versionDetail<ThrowOnError extends boolean = true>(options: Options<contentVersionDetailData, ThrowOnError>) {
+        return (options.client ?? client).get<contentVersionDetailResponses, contentVersionDetailErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/versions/{version_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Version Chunks
+     */
+    public static versionChunks<ThrowOnError extends boolean = true>(options: Options<contentVersionChunksData, ThrowOnError>) {
+        return (options.client ?? client).get<contentVersionChunksResponses, contentVersionChunksErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/versions/{version_id}/chunks',
+            ...options
+        });
+    }
+
+    /**
+     * Download Version
+     */
+    public static downloadVersion<ThrowOnError extends boolean = true>(options: Options<contentDownloadVersionData, ThrowOnError>) {
+        return (options.client ?? client).get<contentDownloadVersionResponses, contentDownloadVersionErrors, ThrowOnError>({
+            responseType: 'blob',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/versions/{version_id}/download',
+            ...options
+        });
+    }
+
+    /**
+     * Reparse Version
+     */
+    public static reparseVersion<ThrowOnError extends boolean = true>(options: Options<contentReparseVersionData, ThrowOnError>) {
+        return (options.client ?? client).post<contentReparseVersionResponses, contentReparseVersionErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/versions/{version_id}/reparse',
             ...options
         });
     }

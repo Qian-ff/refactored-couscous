@@ -1,5 +1,6 @@
 """Actual 8002 HTTP/PG/Docker checks; no TestClient, mocked runner or fixture parser."""
 import hashlib
+import http.client
 import json
 from pathlib import Path
 import time
@@ -109,6 +110,10 @@ def test_real_binary_upload_publication_bindings_revisions_and_revocation(wire):
     matching_jobs = wire.json("GET", "/content/jobs?" + urlencode({"version_id": version, "limit": 1}), teacher)
     assert matching_jobs["total"] == 1 and matching_jobs["items"][0]["version_id"] == version
     wire.job(teacher, matching_jobs["items"][0]["job_id"])
+    reparsed = wire.json("POST", "/content/versions/" + version + "/reparse", teacher)
+    wire.job(teacher, reparsed["job_id"])
+    newer = wire.json("GET", "/content/versions/" + reparsed["version_id"], teacher)
+    assert newer["version_no"] == 2 and newer["content_hash"] == hashlib.sha256(data).hexdigest()
     detail = wire.json("GET", "/content/versions/" + version, teacher)
     assert detail["material_revision"] == 1 and detail["actions"]["edit_material"]
     assert not detail["actions"]["retire_material"]
@@ -122,6 +127,7 @@ def test_real_binary_upload_publication_bindings_revisions_and_revocation(wire):
         {"revision": 1, "decision": "approved", "warning_hash": "0" * 64,
          "warnings_acknowledged": True, "original_authorized": True}, status=409)
     publication = publish(wire, admin, review_a, detail["warning_hash"])
+    wire.json("POST", "/content/material-publications", admin, {"review_id": review_a, "revision": 1}, status=409)
     wire.json("POST", "/content/material-reviews/" + review_a + "/decision", admin,
         {"revision": 1, "decision": "approved", "warning_hash": detail["warning_hash"],
          "warnings_acknowledged": True, "original_authorized": True}, status=409)
@@ -133,6 +139,8 @@ def test_real_binary_upload_publication_bindings_revisions_and_revocation(wire):
     safe = wire.json("GET", "/content/versions/" + version + "?library_id=" + first, student)
     assert safe["material_revision"] is None and safe["source_metadata"] is None and safe["binding"]["review"] is None
     assert safe["actions"]["preview"] and safe["actions"]["download"] and not safe["actions"]["edit_material"]
+    listed = wire.json("GET", "/content/materials?" + urlencode({"library_id": first, "q": tag}), student)
+    assert listed["total"] == 1 and listed["items"][0]["version_id"] == version
     wire.json("GET", "/content/versions/" + version + "?library_id=" + second, student, status=403)
     original, headers = wire.request("GET", "/content/versions/" + version + "/download", student, raw=True)
     assert original == data and int(headers["content-length"]) == len(data)
@@ -170,4 +178,68 @@ def test_real_http_rechecks_course_scope_after_capability_was_read(wire):
     finally:
         with engine.begin() as connection:
             connection.execute(text("UPDATE course_staff SET is_active=true WHERE id=:id"), {"id": fixture_id("staff-general")})
+        engine.dispose()
+
+
+def test_real_receiving_slots_and_canceled_io_keep_reservation_until_cleanup(wire):
+    admin, first_actor, second_actor = wire.login("admin"), wire.login("teacher"), wire.login("teacher_eng")
+    target = library(wire, admin, "C02 streams " + uuid4().hex[:8])
+    data = b"0123456789abcdef0123456789abcdef"
+    request = {"library_id": target, "title": "Controlled upload", "original_name": "controlled.txt", "format": "txt",
+               "expected_bytes": len(data), "expected_hash": hashlib.sha256(data).hexdigest()}
+    first = wire.json("POST", "/content/uploads", first_actor, request, status=201)["upload_id"]
+    wire.json("POST", "/content/uploads", first_actor, request, status=409)
+    second = wire.json("POST", "/content/uploads", second_actor, request, status=201)["upload_id"]
+    third = wire.json("POST", "/content/uploads", admin, request, status=201)["upload_id"]
+    connections = []
+    engine = create_engine(wire.runtime["database_url"])
+    try:
+        for actor, upload in ((first_actor, first), (second_actor, second)):
+            connection = http.client.HTTPConnection("127.0.0.1", 8002, timeout=12)
+            connections.append(connection)
+            connection.putrequest("PUT", "/api/v1/content/uploads/" + upload + "/bytes")
+            connection.putheader("Authorization", "Bearer " + actor)
+            connection.putheader("Content-Type", "application/octet-stream")
+            connection.putheader("Content-Length", str(len(data)))
+            connection.endheaders()
+            connection.send(data[:16])
+            for _attempt in range(30):
+                if wire.json("GET", "/content/uploads/" + upload, actor)["state"] == "receiving":
+                    break
+                time.sleep(.05)
+            else:
+                raise AssertionError("Actual PUT did not acquire its receiving slot")
+        wire.json("PUT", "/content/uploads/" + third + "/bytes", admin, data, status=409)
+        wire.json("POST", "/content/uploads/" + first + "/cancel", first_actor)
+        with engine.connect() as connection:
+            reserved, owner = connection.execute(text("SELECT reserved_bytes,lease_owner FROM content_upload WHERE id=:id"),
+                                                 {"id": first}).one()
+        assert reserved == len(data) and owner is not None
+        wire.json("PUT", "/content/uploads/" + third + "/bytes", admin, data, status=409)
+        connections[0].close()
+        for _attempt in range(100):
+            with engine.connect() as connection:
+                reserved, owner = connection.execute(text("SELECT reserved_bytes,lease_owner FROM content_upload WHERE id=:id"),
+                                                     {"id": first}).one()
+            if not reserved and owner is None:
+                break
+            time.sleep(.1)
+        else:
+            raise AssertionError("Disconnected canceled writer did not confirm cleanup")
+        private = Path(json.loads(Path(wire.runtime["content_runtime"]).read_text())["storage_root"])
+        assert not (private / (first.replace("-", "") + ".part")).exists()
+        third_result = wire.json("PUT", "/content/uploads/" + third + "/bytes", admin, data)
+        assert third_result["version_id"]
+        connections[1].send(data[16:])
+        with connections[1].getresponse() as response:
+            assert response.status == 200
+            assert json.loads(response.read())["version_id"]
+    finally:
+        for connection in connections:
+            connection.close()
+        for actor, upload in ((first_actor, first), (second_actor, second), (admin, third)):
+            try:
+                wire.json("POST", "/content/uploads/" + upload + "/cancel", actor)
+            except (OSError, AssertionError):
+                pass
         engine.dispose()

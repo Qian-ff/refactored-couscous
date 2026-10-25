@@ -1,8 +1,12 @@
 # API 约定
 
-## 实际 0.3.2（兼容0.3.1、0.3.0及A0的0.2.0）
+## 本资料候选实际0.4.0（兼容0.3.2、0.3.1、0.3.0及A0的0.2.0）
 
 唯一版本源为 ../config/application.json。OpenAPI 只导出实际接口；version.json 记录真实导出哈希，web/src/client 由工具生成，不手改。/courses 继续表示教学班，响应新增 catalog_id；旧创建请求兼容。
+
+0.4.0在当前候选树接入真实`/content`资料接口；main/ECS是否已接收以A主正式发布为准。列表每页1–100，默认50，q最多100字且按字面匹配。上传是JSON创建会话、`PUT /content/uploads/{UUID}/bytes`原始application/octet-stream、GET会话/按version_id过滤的jobs恢复；封存重放重新核对完整正文，不能重新创建版本。一般文件20MiB，TXT/知识点1MiB；没有分片续传。下载返回原始字节、精确Content-Length及UTF-8 Content-Disposition，不能按JSON读取；CORS暴露这两个头。
+
+`VersionView.material_revision`仅在有实际资料编辑权时提供，供MaterialChange消费；version_no、库revision、review.revision、publication.revision互不替代。actions为当前对象细分动作，LibraryView.can_manage与can_submit分开。binding明确target_library_id，只包含该目标下当前可见review和active_publication；同版本在不同目标可同时已发布/待审，不能合成全局枚举。学生无草稿管理revision、来源元数据或无权审核内容。审核/发布列表支持version_id和目标库过滤，服务器对当前分页以有界批量查询取绑定，不要求前端扫全库。所有写、下载、续问及旧会话仍重新授权；能力不是权限凭据。
 
 B1真实组织/账号/目录/班级/CSV操作见[b1-public-handoff](../docs/b1-public-handoff.md)。写入按实际接口要求幂等键；只有DTO声明revision的操作才传revision。学生join/leave/cancel使用Idempotency-Key，没有revision字段，不补造字段。输入校验错误不包含input/context。health增加migration并核验实际库头版本，未迁移返回503。B2等未来接口继续只保留设计，不生成占位SDK。
 
