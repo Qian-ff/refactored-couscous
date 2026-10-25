@@ -24,17 +24,23 @@
 - 真实 HTTP 流程和克隆库迁移共 5 项：上传/重解析、审核发布、撤权、跨校、版本、接收并发与取消；B1 升级、重复升级、空库和专用克隆 downgrade/re-upgrade。见 `http-migration-recovery.txt`。
 - `stress.json`：真实 384MiB OOM、pids64、1CPU 节流、封存输入20MiB及44MiB临时区、stdout16MiB/stderr64KiB上限。
 - `linux-lock.json`：真实 Linux Docker 数据卷，独立进程互斥、释放接管、稳定锁 inode。
-- 2026-10-25 本轮 `pnpm run check`、`pnpm run build:web`、本轮 Python Ruff 与 `git diff --check` 通过。
+- `faults.json`：真实暂停解析61秒触发60秒期限、确认停止；强制退出本树控制端后恢复、拒绝旧任务迟到启动、新任务成功。
+- `sandbox.json`：当前锁定镜像四格式、同绑定重放/异绑定拒绝、实际权限拒绝、双客户端互斥、接收中停止、重启终止凭据。此报告仅标记自身检查范围；资源/HTTP由独立报告证明。
+- `gateway.json`：真实 Caddy 与合成消费正文上游，11项路径/方法/上传22020096字节与其他路径2000000字节边界、公开文档404。仅本机测试，非 ECS 证据。
+- `compose-check.json`：Docker compose真实解析（空占位env、tools profile），未部署。
+- `backend-regression.txt`：完整公共、core、content共152项及55 subtests；`asr-regression.txt`：既有ASR传输回归4项（不等同真实语音推理）。
+- `web-tests.json`、`browser-services.json`：真实浏览器生成SDK原始上传下载字节/哈希、Blob、长度、UTF-8文件名、旧请求取消及无权JSON错误；测试时API源码为`e3fd83d34b6507b17aba84abebeba79d753823ad`。
+- 2026-10-25 本轮 `pnpm run check`、`pnpm run build:web`、真实contracts check、本轮 Python Ruff、候选环境工具2项与 `git diff --check` 通过。
 
 ## 尚未完成
 
-本候选仍为 WIP，禁止当作 C02/A2 完成：
+后台候选最后核验后交 A，禁止当作 C02/A2 完成：
 
-1. 最终源码/镜像的四格式和恢复复测；`faults.py` 真实60秒超时与强制控制端退出恢复。
-2. Caddy 实际匹配/限制及 compose 配置检查。
-3. 本树新提交对应的真实 API 来源检查、浏览器 `content-transfer.spec.ts` 字节/哈希/Blob/会话取消测试；新增测试已通过类型检查，尚未运行浏览器。
-4. 最终 core/ASR/C 回归、源码/原候选差异及指纹证据归档。
-5. A 接收后才激活共享依赖、重建/验证 main 三端。正式 ECS、D 资料 UI、原生资料保存不在当前已完成结论中。
+1. 最终提交后的 API 来源和共享会话回归，结果见同证据根及`others/reports/c02-session/`。
+2. 原候选逐文件 blob、授权修复差异及最终源码指纹归档至本树忽略证据根，不能把旧镜像构建SHA称为API SHA。
+3. A 接收后才激活共享依赖、重建/验证 main 三端。正式 ECS、D 资料 UI、原生资料保存不在当前已完成结论中。
+
+镜像`sha256:85b4a147c6a394ccad23873c1b7bdf04a27aac3a65f210261d0c9e5cf5d3f4ab`来自`a3f0d8300b92bb8f20003dba771176b6d64aece7`构建，解析闭包指纹见`image.json`；后续提交仅变化于公共接入/测试，不自动重标镜像来源。
 
 Docker Desktop 安装位置为当前用户目录 `C:/Users/lenovo/AppData/Local/Programs/DockerDesktop/`。
 控制端启停脚本核验 PID、启动时间和源码路径；端口来源不符时保留进程。不要按进程名批量停止服务。

@@ -56,9 +56,13 @@ def test_target_bindings_and_material_revision_do_not_blend(db):
 def test_submit_right_does_not_grant_library_management(db):
     admin = identity(db, "admin", "administrator")
     teacher = identity(db, "teacher", "teacher")
-    school_library(db, admin)
-    assert queries.targets(db, teacher, "", 0, 100)
-    assert not any(row.can_manage or row.can_review for row in queries.libraries(db, teacher, "", 0, 100).items)
+    library_id = school_library(db, admin)
+    assert library_id in {row.id for row in queries.targets(db, teacher, "Synthetic C02", 0, 100)}
+    create_text_version(db, teacher, TextMaterialCreate(library_id=library_id, title="Owned draft", text="Original"),
+                        "c02-submit-only-projection", 10 * 1024**3)
+    # A teacher may legitimately manage another course library already created by an HTTP test.
+    row = next(row for row in queries.libraries(db, teacher, "Synthetic C02", 0, 100).items if row.id == library_id)
+    assert row.can_submit and not row.can_manage and not row.can_review
 
 
 def test_submit_sql_matches_b_capability_for_all_seed_roles(db):
