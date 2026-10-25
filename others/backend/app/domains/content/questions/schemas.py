@@ -41,6 +41,7 @@ def fingerprint(value) -> str:
 class Provenance(SourceMetadata):
     origin: Literal["upload", "open_seed", "derived"] = "derived"
     source_hash: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
+    teaching_reuse_allowed: bool = Field(default=False, strict=True)
 
     @field_validator("author", "license", "source_version")
     @classmethod
@@ -137,6 +138,10 @@ class QuestionChange(DraftContent):
 
 class Revision(StrictModel):
     revision: int = Field(ge=1, strict=True)
+
+
+class ParentChange(Revision):
+    retired: bool = Field(strict=True)
 
 
 class Submit(Revision):
