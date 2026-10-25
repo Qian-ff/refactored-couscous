@@ -2,6 +2,8 @@
 
 编号 `c1-schema-pg-integration`。2026-10-26，A主对已由用户手动启动的C1作普通公共接入续办；不是新模块首启，也不是C1整包验收。仅本文件与main已提交的active委托、A实际发送的完整执行SHA共同生效。
 
+本包现已完成技术与15项领域PG接棒，结果见[接收记录](../c1-domain-reception.md)；当前具体实施委托转[T2](c1-runtime-public-integration.md)。下文保留原T1范围和执行条件，不重复启动或重跑。
+
 ## 执行者、输入与边界
 
 - A副 / A-executor，host=local，thread=`01a16921-9ff8-7781-bdb8-6ede3d015d6c`，登记树 `D:/codex/worktree/0aed/SafeLabPlatform`、分支 `codex/a-executor`。gpt-6.1-sol / medium / Default；先核对实际设置、树、分支、暂存区、委托及共享环境。

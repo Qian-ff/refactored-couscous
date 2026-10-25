@@ -1,6 +1,6 @@
 # C1：题库与固定关卡版本，先规划后实施
 
-当前C1已由用户完成首次规划并手动启动，最新领域候选84355fec等待[A副T1迁移与真实PG入口](c1-schema-pg-integration.md)，随后C续办15项领域PG；不重复首次Plan或另开Goal。原C-02资料后端/worker由A副接续、前端由D接续。全局交接见[首版流程](../delivery-workflow.md)。以下两段保留为历史首次启动模板：当时要求先Plan/max规划，定案后Default/medium手动实现；不是当前未开工或重启指令。
+当前C1已由用户完成首次规划并手动启动，[最新46394d5领域候选及15项真实PG已接收](../c1-domain-reception.md)，由A副按[T2](c1-runtime-public-integration.md)接实际任务/公共接口；C等待接缝问题或新实际基线，不重复首次Plan或另开Goal。原C-02资料后端/worker由A副接续、前端由D接续。全局交接见[首版流程](../delivery-workflow.md)。以下两段保留为历史首次启动模板：当时要求先Plan/max规划，定案后Default/medium手动实现；不是当前未开工或重启指令。
 
 `/plan`用于切换计划模式，`/goal`用于设置持续目标，两者不是互相替代的命令；max/medium是另一个推理强度设置。命令依据：[OpenAI Plan说明](https://developers.openai.com/blog/run-long-horizon-tasks-with-codex)、[Goals说明](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex)。先max规划、再medium实施是本项目安排。
 
