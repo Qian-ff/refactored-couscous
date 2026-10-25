@@ -68,11 +68,20 @@ if (-not (Test-Api)) {
     if (-not (Test-Path -LiteralPath (Join-Path $projectRoot '.env'))) { throw 'Local configuration is missing. Run others/scripts/Bootstrap.ps1 first.' }
     Push-Location $projectRoot
     try {
-        & docker compose --env-file .env -f others/deploy/compose.yml up -d --wait db
-        if ($LASTEXITCODE -ne 0) { throw 'PostgreSQL startup failed.' }
+        $databaseContainer = & docker compose --env-file .env -f others/deploy/compose.yml ps -q db
+        $databaseHealth = if ($databaseContainer) { & docker inspect --format '{{.State.Health.Status}}' $databaseContainer } else { '' }
+        if ($databaseHealth -ne 'healthy') {
+            & docker compose --env-file .env -f others/deploy/compose.yml up -d --wait db
+            if ($LASTEXITCODE -ne 0) { throw 'PostgreSQL startup failed.' }
+        }
         $python = Join-Path $projectRoot 'others\backend\.venv\Scripts\python.exe'
         if (-not (Test-Path -LiteralPath $python)) { throw 'Backend environment is missing. Run others/scripts/Bootstrap.ps1 first.' }
-        & python others/scripts/migrate_database.py
+        $contentManagement = Join-Path $projectRoot 'others/runtime/content-parser/database-admin.json'
+        if (Test-Path -LiteralPath $contentManagement) {
+            & $python others/deploy/content/database.py upgrade --admin-config $contentManagement
+        } else {
+            & python others/scripts/migrate_database.py
+        }
         if ($LASTEXITCODE -ne 0) { throw 'Database migration failed.' }
     } finally { Pop-Location }
     if (-not (Test-Api)) {

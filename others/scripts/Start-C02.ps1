@@ -2,6 +2,12 @@ param([switch]$NoOpen)
 $ErrorActionPreference = 'Stop'
 $contentRoot = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $contentRuntime = Join-Path $contentRoot 'others/runtime/c02-public'
+$contentMainRuntime = Join-Path $contentRoot 'others/runtime/content-parser/control.json'
+if (Test-Path -LiteralPath $contentMainRuntime) {
+    & (Join-Path $PSScriptRoot 'Start-A1.ps1') -Target Web -NoOpen
+    if (-not $NoOpen) { Start-Process 'http://127.0.0.1:8000/docs' }
+    return
+}
 $contentConfig = Join-Path $contentRuntime 'api-runtime.json'
 if (-not (Test-Path -LiteralPath $contentConfig)) { throw 'Prepare the dedicated C02 runtime before starting this API' }
 & (Join-Path $PSScriptRoot 'Start-ContentParser.ps1')
