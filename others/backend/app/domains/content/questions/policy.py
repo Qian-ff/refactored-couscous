@@ -112,6 +112,16 @@ def version_query(identity, kind: Kind, library_id=None, *, published_only=False
         Library, Library.id == t.parent.library_id).where(allowed)
 
 
+def locked_draft(db, kind: Kind, parent_id):
+    """Low-level row lock after command authorization; draft PKs are their parent keys."""
+    t = DOMAINS[kind]
+    row = db.exec(select(t.draft).where(getattr(t.draft, t.parent_key) == parent_id).with_for_update()
+                  .execution_options(populate_existing=True)).first()
+    if row is None:
+        raise HTTPException(403, "对象不存在或无权操作")
+    return row
+
+
 def require_draft(db, identity, kind: Kind, parent_id, *, edit=False, allow_retired=False):
     staff(identity)
     t = DOMAINS[kind]
