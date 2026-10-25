@@ -1,5 +1,6 @@
 """Candidate router; only A mounts it after migration and real integration checks."""
 import asyncio
+from datetime import datetime
 from typing import Annotated, Literal
 from uuid import UUID
 
@@ -68,8 +69,11 @@ def create_text(db: Db, identity: CurrentIdentity, runtime: Runtime, body: TextM
 
 @router.get("/materials", response_model=Page[VersionView])
 def list_materials(db: Db, identity: CurrentIdentity, q: Keyword = "", offset: Offset = 0, limit: Limit = 50,
-                   library_id: UUID | None = None):
-    return queries.versions(db, identity, q, offset, limit, library_id=library_id, newest_only=True)
+                   library_id: UUID | None = None, course_id: UUID | None = None,
+                   file_type: Literal["pdf", "pptx", "docx", "txt", "text"] | None = None,
+                   created_after: datetime | None = None, created_before: datetime | None = None):
+    return queries.versions(db, identity, q, offset, limit, library_id=library_id, newest_only=True,
+                            course_id=course_id, file_type=file_type, created_after=created_after, created_before=created_before)
 
 
 @router.patch("/materials/{material_id}", response_model=CommandResult, response_model_exclude_none=True)

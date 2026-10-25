@@ -7,12 +7,13 @@ from sqlalchemy.orm import aliased
 from sqlmodel import select
 
 from app.domains.core.policy import resource_access
+from app.domains.core.models import Course
 from app.domains.core.resource_query import read_resource_predicate
 from app.domains.content.access import columns, descriptor, readable_versions, require_library, require_version, submit_libraries
 from app.domains.content.models import ContentUpload, Library, Material, MaterialPublication, MaterialReview, MaterialVersion, SourceChunk
 from app.domains.content.services import validate_publication_source, warnings_hash
 from app.domains.content.views import (ChunkPage, ChunkView, LibraryView, Page, PublicationView,
-    ReviewView, SubmitTarget, TargetBinding, VersionActions, VersionView)
+    ReviewView, SearchMatch, SubmitTarget, TargetBinding, VersionActions, VersionView)
 
 
 def keyword(value):
@@ -136,6 +137,7 @@ def project_version(db, identity, context, binding):
         except HTTPException:
             submittable = False
     upload = db.get(ContentUpload, version.upload_id) if version.upload_id else None
+    course = db.get(Course, projection.course_id) if projection.course_id else None
     return VersionView(material_id=material.id, version_id=version.id, library_id=projection.id,
                        title=material.title, version_no=version.version_no, input_kind=version.input_kind,
                        extraction_state=version.extraction_state, original_name=upload.original_name if upload else None,
@@ -146,7 +148,9 @@ def project_version(db, identity, context, binding):
                        material_revision=material.revision if editable else None,
                        actions=VersionActions(edit_material=editable, retire_material=bool(source.active and source_access.review),
                            create_version=editable and not material.retired, submit_review=submittable,
-                           preview=version.extraction_state == "succeeded", download=True), binding=binding)
+                           preview=version.extraction_state == "succeeded", download=True), binding=binding,
+                       file_type=upload.format if upload else ("text" if version.input_kind == "text" else None), course_id=course.id if course else None,
+                       course_code=course.code if course else None, course_title=course.title if course else None)
 
 
 def version_view(db, identity, version_id, library_id=None):
@@ -155,11 +159,50 @@ def version_view(db, identity, version_id, library_id=None):
     return project_version(db, identity, context, bindings[(context[0].id, context[2].id)])
 
 
-def versions(db, identity, q, offset, limit, library_id=None, material_id=None, newest_only=False):
-    query = readable_versions(identity, library_id).outerjoin(ContentUpload, ContentUpload.id == MaterialVersion.upload_id)
+def search_matches(db, contexts, q):
+    """One bounded matching chunk per already authorized page version, never a full-library fetch."""
+    ids = [version.id for version, _material, _projection in contexts if version.extraction_state == "succeeded"]
+    start = func.greatest(1, func.strpos(func.lower(SourceChunk.text), func.lower(q)) - 60)
+    ranked = select(SourceChunk.id.label("id"), SourceChunk.material_version_id.label("version_id"),
+        SourceChunk.ordinal, SourceChunk.locator, func.substr(SourceChunk.text, start, 240).label("snippet"),
+        func.row_number().over(partition_by=SourceChunk.material_version_id, order_by=SourceChunk.ordinal).label("rn"),
+    ).where(SourceChunk.material_version_id.in_(ids), SourceChunk.text.ilike(keyword(q), escape="\\")).subquery()
+    matches = {row.version_id: SearchMatch(kind="chunk", snippet=row.snippet, chunk_id=row.id,
+        ordinal=row.ordinal, locator=row.locator) for row in db.exec(select(ranked.c.id, ranked.c.version_id,
+            ranked.c.ordinal, ranked.c.locator, ranked.c.snippet).where(ranked.c.rn == 1))} if ids else {}
+    for version, material, _projection in contexts:
+        if version.id in matches:
+            continue
+        upload = db.get(ContentUpload, version.upload_id) if version.upload_id else None
+        for kind, value in (("input_text", version.input_text), ("title", material.title),
+                            ("filename", upload.original_name if upload else None)):
+            if value and q.lower() in value.lower():
+                start = max(0, value.lower().find(q.lower()) - 60)
+                matches[version.id] = SearchMatch(kind=kind, snippet=value[start:start + 240])
+                break
+    return matches
+
+
+def versions(db, identity, q, offset, limit, library_id=None, material_id=None, newest_only=False,
+             course_id=None, file_type=None, created_after=None, created_before=None):
+    if any(value is not None and value.tzinfo is None for value in (created_after, created_before)):
+        raise HTTPException(422, "时间筛选须包含时区")
+    if created_after and created_before and created_after > created_before:
+        raise HTTPException(422, "开始时间不能晚于结束时间")
+    query = readable_versions(identity, library_id, course_id).outerjoin(ContentUpload, ContentUpload.id == MaterialVersion.upload_id)
     if q:
+        body = select(SourceChunk.id).where(SourceChunk.material_version_id == MaterialVersion.id,
+            SourceChunk.text.ilike(keyword(q), escape="\\")).correlate(MaterialVersion).exists()
         query = query.where(or_(Material.title.ilike(keyword(q), escape="\\"),
-                               ContentUpload.original_name.ilike(keyword(q), escape="\\")))
+                               ContentUpload.original_name.ilike(keyword(q), escape="\\"),
+                               MaterialVersion.input_text.ilike(keyword(q), escape="\\"),
+                               and_(MaterialVersion.extraction_state == "succeeded", body)))
+    if file_type:
+        query = query.where(MaterialVersion.input_kind == "text" if file_type == "text" else ContentUpload.format == file_type)
+    if created_after:
+        query = query.where(MaterialVersion.created_at >= created_after)
+    if created_before:
+        query = query.where(MaterialVersion.created_at <= created_before)
     if material_id is not None:
         query = query.where(Material.id == material_id)
     if newest_only:
@@ -170,10 +213,13 @@ def versions(db, identity, q, offset, limit, library_id=None, material_id=None, 
         query = select(MaterialVersion).where(MaterialVersion.id.in_(select(ranked.c.id).where(ranked.c.rn == 1)))
     count = db.exec(select(func.count()).select_from(query.subquery())).one()
     rows = db.exec(query.order_by(MaterialVersion.created_at.desc(), MaterialVersion.id).offset(offset).limit(limit)).all()
-    contexts = [require_version(db, identity, row.id, library_id) for row in rows]
+    contexts = [require_version(db, identity, row.id, library_id, course_id) for row in rows]
     bindings = binding_batch(db, identity, contexts)
-    return Page[VersionView](items=[project_version(db, identity, context, bindings[(context[0].id, context[2].id)]) for context in contexts],
-                             total=count, offset=offset, limit=limit)
+    matches = search_matches(db, contexts, q) if q else {}
+    items = [project_version(db, identity, context, bindings[(context[0].id, context[2].id)]) for context in contexts]
+    for item in items:
+        item.search_match = matches.get(item.version_id)
+    return Page[VersionView](items=items, total=count, offset=offset, limit=limit)
 
 
 def chunks(db, identity, version_id, after, limit, library_id=None):

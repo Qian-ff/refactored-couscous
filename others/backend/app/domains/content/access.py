@@ -25,7 +25,7 @@ def columns(library, *, creator_id, published):
                            audience=library.audience, creator_id=creator_id, published=published)
 
 
-def readable_versions(identity: Identity, library_id: UUID | None = None):
+def readable_versions(identity: Identity, library_id: UUID | None = None, course_id: UUID | None = None):
     """EXISTS prevents duplicate versions before count/pagination with multiple publications."""
     target = aliased(Library)
     published = select(MaterialPublication.id).join(
@@ -34,13 +34,15 @@ def readable_versions(identity: Identity, library_id: UUID | None = None):
         MaterialPublication.version_id == MaterialVersion.id,
         MaterialPublication.active.is_(True), target.active.is_(True),
         target.id == library_id if library_id is not None else true(),
+        target.course_id == course_id if course_id is not None else true(),
         MaterialReview.state == "approved",
         MaterialReview.version_id == MaterialPublication.version_id,
         MaterialReview.target_library_id == MaterialPublication.target_library_id,
         # Published target access never needs the source creator; avoid a nested source-table cross join.
         read_resource_predicate(identity, columns(target, creator_id=literal(None), published=true())),
     ).correlate(MaterialVersion, Material).exists()
-    source = and_(Library.active.is_(True), Library.id == library_id if library_id is not None else true(), read_resource_predicate(
+    source = and_(Library.active.is_(True), Library.id == library_id if library_id is not None else true(),
+        Library.course_id == course_id if course_id is not None else true(), read_resource_predicate(
         identity, columns(Library, creator_id=Material.creator_id, published=false())))
     review_target = aliased(Library)
     reviewable = select(MaterialReview.id).join(
@@ -49,19 +51,20 @@ def readable_versions(identity: Identity, library_id: UUID | None = None):
         MaterialReview.version_id == MaterialVersion.id,
         MaterialReview.state.in_(["submitted", "approved"]), review_target.active.is_(True),
         review_target.id == library_id if library_id is not None else true(),
+        review_target.course_id == course_id if course_id is not None else true(),
         read_resource_predicate(identity, columns(review_target, creator_id=literal(None), published=false())),
     ).correlate(MaterialVersion).exists()
     return select(MaterialVersion).join(Material, Material.id == MaterialVersion.material_id).join(
         Library, Library.id == Material.library_id).where(or_(source, published, reviewable))
 
 
-def require_version(db: Session, identity: Identity, version_id: UUID, library_id: UUID | None = None):
-    version = db.exec(readable_versions(identity, library_id).where(MaterialVersion.id == version_id)).first()
+def require_version(db: Session, identity: Identity, version_id: UUID, library_id: UUID | None = None, course_id: UUID | None = None):
+    version = db.exec(readable_versions(identity, library_id, course_id).where(MaterialVersion.id == version_id)).first()
     if version is None:
         raise HTTPException(403, "无权读取该资料版本")
     material = db.get(Material, version.material_id)
     source = db.get(Library, material.library_id)
-    if ((library_id is None or source.id == library_id) and source.active
+    if ((library_id is None or source.id == library_id) and (course_id is None or source.course_id == course_id) and source.active
             and resource_access(db, identity, descriptor(source, creator_id=material.creator_id)).read):
         return version, material, source
     bindings = db.exec(select(MaterialPublication, MaterialReview, Library).join(
@@ -75,6 +78,8 @@ def require_version(db: Session, identity: Identity, version_id: UUID, library_i
     for _publication, _review, target in bindings:
         if library_id is not None and target.id != library_id:
             continue
+        if course_id is not None and target.course_id != course_id:
+            continue
         if resource_access(db, identity, descriptor(target, creator_id=material.creator_id, published=True)).read:
             return version, material, target
     reviews = db.exec(select(MaterialReview, Library).join(
@@ -83,6 +88,8 @@ def require_version(db: Session, identity: Identity, version_id: UUID, library_i
             Library.active.is_(True)).order_by(MaterialReview.id)).all()
     for _review, target in reviews:
         if library_id is not None and target.id != library_id:
+            continue
+        if course_id is not None and target.course_id != course_id:
             continue
         if resource_access(db, identity, descriptor(target)).review:
             return version, material, target
