@@ -77,6 +77,14 @@ class TargetBinding(BaseModel):
     active_publication: PublicationView | None = None
 
 
+class SearchMatch(BaseModel):
+    kind: Literal["chunk", "input_text", "title", "filename"]
+    snippet: str = Field(max_length=240)
+    chunk_id: UUID | None = None
+    ordinal: int | None = None
+    locator: dict | None = None
+
+
 class VersionView(BaseModel):
     material_id: UUID
     version_id: UUID
@@ -96,6 +104,11 @@ class VersionView(BaseModel):
     material_revision: int | None = None
     actions: VersionActions = Field(default_factory=VersionActions)
     binding: TargetBinding | None = None
+    file_type: Literal["pdf", "pptx", "docx", "txt", "text"] | None = None
+    course_id: UUID | None = None
+    course_code: str | None = None
+    course_title: str | None = None
+    search_match: SearchMatch | None = None
 
 
 class ChunkView(BaseModel):
