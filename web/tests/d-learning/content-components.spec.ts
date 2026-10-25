@@ -1,0 +1,140 @@
+import { expect, test, type Page } from "@playwright/test"
+import path from "node:path"
+import fs from "node:fs"
+import { reportDirectory, requireService, sourceIdentity, webPort } from "../../../others/scripts/web-environment.mjs"
+
+test.use({ trace: "off" })
+const fixture = "/src/features/content/dev/index.html"
+const apiRequests = new WeakMap<object, string[]>()
+test.beforeAll(async () => {
+  const web = await requireService(`http://127.0.0.1:${webPort}`, sourceIdentity("web"))
+  fs.mkdirSync(reportDirectory, { recursive: true })
+  fs.writeFileSync(path.join(reportDirectory, "component-source.json"), JSON.stringify({ scope: "development props fixture only", web, realMaterialApiValidated: false }, null, 2))
+})
+async function shot(page: Page, name: string) {
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 })
+    await page.evaluate(() => document.fonts.ready)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBeTruthy()
+    expect(await page.locator(".lc-button:visible").evaluateAll(nodes => nodes.filter(node => { const bounds = node.getBoundingClientRect(); return bounds.width < 43.5 || bounds.height < 43.5 }).length)).toBe(0)
+    await page.screenshot({ path: path.join(reportDirectory, name + "-" + width + ".png"), fullPage: true })
+  }
+}
+test.beforeEach(async ({ page }, info) => {
+  const requests: string[] = []
+  apiRequests.set(info, requests)
+  page.on("request", request => { if (request.url().includes("/api/v1/")) requests.push(new URL(request.url()).pathname) })
+  await page.goto(fixture)
+  await expect(page.getByText("开发夹具 · 合成资料 · 非正式业务", { exact: true })).toBeVisible()
+  test.info().annotations.push({ type: "scope", description: "Props fixture only; no real material API verification" })
+})
+test.afterEach(async ({}, info) => { expect(apiRequests.get(info)).toEqual([]) })
+test("权限动作与长列表、学生不显示草稿及管理操作", async ({ page }) => {
+  await expect(page.getByRole("button", { name: "管理资料库" })).toHaveCount(0)
+  await expect(page.getByRole("button", { name: "上传资料", exact: true })).toBeVisible()
+  await expect(page.getByRole("button", { name: "编辑草稿", exact: true })).toBeVisible()
+  await shot(page, "content-fixture-staff")
+  await page.getByRole("button", { name: "下一页", exact: true }).click()
+  await expect(page.getByRole("button", { name: "审核资料", exact: true })).toBeVisible()
+  await page.getByLabel("夹具身份").selectOption("student")
+  await expect(page.locator(".lc-records>li")).toHaveCount(1)
+  await expect(page.getByRole("button", { name: "上传资料", exact: true })).toHaveCount(0)
+  await expect(page.getByRole("button", { name: "编辑草稿", exact: true })).toHaveCount(0)
+  await expect(page.getByRole("button", { name: "审核资料", exact: true })).toHaveCount(0)
+  await expect(page.getByRole("button", { name: "发布版本", exact: true })).toHaveCount(0)
+  await shot(page, "content-fixture-student")
+})
+test("中文组合输入不误搜索、清空、空结果与状态重试", async ({ page }) => {
+  const input = page.getByLabel("搜索资料", { exact: true })
+  await input.dispatchEvent("compositionstart")
+  await input.fill("没有匹配")
+  await input.press("Enter")
+  await expect(page.locator(".lc-records>li")).toHaveCount(2)
+  await input.dispatchEvent("compositionend")
+  await input.press("Enter")
+  await expect(page.getByText("没有匹配的资料", { exact: true })).toBeVisible()
+  await page.getByRole("button", { name: "清空", exact: true }).click()
+  await expect(input).toHaveValue("")
+  await expect(page.locator(".lc-records>li")).toHaveCount(2)
+  for (const [state, title] of [["loading", "正在读取"], ["forbidden", "当前身份无权访问"], ["offline", "网络已断开"], ["unconfigured", "尚未配置服务"], ["error", "读取失败"]]) {
+    await page.getByLabel("夹具状态").selectOption(state)
+    await expect(page.getByRole("heading", { name: title, exact: true })).toBeVisible()
+    await expect(page.locator(".lc-records>li")).toHaveCount(0)
+  }
+  await page.getByRole("button", { name: "重新读取", exact: true }).click()
+  await expect(page.locator(".lc-records>li")).toHaveCount(2)
+})
+test("定位文本安全显示、键盘关闭恢复焦点，下载只是夹具回调", async ({ page }) => {
+  await page.getByRole("button", { name: "定位预览", exact: true }).click()
+  await expect(page.getByRole("dialog")).toContainText("<script>该文字必须作为纯文本显示，不执行脚本。</script>")
+  await expect(page.getByRole("heading", { name: "第 3 页 · 第 2 段", exact: true })).toBeVisible()
+  await page.getByRole("button", { name: "下载有权原件", exact: true }).click()
+  await expect(page.getByText("开发夹具：已触发下载回调，未下载原件。", { exact: true })).toBeVisible()
+  await shot(page, "content-fixture-preview")
+  await page.keyboard.press("Escape")
+  await expect(page.getByRole("dialog")).toHaveCount(0)
+  await expect(page.getByRole("button", { name: "定位预览", exact: true })).toBeFocused()
+})
+test("上传前校验和不确定结果保留原参数，不冒充上传成功", async ({ page }) => {
+  await page.getByRole("button", { name: "上传资料", exact: true }).click()
+  await page.getByLabel("资料名称", { exact: true }).fill("合成上传资料")
+  await page.getByLabel("资料文件", { exact: true }).setInputFiles({ name: "invalid.exe", mimeType: "application/octet-stream", buffer: Buffer.from("fixture") })
+  await page.getByRole("button", { name: "上传并解析", exact: true }).click()
+  await expect(page.getByRole("alert")).toContainText("仅接收 PDF、PPTX、DOCX 和 TXT")
+  await page.getByLabel("资料文件", { exact: true }).setInputFiles({ name: "synthetic.txt", mimeType: "text/plain", buffer: Buffer.from("合成资料") })
+  await page.getByRole("button", { name: "上传并解析", exact: true }).click()
+  await expect(page.getByRole("alert")).toContainText("未发送原件")
+  await expect(page.getByLabel("资料名称", { exact: true })).toHaveValue("合成上传资料")
+  await expect(page.getByLabel("资料文件", { exact: true })).toBeDisabled()
+  await shot(page, "content-fixture-upload-uncertain")
+  await page.getByRole("button", { name: "取消本次处理", exact: true }).click()
+  await expect(page.getByRole("dialog")).toHaveCount(0)
+})
+test("审核绑定固定版本，授权与警告未确认不提交，审核不等于发布", async ({ page }) => {
+  await page.getByRole("button", { name: "下一页", exact: true }).click()
+  await page.getByRole("button", { name: "审核资料", exact: true }).click()
+  await page.getByRole("button", { name: "确认审核决定", exact: true }).click()
+  await expect(page.getByText("开发夹具：已触发审核回调，未审核或发布正式版本。", { exact: true })).toHaveCount(0)
+  await page.getByLabel("已核对整份原件在目标范围的阅读与下载授权").check()
+  await page.getByLabel("已逐项核对当前解析警告").check()
+  await shot(page, "content-fixture-review")
+  await page.getByRole("button", { name: "确认审核决定", exact: true }).click()
+  await expect(page.getByText("开发夹具：已触发审核回调，未审核或发布正式版本。", { exact: true })).toBeVisible()
+})
+test("上传进度与解析阶段分别呈现，发布确认不改变合成记录", async ({ page }) => {
+  for (const [scenario, text] of [["uploading", "正在传输原件"], ["queued", "原件已接收，排队解析"], ["running", "正在解析资料"]]) {
+    await page.getByLabel("夹具上传状态").selectOption(scenario)
+    await page.getByRole("button", { name: "上传资料", exact: true }).click()
+    await page.getByLabel("资料名称", { exact: true }).fill("阶段夹具")
+    await page.getByLabel("资料文件", { exact: true }).setInputFiles({ name: "synthetic.txt", mimeType: "text/plain", buffer: Buffer.from("abcdefghij") })
+    await page.getByRole("button", { name: "上传并解析", exact: true }).click()
+    await expect(page.getByRole("dialog")).toContainText(text)
+    if (scenario === "uploading") {
+      await expect(page.getByRole("progressbar", { name: "文件上传进度" })).toHaveAttribute("value", "50")
+      await shot(page, "content-fixture-upload-progress")
+    }
+    await page.getByRole("button", { name: "取消本次处理", exact: true }).click()
+  }
+  await page.getByRole("button", { name: "下一页", exact: true }).click()
+  await page.getByRole("button", { name: "发布版本", exact: true }).click()
+  await expect(page.getByRole("dialog")).toContainText("第4版 · 合成固定版本")
+  await expect(page.getByRole("dialog")).toContainText("发布范围：合成发布范围")
+  await page.getByRole("button", { name: "确认发布本版本", exact: true }).click()
+  await expect(page.getByText("开发夹具：已触发发布回调，未发布正式版本。", { exact: true })).toBeVisible()
+  await page.getByRole("button", { name: "暂不发布", exact: true }).click()
+  await expect(page.getByText("审核通过，待发布", { exact: true })).toBeVisible()
+})
+test.describe("资料组件触控", () => {
+  test.use({ hasTouch: true, viewport: { width: 390, height: 844 } })
+  test("手机点按打开预览、关闭和读取范围切换", async ({ page }) => {
+    await page.getByLabel("夹具身份").selectOption("student")
+    await page.getByRole("button", { name: "定位预览", exact: true }).tap()
+    await expect(page.getByRole("dialog")).toBeVisible()
+    await page.getByRole("button", { name: "关闭预览", exact: true }).tap()
+    await expect(page.getByRole("dialog")).toHaveCount(0)
+    await page.getByLabel("搜索资料", { exact: true }).fill("没有匹配")
+    await page.getByRole("button", { name: "搜索", exact: true }).tap()
+    await expect(page.getByText("没有匹配的资料", { exact: true })).toBeVisible()
+    await shot(page, "content-fixture-touch-empty")
+  })
+})

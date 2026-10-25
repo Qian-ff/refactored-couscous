@@ -10,11 +10,12 @@ import { ProfilePage } from "../features/student/ProfilePage"
 import { StudentCoursesPage } from "../features/student/StudentCoursesPage"
 import { EnrollmentRequestsPage } from "../features/student/EnrollmentRequestsPage"
 import { StudentClassPage } from "../features/student/StudentClassPage"
+import { contentPages } from "../features/content/ContentPage"
 import { Brand, notifyAccount, PasswordPage, ServiceSettings } from "../components/labconnect/AccountEntry"
 import { Button, Dialog, Notice, StatePanel } from "../components/labconnect"
 
 export const productPages: readonly PageRegistration[] = [
-  ...adminPages, ...teachingPages,
+  ...adminPages, ...teachingPages, ...contentPages,
   { id: "d-student-courses", path: "/student/courses", title: "我的课程", workRoles: ["student"], component: StudentCoursesPage, navGroup: "courses" },
   { id: "d-student-enrollments", path: "/student/enrollments", title: "班级申请与历史", workRoles: ["student"], component: EnrollmentRequestsPage, navGroup: "courses" },
   { id: "d-student-class", path: "/student/courses/:courseId", title: "教学班", workRoles: ["student"], component: StudentClassPage },
