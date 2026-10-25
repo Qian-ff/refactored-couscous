@@ -1699,6 +1699,34 @@ export type RevisionInput = {
 export type Role = 'platform_admin' | 'school_admin' | 'college_admin' | 'teacher' | 'student';
 
 /**
+ * SearchMatch
+ */
+export type SearchMatch = {
+    /**
+     * Chunk Id
+     */
+    chunk_id?: string | null;
+    /**
+     * Kind
+     */
+    kind: 'chunk' | 'input_text' | 'title' | 'filename';
+    /**
+     * Locator
+     */
+    locator?: {
+        [key: string]: unknown;
+    } | null;
+    /**
+     * Ordinal
+     */
+    ordinal?: number | null;
+    /**
+     * Snippet
+     */
+    snippet: string;
+};
+
+/**
  * SelfEnrollmentView
  *
  * Latest stored relationship, not an event ledger or a live-resource permission.
@@ -2163,6 +2191,18 @@ export type VersionView = {
      */
     content_hash: string;
     /**
+     * Course Code
+     */
+    course_code?: string | null;
+    /**
+     * Course Id
+     */
+    course_id?: string | null;
+    /**
+     * Course Title
+     */
+    course_title?: string | null;
+    /**
      * Created At
      */
     created_at: string;
@@ -2174,6 +2214,10 @@ export type VersionView = {
      * File Bytes
      */
     file_bytes: number | null;
+    /**
+     * File Type
+     */
+    file_type?: 'pdf' | 'pptx' | 'docx' | 'txt' | 'text' | null;
     /**
      * Input Kind
      */
@@ -2198,6 +2242,7 @@ export type VersionView = {
      * Parser Version
      */
     parser_version: string | null;
+    search_match?: SearchMatch | null;
     source_metadata?: SourceMetadata | null;
     /**
      * Title
@@ -4077,6 +4122,22 @@ export type contentListMaterialsData = {
          * Library Id
          */
         library_id?: string | null;
+        /**
+         * Course Id
+         */
+        course_id?: string | null;
+        /**
+         * File Type
+         */
+        file_type?: 'pdf' | 'pptx' | 'docx' | 'txt' | 'text' | null;
+        /**
+         * Created After
+         */
+        created_after?: string | null;
+        /**
+         * Created Before
+         */
+        created_before?: string | null;
     };
     url: '/api/v1/content/materials';
 };
