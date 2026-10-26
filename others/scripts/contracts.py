@@ -19,8 +19,16 @@ SCHEMA = ROOT / "others/contracts/openapi.json"
 
 def export_schema() -> str:
     primary = primary_root(ROOT)
-    require_compatible(ROOT, primary, BACKEND_INPUTS)
-    interpreter = primary / "others/backend" / (".venv/Scripts/python.exe" if os.name == "nt" else ".venv/bin/python")
+    grants = json.loads((ROOT / "others/contracts/execution-delegations.json").read_text())["packages"]
+    if ROOT.resolve() != primary.resolve() and grants.get("c1-runtime-public-integration", {}).get("status") == "active":
+        from c1_candidate_env import validate, paths, fingerprint
+        validate()
+        project, environment, interpreter = paths("backend")
+        if json.loads((environment / "c1-inputs.json").read_text())["fingerprint"] != fingerprint(project):
+            raise RuntimeError("Prepare the locked C1 candidate backend first")
+    else:
+        require_compatible(ROOT, primary, BACKEND_INPUTS)
+        interpreter = primary / "others/backend" / (".venv/Scripts/python.exe" if os.name == "nt" else ".venv/bin/python")
     process = subprocess.run([str(interpreter), "-c", BOOTSTRAP, str(ROOT), str(primary), "__openapi__"],
                              cwd=ROOT, capture_output=True, text=True, encoding="utf-8", check=True)
     return json.dumps(json.loads(process.stdout), ensure_ascii=False, sort_keys=True, indent=2) + "\n"

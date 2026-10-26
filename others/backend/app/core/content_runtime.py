@@ -10,7 +10,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import Session
 
-from app.core.content_runner import DockerParseRunner
+from app.core.content_runner import DockerParseRunner, C1_PROTOCOL
 from app.core.db import engine
 from app.core.config import settings
 from app.domains.content.runtime import ContentRuntime
@@ -48,6 +48,12 @@ def build_runtime():
             require_runtime_role(connection)
         runtime.storage = PrivateStorage(root)
         runtime.runner = DockerParseRunner(json.loads(parser.read_text(encoding="utf-8")))
+        if runtime.runner.configuration["protocol"] == C1_PROTOCOL:
+            with engine.connect() as connection:
+                count = connection.execute(text("SELECT count(*) FROM pg_tables WHERE schemaname='public' AND "
+                    "(tablename LIKE 'content_question%' OR tablename LIKE 'content_lesson%' OR tablename='content_scene_asset')")).scalar_one()
+                if count != 23:
+                    raise RuntimeError("CONTENT_C1_SCHEMA_UNAVAILABLE")
     except (OSError, ValueError, TypeError, KeyError, RuntimeError, HTTPException, SQLAlchemyError):
         runtime.storage = None
         runtime.unavailable_reason = "CONTENT_RUNTIME_UNAVAILABLE"
@@ -58,10 +64,16 @@ def build_runtime():
 async def lifespan(application):
     runtime = build_runtime()
     application.state.content_runtime = runtime
+    transfer = None
+    if (runtime.storage is not None and isinstance(runtime.runner, DockerParseRunner)
+            and runtime.runner.configuration["protocol"] == C1_PROTOCOL):
+        from app.core.content_transfer_runtime import TransferDriver, environment
+        application.state.c1_environment = lambda: environment(runtime)
+        transfer = TransferDriver(runtime)
     stop = asyncio.Event()
     worker = None
     if runtime.storage is not None and settings.APP_ENV != "test":
-        scheduler = ContentScheduler(runtime.factory, runtime.storage, runtime.runner)
+        scheduler = ContentScheduler(runtime.factory, runtime.storage, runtime.runner, transfer)
         application.state.content_scheduler = scheduler
         worker = asyncio.create_task(scheduler.serve(stop), name="content-scheduler")
     try:

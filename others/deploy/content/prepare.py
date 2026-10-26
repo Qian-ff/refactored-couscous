@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import argparse
 import importlib.metadata
 import json
 import os
@@ -11,6 +12,9 @@ import shutil
 import subprocess
 import sys
 import tomllib
+import urllib.request
+from urllib.parse import urlparse
+from concurrent.futures import ThreadPoolExecutor
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "others/scripts"))
@@ -21,11 +25,13 @@ def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def closure(lock):
+def closure(lock, *, transfers=False):
     packages = {package["name"]: package for package in lock["package"]}
     if len(packages) != len(lock["package"]):
         raise RuntimeError("Ambiguous parser lock versions")
     needed, pending = {}, ["pypdf", "python-docx", "python-pptx", "lxml"]
+    if transfers:
+        pending.extend(["openpyxl", "defusedxml", "pydantic"])
     while pending:
         name = pending.pop()
         if name in needed:
@@ -38,15 +44,66 @@ def closure(lock):
     return needed
 
 
+def cache_linux_wheel(package, directory):
+    """Fixed image uses CPython 3.13/glibc x86_64. Fetch only an official locked wheel."""
+    candidates = [wheel for wheel in package.get("wheels", []) if
+        wheel["url"].endswith("none-any.whl") or
+        ("-cp313-cp313-manylinux" in wheel["url"] and "x86_64" in wheel["url"])]
+    if not candidates:
+        raise RuntimeError("No locked wheel for the fixed parser image: " + package["name"])
+    wheel = sorted(candidates, key=lambda value: value["url"])[0]
+    url = urlparse(wheel["url"])
+    if url.scheme != "https" or url.hostname != "files.pythonhosted.org" or url.username:
+        raise RuntimeError("Unexpected wheel origin")
+    target = directory / url.path.rsplit("/", 1)[-1]
+    if target.exists() and "sha256:" + digest(target) == wheel["hash"]:
+        return target
+    with urllib.request.urlopen(wheel["url"], timeout=30) as response:
+        data = response.read(32 * 1024 * 1024 + 1)
+    if len(data) > 32 * 1024 * 1024 or "sha256:" + hashlib.sha256(data).hexdigest() != wheel["hash"]:
+        raise RuntimeError("Official locked wheel hash mismatch")
+    temporary = target.with_suffix(".new")
+    temporary.write_bytes(data)
+    temporary.replace(target)
+    return target
+
+
 def main():
-    validate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--profile", choices=("c02", "c1"), default="c02")
+    profile = parser.parse_args().profile
+    if profile == "c1":
+        from c1_candidate_env import validate as validate_c1
+        validate_c1()
+    else:
+        validate()
     worker = ROOT / "others/ai_worker"
     lock = tomllib.loads((worker / "uv.lock").read_text(encoding="utf-8"))
-    packages = closure(lock)
-    destination = ROOT / "others/runtime/c02-public/build"
+    packages = closure(lock, transfers=profile == "c1")
+    runtime = ROOT / ("others/runtime/c1-public" if profile == "c1" else "others/runtime/c02-public")
+    destination = runtime / "build"
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "content").mkdir(exist_ok=True)
+    wheelhouse = destination / "wheels"
+    wheelhouse.mkdir(exist_ok=True)
     copied = {}
+    if profile == "c1":
+        with ThreadPoolExecutor(max_workers=3) as downloads:
+            for wheel in downloads.map(lambda package: cache_linux_wheel(package, wheelhouse), packages.values()):
+                copied["wheels/" + wheel.name] = digest(wheel)
+    # Only the pure CLI package closure; no API, DB, SQLModel, .env or speech modules.
+    for name in ("app/__init__.py", "app/domains/__init__.py", "app/domains/content/__init__.py",
+                 "app/domains/content/questions/__init__.py"):
+        target = destination / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text("", encoding="utf-8")
+        copied[name] = digest(target)
+    if profile == "c1":
+        for name in ("app/domains/content/schemas.py", "app/domains/content/questions/schemas.py",
+                     "app/domains/content/questions/transfer_codec.py", "app/domains/content/questions/transfer_cli.py"):
+            source, target = ROOT / "others/backend" / name, destination / name
+            shutil.copyfile(source, target)
+            copied[name] = digest(source)
     for name in ("__init__.py", "archive.py", "cli.py", "parser.py", "protocol.py"):
         path = worker / "content" / name
         shutil.copyfile(path, destination / "content" / name)
@@ -57,7 +114,7 @@ def main():
         copied[name] = digest(path)
     requirements = []
     licenses = {}
-    license_root = ROOT / "others/licenses/content-parser"
+    license_root = ROOT / ("others/licenses/content-transfer" if profile == "c1" else "others/licenses/content-parser")
     license_root.mkdir(parents=True, exist_ok=True)
     for name, package in sorted(packages.items()):
         installed = importlib.metadata.distribution(name)
@@ -69,7 +126,7 @@ def main():
         requirements.append(name + "==" + package["version"] + " " + " ".join("--hash=" + value for value in hashes))
         files = {}
         for member in installed.files or []:
-            if ".dist-info" not in str(member) or "license" not in member.name.lower():
+            if ".dist-info" not in str(member) or not any(word in member.name.lower() for word in ("license", "licence", "copying")):
                 continue
             original = Path(installed.locate_file(member))
             if original.is_file():
@@ -89,7 +146,6 @@ def main():
     subprocess.run(["docker", "build", "--tag", tag, "--label", "labconnect.parse.source-sha=" + source_sha,
                     "--label", "labconnect.parse.content-fingerprint=" + fingerprint, str(destination)], check=True)
     image = subprocess.check_output(["docker", "image", "inspect", "--format", "{{.Id}}", tag], text=True).strip()
-    runtime = ROOT / "others/runtime/c02-public"
     server_path = runtime / "control.json"
     previous = json.loads(server_path.read_text()) if server_path.exists() else None
     root = runtime / "controller"
@@ -99,9 +155,9 @@ def main():
             raise RuntimeError("Stop and release the old parser executions before changing image")
     key = previous["key"] if previous else secrets.token_urlsafe(48)
     instance = previous["instance"] if previous else secrets.token_hex(16)
-    endpoint = ({"host": "127.0.0.1", "port": 18767} if os.name == "nt" else
+    endpoint = ({"host": "127.0.0.1", "port": 18768 if profile == "c1" else 18767} if os.name == "nt" else
                 {"socket": str(runtime / "parse-control.sock")})
-    client = {"protocol": "labconnect.parse-control/1", "key": key, **endpoint}
+    client = {"protocol": "labconnect.content-control/2" if profile == "c1" else "labconnect.parse-control/1", "key": key, **endpoint}
     server = {**client, "root": str(root), "image": image, "instance": instance}
     for name, value in (("control.json", server), ("parser-client.json", client)):
         path = runtime / name

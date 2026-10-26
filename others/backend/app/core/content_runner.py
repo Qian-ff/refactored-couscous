@@ -13,6 +13,8 @@ from uuid import UUID
 from app.domains.content.parse_runner import ExecutionState, RunnerCapabilities, RunnerUnavailable
 
 PROTOCOL = "labconnect.parse-control/1"
+C1_PROTOCOL = "labconnect.content-control/2"
+TASK_KINDS = ("material_parse", "question_import", "question_export")
 FRAME = 65536
 MAX_INPUT = 20 * 1024 * 1024
 MAX_OUTPUT = 16 * 1024 * 1024
@@ -35,6 +37,17 @@ def json_bytes(value):
 
 
 def validate_task(value):
+    if isinstance(value, dict) and "task_kind" in value:
+        expected = {"task_kind", "task_id", "execution_id", "generation", "input_sha256", "format"}
+        if set(value) != expected or value["task_kind"] not in TASK_KINDS[1:] or value["format"] not in {"csv", "xlsx"}:
+            raise RunnerUnavailable()
+        for name in ("task_id", "execution_id"):
+            if not isinstance(value[name], str) or str(UUID(value[name])) != value[name]:
+                raise RunnerUnavailable()
+        if (type(value["generation"]) is not int or value["generation"] < 1
+                or not isinstance(value["input_sha256"], str) or not re.fullmatch("[0-9a-f]{64}", value["input_sha256"])):
+            raise RunnerUnavailable()
+        return value
     expected = {"execution_id", "job_id", "version_id", "generation", "input_sha256", "format", "encoding"}
     if not isinstance(value, dict) or set(value) != expected:
         raise RunnerUnavailable()
@@ -50,16 +63,26 @@ def validate_task(value):
     return value
 
 
+def task_input_limit(task):
+    kind = task.get("task_kind", "material_parse")
+    if kind == "question_export":
+        return MAX_OUTPUT
+    if kind == "question_import":
+        return 1048576 if task["format"] == "csv" else 5242880
+    return 1048576 if task["format"] in {"txt", "text"} else MAX_INPUT
+
+
 class DockerParseRunner:
     def __init__(self, configuration: dict):
         if (set(configuration) - {"protocol", "key", "host", "port", "socket"}
-                or configuration.get("protocol") != PROTOCOL
+                or configuration.get("protocol") not in {PROTOCOL, C1_PROTOCOL}
                 or not isinstance(configuration.get("key"), str) or len(configuration["key"]) < 32):
             raise RunnerUnavailable()
         if "socket" in configuration:
             if "host" in configuration or "port" in configuration or not Path(configuration["socket"]).is_absolute():
                 raise RunnerUnavailable()
-        elif configuration.get("host") != "127.0.0.1" or configuration.get("port") != 18767:
+        elif (configuration.get("host") != "127.0.0.1"
+              or configuration.get("port") != (18768 if configuration["protocol"] == C1_PROTOCOL else 18767)):
             raise RunnerUnavailable()
         self.configuration = configuration
 
@@ -68,7 +91,7 @@ class DockerParseRunner:
         connect = (asyncio.open_unix_connection(settings["socket"]) if "socket" in settings else
                    asyncio.open_connection(settings["host"], settings["port"]))
         reader, writer = await asyncio.wait_for(connect, 5)
-        request = json_bytes({"protocol": PROTOCOL, "key": settings["key"], "operation": operation, **fields})
+        request = json_bytes({"protocol": settings["protocol"], "key": settings["key"], "operation": operation, **fields})
         if len(request) > 16384:
             writer.close()
             raise RunnerUnavailable()
@@ -107,6 +130,8 @@ class DockerParseRunner:
             reader, writer = await self._open(operation, **fields)
             value = await self._response(reader)
             if operation == "capabilities":
+                if self.configuration["protocol"] == C1_PROTOCOL and value.get("task_kinds") != list(TASK_KINDS):
+                    raise RunnerUnavailable()
                 capabilities = RunnerCapabilities(**value["capabilities"])
                 capabilities.require_supported()
                 return capabilities
@@ -156,7 +181,7 @@ class DockerParseRunner:
                 if not isinstance(data, bytes):
                     raise RunnerUnavailable()
                 size += len(data)
-                if size > (1024 * 1024 if task.format in {"text", "txt"} else MAX_INPUT):
+                if size > task_input_limit(specification):
                     raise RunnerUnavailable()
                 digest.update(data)
                 for offset in range(0, len(data), FRAME):

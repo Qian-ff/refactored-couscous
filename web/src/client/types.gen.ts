@@ -143,6 +143,86 @@ export type AccountView = {
 };
 
 /**
+ * BankView
+ */
+export type BankView = {
+    /**
+     * Active
+     */
+    active: boolean;
+    /**
+     * Audience
+     */
+    audience: string;
+    /**
+     * Can Review
+     */
+    can_review: boolean;
+    /**
+     * Can Submit
+     */
+    can_submit: boolean;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Scope
+     */
+    scope: string;
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
+ * BatchView
+ */
+export type BatchView = {
+    /**
+     * Committed At
+     */
+    committed_at: string | null;
+    /**
+     * Expires At
+     */
+    expires_at: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Input Hash
+     */
+    input_hash: string;
+    /**
+     * Library Id
+     */
+    library_id: string;
+    /**
+     * Preview Hash
+     */
+    preview_hash: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Row Count
+     */
+    row_count: number;
+    /**
+     * State
+     */
+    state: string;
+};
+
+/**
  * Capabilities
  */
 export type Capabilities = {
@@ -251,6 +331,40 @@ export type CatalogView = {
 };
 
 /**
+ * Choice
+ */
+export type Choice = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'choice';
+    /**
+     * Options
+     */
+    options: Array<Option>;
+    /**
+     * Prompt
+     */
+    prompt: string;
+    /**
+     * Question Version Id
+     */
+    question_version_id?: string | null;
+    /**
+     * Selection
+     */
+    selection: 'single' | 'multiple';
+    /**
+     * Sources
+     */
+    sources?: Array<SourcePointer>;
+};
+
+/**
  * ChunkPage
  */
 export type ChunkPage = {
@@ -355,37 +469,21 @@ export type ClassManagementView = {
 };
 
 /**
- * CommandResult
+ * CopyOrReference
  */
-export type CommandResult = {
+export type CopyOrReference = {
     /**
-     * Job Id
+     * Authorization Statement
      */
-    job_id?: string | null;
+    authorization_statement: string;
     /**
-     * Library Id
+     * Source Version Id
      */
-    library_id?: string | null;
+    source_version_id: string;
     /**
-     * Material Id
+     * Target Library Id
      */
-    material_id?: string | null;
-    /**
-     * Publication Id
-     */
-    publication_id?: string | null;
-    /**
-     * Review Id
-     */
-    review_id?: string | null;
-    /**
-     * Upload Id
-     */
-    upload_id?: string | null;
-    /**
-     * Version Id
-     */
-    version_id?: string | null;
+    target_library_id: string;
 };
 
 /**
@@ -507,6 +605,20 @@ export type CoursesPublic = {
 };
 
 /**
+ * CreatedQuestion
+ */
+export type CreatedQuestion = {
+    /**
+     * Question Id
+     */
+    question_id: string;
+    /**
+     * Row
+     */
+    row: number;
+};
+
+/**
  * CsvCommit
  */
 export type CsvCommit = {
@@ -615,6 +727,36 @@ export type CsvTemplateView = {
 };
 
 /**
+ * Decision
+ */
+export type Decision = {
+    /**
+     * Decision
+     */
+    decision: 'approved' | 'rejected';
+    /**
+     * Reason
+     */
+    reason?: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
+};
+
+/**
+ * DraftContent
+ */
+export type DraftContent = {
+    payload: QuestionPayload;
+    provenance?: Provenance;
+    /**
+     * Sources
+     */
+    sources?: Array<SourcePointer>;
+};
+
+/**
  * EnrollmentResult
  */
 export type EnrollmentResult = {
@@ -630,6 +772,28 @@ export type EnrollmentResult = {
      * Status
      */
     status: string;
+};
+
+/**
+ * ExportCreate
+ */
+export type ExportCreate = {
+    /**
+     * Authorization Statement
+     */
+    authorization_statement: string;
+    /**
+     * Format
+     */
+    format: 'csv' | 'xlsx';
+    /**
+     * Library Id
+     */
+    library_id: string;
+    /**
+     * Version Ids
+     */
+    version_ids: Array<string>;
 };
 
 /**
@@ -665,6 +829,99 @@ export type HTTPValidationError = {
      * Detail
      */
     detail?: Array<ValidationError>;
+};
+
+/**
+ * Hotspot
+ */
+export type Hotspot = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'hotspot';
+    /**
+     * Prompt
+     */
+    prompt: string;
+    /**
+     * Regions
+     */
+    regions: Array<Region>;
+    /**
+     * Scene Id
+     */
+    scene_id: string;
+    /**
+     * Sources
+     */
+    sources?: Array<SourcePointer>;
+};
+
+/**
+ * ImportConfirm
+ */
+export type ImportConfirm = {
+    /**
+     * Input Hash
+     */
+    input_hash: string;
+    /**
+     * Library Id
+     */
+    library_id: string;
+    /**
+     * Preview Hash
+     */
+    preview_hash: string;
+    /**
+     * Revision
+     */
+    revision: number;
+};
+
+/**
+ * ImportCreate
+ */
+export type ImportCreate = {
+    /**
+     * Expected Bytes
+     */
+    expected_bytes: number;
+    /**
+     * Format
+     */
+    format: 'csv' | 'xlsx';
+    /**
+     * Input Hash
+     */
+    input_hash: string;
+    /**
+     * Library Id
+     */
+    library_id: string;
+};
+
+/**
+ * ImportRowView
+ */
+export type ImportRowView = {
+    content: DraftContent | null;
+    /**
+     * Duplicate Of
+     */
+    duplicate_of: number | null;
+    /**
+     * Error
+     */
+    error: string | null;
+    /**
+     * Row
+     */
+    row: number;
 };
 
 /**
@@ -884,6 +1141,62 @@ export type JoinInput = {
 };
 
 /**
+ * LessonChange
+ */
+export type LessonChange = {
+    content: LessonContent;
+    /**
+     * Revision
+     */
+    revision: number;
+};
+
+/**
+ * LessonContent
+ */
+export type LessonContent = {
+    /**
+     * Activities
+     */
+    activities: Array<({
+        kind: 'choice';
+    } & Choice) | ({
+        kind: 'hotspot';
+    } & Hotspot) | ({
+        kind: 'order';
+    } & Order)>;
+    provenance?: Provenance;
+    /**
+     * Required
+     */
+    required?: boolean;
+    scene: Scene;
+    /**
+     * Scoring
+     */
+    scoring: Array<Scoring>;
+    /**
+     * Short Lesson
+     */
+    short_lesson: string;
+    /**
+     * Title
+     */
+    title: string;
+};
+
+/**
+ * LessonCreate
+ */
+export type LessonCreate = {
+    content: LessonContent;
+    /**
+     * Library Id
+     */
+    library_id: string;
+};
+
+/**
  * LibraryChange
  */
 export type LibraryChange = {
@@ -1052,6 +1365,46 @@ export type Message = {
 };
 
 /**
+ * Option
+ */
+export type Option = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Label
+     */
+    label: string;
+};
+
+/**
+ * Order
+ */
+export type Order = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Items
+     */
+    items: Array<Option>;
+    /**
+     * Kind
+     */
+    kind: 'order';
+    /**
+     * Prompt
+     */
+    prompt: string;
+    /**
+     * Sources
+     */
+    sources?: Array<SourcePointer>;
+};
+
+/**
  * OrganizationInput
  */
 export type OrganizationInput = {
@@ -1158,6 +1511,28 @@ export type Page_AccountView_ = {
 };
 
 /**
+ * Page[BankView]
+ */
+export type Page_BankView_ = {
+    /**
+     * Items
+     */
+    items: Array<BankView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
  * Page[CatalogView]
  */
 export type Page_CatalogView_ = {
@@ -1169,6 +1544,50 @@ export type Page_CatalogView_ = {
      * Data
      */
     data: Array<CatalogView>;
+};
+
+/**
+ * Page[CreatedQuestion]
+ */
+export type Page_CreatedQuestion_ = {
+    /**
+     * Items
+     */
+    items: Array<CreatedQuestion>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * Page[ImportRowView]
+ */
+export type Page_ImportRowView_ = {
+    /**
+     * Items
+     */
+    items: Array<ImportRowView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
 };
 
 /**
@@ -1258,28 +1677,6 @@ export type Page_OrganizationView_ = {
 };
 
 /**
- * Page[PublicationView]
- */
-export type Page_PublicationView_ = {
-    /**
-     * Items
-     */
-    items: Array<PublicationView>;
-    /**
-     * Limit
-     */
-    limit: number;
-    /**
-     * Offset
-     */
-    offset: number;
-    /**
-     * Total
-     */
-    total: number;
-};
-
-/**
  * Page[RequestView]
  */
 export type Page_RequestView_ = {
@@ -1291,28 +1688,6 @@ export type Page_RequestView_ = {
      * Data
      */
     data: Array<RequestView>;
-};
-
-/**
- * Page[ReviewView]
- */
-export type Page_ReviewView_ = {
-    /**
-     * Items
-     */
-    items: Array<ReviewView>;
-    /**
-     * Limit
-     */
-    limit: number;
-    /**
-     * Offset
-     */
-    offset: number;
-    /**
-     * Total
-     */
-    total: number;
 };
 
 /**
@@ -1372,25 +1747,17 @@ export type Page_TeacherOption_ = {
 };
 
 /**
- * Page[VersionView]
+ * ParentChange
  */
-export type Page_VersionView_ = {
+export type ParentChange = {
     /**
-     * Items
+     * Retired
      */
-    items: Array<VersionView>;
+    retired: boolean;
     /**
-     * Limit
+     * Revision
      */
-    limit: number;
-    /**
-     * Offset
-     */
-    offset: number;
-    /**
-     * Total
-     */
-    total: number;
+    revision: number;
 };
 
 /**
@@ -1436,6 +1803,56 @@ export type ProfilePatch = {
 };
 
 /**
+ * Provenance
+ */
+export type Provenance = {
+    /**
+     * Acquired Date
+     */
+    acquired_date?: string | null;
+    /**
+     * Adapted
+     */
+    adapted?: boolean;
+    /**
+     * Author
+     */
+    author?: string | null;
+    /**
+     * License
+     */
+    license?: string | null;
+    /**
+     * License Url
+     */
+    license_url?: string | null;
+    /**
+     * Origin
+     */
+    origin?: 'upload' | 'open_seed' | 'derived';
+    /**
+     * Original Url
+     */
+    original_url?: string | null;
+    /**
+     * Public Reuse Allowed
+     */
+    public_reuse_allowed?: boolean;
+    /**
+     * Source Hash
+     */
+    source_hash?: string | null;
+    /**
+     * Source Version
+     */
+    source_version?: string | null;
+    /**
+     * Teaching Reuse Allowed
+     */
+    teaching_reuse_allowed?: boolean;
+};
+
+/**
  * PublicationCreate
  */
 export type PublicationCreate = {
@@ -1450,45 +1867,99 @@ export type PublicationCreate = {
 };
 
 /**
- * PublicationView
+ * QuestionChange
  */
-export type PublicationView = {
-    /**
-     * Active
-     */
-    active: boolean;
-    /**
-     * Can Retire
-     */
-    can_retire?: boolean;
-    /**
-     * Id
-     */
-    id: string;
-    /**
-     * Published At
-     */
-    published_at: string;
-    /**
-     * Retired At
-     */
-    retired_at: string | null;
-    /**
-     * Review Id
-     */
-    review_id: string;
+export type QuestionChange = {
+    payload: QuestionPayload;
+    provenance?: Provenance;
     /**
      * Revision
      */
     revision: number;
     /**
-     * Target Library Id
+     * Sources
      */
-    target_library_id: string;
+    sources?: Array<SourcePointer>;
+};
+
+/**
+ * QuestionCreate
+ */
+export type QuestionCreate = {
     /**
-     * Version Id
+     * Library Id
      */
-    version_id: string;
+    library_id: string;
+    payload: QuestionPayload;
+    provenance?: Provenance;
+    /**
+     * Sources
+     */
+    sources?: Array<SourcePointer>;
+};
+
+/**
+ * QuestionPayload
+ */
+export type QuestionPayload = {
+    /**
+     * Answer Ids
+     */
+    answer_ids: Array<string>;
+    /**
+     * Difficulty
+     */
+    difficulty: 'easy' | 'medium' | 'hard';
+    /**
+     * Explanation
+     */
+    explanation: string;
+    /**
+     * Kind
+     */
+    kind: 'single' | 'multiple' | 'true_false' | 'scenario';
+    /**
+     * Knowledge Points
+     */
+    knowledge_points: Array<string>;
+    /**
+     * Options
+     */
+    options: Array<Option>;
+    /**
+     * Stem
+     */
+    stem: string;
+};
+
+/**
+ * Region
+ */
+export type Region = {
+    /**
+     * Height
+     */
+    height: number;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Label
+     */
+    label: string;
+    /**
+     * Width
+     */
+    width: number;
+    /**
+     * X
+     */
+    x: number;
+    /**
+     * Y
+     */
+    y: number;
 };
 
 /**
@@ -1626,61 +2097,13 @@ export type ReviewSubmit = {
 };
 
 /**
- * ReviewView
+ * Revision
  */
-export type ReviewView = {
-    /**
-     * Authorization Statement
-     */
-    authorization_statement: string;
-    /**
-     * Can Decide
-     */
-    can_decide?: boolean;
-    /**
-     * Can Publish
-     */
-    can_publish?: boolean;
-    /**
-     * Decided At
-     */
-    decided_at: string | null;
-    /**
-     * Id
-     */
-    id: string;
-    /**
-     * Original Authorized
-     */
-    original_authorized: boolean;
-    /**
-     * Reason
-     */
-    reason: string | null;
+export type Revision = {
     /**
      * Revision
      */
     revision: number;
-    /**
-     * State
-     */
-    state: string;
-    /**
-     * Submitted At
-     */
-    submitted_at: string;
-    /**
-     * Target Library Id
-     */
-    target_library_id: string;
-    /**
-     * Version Id
-     */
-    version_id: string;
-    /**
-     * Warning Hash
-     */
-    warning_hash: string;
 };
 
 /**
@@ -1697,6 +2120,57 @@ export type RevisionInput = {
  * Role
  */
 export type Role = 'platform_admin' | 'school_admin' | 'college_admin' | 'teacher' | 'student';
+
+/**
+ * Scene
+ */
+export type Scene = {
+    /**
+     * Accessible Description
+     */
+    accessible_description: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Svg Asset Id
+     */
+    svg_asset_id: string;
+};
+
+/**
+ * SceneCreate
+ */
+export type SceneCreate = {
+    /**
+     * Library Id
+     */
+    library_id: string;
+    provenance?: Provenance;
+    /**
+     * Svg
+     */
+    svg: string;
+};
+
+/**
+ * Scoring
+ */
+export type Scoring = {
+    /**
+     * Activity Id
+     */
+    activity_id: string;
+    /**
+     * Correct Ids
+     */
+    correct_ids: Array<string>;
+    /**
+     * Explanation
+     */
+    explanation: string;
+};
 
 /**
  * SearchMatch
@@ -1853,6 +2327,44 @@ export type SourceMetadata = {
 };
 
 /**
+ * SourcePointer
+ */
+export type SourcePointer = {
+    /**
+     * Chunk Id
+     */
+    chunk_id?: string | null;
+    /**
+     * Material Version Id
+     */
+    material_version_id: string;
+};
+
+/**
+ * SourceView
+ */
+export type SourceView = {
+    /**
+     * Chunk Id
+     */
+    chunk_id?: string | null;
+    /**
+     * Locator
+     */
+    locator: {
+        [key: string]: unknown;
+    };
+    /**
+     * Material Id
+     */
+    material_id: string;
+    /**
+     * Material Version Id
+     */
+    material_version_id: string;
+};
+
+/**
  * StaffInput
  */
 export type StaffInput = {
@@ -1889,6 +2401,173 @@ export type StaffView = {
 };
 
 /**
+ * StudentChoice
+ */
+export type StudentChoice = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'choice';
+    /**
+     * Options
+     */
+    options: Array<Option>;
+    /**
+     * Prompt
+     */
+    prompt: string;
+    /**
+     * Selection
+     */
+    selection: 'single' | 'multiple';
+    /**
+     * Source Refs
+     */
+    source_refs: Array<StudentReference>;
+};
+
+/**
+ * StudentHotspot
+ */
+export type StudentHotspot = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Kind
+     */
+    kind: 'hotspot';
+    /**
+     * Prompt
+     */
+    prompt: string;
+    /**
+     * Regions
+     */
+    regions: Array<Region>;
+    /**
+     * Scene Id
+     */
+    scene_id: string;
+    /**
+     * Source Refs
+     */
+    source_refs: Array<StudentReference>;
+};
+
+/**
+ * StudentLesson
+ */
+export type StudentLesson = {
+    /**
+     * Activities
+     */
+    activities: Array<({
+        kind: 'choice';
+    } & StudentChoice) | ({
+        kind: 'hotspot';
+    } & StudentHotspot) | ({
+        kind: 'order';
+    } & StudentOrder)>;
+    /**
+     * Lesson Id
+     */
+    lesson_id: string;
+    /**
+     * Required
+     */
+    required: boolean;
+    scene: Scene;
+    /**
+     * Schema Version
+     */
+    schema_version?: 'labconnect.lesson/1';
+    /**
+     * Short Lesson
+     */
+    short_lesson: string;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
+};
+
+/**
+ * StudentOrder
+ */
+export type StudentOrder = {
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Items
+     */
+    items: Array<Option>;
+    /**
+     * Kind
+     */
+    kind: 'order';
+    /**
+     * Prompt
+     */
+    prompt: string;
+    /**
+     * Source Refs
+     */
+    source_refs: Array<StudentReference>;
+};
+
+/**
+ * StudentReference
+ */
+export type StudentReference = {
+    /**
+     * Material Id
+     */
+    material_id: string;
+    /**
+     * Page
+     */
+    page?: number | null;
+    /**
+     * Paragraph
+     */
+    paragraph?: string | null;
+    /**
+     * Version Id
+     */
+    version_id: string;
+};
+
+/**
+ * Submit
+ */
+export type Submit = {
+    /**
+     * Authorization Statement
+     */
+    authorization_statement: string;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Target Library Id
+     */
+    target_library_id: string;
+};
+
+/**
  * SubmitTarget
  */
 export type SubmitTarget = {
@@ -1914,12 +2593,37 @@ export type SubmitTarget = {
  * TargetBinding
  */
 export type TargetBinding = {
-    active_publication?: PublicationView | null;
-    review?: ReviewView | null;
+    active_publication?: app__domains__content__views__PublicationView | null;
+    review?: app__domains__content__views__ReviewView | null;
     /**
      * Target Library Id
      */
     target_library_id: string;
+};
+
+/**
+ * TaskGeneration
+ */
+export type TaskGeneration = {
+    /**
+     * Generation
+     */
+    generation: number;
+};
+
+/**
+ * TeacherLessonPreview
+ */
+export type TeacherLessonPreview = {
+    lesson: StudentLesson;
+    /**
+     * Mode
+     */
+    mode?: 'teacher-preview';
+    /**
+     * Review
+     */
+    review: Array<Scoring>;
 };
 
 /**
@@ -1983,6 +2687,82 @@ export type Token = {
      * Token Type
      */
     token_type?: string;
+};
+
+/**
+ * TransferResult
+ */
+export type TransferResult = {
+    /**
+     * Batch Id
+     */
+    batch_id?: string | null;
+    /**
+     * Created Count
+     */
+    created_count?: number | null;
+    /**
+     * Generation
+     */
+    generation?: number | null;
+    /**
+     * Revision
+     */
+    revision?: number | null;
+    /**
+     * State
+     */
+    state: string;
+    /**
+     * Task Id
+     */
+    task_id?: string | null;
+};
+
+/**
+ * TransferView
+ */
+export type TransferView = {
+    /**
+     * Batch Id
+     */
+    batch_id: string | null;
+    /**
+     * Error Code
+     */
+    error_code: string | null;
+    /**
+     * Expires At
+     */
+    expires_at: string;
+    /**
+     * Format
+     */
+    format: 'csv' | 'xlsx';
+    /**
+     * Generation
+     */
+    generation: number;
+    /**
+     * Kind
+     */
+    kind: 'import' | 'export';
+    /**
+     * Result Bytes
+     */
+    result_bytes: number;
+    /**
+     * Stage
+     */
+    stage: string;
+    /**
+     * State
+     */
+    state: string;
+    /**
+     * Task Id
+     */
+    task_id: string;
 };
 
 /**
@@ -2181,9 +2961,608 @@ export type VersionActions = {
 };
 
 /**
+ * DraftView
+ */
+export type app__domains__content__lessons__views__DraftView = {
+    /**
+     * Can Edit
+     */
+    can_edit: boolean;
+    content: LessonContent;
+    /**
+     * Lesson Id
+     */
+    lesson_id: string;
+    /**
+     * Library Id
+     */
+    library_id: string;
+    /**
+     * Parent Revision
+     */
+    parent_revision: number;
+    /**
+     * Retired
+     */
+    retired: boolean;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
  * VersionView
  */
-export type VersionView = {
+export type app__domains__content__lessons__views__VersionView = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Lesson Id
+     */
+    lesson_id: string;
+    /**
+     * Library Id
+     */
+    library_id: string;
+    /**
+     * Required
+     */
+    required: boolean;
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
+    /**
+     * Version No
+     */
+    version_no: number;
+};
+
+/**
+ * CommandResult
+ */
+export type app__domains__content__questions__views__CommandResult = {
+    /**
+     * Active
+     */
+    active?: boolean | null;
+    /**
+     * Asset Id
+     */
+    asset_id?: string | null;
+    /**
+     * Draft Discarded
+     */
+    draft_discarded?: boolean | null;
+    /**
+     * Lesson Id
+     */
+    lesson_id?: string | null;
+    /**
+     * Publication Id
+     */
+    publication_id?: string | null;
+    /**
+     * Question Id
+     */
+    question_id?: string | null;
+    /**
+     * Retired
+     */
+    retired?: boolean | null;
+    /**
+     * Review Id
+     */
+    review_id?: string | null;
+    /**
+     * Revision
+     */
+    revision?: number | null;
+    /**
+     * State
+     */
+    state?: string | null;
+    /**
+     * Version Id
+     */
+    version_id?: string | null;
+};
+
+/**
+ * DraftView
+ */
+export type app__domains__content__questions__views__DraftView = {
+    /**
+     * Can Edit
+     */
+    can_edit: boolean;
+    /**
+     * Library Id
+     */
+    library_id: string;
+    /**
+     * Parent Revision
+     */
+    parent_revision: number;
+    payload: QuestionPayload;
+    provenance: Provenance;
+    /**
+     * Question Id
+     */
+    question_id: string;
+    /**
+     * Retired
+     */
+    retired: boolean;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Sources
+     */
+    sources: Array<SourceView>;
+    /**
+     * Updated At
+     */
+    updated_at: string;
+};
+
+/**
+ * Page[DraftView]
+ */
+export type app__domains__content__questions__views__Page_DraftView___1 = {
+    /**
+     * Items
+     */
+    items: Array<app__domains__content__questions__views__DraftView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * Page[DraftView]
+ */
+export type app__domains__content__questions__views__Page_DraftView___2 = {
+    /**
+     * Items
+     */
+    items: Array<app__domains__content__lessons__views__DraftView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * Page[PublicationView]
+ */
+export type app__domains__content__questions__views__Page_PublicationView_ = {
+    /**
+     * Items
+     */
+    items: Array<app__domains__content__questions__views__PublicationView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * Page[ReviewView]
+ */
+export type app__domains__content__questions__views__Page_ReviewView_ = {
+    /**
+     * Items
+     */
+    items: Array<app__domains__content__questions__views__ReviewView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * Page[VersionView]
+ */
+export type app__domains__content__questions__views__Page_VersionView___1 = {
+    /**
+     * Items
+     */
+    items: Array<app__domains__content__questions__views__VersionView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * Page[VersionView]
+ */
+export type app__domains__content__questions__views__Page_VersionView___2 = {
+    /**
+     * Items
+     */
+    items: Array<app__domains__content__lessons__views__VersionView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * PublicationView
+ */
+export type app__domains__content__questions__views__PublicationView = {
+    /**
+     * Active
+     */
+    active: boolean;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Published At
+     */
+    published_at: string;
+    /**
+     * Retired At
+     */
+    retired_at: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Target Library Id
+     */
+    target_library_id: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
+};
+
+/**
+ * ReviewView
+ */
+export type app__domains__content__questions__views__ReviewView = {
+    /**
+     * Authorization Statement
+     */
+    authorization_statement: string;
+    /**
+     * Decided At
+     */
+    decided_at: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Reason
+     */
+    reason: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * State
+     */
+    state: string;
+    /**
+     * Submitted At
+     */
+    submitted_at: string;
+    /**
+     * Target Library Id
+     */
+    target_library_id: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
+};
+
+/**
+ * VersionView
+ */
+export type app__domains__content__questions__views__VersionView = {
+    /**
+     * Created At
+     */
+    created_at: string;
+    /**
+     * Library Id
+     */
+    library_id: string;
+    payload: QuestionPayload;
+    provenance: Provenance;
+    /**
+     * Question Id
+     */
+    question_id: string;
+    /**
+     * Sources
+     */
+    sources: Array<SourceView>;
+    /**
+     * Version Id
+     */
+    version_id: string;
+    /**
+     * Version No
+     */
+    version_no: number;
+};
+
+/**
+ * CommandResult
+ */
+export type app__domains__content__views__CommandResult = {
+    /**
+     * Job Id
+     */
+    job_id?: string | null;
+    /**
+     * Library Id
+     */
+    library_id?: string | null;
+    /**
+     * Material Id
+     */
+    material_id?: string | null;
+    /**
+     * Publication Id
+     */
+    publication_id?: string | null;
+    /**
+     * Review Id
+     */
+    review_id?: string | null;
+    /**
+     * Upload Id
+     */
+    upload_id?: string | null;
+    /**
+     * Version Id
+     */
+    version_id?: string | null;
+};
+
+/**
+ * Page[PublicationView]
+ */
+export type app__domains__content__views__Page_PublicationView_ = {
+    /**
+     * Items
+     */
+    items: Array<app__domains__content__views__PublicationView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * Page[ReviewView]
+ */
+export type app__domains__content__views__Page_ReviewView_ = {
+    /**
+     * Items
+     */
+    items: Array<app__domains__content__views__ReviewView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * Page[VersionView]
+ */
+export type app__domains__content__views__Page_VersionView_ = {
+    /**
+     * Items
+     */
+    items: Array<app__domains__content__views__VersionView>;
+    /**
+     * Limit
+     */
+    limit: number;
+    /**
+     * Offset
+     */
+    offset: number;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * PublicationView
+ */
+export type app__domains__content__views__PublicationView = {
+    /**
+     * Active
+     */
+    active: boolean;
+    /**
+     * Can Retire
+     */
+    can_retire?: boolean;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Published At
+     */
+    published_at: string;
+    /**
+     * Retired At
+     */
+    retired_at: string | null;
+    /**
+     * Review Id
+     */
+    review_id: string;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * Target Library Id
+     */
+    target_library_id: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
+};
+
+/**
+ * ReviewView
+ */
+export type app__domains__content__views__ReviewView = {
+    /**
+     * Authorization Statement
+     */
+    authorization_statement: string;
+    /**
+     * Can Decide
+     */
+    can_decide?: boolean;
+    /**
+     * Can Publish
+     */
+    can_publish?: boolean;
+    /**
+     * Decided At
+     */
+    decided_at: string | null;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Original Authorized
+     */
+    original_authorized: boolean;
+    /**
+     * Reason
+     */
+    reason: string | null;
+    /**
+     * Revision
+     */
+    revision: number;
+    /**
+     * State
+     */
+    state: string;
+    /**
+     * Submitted At
+     */
+    submitted_at: string;
+    /**
+     * Target Library Id
+     */
+    target_library_id: string;
+    /**
+     * Version Id
+     */
+    version_id: string;
+    /**
+     * Warning Hash
+     */
+    warning_hash: string;
+};
+
+/**
+ * VersionView
+ */
+export type app__domains__content__views__VersionView = {
     actions?: VersionActions;
     binding?: TargetBinding | null;
     /**
@@ -3642,7 +5021,7 @@ export type contentCancelJobResponses = {
     /**
      * Successful Response
      */
-    200: CommandResult;
+    200: app__domains__content__views__CommandResult;
 };
 
 export type contentCancelJobResponse = contentCancelJobResponses[keyof contentCancelJobResponses];
@@ -3682,10 +5061,901 @@ export type contentRetryJobResponses = {
     /**
      * Successful Response
      */
-    200: CommandResult;
+    200: app__domains__content__views__CommandResult;
 };
 
 export type contentRetryJobResponse = contentRetryJobResponses[keyof contentRetryJobResponses];
+
+export type contentLessonsBanksData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Include Inactive
+         */
+        include_inactive?: boolean;
+    };
+    url: '/api/v1/content/lessons/banks';
+};
+
+export type contentLessonsBanksErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsBanksError = contentLessonsBanksErrors[keyof contentLessonsBanksErrors];
+
+export type contentLessonsBanksResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_BankView_;
+};
+
+export type contentLessonsBanksResponse = contentLessonsBanksResponses[keyof contentLessonsBanksResponses];
+
+export type contentLessonsCopyData = {
+    body: CopyOrReference;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/lessons/copies';
+};
+
+export type contentLessonsCopyErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsCopyError = contentLessonsCopyErrors[keyof contentLessonsCopyErrors];
+
+export type contentLessonsCopyResponses = {
+    /**
+     * Successful Response
+     */
+    201: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsCopyResponse = contentLessonsCopyResponses[keyof contentLessonsCopyResponses];
+
+export type contentLessonsDraftsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/lessons/drafts';
+};
+
+export type contentLessonsDraftsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsDraftsError = contentLessonsDraftsErrors[keyof contentLessonsDraftsErrors];
+
+export type contentLessonsDraftsResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__Page_DraftView___2;
+};
+
+export type contentLessonsDraftsResponse = contentLessonsDraftsResponses[keyof contentLessonsDraftsResponses];
+
+export type contentLessonsCreateData = {
+    body: LessonCreate;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/lessons/drafts';
+};
+
+export type contentLessonsCreateErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsCreateError = contentLessonsCreateErrors[keyof contentLessonsCreateErrors];
+
+export type contentLessonsCreateResponses = {
+    /**
+     * Successful Response
+     */
+    201: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsCreateResponse = contentLessonsCreateResponses[keyof contentLessonsCreateResponses];
+
+export type contentLessonsDraftData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Lesson Id
+         */
+        lesson_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/lessons/drafts/{lesson_id}';
+};
+
+export type contentLessonsDraftErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsDraftError = contentLessonsDraftErrors[keyof contentLessonsDraftErrors];
+
+export type contentLessonsDraftResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__lessons__views__DraftView;
+};
+
+export type contentLessonsDraftResponse = contentLessonsDraftResponses[keyof contentLessonsDraftResponses];
+
+export type contentLessonsChangeData = {
+    body: LessonChange;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Lesson Id
+         */
+        lesson_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/lessons/drafts/{lesson_id}';
+};
+
+export type contentLessonsChangeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsChangeError = contentLessonsChangeErrors[keyof contentLessonsChangeErrors];
+
+export type contentLessonsChangeResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsChangeResponse = contentLessonsChangeResponses[keyof contentLessonsChangeResponses];
+
+export type contentLessonsDiscardData = {
+    body: Revision;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Lesson Id
+         */
+        lesson_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/lessons/drafts/{lesson_id}/discard';
+};
+
+export type contentLessonsDiscardErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsDiscardError = contentLessonsDiscardErrors[keyof contentLessonsDiscardErrors];
+
+export type contentLessonsDiscardResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsDiscardResponse = contentLessonsDiscardResponses[keyof contentLessonsDiscardResponses];
+
+export type contentLessonsDraftSceneData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Lesson Id
+         */
+        lesson_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/lessons/drafts/{lesson_id}/scene';
+};
+
+export type contentLessonsDraftSceneErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsDraftSceneError = contentLessonsDraftSceneErrors[keyof contentLessonsDraftSceneErrors];
+
+export type contentLessonsDraftSceneResponses = {
+    /**
+     * Successful Response
+     */
+    200: Blob | File;
+};
+
+export type contentLessonsDraftSceneResponse = contentLessonsDraftSceneResponses[keyof contentLessonsDraftSceneResponses];
+
+export type contentLessonsSubmitData = {
+    body: Submit;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Lesson Id
+         */
+        lesson_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/lessons/drafts/{lesson_id}/submit';
+};
+
+export type contentLessonsSubmitErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsSubmitError = contentLessonsSubmitErrors[keyof contentLessonsSubmitErrors];
+
+export type contentLessonsSubmitResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsSubmitResponse = contentLessonsSubmitResponses[keyof contentLessonsSubmitResponses];
+
+export type contentLessonsPublicationsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query: {
+        /**
+         * Library Id
+         */
+        library_id: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/content/lessons/publications';
+};
+
+export type contentLessonsPublicationsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsPublicationsError = contentLessonsPublicationsErrors[keyof contentLessonsPublicationsErrors];
+
+export type contentLessonsPublicationsResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__Page_PublicationView_;
+};
+
+export type contentLessonsPublicationsResponse = contentLessonsPublicationsResponses[keyof contentLessonsPublicationsResponses];
+
+export type contentLessonsUnpublishData = {
+    body: Revision;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Publication Id
+         */
+        publication_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/lessons/publications/{publication_id}/retire';
+};
+
+export type contentLessonsUnpublishErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsUnpublishError = contentLessonsUnpublishErrors[keyof contentLessonsUnpublishErrors];
+
+export type contentLessonsUnpublishResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsUnpublishResponse = contentLessonsUnpublishResponses[keyof contentLessonsUnpublishResponses];
+
+export type contentLessonsReferenceData = {
+    body: CopyOrReference;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/lessons/references';
+};
+
+export type contentLessonsReferenceErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsReferenceError = contentLessonsReferenceErrors[keyof contentLessonsReferenceErrors];
+
+export type contentLessonsReferenceResponses = {
+    /**
+     * Successful Response
+     */
+    201: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsReferenceResponse = contentLessonsReferenceResponses[keyof contentLessonsReferenceResponses];
+
+export type contentLessonsReviewsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+        /**
+         * State
+         */
+        state?: 'submitted' | 'approved' | 'rejected' | null;
+    };
+    url: '/api/v1/content/lessons/reviews';
+};
+
+export type contentLessonsReviewsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsReviewsError = contentLessonsReviewsErrors[keyof contentLessonsReviewsErrors];
+
+export type contentLessonsReviewsResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__Page_ReviewView_;
+};
+
+export type contentLessonsReviewsResponse = contentLessonsReviewsResponses[keyof contentLessonsReviewsResponses];
+
+export type contentLessonsReviewData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Review Id
+         */
+        review_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/lessons/reviews/{review_id}';
+};
+
+export type contentLessonsReviewErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsReviewError = contentLessonsReviewErrors[keyof contentLessonsReviewErrors];
+
+export type contentLessonsReviewResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__ReviewView;
+};
+
+export type contentLessonsReviewResponse = contentLessonsReviewResponses[keyof contentLessonsReviewResponses];
+
+export type contentLessonsDecideData = {
+    body: Decision;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Review Id
+         */
+        review_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/lessons/reviews/{review_id}/decision';
+};
+
+export type contentLessonsDecideErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsDecideError = contentLessonsDecideErrors[keyof contentLessonsDecideErrors];
+
+export type contentLessonsDecideResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsDecideResponse = contentLessonsDecideResponses[keyof contentLessonsDecideResponses];
+
+export type contentLessonsPublishData = {
+    body: Revision;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Review Id
+         */
+        review_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/lessons/reviews/{review_id}/publish';
+};
+
+export type contentLessonsPublishErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsPublishError = contentLessonsPublishErrors[keyof contentLessonsPublishErrors];
+
+export type contentLessonsPublishResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsPublishResponse = contentLessonsPublishResponses[keyof contentLessonsPublishResponses];
+
+export type contentLessonsCreateSceneData = {
+    body: SceneCreate;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/lessons/scenes';
+};
+
+export type contentLessonsCreateSceneErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsCreateSceneError = contentLessonsCreateSceneErrors[keyof contentLessonsCreateSceneErrors];
+
+export type contentLessonsCreateSceneResponses = {
+    /**
+     * Successful Response
+     */
+    201: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsCreateSceneResponse = contentLessonsCreateSceneResponses[keyof contentLessonsCreateSceneResponses];
+
+export type contentLessonsVersionsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+        /**
+         * Lesson Id
+         */
+        lesson_id?: string | null;
+    };
+    url: '/api/v1/content/lessons/versions';
+};
+
+export type contentLessonsVersionsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsVersionsError = contentLessonsVersionsErrors[keyof contentLessonsVersionsErrors];
+
+export type contentLessonsVersionsResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__Page_VersionView___2;
+};
+
+export type contentLessonsVersionsResponse = contentLessonsVersionsResponses[keyof contentLessonsVersionsResponses];
+
+export type contentLessonsVersionData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Version Id
+         */
+        version_id: string;
+    };
+    query?: {
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/lessons/versions/{version_id}';
+};
+
+export type contentLessonsVersionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsVersionError = contentLessonsVersionErrors[keyof contentLessonsVersionErrors];
+
+export type contentLessonsVersionResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__lessons__views__VersionView;
+};
+
+export type contentLessonsVersionResponse = contentLessonsVersionResponses[keyof contentLessonsVersionResponses];
+
+export type contentLessonsPreviewData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Version Id
+         */
+        version_id: string;
+    };
+    query?: {
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/lessons/versions/{version_id}/preview';
+};
+
+export type contentLessonsPreviewErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsPreviewError = contentLessonsPreviewErrors[keyof contentLessonsPreviewErrors];
+
+export type contentLessonsPreviewResponses = {
+    /**
+     * Successful Response
+     */
+    200: TeacherLessonPreview;
+};
+
+export type contentLessonsPreviewResponse = contentLessonsPreviewResponses[keyof contentLessonsPreviewResponses];
+
+export type contentLessonsPreviewSceneData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Version Id
+         */
+        version_id: string;
+    };
+    query?: {
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/lessons/versions/{version_id}/preview/scene';
+};
+
+export type contentLessonsPreviewSceneErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsPreviewSceneError = contentLessonsPreviewSceneErrors[keyof contentLessonsPreviewSceneErrors];
+
+export type contentLessonsPreviewSceneResponses = {
+    /**
+     * Successful Response
+     */
+    200: Blob | File;
+};
+
+export type contentLessonsPreviewSceneResponse = contentLessonsPreviewSceneResponses[keyof contentLessonsPreviewSceneResponses];
+
+export type contentLessonsRetireData = {
+    body: ParentChange;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Lesson Id
+         */
+        lesson_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/lessons/{lesson_id}/retirement';
+};
+
+export type contentLessonsRetireErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentLessonsRetireError = contentLessonsRetireErrors[keyof contentLessonsRetireErrors];
+
+export type contentLessonsRetireResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentLessonsRetireResponse = contentLessonsRetireResponses[keyof contentLessonsRetireResponses];
 
 export type contentListLibrariesData = {
     body?: never;
@@ -3765,7 +6035,7 @@ export type contentCreateLibraryResponses = {
     /**
      * Successful Response
      */
-    201: CommandResult;
+    201: app__domains__content__views__CommandResult;
 };
 
 export type contentCreateLibraryResponse = contentCreateLibraryResponses[keyof contentCreateLibraryResponses];
@@ -3805,7 +6075,7 @@ export type contentChangeLibraryResponses = {
     /**
      * Successful Response
      */
-    200: CommandResult;
+    200: app__domains__content__views__CommandResult;
 };
 
 export type contentChangeLibraryResponse = contentChangeLibraryResponses[keyof contentChangeLibraryResponses];
@@ -3853,7 +6123,7 @@ export type contentListPublicationsResponses = {
     /**
      * Successful Response
      */
-    200: Page_PublicationView_;
+    200: app__domains__content__views__Page_PublicationView_;
 };
 
 export type contentListPublicationsResponse = contentListPublicationsResponses[keyof contentListPublicationsResponses];
@@ -3888,7 +6158,7 @@ export type contentPublishReviewResponses = {
     /**
      * Successful Response
      */
-    201: CommandResult;
+    201: app__domains__content__views__CommandResult;
 };
 
 export type contentPublishReviewResponse = contentPublishReviewResponses[keyof contentPublishReviewResponses];
@@ -3928,7 +6198,7 @@ export type contentRetirePublicationResponses = {
     /**
      * Successful Response
      */
-    200: CommandResult;
+    200: app__domains__content__views__CommandResult;
 };
 
 export type contentRetirePublicationResponse = contentRetirePublicationResponses[keyof contentRetirePublicationResponses];
@@ -3980,7 +6250,7 @@ export type contentListReviewsResponses = {
     /**
      * Successful Response
      */
-    200: Page_ReviewView_;
+    200: app__domains__content__views__Page_ReviewView_;
 };
 
 export type contentListReviewsResponse = contentListReviewsResponses[keyof contentListReviewsResponses];
@@ -4015,7 +6285,7 @@ export type contentSubmitReviewResponses = {
     /**
      * Successful Response
      */
-    201: CommandResult;
+    201: app__domains__content__views__CommandResult;
 };
 
 export type contentSubmitReviewResponse = contentSubmitReviewResponses[keyof contentSubmitReviewResponses];
@@ -4051,7 +6321,7 @@ export type contentReviewDetailResponses = {
     /**
      * Successful Response
      */
-    200: ReviewView;
+    200: app__domains__content__views__ReviewView;
 };
 
 export type contentReviewDetailResponse = contentReviewDetailResponses[keyof contentReviewDetailResponses];
@@ -4091,7 +6361,7 @@ export type contentDecideReviewResponses = {
     /**
      * Successful Response
      */
-    200: CommandResult;
+    200: app__domains__content__views__CommandResult;
 };
 
 export type contentDecideReviewResponse = contentDecideReviewResponses[keyof contentDecideReviewResponses];
@@ -4155,7 +6425,7 @@ export type contentListMaterialsResponses = {
     /**
      * Successful Response
      */
-    200: Page_VersionView_;
+    200: app__domains__content__views__Page_VersionView_;
 };
 
 export type contentListMaterialsResponse = contentListMaterialsResponses[keyof contentListMaterialsResponses];
@@ -4190,7 +6460,7 @@ export type contentCreateTextResponses = {
     /**
      * Successful Response
      */
-    201: CommandResult;
+    201: app__domains__content__views__CommandResult;
 };
 
 export type contentCreateTextResponse = contentCreateTextResponses[keyof contentCreateTextResponses];
@@ -4230,7 +6500,7 @@ export type contentChangeMaterialResponses = {
     /**
      * Successful Response
      */
-    200: CommandResult;
+    200: app__domains__content__views__CommandResult;
 };
 
 export type contentChangeMaterialResponse = contentChangeMaterialResponses[keyof contentChangeMaterialResponses];
@@ -4279,10 +6549,1192 @@ export type contentMaterialVersionsResponses = {
     /**
      * Successful Response
      */
-    200: Page_VersionView_;
+    200: app__domains__content__views__Page_VersionView_;
 };
 
 export type contentMaterialVersionsResponse = contentMaterialVersionsResponses[keyof contentMaterialVersionsResponses];
+
+export type contentQuestionsBanksData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Include Inactive
+         */
+        include_inactive?: boolean;
+    };
+    url: '/api/v1/content/questions/banks';
+};
+
+export type contentQuestionsBanksErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsBanksError = contentQuestionsBanksErrors[keyof contentQuestionsBanksErrors];
+
+export type contentQuestionsBanksResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_BankView_;
+};
+
+export type contentQuestionsBanksResponse = contentQuestionsBanksResponses[keyof contentQuestionsBanksResponses];
+
+export type contentQuestionsCopyData = {
+    body: CopyOrReference;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/questions/copies';
+};
+
+export type contentQuestionsCopyErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsCopyError = contentQuestionsCopyErrors[keyof contentQuestionsCopyErrors];
+
+export type contentQuestionsCopyResponses = {
+    /**
+     * Successful Response
+     */
+    201: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentQuestionsCopyResponse = contentQuestionsCopyResponses[keyof contentQuestionsCopyResponses];
+
+export type contentQuestionsDraftsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Knowledge
+         */
+        knowledge?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/questions/drafts';
+};
+
+export type contentQuestionsDraftsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsDraftsError = contentQuestionsDraftsErrors[keyof contentQuestionsDraftsErrors];
+
+export type contentQuestionsDraftsResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__Page_DraftView___1;
+};
+
+export type contentQuestionsDraftsResponse = contentQuestionsDraftsResponses[keyof contentQuestionsDraftsResponses];
+
+export type contentQuestionsCreateData = {
+    body: QuestionCreate;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/questions/drafts';
+};
+
+export type contentQuestionsCreateErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsCreateError = contentQuestionsCreateErrors[keyof contentQuestionsCreateErrors];
+
+export type contentQuestionsCreateResponses = {
+    /**
+     * Successful Response
+     */
+    201: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentQuestionsCreateResponse = contentQuestionsCreateResponses[keyof contentQuestionsCreateResponses];
+
+export type contentQuestionsDraftData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Question Id
+         */
+        question_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/drafts/{question_id}';
+};
+
+export type contentQuestionsDraftErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsDraftError = contentQuestionsDraftErrors[keyof contentQuestionsDraftErrors];
+
+export type contentQuestionsDraftResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__DraftView;
+};
+
+export type contentQuestionsDraftResponse = contentQuestionsDraftResponses[keyof contentQuestionsDraftResponses];
+
+export type contentQuestionsChangeData = {
+    body: QuestionChange;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Question Id
+         */
+        question_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/drafts/{question_id}';
+};
+
+export type contentQuestionsChangeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsChangeError = contentQuestionsChangeErrors[keyof contentQuestionsChangeErrors];
+
+export type contentQuestionsChangeResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentQuestionsChangeResponse = contentQuestionsChangeResponses[keyof contentQuestionsChangeResponses];
+
+export type contentQuestionsDiscardData = {
+    body: Revision;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Question Id
+         */
+        question_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/drafts/{question_id}/discard';
+};
+
+export type contentQuestionsDiscardErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsDiscardError = contentQuestionsDiscardErrors[keyof contentQuestionsDiscardErrors];
+
+export type contentQuestionsDiscardResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentQuestionsDiscardResponse = contentQuestionsDiscardResponses[keyof contentQuestionsDiscardResponses];
+
+export type contentQuestionsSubmitData = {
+    body: Submit;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Question Id
+         */
+        question_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/drafts/{question_id}/submit';
+};
+
+export type contentQuestionsSubmitErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsSubmitError = contentQuestionsSubmitErrors[keyof contentQuestionsSubmitErrors];
+
+export type contentQuestionsSubmitResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentQuestionsSubmitResponse = contentQuestionsSubmitResponses[keyof contentQuestionsSubmitResponses];
+
+export type contentQuestionsCreateExportData = {
+    body: ExportCreate;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/questions/exports';
+};
+
+export type contentQuestionsCreateExportErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsCreateExportError = contentQuestionsCreateExportErrors[keyof contentQuestionsCreateExportErrors];
+
+export type contentQuestionsCreateExportResponses = {
+    /**
+     * Successful Response
+     */
+    201: TransferResult;
+};
+
+export type contentQuestionsCreateExportResponse = contentQuestionsCreateExportResponses[keyof contentQuestionsCreateExportResponses];
+
+export type contentQuestionsDownloadExportData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Task Id
+         */
+        task_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/exports/{task_id}/download';
+};
+
+export type contentQuestionsDownloadExportErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsDownloadExportError = contentQuestionsDownloadExportErrors[keyof contentQuestionsDownloadExportErrors];
+
+export type contentQuestionsDownloadExportResponses = {
+    /**
+     * Successful Response
+     */
+    200: Blob | File;
+};
+
+export type contentQuestionsDownloadExportResponse = contentQuestionsDownloadExportResponses[keyof contentQuestionsDownloadExportResponses];
+
+export type contentQuestionsCreateImportData = {
+    body: ImportCreate;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/questions/imports';
+};
+
+export type contentQuestionsCreateImportErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsCreateImportError = contentQuestionsCreateImportErrors[keyof contentQuestionsCreateImportErrors];
+
+export type contentQuestionsCreateImportResponses = {
+    /**
+     * Successful Response
+     */
+    201: TransferResult;
+};
+
+export type contentQuestionsCreateImportResponse = contentQuestionsCreateImportResponses[keyof contentQuestionsCreateImportResponses];
+
+export type contentQuestionsImportStatusData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Batch Id
+         */
+        batch_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/imports/{batch_id}';
+};
+
+export type contentQuestionsImportStatusErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsImportStatusError = contentQuestionsImportStatusErrors[keyof contentQuestionsImportStatusErrors];
+
+export type contentQuestionsImportStatusResponses = {
+    /**
+     * Successful Response
+     */
+    200: BatchView;
+};
+
+export type contentQuestionsImportStatusResponse = contentQuestionsImportStatusResponses[keyof contentQuestionsImportStatusResponses];
+
+export type contentQuestionsConfirmImportData = {
+    body: ImportConfirm;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Batch Id
+         */
+        batch_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/imports/{batch_id}/confirm';
+};
+
+export type contentQuestionsConfirmImportErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsConfirmImportError = contentQuestionsConfirmImportErrors[keyof contentQuestionsConfirmImportErrors];
+
+export type contentQuestionsConfirmImportResponses = {
+    /**
+     * Successful Response
+     */
+    200: TransferResult;
+};
+
+export type contentQuestionsConfirmImportResponse = contentQuestionsConfirmImportResponses[keyof contentQuestionsConfirmImportResponses];
+
+export type contentQuestionsImportCreatedData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Batch Id
+         */
+        batch_id: string;
+    };
+    query?: {
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/content/questions/imports/{batch_id}/created';
+};
+
+export type contentQuestionsImportCreatedErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsImportCreatedError = contentQuestionsImportCreatedErrors[keyof contentQuestionsImportCreatedErrors];
+
+export type contentQuestionsImportCreatedResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_CreatedQuestion_;
+};
+
+export type contentQuestionsImportCreatedResponse = contentQuestionsImportCreatedResponses[keyof contentQuestionsImportCreatedResponses];
+
+export type contentQuestionsImportRowsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Batch Id
+         */
+        batch_id: string;
+    };
+    query?: {
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/content/questions/imports/{batch_id}/rows';
+};
+
+export type contentQuestionsImportRowsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsImportRowsError = contentQuestionsImportRowsErrors[keyof contentQuestionsImportRowsErrors];
+
+export type contentQuestionsImportRowsResponses = {
+    /**
+     * Successful Response
+     */
+    200: Page_ImportRowView_;
+};
+
+export type contentQuestionsImportRowsResponse = contentQuestionsImportRowsResponses[keyof contentQuestionsImportRowsResponses];
+
+export type contentQuestionsPublicationsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query: {
+        /**
+         * Library Id
+         */
+        library_id: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/content/questions/publications';
+};
+
+export type contentQuestionsPublicationsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsPublicationsError = contentQuestionsPublicationsErrors[keyof contentQuestionsPublicationsErrors];
+
+export type contentQuestionsPublicationsResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__Page_PublicationView_;
+};
+
+export type contentQuestionsPublicationsResponse = contentQuestionsPublicationsResponses[keyof contentQuestionsPublicationsResponses];
+
+export type contentQuestionsUnpublishData = {
+    body: Revision;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Publication Id
+         */
+        publication_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/publications/{publication_id}/retire';
+};
+
+export type contentQuestionsUnpublishErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsUnpublishError = contentQuestionsUnpublishErrors[keyof contentQuestionsUnpublishErrors];
+
+export type contentQuestionsUnpublishResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentQuestionsUnpublishResponse = contentQuestionsUnpublishResponses[keyof contentQuestionsUnpublishResponses];
+
+export type contentQuestionsReferenceData = {
+    body: CopyOrReference;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: never;
+    url: '/api/v1/content/questions/references';
+};
+
+export type contentQuestionsReferenceErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsReferenceError = contentQuestionsReferenceErrors[keyof contentQuestionsReferenceErrors];
+
+export type contentQuestionsReferenceResponses = {
+    /**
+     * Successful Response
+     */
+    201: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentQuestionsReferenceResponse = contentQuestionsReferenceResponses[keyof contentQuestionsReferenceResponses];
+
+export type contentQuestionsReviewsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+        /**
+         * State
+         */
+        state?: 'submitted' | 'approved' | 'rejected' | null;
+    };
+    url: '/api/v1/content/questions/reviews';
+};
+
+export type contentQuestionsReviewsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsReviewsError = contentQuestionsReviewsErrors[keyof contentQuestionsReviewsErrors];
+
+export type contentQuestionsReviewsResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__Page_ReviewView_;
+};
+
+export type contentQuestionsReviewsResponse = contentQuestionsReviewsResponses[keyof contentQuestionsReviewsResponses];
+
+export type contentQuestionsReviewData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Review Id
+         */
+        review_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/reviews/{review_id}';
+};
+
+export type contentQuestionsReviewErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsReviewError = contentQuestionsReviewErrors[keyof contentQuestionsReviewErrors];
+
+export type contentQuestionsReviewResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__ReviewView;
+};
+
+export type contentQuestionsReviewResponse = contentQuestionsReviewResponses[keyof contentQuestionsReviewResponses];
+
+export type contentQuestionsDecideData = {
+    body: Decision;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Review Id
+         */
+        review_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/reviews/{review_id}/decision';
+};
+
+export type contentQuestionsDecideErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsDecideError = contentQuestionsDecideErrors[keyof contentQuestionsDecideErrors];
+
+export type contentQuestionsDecideResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentQuestionsDecideResponse = contentQuestionsDecideResponses[keyof contentQuestionsDecideResponses];
+
+export type contentQuestionsPublishData = {
+    body: Revision;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Review Id
+         */
+        review_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/reviews/{review_id}/publish';
+};
+
+export type contentQuestionsPublishErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsPublishError = contentQuestionsPublishErrors[keyof contentQuestionsPublishErrors];
+
+export type contentQuestionsPublishResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentQuestionsPublishResponse = contentQuestionsPublishResponses[keyof contentQuestionsPublishResponses];
+
+export type contentQuestionsTaskData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Task Id
+         */
+        task_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/tasks/{task_id}';
+};
+
+export type contentQuestionsTaskErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsTaskError = contentQuestionsTaskErrors[keyof contentQuestionsTaskErrors];
+
+export type contentQuestionsTaskResponses = {
+    /**
+     * Successful Response
+     */
+    200: TransferView;
+};
+
+export type contentQuestionsTaskResponse = contentQuestionsTaskResponses[keyof contentQuestionsTaskResponses];
+
+export type contentQuestionsCancelData = {
+    body: TaskGeneration;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Task Id
+         */
+        task_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/tasks/{task_id}/cancel';
+};
+
+export type contentQuestionsCancelErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsCancelError = contentQuestionsCancelErrors[keyof contentQuestionsCancelErrors];
+
+export type contentQuestionsCancelResponses = {
+    /**
+     * Successful Response
+     */
+    200: TransferResult;
+};
+
+export type contentQuestionsCancelResponse = contentQuestionsCancelResponses[keyof contentQuestionsCancelResponses];
+
+export type contentQuestionsUploadInputData = {
+    body: Blob | File;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * Content-Type
+         */
+        'content-type'?: string;
+        /**
+         * Content-Length
+         */
+        'content-length'?: number | null;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Task Id
+         */
+        task_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/tasks/{task_id}/input';
+};
+
+export type contentQuestionsUploadInputErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsUploadInputError = contentQuestionsUploadInputErrors[keyof contentQuestionsUploadInputErrors];
+
+export type contentQuestionsUploadInputResponses = {
+    /**
+     * Successful Response
+     */
+    200: TransferResult;
+};
+
+export type contentQuestionsUploadInputResponse = contentQuestionsUploadInputResponses[keyof contentQuestionsUploadInputResponses];
+
+export type contentQuestionsRetryData = {
+    body: TaskGeneration;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Task Id
+         */
+        task_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/tasks/{task_id}/retry';
+};
+
+export type contentQuestionsRetryErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsRetryError = contentQuestionsRetryErrors[keyof contentQuestionsRetryErrors];
+
+export type contentQuestionsRetryResponses = {
+    /**
+     * Successful Response
+     */
+    200: TransferResult;
+};
+
+export type contentQuestionsRetryResponse = contentQuestionsRetryResponses[keyof contentQuestionsRetryResponses];
+
+export type contentQuestionsVersionsData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path?: never;
+    query?: {
+        /**
+         * Q
+         */
+        q?: string;
+        /**
+         * Knowledge
+         */
+        knowledge?: string;
+        /**
+         * Offset
+         */
+        offset?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+        /**
+         * Question Id
+         */
+        question_id?: string | null;
+    };
+    url: '/api/v1/content/questions/versions';
+};
+
+export type contentQuestionsVersionsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsVersionsError = contentQuestionsVersionsErrors[keyof contentQuestionsVersionsErrors];
+
+export type contentQuestionsVersionsResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__Page_VersionView___1;
+};
+
+export type contentQuestionsVersionsResponse = contentQuestionsVersionsResponses[keyof contentQuestionsVersionsResponses];
+
+export type contentQuestionsVersionData = {
+    body?: never;
+    headers?: {
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Version Id
+         */
+        version_id: string;
+    };
+    query?: {
+        /**
+         * Library Id
+         */
+        library_id?: string | null;
+    };
+    url: '/api/v1/content/questions/versions/{version_id}';
+};
+
+export type contentQuestionsVersionErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsVersionError = contentQuestionsVersionErrors[keyof contentQuestionsVersionErrors];
+
+export type contentQuestionsVersionResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__VersionView;
+};
+
+export type contentQuestionsVersionResponse = contentQuestionsVersionResponses[keyof contentQuestionsVersionResponses];
+
+export type contentQuestionsRetireData = {
+    body: ParentChange;
+    headers: {
+        /**
+         * Idempotency-Key
+         */
+        'Idempotency-Key': string;
+        /**
+         * X-Work-Role
+         */
+        'X-Work-Role'?: string | null;
+    };
+    path: {
+        /**
+         * Question Id
+         */
+        question_id: string;
+    };
+    query?: never;
+    url: '/api/v1/content/questions/{question_id}/retirement';
+};
+
+export type contentQuestionsRetireErrors = {
+    /**
+     * Validation Error
+     */
+    422: HTTPValidationError;
+};
+
+export type contentQuestionsRetireError = contentQuestionsRetireErrors[keyof contentQuestionsRetireErrors];
+
+export type contentQuestionsRetireResponses = {
+    /**
+     * Successful Response
+     */
+    200: app__domains__content__questions__views__CommandResult;
+};
+
+export type contentQuestionsRetireResponse = contentQuestionsRetireResponses[keyof contentQuestionsRetireResponses];
 
 export type contentSubmitTargetsData = {
     body?: never;
@@ -4360,7 +7812,7 @@ export type contentCreateUploadResponses = {
     /**
      * Successful Response
      */
-    201: CommandResult;
+    201: app__domains__content__views__CommandResult;
 };
 
 export type contentCreateUploadResponse = contentCreateUploadResponses[keyof contentCreateUploadResponses];
@@ -4440,7 +7892,7 @@ export type contentUploadBytesResponses = {
     /**
      * Successful Response
      */
-    200: CommandResult;
+    200: app__domains__content__views__CommandResult;
 };
 
 export type contentUploadBytesResponse = contentUploadBytesResponses[keyof contentUploadBytesResponses];
@@ -4480,7 +7932,7 @@ export type contentCancelUploadResponses = {
     /**
      * Successful Response
      */
-    200: CommandResult;
+    200: app__domains__content__views__CommandResult;
 };
 
 export type contentCancelUploadResponse = contentCancelUploadResponses[keyof contentCancelUploadResponses];
@@ -4521,7 +7973,7 @@ export type contentVersionDetailResponses = {
     /**
      * Successful Response
      */
-    200: VersionView;
+    200: app__domains__content__views__VersionView;
 };
 
 export type contentVersionDetailResponse = contentVersionDetailResponses[keyof contentVersionDetailResponses];
@@ -4651,7 +8103,7 @@ export type contentReparseVersionResponses = {
     /**
      * Successful Response
      */
-    200: CommandResult;
+    200: app__domains__content__views__CommandResult;
 };
 
 export type contentReparseVersionResponse = contentReparseVersionResponses[keyof contentReparseVersionResponses];

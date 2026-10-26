@@ -15,7 +15,7 @@ from app.domains.core.commands import tenant_write_lock
 from app.domains.content.access import require_library, require_version
 from app.domains.content.background_identity import load_identity
 from app.domains.content.models import ContentJob, ContentUpload, Material, MaterialVersion
-from app.domains.content.quota import enforce_budget, enforce_queue, quota_lock
+from app.domains.content.quota import enforce_budget, enforce_queue, quota_lock, pending_receiver, receiving_slots
 from app.domains.content.schemas import UploadCreate
 from app.domains.content.services import editable_material, execute_command, locked, require_key
 from app.domains.content.upload_fence import FenceUnavailable
@@ -52,9 +52,7 @@ def create_upload(db, identity, request: UploadCreate, key, free_disk_bytes):
 
     def action():
         quota_lock(db)
-        active = db.exec(select(ContentUpload.id).where(ContentUpload.owner_id == identity.user.id,
-                                                       ContentUpload.state.in_(["created", "receiving"]))).first()
-        if active:
+        if pending_receiver(db, identity.user.id):
             raise HTTPException(409, "已有活跃上传，请查询状态或取消后重试")
         upload_id = uuid4()
         metadata = request.source_metadata.model_dump()
@@ -122,8 +120,7 @@ def _claim(factory, context, upload_id, writer_id, guard):
             if not replay and (current.state != "created" or current.login_session_id != identity.login.id
                                or current.expires_at <= db_now(db)):
                 raise HTTPException(409, "上传会话不能开始，请查询状态后重新上传")
-            streams = db.exec(select(func.count()).select_from(ContentUpload).where(
-                ContentUpload.lease_owner.is_not(None), ContentUpload.id != upload_id)).one()
+            streams = receiving_slots(db, exclude_upload=upload_id)
             if streams >= 2:
                 raise HTTPException(409, "上传通道繁忙，请稍后重试")
             if not replay:

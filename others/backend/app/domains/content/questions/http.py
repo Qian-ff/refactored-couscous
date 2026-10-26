@@ -37,6 +37,8 @@ class C1Environment:
 
 def get_environment(request: Request):
     value = getattr(request.app.state, "c1_environment", None)
+    if callable(value):
+        value = value()
     if not isinstance(value, C1Environment):
         raise HTTPException(503, "CONTENT_C1_UNAVAILABLE：C1公共运行环境尚未接入")
     return value

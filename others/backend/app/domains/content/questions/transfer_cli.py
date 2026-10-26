@@ -1,11 +1,11 @@
-"""Fixed one-shot worker. A mounts /job/input; stdout is bounded JSON/CSV/XLSX.
+"""Fixed one-shot worker. A passes a kernel-sealed fd; stdout is bounded JSON/CSV/XLSX.
 
 No database, dotenv, shell, network client or user-supplied path is imported here.
 Process timeout and filesystem isolation remain the trusted runner's responsibility.
 """
 import argparse
+import os
 import sys
-from pathlib import Path
 from typing import Literal
 
 from pydantic import Field, ValidationError
@@ -36,9 +36,14 @@ def main():
     parser = argparse.ArgumentParser(description="Fixed labconnect.question-transfer/1 worker")
     parser.add_argument("--operation", choices=["import", "export"], required=True)
     parser.add_argument("--format", choices=["csv", "xlsx"], required=True)
+    parser.add_argument("--input-fd", type=int, required=True)
     args = parser.parse_args()
     try:
-        with Path("/job/input").open("rb") as source:
+        import fcntl
+        required = fcntl.F_SEAL_WRITE | fcntl.F_SEAL_GROW | fcntl.F_SEAL_SHRINK | fcntl.F_SEAL_SEAL
+        if args.input_fd < 0 or fcntl.fcntl(args.input_fd, fcntl.F_GET_SEALS) & required != required:
+            raise ValueError("Unsealed input")
+        with os.fdopen(os.dup(args.input_fd), "rb") as source:
             result = process(source, args.operation, args.format)
         if len(result) > OUTPUT_LIMIT:
             raise TransferError("output_size")

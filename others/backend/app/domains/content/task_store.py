@@ -10,6 +10,7 @@ from app.domains.core.commands import refresh_identity, tenant_write_lock
 from app.domains.content.background_identity import load_identity
 from app.domains.content.models import ContentJob, ContentUpload, Library, Material, MaterialVersion, SourceChunk
 from app.domains.content.quota import enforce_budget, quota_lock
+from app.domains.content.questions.models import TransferTask
 from app.domains.content.services import editable_material, locked
 from app.domains.content.uploads import db_now
 
@@ -64,8 +65,16 @@ def claim(factory, owner):
         except HTTPException:
             authorization_error = True
         quota_lock(db)
+        transfer = db.exec(select(TransferTask).where(TransferTask.state == "queued").order_by(
+            TransferTask.created_at, TransferTask.id).limit(1)).first()
+        if transfer is not None and (transfer.created_at, str(transfer.id)) < (first.created_at, str(first.id)):
+            return None
+        if db.exec(select(TransferTask.id).where(or_(TransferTask.state == "running", and_(
+            TransferTask.execution_id.is_not(None), or_(TransferTask.stop_confirmed.is_(False),
+                                                       TransferTask.reserved_bytes > 0)))).limit(1)).first():
+            return None
         blocked = db.exec(select(ContentJob.id).where(or_(ContentJob.state == "running", and_(
-            ContentJob.execution_id.is_not(None), ContentJob.stop_confirmed.is_(False))))).first()
+            ContentJob.execution_id.is_not(None), or_(ContentJob.stop_confirmed.is_(False), ContentJob.reserved_bytes > 0))))).first()
         if blocked:
             db.rollback()
             return None

@@ -125,6 +125,19 @@ def main():
     os.environ["APP_ENV"] = "test"
     migrate(data["owner_url"])
     grant_runtime(data["owner_url"], data["runtime_role"])
+    if args.action == "prepare-c1-test":
+        runtime = args.admin_config.parent
+        storage = (runtime / "materials").resolve()
+        storage.mkdir(mode=0o700, exist_ok=True)
+        content_file = runtime / "content-runtime.json"
+        content_file.write_text(json.dumps({"storage_root": str(storage),
+            "parser_client": str((runtime / "parser-client.json").resolve())}), encoding="utf-8")
+        api_file = runtime / "api-runtime.json"
+        if not api_file.exists():
+            api_file.write_text(json.dumps({"database_url": data["runtime_url"], "secret_key": secrets.token_urlsafe(48),
+                "content_runtime": str(content_file.resolve()), "synthetic_password": data["synthetic_password"]}), encoding="utf-8")
+        for path in (content_file, api_file):
+            path.chmod(0o600)
     if args.action == "prepare-test":
         if "synthetic_password" not in data:
             data["synthetic_password"] = secrets.token_urlsafe(24)

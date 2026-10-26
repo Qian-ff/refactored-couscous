@@ -8,18 +8,16 @@ from time import monotonic
 from uuid import uuid4
 
 from fastapi import HTTPException
-from sqlalchemy import func
-from sqlmodel import select
 from starlette.background import BackgroundTask
 from starlette.responses import StreamingResponse
 
 from app.domains.content.background_identity import load_identity
 from app.domains.content.downloads import verified_file
-from app.domains.content.models import ContentUpload, now
+from app.domains.content.models import now
 from app.domains.content.questions.budget import ContentBudget
 from app.domains.content.questions.models import ImportBatch, TransferTask
 from app.domains.content.questions.transfers import TransferAdmission, export_download, require_task
-from app.domains.content.quota import quota_lock
+from app.domains.content.quota import quota_lock, receiving_slots
 from app.domains.content.services import execute_command, locked
 from app.domains.content.storage import PrivateStorage
 from app.domains.content.upload_fence import FenceUnavailable
@@ -37,12 +35,9 @@ class TransferIO:
 
 def receiving_count(db):
     """A must also use this combined count in the C02 receiving-slot check under quota_lock."""
-    uploads = db.exec(select(func.count()).select_from(ContentUpload).where(ContentUpload.lease_owner.is_not(None))).one()
     # Cancellation/expiry is not proof that the receiver or its cleanup has closed.
     # Sealed imports may hold parser leases, which are not upload-slot occupancy.
-    transfers = db.exec(select(func.count()).select_from(TransferTask).where(
-        TransferTask.kind == "import", TransferTask.input_sealed.is_(False), TransferTask.lease_owner.is_not(None))).one()
-    return int(uploads) + int(transfers)
+    return receiving_slots(db)
 
 
 def _check(factory, context, task_id):
