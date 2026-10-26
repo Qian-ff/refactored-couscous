@@ -1,6 +1,6 @@
 # ECS 云端联调与演示
 
-A维护本流程；0.5.0/C1云部署工具候选见[交接](../../docs/c1-cloud-handoff.md)，实际ECS仍以最后一次真实部署证据为准（M1准备时717e1d0/0.3.2）。必须从A接收的干净main及实际发送的执行SHA发布。D/B既有UI改版和后续门禁继续按[阶段入口](../../docs/a2-start.md)，不把候选工具或本机0.5验收冒称云端升级。
+A维护本流程；2026-10-26已从干净main部署 `cd1a385fe69b9f97e8f8ceaa84e84e542c4e76eb`、0.5.0/c1d0c000001至 [https://8.139.253.87](https://8.139.253.87)，A已接收真实TXT/CSV/固定内容与三端基本连接结果，见[云端接收](../../docs/c1-cloud-handoff.md)。后续仍须从A接收的干净main及实际发送的执行SHA发布；文档HEAD不等于当前部署源码。D/B既有UI改版和后续门禁继续按[阶段入口](../../docs/a2-start.md)，不将本次部署称为完整A2验收。
 
 ## 连接和配置
 
@@ -31,7 +31,7 @@ python .\others\scripts\cloud.py verify https://实际公网IP或已配置域名
 
 build要求干净main，固定源码SHA及API/网页内容指纹，构建生产网页与非root后端镜像。基础镜像见[images.lock.json](images.lock.json)，依赖继续用pnpm-lock.yaml和uv.lock。包只含生产镜像、公开部署文件、版本及校验清单，无.env、真实账号、SSH密钥、私密PPT、设计树、虚拟环境或模型缓存。构建和上传在本机进行，减少2核4GiB服务器的构建压力。bundle.tar留忽略区，不进入Git。
 
-服务器采用/opt/labconnect/shared、releases/完整SHA、incoming和backups。首次部署传入独立凭据；后续保留服务器凭据，避免重建密码导致数据库失联。Docker命名卷labconnect_cloud_pg18、labconnect_cloud_files、证书卷持久化，和本地safelab-a1卷完全独立。总内存限额约2GiB，不在这台实例加载语音或视觉模型。
+服务器采用/opt/labconnect/shared、releases/完整SHA、incoming和backups。首次部署传入独立凭据；后续保留服务器凭据，避免重建密码导致数据库失联。Docker命名卷labconnect_cloud_pg18、labconnect_cloud_files、证书卷持久化，和本地safelab-a1卷完全独立。DB/API/Web/controller限额分别768/1024/256/128MiB，临时解析任务另有限额；限额不等于实测峰值，不在这台实例加载语音或视觉模型。
 
 发布会核对压缩包和镜像清单，取得独占部署锁，启动数据库、停止本项目API/网页写入、导出并验证PostgreSQL自定义格式备份，再运行同版本Alembic迁移、首次运维初始化和健康检查。首次初始化只创建一个平台运维账号并强制改密；重复执行不重置密码，不调用生产环境禁止的app.seed。上次release及数据库卷保留；成功后current才切换。失败停止并保留备份、旧目录和错误信息，避免以删卷或强行回退数据库掩盖错误。
 
@@ -53,7 +53,7 @@ HTTPS使用官方Caddy、Let's Encrypt ACME shortlived证书，持久化证书�
 
 仅controller持Docker socket，API和解析作业不持有。controller使用无网络容器、同宿主绝对路径的临时任务root、持久journal和私有Unix socket；客户端目录与服务端配置分开。原有ASR/AI目录及配置保留，不在云端安装宿主Python/语音模型。
 
-首次C1更新从原owner连接准备独立migration.env，停写备份后记录旧表/ID/内容摘要，通过仅管理进程创建并验证随机非owner角色，只替换api.env的数据库连接；旧JWT/CORS/密码/AI主密钥/原库/卷/证书保持。迁移后授权并比较原数据，bootstrap仍幂等且不seed。实际数据/角色检查在M2执行，M1不修改ECS。
+首次C1更新从原owner连接准备独立migration.env，停写备份后记录旧表/ID/内容摘要，通过仅管理进程创建并验证随机非owner角色，只替换api.env的数据库连接；旧JWT/CORS/密码/AI主密钥/原库/卷/证书保持。迁移后授权并比较原数据，bootstrap仍幂等且不seed。上述数据/角色检查已在本次M2实过，旧14业务表全行摘要保持；后续更新仍须重新核对，不能复用旧报告冒充新部署验证。
 
 更新已有内容控制服务时，先通过旧服务确认实际停止/release并停旧控制器，再核对journal和保留的key/instance切换。缺少身份或未确认执行直接失败保留；不清空历史。完整HTTPS/预期SHA/0.5.0/c1迁移、实际镜像和非owner/内容能力检查由verify完成；普通TXT/CSV/固定Q-L及客户端真实流程另记报告，能力探针不等同业务流验证。
 

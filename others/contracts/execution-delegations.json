@@ -308,10 +308,10 @@
     "cloud-c1-release": {
       "executor": "A-executor",
       "approved_by": "A-main",
-      "status": "active",
+      "status": "completed",
       "baseline_sha": "25fe60ce2a55a266d0b0f1152d4b32ef8909af79",
       "work_package": "others/docs/ai/cloud-c1-release.md",
-      "phase": "M2_cloud_activation_pending_A_exact_main_sha",
+      "phase": "M2_received_by_A_post_receipt_identity_refresh_only",
       "activation_requirement": "A dispatches committed rule SHA for M1. Actual main build, uploads, cloud configuration/roles/migration/service changes require a second explicitly dispatched full main execution SHA after A receives tooling.",
       "allowed_paths": [
         "others/scripts/cloud.py",
@@ -337,7 +337,18 @@
       "validation_scope": "Small deployment packaging/lifecycle/config checks, preserved original cloud database and credentials, actual HTTPS/TXT/CSV/fixed Q-L flow and basic affected clients. No advanced safety/stress, Daybreak, paid resources, new modules/native implementation or system Python installation.",
       "M1_received_by_A": true,
       "candidate_sha": "03081a1e54e4795677059b7e8aea78d38619f5ec",
-      "M1_evidence_manifest_sha256": "c21d0c45e0b76b259a5d04e38fdc22f679b59928059790244839157684a1d393"
+      "M1_evidence_manifest_sha256": "c21d0c45e0b76b259a5d04e38fdc22f679b59928059790244839157684a1d393",
+      "M2_execution_sha": "cd1a385fe69b9f97e8f8ceaa84e84e542c4e76eb",
+      "M2_received_by_A": true,
+      "M2_evidence_manifest_sha256": "4e9247aeeff376ad168b77dc27e2ea38661943a79fd1cbb4088a96b58a5aaeb5",
+      "cloud_contract": "0.5.0",
+      "cloud_migration": "c1d0c000001",
+      "cloud_service_url": "https://8.139.253.87",
+      "native_artifact_source_sha": "bae3461a0e4cba9f6de8b13d12899a965a66b77b",
+      "post_receipt_identity_refresh": {
+        "authorization": "Only after A actually dispatches the final receipt-document main SHA, verify PID/start-time/command/source ownership and unchanged product fingerprints; refresh owned main API8000/Web5173 identity and check identity/health. No tracked source edits, database/config/controller18767/shared env/native/cloud changes, migrations or builds. No empty commit.",
+        "new_module_start": false
+      }
     }
   }
 }

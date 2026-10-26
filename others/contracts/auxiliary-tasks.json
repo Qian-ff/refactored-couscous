@@ -94,7 +94,13 @@
         "C1_main_launcher_candidate_sha": "58b5d26ece3cd8e076eaaf8d9034b7ca511988d2",
         "C1_main_verified_source_sha": "bae3461a0e4cba9f6de8b13d12899a965a66b77b",
         "C1_consumer_handoff": "others/docs/c1-consumer-baseline.md",
-        "B2_start_requirement": "Technical dependency gate passed by A; user must manually start first B2 Goal per coordination.md"
+        "B2_start_requirement": "Technical dependency gate passed by A; user must manually start first B2 Goal per coordination.md",
+        "C1_cloud_received_by_A": true,
+        "C1_cloud_source_sha": "cd1a385fe69b9f97e8f8ceaa84e84e542c4e76eb",
+        "C1_cloud_contract": "0.5.0",
+        "C1_cloud_migration": "c1d0c000001",
+        "C1_cloud_handoff": "others/docs/c1-cloud-handoff.md",
+        "C1_cloud_service_url": "https://8.139.253.87"
       }
     },
     "ui-assistant-floating-v1": {
@@ -162,7 +168,7 @@
     "workflow-v3": {
       "coordinator_role": "A",
       "thread_id": "01a1544b-7eb1-77f1-9f83-52fa8510503c",
-      "status": "first_round_authorized",
+      "status": "C1_and_cloud_received_next_modules_manual",
       "baseline_sha": "2f07bd08893f5f0b0e6260068b1c3e9106a7db68",
       "workflow": "others/docs/delivery-workflow.md",
       "rollout": "others/docs/workflow-v3-rollout.md",
@@ -183,7 +189,10 @@
       "B2_new_features_allowed": true,
       "D2_status": "dependency_baseline_ready_awaiting_user_first_module_start",
       "C2_status": "awaiting_user_first_module_start",
-      "C1_verified_source_sha": "bae3461a0e4cba9f6de8b13d12899a965a66b77b"
+      "C1_verified_source_sha": "bae3461a0e4cba9f6de8b13d12899a965a66b77b",
+      "cloud_status": "M2_received_by_A",
+      "cloud_source_sha": "cd1a385fe69b9f97e8f8ceaa84e84e542c4e76eb",
+      "cloud_handoff": "others/docs/c1-cloud-handoff.md"
     }
   }
 }
