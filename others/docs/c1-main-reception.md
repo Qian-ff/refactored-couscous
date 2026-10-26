@@ -18,3 +18,11 @@
 现有prepare/profile与Prepare脚本仍面向A副候选venv，需最小严格main模式和实际迁移头输出；主线运行准备不能重写受跟踪许可证/源码。P1工具改动只在A副树提交，A接收后给准确main SHA才进入P2。迁移保留原库/数据/ID/owner分离，激活已经验证的两套共享环境与原18767，实测新旧入口和普通合成闭环，再按最终main重建受影响三端。
 
 正式B2/D2基线须等待实际main、固定版本/学生DTO/受控服务及来源证据；专业60题/六关仍是待审核草稿，合成验证不冒充专业人工审核。B2/C2/D2、新原生、G、ECS与Git推送门禁保持。
+
+## P1启动工具候选（待A合入）
+
+A副按 `21db8c558e46b82ea79aa45bbf08a522d7f9d5d6` 委托补齐工具：prepare/启停/探针按固定profile选择；main仅真实primary/main，固定共享worker、`runtime/content-parser`及18767；C1候选仍独立18768且保留原角色校验。main运行准备只比对已接收锁、14包安装版本和许可证据，许可不一致直接失败，不重写跟踪资料。镜像/协议切换须原journal每条均已实际停止且released，原实例/key继续使用。
+
+迁移入口在升级事务内读取实际alembic头并输出。新增 `Open-C1-API.cmd` / `Start-C1.ps1 -NoOpen`，复用Start-A1的API目标、真实来源与健康检查；主线v2尚未准备则明确拒绝，默认打开8000/docs。网页资料保留原入口；Verify在main/C1仅报告能力/源码/镜像检查，不冒充旧完整sandbox验收。
+
+P1仅工具及只读/合成profile检查，未执行main准备、依赖激活、控制器切换、备份迁移或三端构建。准确候选提交和最小检查见A副最终回执及 `others/reports/c1-public/post-main/p1/`；只有A接收并发送第二个完整main SHA才执行P2。

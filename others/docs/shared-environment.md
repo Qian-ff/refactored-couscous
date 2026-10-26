@@ -77,4 +77,8 @@ Codex运行时刷新后若pnpm消失，A在主树执行python others/scripts/pre
 
 ## A副独立验证入口
 
+C1主线接入分P1工具候选与P2实际激活，见[c1-main-activation](ai/c1-main-activation.md)。只有A收到工具并发第二个完整main执行SHA后，才在真实primary/main按已接收锁激活既有两套共享venv。`Prepare-ContentParser.ps1 -Profile main`使用固定共享worker，检查已接收锁/14包版本/许可，只写忽略的 `runtime/content-parser`；不会安装共享依赖或重写受跟踪许可。可将已核对SHA的候选Linux wheels放入该目录的 `build/wheels` 复用，程序仍逐个按锁校验，不复制候选venv。切换前经旧控制端确认停止/release并保留实例/key/journal。
+
+`Start/Stop/Verify-ContentParser.ps1 -Profile main`固定18767；`-Profile c1`固定候选18768并保留登记角色/活动包校验；不传参数时仅真实primary/main自动选main，其余沿用c02候选校验。main的Verify只作来源/镜像/能力探针，非完整sandbox实测。P2后 `Open-C1-API.cmd -NoOpen` / `Start-C1.ps1 -NoOpen`检查真实8000来源/0.5.0/c1迁移及v2控制器，默认打开8000/docs；资料仍用Open-Materials，未新增题库UI。
+
 在登记的A副树先运行shared_env.py status/probe/probe-worker；已有依赖不重装。需要网页依赖时用install-web离线复用。API使用Start-Backend.ps1 -Port 8002；网页按codex/a-executor分支默认5177。端口占用或源码身份不符则保留已有服务并报告，不终止其他树进程。浏览器验证显式设置LABCONNECT_API_ROOT为本树、LABCONNECT_API_URL为http://127.0.0.1:8002，避免默认主树API产生假通过。Start-A1仅用于既有主/业务树，A副使用上述分支独立验证入口，不执行演示库迁移。

@@ -24,7 +24,9 @@ def migrate(owner_url: str, revision: str = "head"):
     with engine.begin() as connection:
         config.attributes["connection"] = connection
         command.upgrade(config, revision)
+        heads = list(connection.execute(text("SELECT version_num FROM alembic_version ORDER BY version_num")).scalars())
     engine.dispose()
+    return heads
 
 
 def grant_runtime(owner_url: str, role: str):
@@ -123,7 +125,7 @@ def main():
     os.environ["DATABASE_URL"] = data["runtime_url"]
     os.environ.setdefault("SECRET_KEY", secrets.token_urlsafe(32))
     os.environ["APP_ENV"] = "test"
-    migrate(data["owner_url"])
+    heads = migrate(data["owner_url"])
     grant_runtime(data["owner_url"], data["runtime_role"])
     if args.action == "prepare-c1-test":
         runtime = args.admin_config.parent
@@ -155,7 +157,7 @@ def main():
         for path in (args.admin_config, content_file, api_file):
             path.chmod(0o600)
     print(json.dumps({"database": make_url(data["runtime_url"]).database, "runtime_role": data["runtime_role"],
-                      "migration": "c1d0c000001" if data.get("profile") == "c1-test" else "c02d0c00001",
+                      "migration": heads[0] if len(heads) == 1 else heads,
                       "owner_configuration_separate": True}))
 
 

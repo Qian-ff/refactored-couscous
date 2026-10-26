@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import re
 import struct
+import subprocess
 from uuid import UUID
 
 from app.domains.content.parse_runner import ExecutionState, RunnerCapabilities, RunnerUnavailable
@@ -18,6 +19,20 @@ TASK_KINDS = ("material_parse", "question_import", "question_export")
 FRAME = 65536
 MAX_INPUT = 20 * 1024 * 1024
 MAX_OUTPUT = 16 * 1024 * 1024
+
+
+def main_control_configuration(configuration):
+    """Only the actual primary/main may bind the v2 protocol to the original port."""
+    root = Path(__file__).resolve().parents[4]
+    try:
+        common = subprocess.check_output(["git", "rev-parse", "--path-format=absolute", "--git-common-dir"],
+                                         cwd=root, text=True, stderr=subprocess.DEVNULL).strip()
+        branch = subprocess.check_output(["git", "branch", "--show-current"], cwd=root,
+                                         text=True, stderr=subprocess.DEVNULL).strip()
+        return (Path(common).resolve().parent == root and branch == "main"
+                and configuration == json.loads((root / "others/runtime/content-parser/parser-client.json").read_text()))
+    except (OSError, ValueError, subprocess.CalledProcessError):
+        return False
 
 
 async def read_frame(reader, maximum, timeout=30):
@@ -81,9 +96,13 @@ class DockerParseRunner:
         if "socket" in configuration:
             if "host" in configuration or "port" in configuration or not Path(configuration["socket"]).is_absolute():
                 raise RunnerUnavailable()
-        elif (configuration.get("host") != "127.0.0.1"
-              or configuration.get("port") != (18768 if configuration["protocol"] == C1_PROTOCOL else 18767)):
-            raise RunnerUnavailable()
+        else:
+            port = configuration.get("port")
+            expected = 18768 if configuration["protocol"] == C1_PROTOCOL else 18767
+            main_v2 = (configuration["protocol"] == C1_PROTOCOL and port == 18767
+                       and main_control_configuration(configuration))
+            if configuration.get("host") != "127.0.0.1" or (port != expected and not main_v2):
+                raise RunnerUnavailable()
         self.configuration = configuration
 
     async def _open(self, operation, **fields):

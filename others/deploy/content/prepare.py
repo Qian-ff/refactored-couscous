@@ -11,7 +11,6 @@ import secrets
 import shutil
 import subprocess
 import sys
-import tomllib
 import urllib.request
 from urllib.parse import urlparse
 from concurrent.futures import ThreadPoolExecutor
@@ -19,10 +18,79 @@ from concurrent.futures import ThreadPoolExecutor
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "others/scripts"))
 from content_candidate_env import validate  # noqa: E402
+from workflow import primary_root  # noqa: E402
 
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def profile_settings(profile):
+    primary = primary_root(ROOT)
+    branch = subprocess.check_output(["git", "branch", "--show-current"], cwd=ROOT, text=True).strip()
+    if profile == "auto":
+        profile = "main" if ROOT.resolve() == primary.resolve() and branch == "main" else "c02"
+    if profile == "main":
+        if ROOT.resolve() != primary.resolve() or branch != "main":
+            raise RuntimeError("Main parser profile requires the actual primary/main checkout")
+        runtime = ROOT / "others/runtime/content-parser"
+        backend = ROOT / "others/backend/.venv/Scripts/python.exe"
+        worker = ROOT / "others/ai_worker/.venv/Scripts/python.exe"
+    else:
+        if profile == "c1":
+            from c1_candidate_env import validate as validate_c1
+            validate_c1()
+        else:
+            validate()
+        runtime = ROOT / ("others/runtime/c1-public" if profile == "c1" else "others/runtime/c02-public")
+        backend = runtime / "envs/backend/Scripts/python.exe"
+        worker = runtime / "envs/worker/Scripts/python.exe"
+    return {"profile": profile, "runtime": str(runtime), "backend": str(backend), "worker": str(worker),
+            "port": 18768 if profile == "c1" else 18767}
+
+
+def require_released(runtime, previous, image, protocol):
+    journal = runtime / "controller/journal"
+    if previous is None and any(journal.glob("*.json")):
+        raise RuntimeError("Existing execution history has no controller identity; preserve it for A")
+    if previous and (previous["image"] != image or previous["protocol"] != protocol):
+        expected = (runtime / "controller").resolve()
+        if Path(previous["root"]).resolve() != expected:
+            raise RuntimeError("Existing controller root differs; preserve the original instance")
+        for path in journal.glob("*.json"):
+            record = json.loads(path.read_text(encoding="utf-8"))
+            if record.get("released") is not True or record.get("stop_confirmed") is not True:
+                raise RuntimeError("Confirm stop and release of old executions before changing image/protocol")
+
+
+def license_evidence(packages, license_root, *, readonly=False):
+    licenses = {}
+    if not readonly:
+        license_root.mkdir(parents=True, exist_ok=True)
+    for name, package in sorted(packages.items()):
+        installed = importlib.metadata.distribution(name)
+        if installed.version != package["version"]:
+            raise RuntimeError("Installed version differs from parser lock: " + name)
+        files = {}
+        for member in installed.files or []:
+            if ".dist-info" not in str(member) or not any(word in member.name.lower() for word in ("license", "licence", "copying")):
+                continue
+            original = Path(installed.locate_file(member))
+            if original.is_file():
+                target = license_root / (name + "-" + package["version"] + "-" + member.name)
+                if readonly:
+                    if not target.is_file() or digest(target) != digest(original):
+                        raise RuntimeError("Accepted license evidence differs: " + target.name)
+                else:
+                    shutil.copyfile(original, target)
+                files[target.name] = digest(original)
+        if not files:
+            raise RuntimeError("Wheel did not provide license evidence: " + name)
+        licenses[name] = {"version": package["version"], "source": package["source"], "files": files,
+                          "wheel_urls": [file["url"] for file in package["wheels"]]}
+    if readonly and json.loads((license_root / "manifest.json").read_text(encoding="utf-8")) != licenses:
+        raise RuntimeError("Accepted license manifest differs; fix on executor branch before main activation")
+    return licenses
 
 
 def closure(lock, *, transfers=False):
@@ -70,24 +138,35 @@ def cache_linux_wheel(package, directory):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", choices=("c02", "c1"), default="c02")
-    profile = parser.parse_args().profile
-    if profile == "c1":
-        from c1_candidate_env import validate as validate_c1
-        validate_c1()
-    else:
-        validate()
+    parser.add_argument("--profile", choices=("auto", "main", "c02", "c1"), default="c02")
+    parser.add_argument("--describe-profile", action="store_true", help="Read-only fixed paths and role validation")
+    args = parser.parse_args()
+    settings = profile_settings(args.profile)
+    if args.describe_profile:
+        print(json.dumps(settings))
+        return
+    profile = settings["profile"]
+    transfers = profile in {"c1", "main"}
+    if profile == "main":
+        if Path(sys.executable).resolve() != Path(settings["worker"]).resolve():
+            raise RuntimeError("Main prepare must run with the fixed shared worker interpreter")
+        # A receives the exact lock first; local tracked edits cannot silently select new pins.
+        subprocess.run(["git", "diff", "--exit-code", "HEAD", "--", "others/ai_worker/uv.lock",
+                        "others/ai_worker/pyproject.toml", "others/licenses/content-transfer"], cwd=ROOT, check=True)
+    import tomllib
     worker = ROOT / "others/ai_worker"
     lock = tomllib.loads((worker / "uv.lock").read_text(encoding="utf-8"))
-    packages = closure(lock, transfers=profile == "c1")
-    runtime = ROOT / ("others/runtime/c1-public" if profile == "c1" else "others/runtime/c02-public")
+    packages = closure(lock, transfers=transfers)
+    license_root = ROOT / ("others/licenses/content-transfer" if transfers else "others/licenses/content-parser")
+    licenses = license_evidence(packages, license_root, readonly=profile == "main")
+    runtime = Path(settings["runtime"])
     destination = runtime / "build"
     destination.mkdir(parents=True, exist_ok=True)
     (destination / "content").mkdir(exist_ok=True)
     wheelhouse = destination / "wheels"
     wheelhouse.mkdir(exist_ok=True)
     copied = {}
-    if profile == "c1":
+    if transfers:
         with ThreadPoolExecutor(max_workers=3) as downloads:
             for wheel in downloads.map(lambda package: cache_linux_wheel(package, wheelhouse), packages.values()):
                 copied["wheels/" + wheel.name] = digest(wheel)
@@ -98,7 +177,7 @@ def main():
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text("", encoding="utf-8")
         copied[name] = digest(target)
-    if profile == "c1":
+    if transfers:
         for name in ("app/domains/content/schemas.py", "app/domains/content/questions/schemas.py",
                      "app/domains/content/questions/transfer_codec.py", "app/domains/content/questions/transfer_cli.py"):
             source, target = ROOT / "others/backend" / name, destination / name
@@ -113,30 +192,11 @@ def main():
         shutil.copyfile(path, destination / name)
         copied[name] = digest(path)
     requirements = []
-    licenses = {}
-    license_root = ROOT / ("others/licenses/content-transfer" if profile == "c1" else "others/licenses/content-parser")
-    license_root.mkdir(parents=True, exist_ok=True)
     for name, package in sorted(packages.items()):
-        installed = importlib.metadata.distribution(name)
-        if installed.version != package["version"]:
-            raise RuntimeError("Candidate installed version differs from parser lock: " + name)
         hashes = sorted({file["hash"] for file in package.get("wheels", [])})
         if not hashes or any(not value.startswith("sha256:") for value in hashes):
             raise RuntimeError("Missing locked wheel hashes")
         requirements.append(name + "==" + package["version"] + " " + " ".join("--hash=" + value for value in hashes))
-        files = {}
-        for member in installed.files or []:
-            if ".dist-info" not in str(member) or not any(word in member.name.lower() for word in ("license", "licence", "copying")):
-                continue
-            original = Path(installed.locate_file(member))
-            if original.is_file():
-                target = license_root / (name + "-" + package["version"] + "-" + member.name)
-                shutil.copyfile(original, target)
-                files[target.name] = digest(target)
-        if not files:
-            raise RuntimeError("Wheel did not provide license evidence: " + name)
-        licenses[name] = {"version": package["version"], "source": package["source"], "files": files,
-                          "wheel_urls": [file["url"] for file in package["wheels"]]}
     requirement_file = destination / "requirements.txt"
     requirement_file.write_text("\n".join(requirements) + "\n", encoding="utf-8", newline="\n")
     copied["requirements.txt"] = digest(requirement_file)
@@ -150,14 +210,13 @@ def main():
     previous = json.loads(server_path.read_text()) if server_path.exists() else None
     root = runtime / "controller"
     root.mkdir(mode=0o700, exist_ok=True)
-    if previous and previous["image"] != image:
-        if any(not json.loads(path.read_text()).get("released") for path in (root / "journal").glob("*.json")):
-            raise RuntimeError("Stop and release the old parser executions before changing image")
+    protocol = "labconnect.content-control/2" if transfers else "labconnect.parse-control/1"
+    require_released(runtime, previous, image, protocol)
     key = previous["key"] if previous else secrets.token_urlsafe(48)
     instance = previous["instance"] if previous else secrets.token_hex(16)
-    endpoint = ({"host": "127.0.0.1", "port": 18768 if profile == "c1" else 18767} if os.name == "nt" else
+    endpoint = ({"host": "127.0.0.1", "port": settings["port"]} if os.name == "nt" else
                 {"socket": str(runtime / "parse-control.sock")})
-    client = {"protocol": "labconnect.content-control/2" if profile == "c1" else "labconnect.parse-control/1", "key": key, **endpoint}
+    client = {"protocol": protocol, "key": key, **endpoint}
     server = {**client, "root": str(root), "image": image, "instance": instance}
     for name, value in (("control.json", server), ("parser-client.json", client)):
         path = runtime / name
@@ -167,7 +226,8 @@ def main():
                 "source_files": copied, "worker_lock_sha256": digest(worker / "uv.lock"),
                 "parser_packages": sorted(packages), "contains_speech_models": False}
     (runtime / "image.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
-    (license_root / "manifest.json").write_text(json.dumps(licenses, indent=2) + "\n", encoding="utf-8")
+    if profile != "main":
+        (license_root / "manifest.json").write_text(json.dumps(licenses, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(evidence))
 
 
