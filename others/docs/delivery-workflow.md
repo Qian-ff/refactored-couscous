@@ -4,6 +4,8 @@
 
 ## 当前交接与开工
 
+2026-10-26最新：[T2最终b7候选已通过A审查](c1-main-reception.md)，当前仍未合main。A副按[具体主线包P1](ai/c1-main-activation.md)补严格main准备模式和一键入口，A接收工具后与T2统一合入并发准确SHA，才执行P2原库备份/兼容迁移/共享环境及三端构建；先前T2“正在接入”是历史阶段，B2仍未放行。
+
 原C-02整包尚未验收。初始冻结候选`ecb7129497d1f6a69daf09df6db3f2f30537d7ba`的纯检查/未跑项保留历史原义；现已[接收后台及正文检索](c02-main-reception.md)，40fe与cff分别保留基础运行/检索增量证据。2026-10-26，[D资料页合并版本d4a已通过主线基础复验](material-ui-main-reception.md)，三端登录/资料预览与网页上传发布下载通过，Windows/安卓持久保存未验证；现行main源码契约0.4.1、迁移仍为c02d0c00001。云端旧版本另见[云端ASR交接](cloud-asr-handoff.md)，未随本机源码更新。
 
 - **A副1**承接C-02全部后端/worker遗留实现、修复、公共接入和实测；[生效工作包](ai/c02-public-integration.md)与[具体委托](../contracts/execution-delegations.json)共同限制写范围。

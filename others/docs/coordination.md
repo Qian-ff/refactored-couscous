@@ -25,7 +25,7 @@ E/F不再是独立活跃身份。C接收原E的backend/worker监控目录，监�
 
 A仍维护公共契约、迁移、SDK、依赖和共享环境，D仍唯一维护公共入口。A副的写权限来自main已提交的具体委托，不继承A的通配权限；任务需要额外公共文件时A主先明确范围并提交委托。A副提交候选成果，A主审核后在main接收及放行；合入后需要重测、重建的工作继续明确委托，旧包不证明新发布源码。签名、推送与公开发布不因职责迁移扩大授权。
 
-当前按[首版交付流程](delivery-workflow.md)接续：[D1资料页主线基础复验已通过](material-ui-main-reception.md)，原生保存未验；[C1 T1及46394d5候选15项真实领域PG已接收](c1-domain-reception.md)，由A副按[已登记T2包](ai/c1-runtime-public-integration.md)接真实运行器/统一计量/HTTP/SDK，尚未合main或发布B2基线。四个C1接缝与对应测试串行交A副，其余C领域保持冻结；C、D、B等待实际依赖，不因恢复自动首启C2/D2/B2。C原content/assistant/monitoring前端统一交D，B原admin/teaching保留。B2等A接收固定题目/关卡版本、学生DTO及受控答案服务后发布具体基线，不等待整个助手/监控；D助手与原生新增仍按后续门禁。G独立验收保留，身份合并不降低权限、数据隔离及真实运行要求。
+当前按[首版交付流程](delivery-workflow.md)接续：[D1资料页主线基础复验已通过](material-ui-main-reception.md)，原生保存未验；[C1最终b7 T2候选已接收](c1-main-reception.md)，A副按[主线接入包P1](ai/c1-main-activation.md)先补启动工具，A接收后一并合main并给准确SHA才执行P2备份迁移/激活/三端构建，B2仍未放行。C1领域及已验T2业务源冻结，其余角色等待实际依赖，不重复同一统一恢复确认、不因恢复自动首启C2/D2/B2。C原content/assistant/monitoring前端统一交D，B原admin/teaching保留。B2等A确认真实main固定版本、学生DTO及受控答案服务后发布具体基线，不等待整个助手/监控；D助手与原生新增仍按后续门禁。G独立验收保留，身份合并不降低权限、数据隔离及真实运行要求。
 
 ## 自查、审查与工作包
 

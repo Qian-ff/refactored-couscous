@@ -62,7 +62,7 @@
         "C_release_remaining": null,
         "B2_release_condition": "A-accepted actual fixed QuestionVersion/LessonVersion, student-safe DTO and controlled answer-read service, followed by an explicit full B2 execution SHA; no dependency on complete assistant/monitoring.",
         "current_workflow": "others/docs/delivery-workflow.md",
-        "C_current_stage": "C1 T1 and15real domainPG accepted as T2 input; A-executor delegated runtime/public candidate integration, no C2/B2 release",
+        "C_current_stage": "Final T2 candidate b7 received; executor prepares main launchers under P1, then A merge and explicit P2 activation; no B2/C2 release",
         "C02_remaining_backend_worker_executor": "A-executor",
         "C02_remaining_frontend_executor": "D",
         "C02_accepted_by_A": false,
@@ -87,7 +87,9 @@
         "C02_search_main_merge": "7c7570dee7680e0356517a4e8ddb71d2cbe307d1",
         "C1_domain_candidate_sha": "46394d57fc077e381748acb306e133476a47e7fe",
         "C1_domain_pg_passed": 15,
-        "C1_public_runtime_ready": false
+        "C1_public_runtime_ready": false,
+        "C1_runtime_candidate_received_by_A": true,
+        "C1_runtime_candidate_sha": "b7b27c72c1fdfccd434663f2fc683b5576202967"
       }
     },
     "ui-assistant-floating-v1": {
@@ -162,7 +164,7 @@
       "C02_status": "material_main_basic_verified_native_save_unverified",
       "A_executor_package": "c02-public-integration",
       "D_package": "others/docs/ai/d1-content-ui.md",
-      "C1_status": "T1_and_domain_PG_verified_T2_candidate_runtime_integration",
+      "C1_status": "T2_candidate_received_main_launcher_preparation_before_merge",
       "C1_candidate_sha": "46394d57fc077e381748acb306e133476a47e7fe",
       "B2_status": "waiting_real_content_baseline_and_A_release",
       "G_status": "manual_chat_creation_and_registration_required_at_milestone",
