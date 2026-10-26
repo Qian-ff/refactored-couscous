@@ -311,7 +311,7 @@
       "status": "active",
       "baseline_sha": "25fe60ce2a55a266d0b0f1152d4b32ef8909af79",
       "work_package": "others/docs/ai/cloud-c1-release.md",
-      "phase": "M1_deployment_tooling_before_main_cloud_activation",
+      "phase": "M2_cloud_activation_pending_A_exact_main_sha",
       "activation_requirement": "A dispatches committed rule SHA for M1. Actual main build, uploads, cloud configuration/roles/migration/service changes require a second explicitly dispatched full main execution SHA after A receives tooling.",
       "allowed_paths": [
         "others/scripts/cloud.py",
@@ -334,7 +334,10 @@
       "authorization_thread": "01a1544b-7eb1-77f1-9f83-52fa8510503c",
       "authorization_source": "Human 2026-10-26 explicitly requests task status verification plus GitHub and existing ECS update.",
       "push_owner": "A-main only; no checkpoint-2 tag claimed",
-      "validation_scope": "Small deployment packaging/lifecycle/config checks, preserved original cloud database and credentials, actual HTTPS/TXT/CSV/fixed Q-L flow and basic affected clients. No advanced safety/stress, Daybreak, paid resources, new modules/native implementation or system Python installation."
+      "validation_scope": "Small deployment packaging/lifecycle/config checks, preserved original cloud database and credentials, actual HTTPS/TXT/CSV/fixed Q-L flow and basic affected clients. No advanced safety/stress, Daybreak, paid resources, new modules/native implementation or system Python installation.",
+      "M1_received_by_A": true,
+      "candidate_sha": "03081a1e54e4795677059b7e8aea78d38619f5ec",
+      "M1_evidence_manifest_sha256": "c21d0c45e0b76b259a5d04e38fdc22f679b59928059790244839157684a1d393"
     }
   }
 }

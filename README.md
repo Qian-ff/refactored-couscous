@@ -6,7 +6,7 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：[C1主线基础接入已验收](others/docs/c1-main-reception.md)，契约0.5.0、迁移c1d0c000001；原库摘要保持，三端构建及学生登录/资料正文访问通过。** 实测功能/产物来源为bae3461；Windows为隐藏DOM、安卓仅项目模拟器，原生持久保存及真机仍未验。[下一阶段依赖和各聊天交接](others/docs/c1-consumer-baseline.md)已准备，B2/D2/C2仍须按新模块首次手动启动。云端仍以[c-start-ready交接](others/docs/cloud-asr-handoff.md)记录的旧部署为准，不能把本机源码接收当云端更新。[Open-C1-API.cmd](Open-C1-API.cmd)在P2激活后打开真实后台API；资料仍用[Open-Materials.cmd](Open-Materials.cmd)，Open-DUI.cmd保留，Start-CloudASR.cmd恢复既有识别节点。题库编辑/学习考试界面、助手、监控及完整新工作台尚未开放。[既有UI](others/docs/existing-ui-acceptance.md)、[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
+**当前阶段：[C1主线基础接入已验收](others/docs/c1-main-reception.md)，契约0.5.0、迁移c1d0c000001；原库摘要保持，三端构建及学生登录/资料正文访问通过。** 实测功能/产物来源为bae3461；Windows为隐藏DOM、安卓仅项目模拟器，原生持久保存及真机仍未验。[下一阶段依赖和各聊天交接](others/docs/c1-consumer-baseline.md)已准备，B2/D2/C2仍须按新模块首次手动启动。用户已授权本轮GitHub与ECS更新，[云部署工具与实际验证交接](others/docs/c1-cloud-handoff.md)记录本次范围；云端实际版本以受校验HTTPS的build-info和cloud.py status为准，不能把本机接收当云端部署成功。[Open-C1-API.cmd](Open-C1-API.cmd)在P2激活后打开真实后台API；资料仍用[Open-Materials.cmd](Open-Materials.cmd)，Open-DUI.cmd保留，Start-CloudASR.cmd恢复既有识别节点。题库编辑/学习考试界面、助手、监控及完整新工作台尚未开放。[既有UI](others/docs/existing-ui-acceptance.md)、[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
 
 ## 从这里开始
 

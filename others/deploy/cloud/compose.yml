@@ -50,6 +50,7 @@ services:
       - /opt/labconnect/shared/content-client:/run/labconnect-content:ro
     depends_on:
       db: {condition: service_healthy}
+      content-control: {condition: service_healthy}
     healthcheck:
       test: [CMD, .venv/bin/python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=4).read()"]
       interval: 10s
@@ -63,6 +64,44 @@ services:
     # Only this management process receives the separate owner URL. api.env is runtime-only.
     env_file: [/opt/labconnect/shared/api.env, /opt/labconnect/shared/migration.env]
     command: [.venv/bin/python, -m, alembic, -c, alembic.ini, upgrade, head]
+  content-manage:
+    <<: *api
+    profiles: [tools]
+    user: "0:0"
+    restart: "no"
+    networks: [private]
+    env_file: [/opt/labconnect/shared/api.env, /opt/labconnect/shared/migration.env]
+    volumes: [/opt/labconnect/shared:/run/cloud-management]
+    command: [.venv/bin/python, /opt/labconnect/others/deploy/cloud/content_setup.py, grant-check]
+  content-control:
+    image: ${CONTROL_IMAGE:?Set CONTROL_IMAGE in release.env}
+    pull_policy: never
+    restart: unless-stopped
+    user: "0:0"
+    read_only: true
+    tmpfs: [/tmp]
+    network_mode: none
+    cap_drop: [ALL]
+    # Read/clean the sandbox uid65532 output directories; only this trusted layer has Docker access.
+    cap_add: [CHOWN, DAC_OVERRIDE]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 128m
+    cpus: 0.3
+    pids_limit: 64
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/labconnect/shared/content-server:/run/content-server:ro
+      - /opt/labconnect/shared/content-client:/run/labconnect-content
+      - /opt/labconnect/shared/content-control:/opt/labconnect/shared/content-control
+    healthcheck:
+      test: [CMD, python, others/deploy/content/probe.py, --config, /run/labconnect-content/parser-client.json]
+      interval: 10s
+      timeout: 15s
+      retries: 12
+      start_period: 10s
+    logging:
+      driver: json-file
+      options: {max-size: "5m", max-file: "2"}
   bootstrap:
     <<: *api
     profiles: [tools]

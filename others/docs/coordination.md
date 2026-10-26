@@ -25,7 +25,7 @@ E/F不再是独立活跃身份。C接收原E的backend/worker监控目录，监�
 
 A仍维护公共契约、迁移、SDK、依赖和共享环境，D仍唯一维护公共入口。A副的写权限来自main已提交的具体委托，不继承A的通配权限；任务需要额外公共文件时A主先明确范围并提交委托。A副提交候选成果，A主审核后在main接收及放行；合入后需要重测、重建的工作继续明确委托，旧包不证明新发布源码。签名、推送与公开发布不因职责迁移扩大授权。
 
-当前按[首版交付流程](delivery-workflow.md)接续：[D1资料页主线基础复验已通过](material-ui-main-reception.md)，原生保存未验；[C1主线基础接入已验收](c1-main-reception.md)，实测功能/产物bae3461、0.5.0/c1d0c000001。[B2/D2/C2技术输入与交接](c1-consumer-baseline.md)现已就绪，仍待用户分别手动首次启动；A副仅可按A明确交接SHA做本次最终API/Web身份刷新，不增加业务、迁移或客户端重建。C1领域及已验T2业务源冻结，其余角色等待实际依赖，不重复同一统一恢复确认、不因恢复自动首启C2/D2/B2。C原content/assistant/monitoring前端统一交D，B原admin/teaching保留。B2等A确认真实main固定版本、学生DTO及受控答案服务后发布具体基线，不等待整个助手/监控；D助手与原生新增仍按后续门禁。G独立验收保留，身份合并不降低权限、数据隔离及真实运行要求。
+当前按[首版交付流程](delivery-workflow.md)接续：[D1资料页主线基础复验已通过](material-ui-main-reception.md)，原生保存未验；[C1主线基础接入已验收](c1-main-reception.md)，实测功能/产物bae3461、0.5.0/c1d0c000001。[B2/D2/C2技术输入与交接](c1-consumer-baseline.md)现已就绪，仍待用户分别手动首次启动；C1本机身份刷新已完成。用户现明确要求GitHub及ECS更新，A副按[cloud-c1-release](ai/cloud-c1-release.md)接续普通云部署配套；M1已接收，A实际发送完整main SHA后才进入M2，保留原库/密钥/卷、本机环境及新模块门禁。C1领域及已验T2业务源冻结，其余角色等待实际依赖，不重复同一统一恢复确认、不因恢复自动首启C2/D2/B2。C原content/assistant/monitoring前端统一交D，B原admin/teaching保留。B2等A确认真实main固定版本、学生DTO及受控答案服务后发布具体基线，不等待整个助手/监控；D助手与原生新增仍按后续门禁。G独立验收保留，身份合并不降低权限、数据隔离及真实运行要求。
 
 ## 自查、审查与工作包
 

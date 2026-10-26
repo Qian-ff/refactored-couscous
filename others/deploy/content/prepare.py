@@ -30,10 +30,13 @@ def profile_settings(profile):
     branch = subprocess.check_output(["git", "branch", "--show-current"], cwd=ROOT, text=True).strip()
     if profile == "auto":
         profile = "main" if ROOT.resolve() == primary.resolve() and branch == "main" else "c02"
-    if profile == "main":
+    if profile in {"main", "cloud"}:
         if ROOT.resolve() != primary.resolve() or branch != "main":
             raise RuntimeError("Main parser profile requires the actual primary/main checkout")
         runtime = ROOT / "others/runtime/content-parser"
+        if profile == "cloud":
+            sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+            runtime = ROOT / "others/runtime/cloud-ecs/releases" / sha / "parser"
         backend = ROOT / "others/backend/.venv/Scripts/python.exe"
         worker = ROOT / "others/ai_worker/.venv/Scripts/python.exe"
     else:
@@ -112,7 +115,7 @@ def closure(lock, *, transfers=False):
     return needed
 
 
-def cache_linux_wheel(package, directory):
+def cache_linux_wheel(package, directory, *, reuse=None):
     """Fixed image uses CPython 3.13/glibc x86_64. Fetch only an official locked wheel."""
     candidates = [wheel for wheel in package.get("wheels", []) if
         wheel["url"].endswith("none-any.whl") or
@@ -126,6 +129,10 @@ def cache_linux_wheel(package, directory):
     target = directory / url.path.rsplit("/", 1)[-1]
     if target.exists() and "sha256:" + digest(target) == wheel["hash"]:
         return target
+    cached = reuse / target.name if reuse is not None else None
+    if cached is not None and cached.is_file() and "sha256:" + digest(cached) == wheel["hash"]:
+        shutil.copyfile(cached, target)
+        return target
     with urllib.request.urlopen(wheel["url"], timeout=30) as response:
         data = response.read(32 * 1024 * 1024 + 1)
     if len(data) > 32 * 1024 * 1024 or "sha256:" + hashlib.sha256(data).hexdigest() != wheel["hash"]:
@@ -138,7 +145,7 @@ def cache_linux_wheel(package, directory):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", choices=("auto", "main", "c02", "c1"), default="c02")
+    parser.add_argument("--profile", choices=("auto", "main", "cloud", "c02", "c1"), default="c02")
     parser.add_argument("--describe-profile", action="store_true", help="Read-only fixed paths and role validation")
     args = parser.parse_args()
     settings = profile_settings(args.profile)
@@ -146,8 +153,8 @@ def main():
         print(json.dumps(settings))
         return
     profile = settings["profile"]
-    transfers = profile in {"c1", "main"}
-    if profile == "main":
+    transfers = profile in {"c1", "main", "cloud"}
+    if profile in {"main", "cloud"}:
         if Path(sys.executable).resolve() != Path(settings["worker"]).resolve():
             raise RuntimeError("Main prepare must run with the fixed shared worker interpreter")
         # A receives the exact lock first; local tracked edits cannot silently select new pins.
@@ -158,7 +165,7 @@ def main():
     lock = tomllib.loads((worker / "uv.lock").read_text(encoding="utf-8"))
     packages = closure(lock, transfers=transfers)
     license_root = ROOT / ("others/licenses/content-transfer" if transfers else "others/licenses/content-parser")
-    licenses = license_evidence(packages, license_root, readonly=profile == "main")
+    licenses = license_evidence(packages, license_root, readonly=profile in {"main", "cloud"})
     runtime = Path(settings["runtime"])
     destination = runtime / "build"
     destination.mkdir(parents=True, exist_ok=True)
@@ -167,8 +174,9 @@ def main():
     wheelhouse.mkdir(exist_ok=True)
     copied = {}
     if transfers:
+        reuse = ROOT / "others/runtime/content-parser/build/wheels" if profile == "cloud" else None
         with ThreadPoolExecutor(max_workers=3) as downloads:
-            for wheel in downloads.map(lambda package: cache_linux_wheel(package, wheelhouse), packages.values()):
+            for wheel in downloads.map(lambda package: cache_linux_wheel(package, wheelhouse, reuse=reuse), packages.values()):
                 copied["wheels/" + wheel.name] = digest(wheel)
     # Only the pure CLI package closure; no API, DB, SQLModel, .env or speech modules.
     for name in ("app/__init__.py", "app/domains/__init__.py", "app/domains/content/__init__.py",
@@ -206,6 +214,14 @@ def main():
     subprocess.run(["docker", "build", "--tag", tag, "--label", "labconnect.parse.source-sha=" + source_sha,
                     "--label", "labconnect.parse.content-fingerprint=" + fingerprint, str(destination)], check=True)
     image = subprocess.check_output(["docker", "image", "inspect", "--format", "{{.Id}}", tag], text=True).strip()
+    evidence = {"source_sha": source_sha, "content_fingerprint": fingerprint, "image": image,
+                "source_files": copied, "worker_lock_sha256": digest(worker / "uv.lock"),
+                "parser_packages": sorted(packages), "contains_speech_models": False}
+    if profile == "cloud":
+        # Pure build: no local controller credentials, identity, journal or license writes.
+        (runtime / "image.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps(evidence))
+        return
     server_path = runtime / "control.json"
     previous = json.loads(server_path.read_text()) if server_path.exists() else None
     root = runtime / "controller"
@@ -222,9 +238,6 @@ def main():
         path = runtime / name
         path.write_text(json.dumps(value, indent=2) + "\n", encoding="utf-8")
         path.chmod(0o600)
-    evidence = {"source_sha": source_sha, "content_fingerprint": fingerprint, "image": image,
-                "source_files": copied, "worker_lock_sha256": digest(worker / "uv.lock"),
-                "parser_packages": sorted(packages), "contains_speech_models": False}
     (runtime / "image.json").write_text(json.dumps(evidence, indent=2) + "\n", encoding="utf-8")
     if profile != "main":
         (license_root / "manifest.json").write_text(json.dumps(licenses, indent=2) + "\n", encoding="utf-8")

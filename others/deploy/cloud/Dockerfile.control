@@ -1,0 +1,11 @@
+FROM docker:29.9.2-cli@sha256:98776017a505b6d89c0adff8c63b0d8701ca10280c41315dbb0638fe3b5cf6e5 AS cli
+FROM python:3.13.16-slim@sha256:cf50a4f6ac4f026458b08d5222023d700ac806410dff5e9ca8728fa44f2b850f
+COPY --from=cli /usr/local/bin/docker /usr/local/bin/docker
+WORKDIR /controller
+COPY others/ ./others/
+COPY licenses/ /licenses/
+ARG SOURCE_SHA=unrecorded
+LABEL org.opencontainers.image.revision=$SOURCE_SHA
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+# Trusted control plane only. It receives Docker access but no business/owner/AI environment.
+ENTRYPOINT ["python", "others/deploy/content/control.py", "--config", "/run/content-server/control.json"]
