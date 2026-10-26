@@ -1,6 +1,6 @@
 # 六个协作身份与阶段Goal
 
-**v3当前任务入口**：[全项目路线/逐聊天交接](../delivery-workflow.md)、[D1资料页主线复验](../material-ui-main-reception.md)、[C1后台及P1工具主线接收](../c1-main-reception.md)、[A副当前主线激活P2](c1-main-activation.md)、[已交T2范围](c1-runtime-public-integration.md)、[C1历史首次启动词](c1-question-lessons.md)、[G后续验收](qa-final-acceptance.md)。P2和B2均须A实际基线；以下旧Goal为历史/后续参考，角色与顺序以v3为准。
+**v3当前任务入口**：[全项目路线/逐聊天交接](../delivery-workflow.md)、[D1资料页主线复验](../material-ui-main-reception.md)、[C1主线基础接入验收](../c1-main-reception.md)、[B2/D2/C2最新依赖交接](../c1-consumer-baseline.md)、[已交主线激活P2](c1-main-activation.md)、[已交T2范围](c1-runtime-public-integration.md)、[C1历史首次启动词](c1-question-lessons.md)、[G后续验收](qa-final-acceptance.md)。P2已交付，B2/D2/C2技术输入已就绪，仍须用户首次手动启动；以下旧Goal为历史/后续参考，角色与顺序以v3为准。
 
 先读[统一协作规范](../coordination.md)与[工作包模板](work-package-template.md)。v2由责任角色自查及编制工作包，普通已授权任务自主续办，重大事项判断后集中交A决策；C-01/C-02业务证据保留，C02剩余工作转A副/D，C后续新模块首次手动启动。E监控backend/worker并C、前端并D，F原生已并A副，旧任务书仅历史保留；G按里程碑启用，A副计入四聊天并行上限。
 

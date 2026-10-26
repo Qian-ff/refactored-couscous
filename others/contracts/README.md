@@ -1,8 +1,8 @@
 # 契约入口
 
-## 0.5.0 C1主线源码（运行激活待P2）
+## 0.5.0 C1主线（基础接入已验收）
 
-T2接入实际题库/关卡教师管理路由、导入二进制PUT及鉴权Blob导出，唯一版本源为application.json 0.5.0。A已统一接收最终T2及P1工具；候选检查来源以A副 `others/reports/c1-public/t2/` 最终清单为准，原主库迁移、共享环境和三端产物仍待P2实测，见[主线接收](../docs/c1-main-reception.md)。C02既有VersionView/ReviewView等TS名称由生成器命名规则保持，D无需为同名C1 DTO改页面。
+T2接入实际题库/关卡教师管理路由、导入二进制PUT及鉴权Blob导出，唯一版本源为application.json 0.5.0。A已统一接收最终T2及P1工具；候选检查来源以A副 `others/reports/c1-public/t2/` 最终清单为准，原主库兼容迁移、共享环境及三端基本访问已在bae3461实测，见[主线接收](../docs/c1-main-reception.md)。C02既有VersionView/ReviewView等TS名称由生成器命名规则保持，D无需为同名C1 DTO改页面。
 
 B2内部受控服务为 `questions.assessment.resolve_assessment_questions`、`lessons.assessment.resolve_lesson_publication`；生成客户端中的StudentLesson来自真实教师预览模型，不新增学生答案接口。学生投影只过滤数据，不代替B2真实任务/关系/解锁授权。D消费实际TeacherLessonPreview和StudentLesson，暂不启动D2页面。
 

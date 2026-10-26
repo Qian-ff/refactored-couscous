@@ -54,7 +54,7 @@
         "acceptance_handoff": "others/docs/existing-ui-acceptance.md",
         "existing_ui_accepted_by_A": true,
         "C_new_features_allowed": true,
-        "B2_new_features_allowed": false,
+        "B2_new_features_allowed": true,
         "C_release_approved_by": "A",
         "C_release_baseline_ref": "c-start-ready",
         "C_environment_source_sha": "717e1d0e5f88071c52b361cf3fa1c3bb09d13697",
@@ -62,7 +62,7 @@
         "C_release_remaining": null,
         "B2_release_condition": "A-accepted actual fixed QuestionVersion/LessonVersion, student-safe DTO and controlled answer-read service, followed by an explicit full B2 execution SHA; no dependency on complete assistant/monitoring.",
         "current_workflow": "others/docs/delivery-workflow.md",
-        "C_current_stage": "C1 T2 and P1 tooling source received on main0.5.0; P2 actual main runtime and clients pending; no B2/D2/C2 release",
+        "C_current_stage": "C1 main basic runtime and clients received by A at bae3461; B2/D2/C2 dependencies ready, first module start still manual",
         "C02_remaining_backend_worker_executor": "A-executor",
         "C02_remaining_frontend_executor": "D",
         "C02_accepted_by_A": false,
@@ -87,11 +87,14 @@
         "C02_search_main_merge": "7c7570dee7680e0356517a4e8ddb71d2cbe307d1",
         "C1_domain_candidate_sha": "46394d57fc077e381748acb306e133476a47e7fe",
         "C1_domain_pg_passed": 15,
-        "C1_public_runtime_ready": false,
+        "C1_public_runtime_ready": true,
         "C1_runtime_candidate_received_by_A": true,
         "C1_runtime_candidate_sha": "b7b27c72c1fdfccd434663f2fc683b5576202967",
         "C1_main_source_received_by_A": true,
-        "C1_main_launcher_candidate_sha": "58b5d26ece3cd8e076eaaf8d9034b7ca511988d2"
+        "C1_main_launcher_candidate_sha": "58b5d26ece3cd8e076eaaf8d9034b7ca511988d2",
+        "C1_main_verified_source_sha": "bae3461a0e4cba9f6de8b13d12899a965a66b77b",
+        "C1_consumer_handoff": "others/docs/c1-consumer-baseline.md",
+        "B2_start_requirement": "Technical dependency gate passed by A; user must manually start first B2 Goal per coordination.md"
       }
     },
     "ui-assistant-floating-v1": {
@@ -166,9 +169,9 @@
       "C02_status": "material_main_basic_verified_native_save_unverified",
       "A_executor_package": "c02-public-integration",
       "D_package": "others/docs/ai/d1-content-ui.md",
-      "C1_status": "source_received_main_runtime_and_clients_pending",
+      "C1_status": "main_basic_runtime_and_clients_accepted_by_A",
       "C1_candidate_sha": "46394d57fc077e381748acb306e133476a47e7fe",
-      "B2_status": "waiting_real_content_baseline_and_A_release",
+      "B2_status": "dependency_baseline_ready_awaiting_user_first_module_start",
       "G_status": "manual_chat_creation_and_registration_required_at_milestone",
       "frontend_transferred_to_D": [
         "web/src/features/content/",
@@ -176,7 +179,11 @@
         "web/src/features/monitoring/"
       ],
       "first_round_start_evidence": "Record actual target activity after dispatch; authorization alone is not evidence of start.",
-      "C1_launcher_candidate_sha": "58b5d26ece3cd8e076eaaf8d9034b7ca511988d2"
+      "C1_launcher_candidate_sha": "58b5d26ece3cd8e076eaaf8d9034b7ca511988d2",
+      "B2_new_features_allowed": true,
+      "D2_status": "dependency_baseline_ready_awaiting_user_first_module_start",
+      "C2_status": "awaiting_user_first_module_start",
+      "C1_verified_source_sha": "bae3461a0e4cba9f6de8b13d12899a965a66b77b"
     }
   }
 }

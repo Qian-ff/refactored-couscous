@@ -2,7 +2,7 @@
 
 ## 主线源码契约0.5.0（兼容资料0.4.x及既有0.3.x/A0）
 
-C1后台与P1启动工具已接收；实际main原库、共享环境与客户端尚待P2激活复验。下述现有接口和未来协议分别适用，详见[接收状态](../docs/c1-main-reception.md)。
+C1后台与启动工具已接收；实际main原库兼容迁移、共享环境与三端基本访问已在bae3461验收。下述现有接口和未来协议分别适用，详见[接收状态](../docs/c1-main-reception.md)。
 
 唯一版本源为 ../config/application.json。OpenAPI 只导出实际接口；version.json 记录真实导出哈希，web/src/client 由工具生成，不手改。/courses 继续表示教学班，响应新增 catalog_id；旧创建请求兼容。
 
@@ -42,7 +42,7 @@ Bearer 凭据只存前端内存。X-Work-Role 取 student/teacher/administrator�
 - 来源引用使用 material_id/version_id/page/paragraph，下载使用有权版本标识，禁止把任意本机路径或未授权 URL 当成资源授权。
 
 具体跨阶段协议见 [a2-protocols.md](a2-protocols.md)。只有实现、迁移和检查到齐后才由 A 发布下一份真实 OpenAPI。
-# C1 T2增量（0.5.0源码已接收，运行基线待P2）
+# C1 T2增量（0.5.0主线基础接入已验收）
 
 - 题目/关卡管理与教师预览仅teacher/administrator；学生直接读取题库、评分或SVG预览拒绝。服务端继续按学校、学院、课程及具体版本/审核目标判权。
 - `PUT /api/v1/content/questions/tasks/{task_id}/input` 为octet-stream；CSV最多1MiB、XLSX最多5MiB，已sealed重复PUT为409。导入只生成预检，教师确认生成草稿，仍须审核发布。
