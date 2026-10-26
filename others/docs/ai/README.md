@@ -2,6 +2,8 @@
 
 **v3当前任务入口**：[全项目路线/逐聊天交接](../delivery-workflow.md)、[D1资料页主线复验](../material-ui-main-reception.md)、[C1主线基础接入验收](../c1-main-reception.md)、[B2/D2/C2最新依赖交接](../c1-consumer-baseline.md)、[已交主线激活P2](c1-main-activation.md)、[已交T2范围](c1-runtime-public-integration.md)、[C1历史首次启动词](c1-question-lessons.md)、[G后续验收](qa-final-acceptance.md)。P2已交付，B2/D2/C2技术输入已就绪，仍须用户首次手动启动；以下旧Goal为历史/后续参考，角色与顺序以v3为准。
 
+2026-10-26用户另行直接授权本轮GitHub与ECS更新：[云部署接续包](cloud-c1-release.md)。A副先修订普通部署配套，A接收并发实际main SHA后才部署；不自动首启新模块或标记C02原生保存通过。
+
 先读[统一协作规范](../coordination.md)与[工作包模板](work-package-template.md)。v2由责任角色自查及编制工作包，普通已授权任务自主续办，重大事项判断后集中交A决策；C-01/C-02业务证据保留，C02剩余工作转A副/D，C后续新模块首次手动启动。E监控backend/worker并C、前端并D，F原生已并A副，旧任务书仅历史保留；G按里程碑启用，A副计入四聊天并行上限。
 
 唯一A负责集成，最多四聊天并行容量。B1、D-UI和B展示迁移已接收，既有UI及[云端API/ASR前置](../cloud-asr-handoff.md)已通过A验收，c-start-ready允许C开工，B2仍等C交付经A接收后另行放行。D第二批Goal已交付，不重复运行；完整顺序以[阶段入口](../a2-start.md)为准，容量不意味着同时启动全部角色。

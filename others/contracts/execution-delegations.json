@@ -304,6 +304,37 @@
       "runtime_activation_pending": false,
       "main_verified_source_sha": "bae3461a0e4cba9f6de8b13d12899a965a66b77b",
       "post_receipt_authorization": "Only A-dispatched final documentation SHA may refresh confirmed owned main API/Web startup identity with unchanged source fingerprints. No source edits, migration, dependency activation, parser restart, tests or client rebuild; retain artifacts verified at bae3461."
+    },
+    "cloud-c1-release": {
+      "executor": "A-executor",
+      "approved_by": "A-main",
+      "status": "active",
+      "baseline_sha": "25fe60ce2a55a266d0b0f1152d4b32ef8909af79",
+      "work_package": "others/docs/ai/cloud-c1-release.md",
+      "phase": "M1_deployment_tooling_before_main_cloud_activation",
+      "activation_requirement": "A dispatches committed rule SHA for M1. Actual main build, uploads, cloud configuration/roles/migration/service changes require a second explicitly dispatched full main execution SHA after A receives tooling.",
+      "allowed_paths": [
+        "others/scripts/cloud.py",
+        "others/deploy/cloud/",
+        "others/deploy/content/prepare.py",
+        "others/deploy/content/control.py",
+        "others/deploy/content/probe.py",
+        "others/backend/Dockerfile",
+        "others/backend/app/core/content_runner.py",
+        "others/licenses/cloud-controller/",
+        "others/qa/test_cloud_content_release.py",
+        "others/docs/c1-cloud-handoff.md",
+        "others/reports/cloud-c1-release/"
+      ],
+      "compatibility_only_paths": {
+        "others/deploy/content/control.py": "Only confirmed Linux release lifecycle/config/socket seam; preserve accepted fixed task semantics and stop/release.",
+        "others/backend/app/core/content_runner.py": "Only confirmed Linux Unix socket/runtime compatibility; no new permissions or HTTP contracts."
+      },
+      "purpose": "Complete ordinary ECS deployment integration for accepted C02/C1 source using pure fixed runtime images, private controller, independent owner migration/nonowner API, preserved data/secrets and small real cloud/client validation. No direct tracked main edits.",
+      "authorization_thread": "01a1544b-7eb1-77f1-9f83-52fa8510503c",
+      "authorization_source": "Human 2026-10-26 explicitly requests task status verification plus GitHub and existing ECS update.",
+      "push_owner": "A-main only; no checkpoint-2 tag claimed",
+      "validation_scope": "Small deployment packaging/lifecycle/config checks, preserved original cloud database and credentials, actual HTTPS/TXT/CSV/fixed Q-L flow and basic affected clients. No advanced safety/stress, Daybreak, paid resources, new modules/native implementation or system Python installation."
     }
   }
 }

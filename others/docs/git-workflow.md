@@ -62,3 +62,7 @@ python .\others\scripts\workflow.py checkpoint --role B --message "feat(core): a
 每轮代码修改仍须本地提交；非上述节点不自行额外推送，A副及B/C/D/G仅提交自己的本地任务分支。每次推送记录完整提交 SHA，并用 ls-remote 核对远端 main/标签。推送失败不记作已上传；保留本地提交、准确报告原因，再在同一节点恢复，不改写远端历史。构建包、环境、账号密码、数据库与私密参考文件继续留在忽略区；这次授权是 Git 仓库备份，不含部署或公开发布安装包。
 
 checkpoint-1 是已上传的历史交接；本轮 B/C/D 使用 a2-start 和 A 后续发布的完整 SHA，详见 a2-start.md。历史标签均不覆盖或重打。仅项目级 user.name/user.email 使用用户提供值，不修改全局配置。
+
+## 2026-10-26本轮直接推送与部署授权
+
+用户在A主明确要求核对A副1/D1与C1公共接入完成情况，并提交GitHub及现有ECS。本次A可将已接收main及必要云部署修订推送origin/main并更新原实例，无需等待后续B2/D2/C2；此直接授权优先于早先仅三个节点的限制。不创建/移动checkpoint-2，不称完整A2验收。A副仍只提交自己分支，由A核对并push。网络失败按实际远端SHA判断，允许按祖先阶段分批快进推送，不强推或改写历史。具体云包见[本轮工作包](ai/cloud-c1-release.md)。
