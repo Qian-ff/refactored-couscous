@@ -20,7 +20,8 @@ from output_files import UnsafeOutput, read_output
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "others/backend"))
 from app.core.content_runner import (FRAME, MAX_OUTPUT, PROTOCOL, C1_PROTOCOL, TASK_KINDS, json_bytes,  # noqa: E402
-                                     read_frame, validate_task, write_frame, task_input_limit)
+                                     read_frame, validate_task, write_frame, task_input_limit,
+                                     main_control_configuration)
 from app.domains.content.parse_runner import RunnerCapabilities, RunnerUnavailable  # noqa: E402
 
 
@@ -406,6 +407,16 @@ class Controller:
             writer.close()
 
 
+def control_port(config):
+    port = 18768 if config["protocol"] == C1_PROTOCOL else 18767
+    client = {key: config.get(key) for key in ("protocol", "key", "host", "port")}
+    if config["protocol"] == C1_PROTOCOL and config.get("port") == 18767 and main_control_configuration(client):
+        port = 18767
+    if config.get("host") != "127.0.0.1" or config.get("port") != port:
+        raise RunnerUnavailable()
+    return port
+
+
 async def serve(config):
     controller = Controller(config)
     await controller.recover()
@@ -436,9 +447,7 @@ async def serve(config):
         else:
             path.chmod(0o600)
     else:
-        port = 18768 if config["protocol"] == C1_PROTOCOL else 18767
-        if config.get("host") != "127.0.0.1" or config.get("port") != port:
-            raise RunnerUnavailable()
+        port = control_port(config)
         server = await asyncio.start_server(controller.handle, host="127.0.0.1", port=port)
     print(json.dumps({"protocol": config["protocol"], "ready": True, "image": config["image"]}), flush=True)
     async with server:
