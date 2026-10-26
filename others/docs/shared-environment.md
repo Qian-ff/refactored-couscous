@@ -1,5 +1,13 @@
 # 多工作树共用本机环境
 
+## C1 T2独立候选
+
+active `c1-runtime-public-integration` 下，A副仅用本树 `others/runtime/c1-public/envs/{backend,worker}`，由 `python others/scripts/c1_candidate_env.py prepare --surface backend` / `--surface worker` 准备；只复用主树解释器和缓存，不覆盖共享venv。helper每次核对分支、已提交授权祖先、锁与描述指纹，pytest仍持共享串行锁、固定safelab_c1_test profile。正式共享环境待A接收后激活，不能拿候选新锁调用旧shared_env强行绕过不匹配检查。
+
+backend生产依赖不加Excel，dev才用openpyxl3.1.5/defusedxml0.7.1；worker增加这两项及pydantic2.13.4，锁定传递依赖、官方wheel哈希和许可，保留原语音/资料解析版本。构建只复制14包解析/传输闭包，不复制整个worker、SQLModel、API配置、模型或密钥；候选缓存官方Linux wheel哈希核对后离线安装。
+
+API8002/控制18768及其存储/任务/运行日志均在c1-public；main8000/5173/18767和原库独立。C1命令/配置、实际通过与未验边界见 [C1公共交接](c1-public-handoff.md)。
+
 现行职责见[统一协作规范](coordination.md)。A副复用主树依赖/配置/模型，但app_source、worker_source、Git提交和报告属于本树；共享测试库仍串行锁定，不能用主树服务证明分支新代码。
 
 统一入口通过 Git common directory 定位主工作区，不把个人路径写进公共配置。配置/依赖共享，源码/报告/Git分支分别属于各树。

@@ -283,7 +283,10 @@ class Controller:
                         accepted = self.output(execution_id, "accepted", 4096, missing_ok=True)
                         if accepted is not None:
                             receipt = json.loads(accepted)
-                            if receipt != {"kernel_seals": 15, "input_bytes": size, "input_sha256": digest.hexdigest()}:
+                            expected = {"kernel_seals": 15, "input_bytes": size, "input_sha256": digest.hexdigest()}
+                            if "task_kind" in task:
+                                expected.update(task_kind=task["task_kind"], work_tmpfs_bytes=46137344)
+                            if receipt != expected:
                                 raise RunnerUnavailable()
                             break
                         await asyncio.sleep(.1)
@@ -295,6 +298,7 @@ class Controller:
                     raise RunnerUnavailable()
                 if process:
                     record.update(receiving=False, parse_deadline=time.time() + (30 if "task_kind" in task else 60))
+                    record["input_receipt"] = receipt
                     self.save(record)
                 return await self.inspect_locked(execution_id)
         except BaseException:

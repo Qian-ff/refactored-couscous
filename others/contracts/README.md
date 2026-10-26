@@ -1,5 +1,11 @@
 # 契约入口
 
+## 0.5.0 C1候选（本分支，尚未发布main）
+
+T2接入实际题库/关卡教师管理路由、导入二进制PUT及鉴权Blob导出，候选唯一版本源为application.json 0.5.0。OpenAPI/SDK可复现生成，真实结果和来源以A副 `others/reports/c1-public/t2/` 最终清单为准；main仍0.4.1，未因本分支更新而激活。C02既有VersionView/ReviewView等TS名称由生成器命名规则保持，D无需为同名C1 DTO改页面。
+
+B2内部受控服务为 `questions.assessment.resolve_assessment_questions`、`lessons.assessment.resolve_lesson_publication`；生成客户端中的StudentLesson来自真实教师预览模型，不新增学生答案接口。学生投影只过滤数据，不代替B2真实任务/关系/解锁授权。D消费实际TeacherLessonPreview和StudentLesson，暂不启动D2页面。
+
 现行六身份及E/F接收方见[统一协作规范](../docs/coordination.md)；仅协作身份变更，不改业务API版本。A副具体写范围见[执行委托](execution-delegations.json)。
 
 A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；main源码现行契约为 **0.4.1**，包含资料与有权正文检索；运行、客户端和ECS版本须分别看A实际发布记录。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A0历史基线0.2.0及B1首次基线0.3.0保留。

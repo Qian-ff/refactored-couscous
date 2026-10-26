@@ -40,3 +40,10 @@ Bearer 凭据只存前端内存。X-Work-Role 取 student/teacher/administrator�
 - 来源引用使用 material_id/version_id/page/paragraph，下载使用有权版本标识，禁止把任意本机路径或未授权 URL 当成资源授权。
 
 具体跨阶段协议见 [a2-protocols.md](a2-protocols.md)。只有实现、迁移和检查到齐后才由 A 发布下一份真实 OpenAPI。
+# C1 T2候选增量（0.5.0，等待A正式发布）
+
+- 题目/关卡管理与教师预览仅teacher/administrator；学生直接读取题库、评分或SVG预览拒绝。服务端继续按学校、学院、课程及具体版本/审核目标判权。
+- `PUT /api/v1/content/questions/tasks/{task_id}/input` 为octet-stream；CSV最多1MiB、XLSX最多5MiB，已sealed重复PUT为409。导入只生成预检，教师确认生成草稿，仍须审核发布。
+- `GET /api/v1/content/questions/exports/{task_id}/download` 是鉴权Blob，客户端不能按JSON处理。导出固定有序版本，执行和分块下载重新授权；每256KiB复查。Caddy仅对精确UUID输入PUT放5,242,880字节，未扩大整个content。
+- 环境/真实准入缺失503；逻辑配额超额413、磁盘保底不足507；取消不是停止回执，重试必须实际stop/cleanup并释放预留，不能只改state。
+- 私有控制协议 `labconnect.content-control/2` 有且仅有material_parse/question_import/question_export；C1使用task_id，不伪造资料version_id；独立候选18768，main旧协议18767继续使用。能力握手校验三任务闭包，C1实际30秒，旧资料60秒。

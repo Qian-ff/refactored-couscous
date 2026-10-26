@@ -60,8 +60,12 @@ def receive(args):
     fcntl.fcntl(descriptor, fcntl.F_ADD_SEALS,
                 fcntl.F_SEAL_WRITE | fcntl.F_SEAL_GROW | fcntl.F_SEAL_SHRINK | fcntl.F_SEAL_SEAL)
     with (OUTPUT / "accepted.new").open("x") as accepted:
-        json.dump({"kernel_seals": fcntl.fcntl(descriptor, fcntl.F_GET_SEALS),
-                   "input_bytes": size, "input_sha256": digest.hexdigest()}, accepted)
+        receipt = {"kernel_seals": fcntl.fcntl(descriptor, fcntl.F_GET_SEALS),
+                   "input_bytes": size, "input_sha256": digest.hexdigest()}
+        if args.task_kind != "material_parse":
+            work = os.statvfs("/work")
+            receipt.update(task_kind=args.task_kind, work_tmpfs_bytes=work.f_frsize * work.f_blocks)
+        json.dump(receipt, accepted)
         accepted.flush()
         os.fsync(accepted.fileno())
     (OUTPUT / "accepted.new").replace(OUTPUT / "accepted")

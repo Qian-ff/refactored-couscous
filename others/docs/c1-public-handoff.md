@@ -1,5 +1,30 @@
 # C1 T1：公共表与专用 PG 技术交接
 
+## T2运行/公共接口候选（0.5.0，尚待A接收）
+
+本分支已普通合入A规则 `c22328671a5d32715c4b5dbc10b66d5f4d46aa84` 与最终C领域 `46394d57fc077e381748acb306e133476a47e7fe`。仅四个C1接缝及对应测试由A副串行扩展，其他领域/T1迁移原样接收。先保存WIP `4505e6f`，其本身不是验收通过；后续准确候选SHA、最终检查、许可和静态证据以 `others/reports/c1-public/t2/manifest.json` 为准，不能拿旧WIP来源冒充最终服务。
+
+实现范围：真实request级磁盘采样/ContentBudget/TransferAdmission/TransferIO；双向旧资料+C1存量与队列、接收槽、单重任务/恢复/停止屏障；固定三类控制协议及sealed fd CLI；CSV/XLSX真实预检、原子确认草稿、教师审核发布、有序固定版本导出/重授权Blob；真实staff路由、0.5.0 OpenAPI/生成SDK、B2内部快照及安全学生DTO。旧材料TS类型名由生成规则兼容，未改D产品入口/页面。候选不自动发布60题/六关或演示种子到main。
+
+候选环境只有本树runtime/c1-public，API生产不导入Excel解析库，测试dev与worker固定依赖和许可在锁/manifest。受信镜像包含纯CLI闭包，无数据库、API配置、dotenv、SQLModel或语音模型。控制端18768与main18767分开；新协议显式核对三任务，C1 30秒、资料60秒，继续无网络/nonroot/只读、384MiB/CPU1/pids64。实际回执记录内核seals=15、输入hash/字节及/work实际44MiB；受信子进程只用/work作临时目录，密封输入最多20MiB，总临时64MiB。普通导出文件和控制端输出共存仍在32MiB工作预留内；未宣称验证压力峰值。
+
+可执行入口（仅A副活动包）：
+
+```powershell
+python others/scripts/c1_candidate_env.py prepare --surface backend
+python others/scripts/c1_candidate_env.py prepare --surface worker
+others/runtime/c1-public/envs/worker/Scripts/python.exe others/deploy/content/prepare.py --profile c1
+others/runtime/c1-public/envs/backend/Scripts/python.exe others/deploy/content/database.py prepare-c1-test --primary D:/SafeLabPlatform --admin-config D:/codex/worktree/0aed/SafeLabPlatform/others/runtime/c1-public/database-admin.json
+```
+
+控制端使用同目录control.json，API使用api-runtime.json（仅runtime连接/应用secret/内容配置/合成测试口令，不给API owner配置），首次专库需明确`api.py --profile c1 --config <固定api-runtime绝对路径> --seed-test`；已有样本则不重复seed。运行日志只写runtime/logs，封存后才入reports。配置均忽略且不输出密钥。main仍c223/0.4.1/c02d0c00001，未合入C1/迁移/改共享依赖。
+
+实际检查分开记录：小型协议/混合接收与额度、真实CSV/XLSX往返和一次实际取消/重试/停止清理、旧资料兼容一例、真实staff HTTP与学生/跨校/学院/未任教课程拒绝、B2私有固定快照/安全投影/私有SVG、SDK原始字节/Blob、503、相关Ruff/类型/契约/网页构建。最终记录必须对应当时准确源码/指纹；初次网络/输入cursor失败保留，不改写为通过，也不重跑C15或M0/客户端矩阵。
+
+B2继续使用questions.assessment.resolve_assessment_questions和lessons.assessment.resolve_lesson_publication，持久化自己的评分/素材快照；StudentLesson生成类型来自真实教师预览模型。student_lesson_from_snapshot只过滤当前来源和私有评分，真实任务/关系/解锁由B2后续判定。学生不能调用教师预览/直接取得SVG，无新增学生答案接口或裸asset/hash链接。D后续消费生成DTO和接口，由D独写入口/编辑器，不由本包实现D2。
+
+A接收后另行安排main备份/兼容迁移、共享环境激活、一键入口与受影响三端发布。本候选不等于这些动作、B2/C2/D2首启、原生保存、真机/G/ECS验收；旧T1段落保留历史原义，C15已由C实测并被A接收，未在本轮再次全跑。
+
 2026-10-26，A副 / `codex/a-executor`，按已登记 `c1-schema-pg-integration` 实施。输入 main `d4a328bb0fb9742d3d981c20c68f7cff3be5fa3a`、C 候选 `84355fecf0ddb0edb1dc9bcfd030c2f8ee7cd695`，随后原样普通合并 A 明确批准的 C 修复 `6719c31353a3bfa76a10e08820ea18eb0bad50e3`；两段历史均保留，两个新域逐路径 blob 与最新 671 候选一致。准确技术 SHA 以本轮提交及 A 发送记录为准。
 
 ## A 复审后的同包返修

@@ -2593,8 +2593,8 @@ export type SubmitTarget = {
  * TargetBinding
  */
 export type TargetBinding = {
-    active_publication?: app__domains__content__views__PublicationView | null;
-    review?: app__domains__content__views__ReviewView | null;
+    active_publication?: PublicationView | null;
+    review?: ReviewView | null;
     /**
      * Target Library Id
      */
@@ -3362,7 +3362,7 @@ export type app__domains__content__questions__views__VersionView = {
 /**
  * CommandResult
  */
-export type app__domains__content__views__CommandResult = {
+export type CommandResult = {
     /**
      * Job Id
      */
@@ -3396,11 +3396,11 @@ export type app__domains__content__views__CommandResult = {
 /**
  * Page[PublicationView]
  */
-export type app__domains__content__views__Page_PublicationView_ = {
+export type Page_PublicationView_ = {
     /**
      * Items
      */
-    items: Array<app__domains__content__views__PublicationView>;
+    items: Array<PublicationView>;
     /**
      * Limit
      */
@@ -3418,11 +3418,11 @@ export type app__domains__content__views__Page_PublicationView_ = {
 /**
  * Page[ReviewView]
  */
-export type app__domains__content__views__Page_ReviewView_ = {
+export type Page_ReviewView_ = {
     /**
      * Items
      */
-    items: Array<app__domains__content__views__ReviewView>;
+    items: Array<ReviewView>;
     /**
      * Limit
      */
@@ -3440,11 +3440,11 @@ export type app__domains__content__views__Page_ReviewView_ = {
 /**
  * Page[VersionView]
  */
-export type app__domains__content__views__Page_VersionView_ = {
+export type Page_VersionView_ = {
     /**
      * Items
      */
-    items: Array<app__domains__content__views__VersionView>;
+    items: Array<VersionView>;
     /**
      * Limit
      */
@@ -3462,7 +3462,7 @@ export type app__domains__content__views__Page_VersionView_ = {
 /**
  * PublicationView
  */
-export type app__domains__content__views__PublicationView = {
+export type PublicationView = {
     /**
      * Active
      */
@@ -3504,7 +3504,7 @@ export type app__domains__content__views__PublicationView = {
 /**
  * ReviewView
  */
-export type app__domains__content__views__ReviewView = {
+export type ReviewView = {
     /**
      * Authorization Statement
      */
@@ -3562,7 +3562,7 @@ export type app__domains__content__views__ReviewView = {
 /**
  * VersionView
  */
-export type app__domains__content__views__VersionView = {
+export type VersionView = {
     actions?: VersionActions;
     binding?: TargetBinding | null;
     /**
@@ -5021,7 +5021,7 @@ export type contentCancelJobResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__CommandResult;
+    200: CommandResult;
 };
 
 export type contentCancelJobResponse = contentCancelJobResponses[keyof contentCancelJobResponses];
@@ -5061,7 +5061,7 @@ export type contentRetryJobResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__CommandResult;
+    200: CommandResult;
 };
 
 export type contentRetryJobResponse = contentRetryJobResponses[keyof contentRetryJobResponses];
@@ -6035,7 +6035,7 @@ export type contentCreateLibraryResponses = {
     /**
      * Successful Response
      */
-    201: app__domains__content__views__CommandResult;
+    201: CommandResult;
 };
 
 export type contentCreateLibraryResponse = contentCreateLibraryResponses[keyof contentCreateLibraryResponses];
@@ -6075,7 +6075,7 @@ export type contentChangeLibraryResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__CommandResult;
+    200: CommandResult;
 };
 
 export type contentChangeLibraryResponse = contentChangeLibraryResponses[keyof contentChangeLibraryResponses];
@@ -6123,7 +6123,7 @@ export type contentListPublicationsResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__Page_PublicationView_;
+    200: Page_PublicationView_;
 };
 
 export type contentListPublicationsResponse = contentListPublicationsResponses[keyof contentListPublicationsResponses];
@@ -6158,7 +6158,7 @@ export type contentPublishReviewResponses = {
     /**
      * Successful Response
      */
-    201: app__domains__content__views__CommandResult;
+    201: CommandResult;
 };
 
 export type contentPublishReviewResponse = contentPublishReviewResponses[keyof contentPublishReviewResponses];
@@ -6198,7 +6198,7 @@ export type contentRetirePublicationResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__CommandResult;
+    200: CommandResult;
 };
 
 export type contentRetirePublicationResponse = contentRetirePublicationResponses[keyof contentRetirePublicationResponses];
@@ -6250,7 +6250,7 @@ export type contentListReviewsResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__Page_ReviewView_;
+    200: Page_ReviewView_;
 };
 
 export type contentListReviewsResponse = contentListReviewsResponses[keyof contentListReviewsResponses];
@@ -6285,7 +6285,7 @@ export type contentSubmitReviewResponses = {
     /**
      * Successful Response
      */
-    201: app__domains__content__views__CommandResult;
+    201: CommandResult;
 };
 
 export type contentSubmitReviewResponse = contentSubmitReviewResponses[keyof contentSubmitReviewResponses];
@@ -6321,7 +6321,7 @@ export type contentReviewDetailResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__ReviewView;
+    200: ReviewView;
 };
 
 export type contentReviewDetailResponse = contentReviewDetailResponses[keyof contentReviewDetailResponses];
@@ -6361,7 +6361,7 @@ export type contentDecideReviewResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__CommandResult;
+    200: CommandResult;
 };
 
 export type contentDecideReviewResponse = contentDecideReviewResponses[keyof contentDecideReviewResponses];
@@ -6425,7 +6425,7 @@ export type contentListMaterialsResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__Page_VersionView_;
+    200: Page_VersionView_;
 };
 
 export type contentListMaterialsResponse = contentListMaterialsResponses[keyof contentListMaterialsResponses];
@@ -6460,7 +6460,7 @@ export type contentCreateTextResponses = {
     /**
      * Successful Response
      */
-    201: app__domains__content__views__CommandResult;
+    201: CommandResult;
 };
 
 export type contentCreateTextResponse = contentCreateTextResponses[keyof contentCreateTextResponses];
@@ -6500,7 +6500,7 @@ export type contentChangeMaterialResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__CommandResult;
+    200: CommandResult;
 };
 
 export type contentChangeMaterialResponse = contentChangeMaterialResponses[keyof contentChangeMaterialResponses];
@@ -6549,7 +6549,7 @@ export type contentMaterialVersionsResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__Page_VersionView_;
+    200: Page_VersionView_;
 };
 
 export type contentMaterialVersionsResponse = contentMaterialVersionsResponses[keyof contentMaterialVersionsResponses];
@@ -7812,7 +7812,7 @@ export type contentCreateUploadResponses = {
     /**
      * Successful Response
      */
-    201: app__domains__content__views__CommandResult;
+    201: CommandResult;
 };
 
 export type contentCreateUploadResponse = contentCreateUploadResponses[keyof contentCreateUploadResponses];
@@ -7892,7 +7892,7 @@ export type contentUploadBytesResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__CommandResult;
+    200: CommandResult;
 };
 
 export type contentUploadBytesResponse = contentUploadBytesResponses[keyof contentUploadBytesResponses];
@@ -7932,7 +7932,7 @@ export type contentCancelUploadResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__CommandResult;
+    200: CommandResult;
 };
 
 export type contentCancelUploadResponse = contentCancelUploadResponses[keyof contentCancelUploadResponses];
@@ -7973,7 +7973,7 @@ export type contentVersionDetailResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__VersionView;
+    200: VersionView;
 };
 
 export type contentVersionDetailResponse = contentVersionDetailResponses[keyof contentVersionDetailResponses];
@@ -8103,7 +8103,7 @@ export type contentReparseVersionResponses = {
     /**
      * Successful Response
      */
-    200: app__domains__content__views__CommandResult;
+    200: CommandResult;
 };
 
 export type contentReparseVersionResponse = contentReparseVersionResponses[keyof contentReparseVersionResponses];

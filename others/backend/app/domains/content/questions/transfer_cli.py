@@ -6,6 +6,7 @@ Process timeout and filesystem isolation remain the trusted runner's responsibil
 import argparse
 import os
 import sys
+import tempfile
 from typing import Literal
 
 from pydantic import Field, ValidationError
@@ -40,9 +41,13 @@ def main():
     args = parser.parse_args()
     try:
         import fcntl
+        if tempfile.gettempdir() != "/work":
+            raise ValueError("Unexpected temporary directory")
         required = fcntl.F_SEAL_WRITE | fcntl.F_SEAL_GROW | fcntl.F_SEAL_SHRINK | fcntl.F_SEAL_SEAL
         if args.input_fd < 0 or fcntl.fcntl(args.input_fd, fcntl.F_GET_SEALS) & required != required:
             raise ValueError("Unsealed input")
+        # dup shares the receiver's end-of-input offset; start this one-shot read at zero.
+        os.lseek(args.input_fd, 0, os.SEEK_SET)
         with os.fdopen(os.dup(args.input_fd), "rb") as source:
             result = process(source, args.operation, args.format)
         if len(result) > OUTPUT_LIMIT:
