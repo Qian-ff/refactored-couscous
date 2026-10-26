@@ -1,12 +1,22 @@
 import { expect, test } from "@playwright/test"
 import fs from "node:fs"
 import path from "node:path"
-import { reportDirectory } from "../../../others/scripts/web-environment.mjs"
+import { requireService, sourceIdentity, webPort } from "../../../others/scripts/web-environment.mjs"
+
+const projectRoot = path.resolve(import.meta.dirname, "../../..")
+const reportDirectory = path.join(projectRoot, "others/reports/c1-public/t2/sdk-final")
+
+test.beforeAll(async () => {
+  const web = await requireService(`http://127.0.0.1:${webPort}`, sourceIdentity("web"))
+  const api = await requireService("http://127.0.0.1:8002", sourceIdentity("api"))
+  fs.mkdirSync(reportDirectory, { recursive: true })
+  fs.writeFileSync(path.join(reportDirectory, "browser-services.json"), JSON.stringify({ web, api }, null, 2))
+})
 
 test.use({ trace: "off" })
 test("C1实际SDK原始字节上传和鉴权Blob下载", async ({ page }) => {
   test.setTimeout(90000)
-  const root = path.resolve(import.meta.dirname, "../../..")
+  const root = projectRoot
   const config = JSON.parse(fs.readFileSync(path.join(root, "others/runtime/c1-public/api-runtime.json"), "utf8"))
   const previous = JSON.parse(fs.readFileSync(path.join(root, "others/reports/c1-public/t2/live-http.json"), "utf8"))
   await page.goto("/")
