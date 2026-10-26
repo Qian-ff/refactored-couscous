@@ -15,6 +15,19 @@ SPEC.loader.exec_module(prepare)
 
 
 class MainParserProfileTests(unittest.TestCase):
+    def test_controller_and_client_share_the_main_port_gate(self):
+        sys.path.insert(0, str(ROOT / "others/deploy/content"))
+        import control
+        settings = {"protocol": control.C1_PROTOCOL, "key": "x" * 40, "host": "127.0.0.1", "port": 18768}
+        self.assertEqual(control.control_port(settings), 18768)
+        with patch.object(control, "main_control_configuration", return_value=False):
+            with self.assertRaises(control.RunnerUnavailable):
+                control.control_port({**settings, "port": 18767})
+        with patch.object(control, "main_control_configuration", return_value=True):
+            self.assertEqual(control.control_port({**settings, "port": 18767}), 18767)
+            with self.assertRaises(control.RunnerUnavailable):
+                control.control_port({**settings, "host": "0.0.0.0", "port": 18767})
+
     def test_fixed_primary_main_and_candidate_guards(self):
         with tempfile.TemporaryDirectory() as temporary:
             primary, child = Path(temporary) / "primary", Path(temporary) / "child"
