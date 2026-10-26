@@ -2,7 +2,7 @@
 
 import type { Client, Options as Options2, TDataShape } from './client';
 import { client } from './client.gen';
-import type { authLoginData, authLoginErrors, authLoginResponses, authLogoutData, authLogoutResponses, authMeData, authMeErrors, authMeResponses, contentCancelJobData, contentCancelJobErrors, contentCancelJobResponses, contentCancelUploadData, contentCancelUploadErrors, contentCancelUploadResponses, contentCapabilitiesData, contentCapabilitiesErrors, contentCapabilitiesResponses, contentChangeLibraryData, contentChangeLibraryErrors, contentChangeLibraryResponses, contentChangeMaterialData, contentChangeMaterialErrors, contentChangeMaterialResponses, contentCreateLibraryData, contentCreateLibraryErrors, contentCreateLibraryResponses, contentCreateTextData, contentCreateTextErrors, contentCreateTextResponses, contentCreateUploadData, contentCreateUploadErrors, contentCreateUploadResponses, contentDecideReviewData, contentDecideReviewErrors, contentDecideReviewResponses, contentDownloadVersionData, contentDownloadVersionErrors, contentDownloadVersionResponses, contentJobStatusData, contentJobStatusErrors, contentJobStatusResponses, contentListJobsData, contentListJobsErrors, contentListJobsResponses, contentListLibrariesData, contentListLibrariesErrors, contentListLibrariesResponses, contentListMaterialsData, contentListMaterialsErrors, contentListMaterialsResponses, contentListPublicationsData, contentListPublicationsErrors, contentListPublicationsResponses, contentListReviewsData, contentListReviewsErrors, contentListReviewsResponses, contentMaterialVersionsData, contentMaterialVersionsErrors, contentMaterialVersionsResponses, contentPublishReviewData, contentPublishReviewErrors, contentPublishReviewResponses, contentReparseVersionData, contentReparseVersionErrors, contentReparseVersionResponses, contentRetirePublicationData, contentRetirePublicationErrors, contentRetirePublicationResponses, contentRetryJobData, contentRetryJobErrors, contentRetryJobResponses, contentReviewDetailData, contentReviewDetailErrors, contentReviewDetailResponses, contentSubmitReviewData, contentSubmitReviewErrors, contentSubmitReviewResponses, contentSubmitTargetsData, contentSubmitTargetsErrors, contentSubmitTargetsResponses, contentUploadBytesData, contentUploadBytesErrors, contentUploadBytesResponses, contentUploadStatusData, contentUploadStatusErrors, contentUploadStatusResponses, contentVersionChunksData, contentVersionChunksErrors, contentVersionChunksResponses, contentVersionDetailData, contentVersionDetailErrors, contentVersionDetailResponses, coursesContextData, coursesContextErrors, coursesContextResponses, coursesCourseData, coursesCourseErrors, coursesCourseResponses, coursesCoursesData, coursesCoursesErrors, coursesCoursesResponses, coursesCreateCourseData, coursesCreateCourseErrors, coursesCreateCourseResponses, importsCommitImportData, importsCommitImportErrors, importsCommitImportResponses, importsPreviewImportData, importsPreviewImportErrors, importsPreviewImportResponses, importsTemplateData, importsTemplateErrors, importsTemplateResponses, managementChangePasswordData, managementChangePasswordErrors, managementChangePasswordResponses, managementCreateAccountData, managementCreateAccountErrors, managementCreateAccountResponses, managementCreateCollegeData, managementCreateCollegeErrors, managementCreateCollegeResponses, managementCreateInvitationData, managementCreateInvitationErrors, managementCreateInvitationResponses, managementCreateMajorData, managementCreateMajorErrors, managementCreateMajorResponses, managementCreateSchoolData, managementCreateSchoolErrors, managementCreateSchoolResponses, managementGetAccountData, managementGetAccountErrors, managementGetAccountResponses, managementGetProfileData, managementGetProfileErrors, managementGetProfileResponses, managementGrantRoleData, managementGrantRoleErrors, managementGrantRoleResponses, managementInvitationContextData, managementInvitationContextErrors, managementInvitationContextResponses, managementListAccountsData, managementListAccountsErrors, managementListAccountsResponses, managementListCollegesData, managementListCollegesErrors, managementListCollegesResponses, managementListInvitationsData, managementListInvitationsErrors, managementListInvitationsResponses, managementListMajorsData, managementListMajorsErrors, managementListMajorsResponses, managementListSchoolsData, managementListSchoolsErrors, managementListSchoolsResponses, managementRegisterAccountData, managementRegisterAccountErrors, managementRegisterAccountResponses, managementResetPasswordData, managementResetPasswordErrors, managementResetPasswordResponses, managementRevokeInvitationData, managementRevokeInvitationErrors, managementRevokeInvitationResponses, managementRevokeRoleData, managementRevokeRoleErrors, managementRevokeRoleResponses, managementUpdateAccountData, managementUpdateAccountErrors, managementUpdateAccountResponses, managementUpdateCollegeData, managementUpdateCollegeErrors, managementUpdateCollegeResponses, managementUpdateMajorData, managementUpdateMajorErrors, managementUpdateMajorResponses, managementUpdateProfileData, managementUpdateProfileErrors, managementUpdateProfileResponses, managementUpdateSchoolData, managementUpdateSchoolErrors, managementUpdateSchoolResponses, systemHealthData, systemHealthResponses, teachingAddMemberData, teachingAddMemberErrors, teachingAddMemberResponses, teachingAddStaffData, teachingAddStaffErrors, teachingAddStaffResponses, teachingArchiveClassData, teachingArchiveClassErrors, teachingArchiveClassResponses, teachingCancelMyRequestData, teachingCancelMyRequestErrors, teachingCancelMyRequestResponses, teachingCatalogData, teachingCatalogErrors, teachingCatalogResponses, teachingCatalogsData, teachingCatalogsErrors, teachingCatalogsResponses, teachingCatalogTeacherOptionsData, teachingCatalogTeacherOptionsErrors, teachingCatalogTeacherOptionsResponses, teachingClassManagementData, teachingClassManagementErrors, teachingClassManagementResponses, teachingCreateCatalogData, teachingCreateCatalogErrors, teachingCreateCatalogResponses, teachingDecideRequestData, teachingDecideRequestErrors, teachingDecideRequestResponses, teachingJoinClassData, teachingJoinClassErrors, teachingJoinClassResponses, teachingLeaveClassData, teachingLeaveClassErrors, teachingLeaveClassResponses, teachingListStaffData, teachingListStaffErrors, teachingListStaffResponses, teachingMembersData, teachingMembersErrors, teachingMembersResponses, teachingMyEnrollmentsData, teachingMyEnrollmentsErrors, teachingMyEnrollmentsResponses, teachingMyRequestsData, teachingMyRequestsErrors, teachingMyRequestsResponses, teachingRemoveMemberData, teachingRemoveMemberErrors, teachingRemoveMemberResponses, teachingRemoveStaffData, teachingRemoveStaffErrors, teachingRemoveStaffResponses, teachingRequestsData, teachingRequestsErrors, teachingRequestsResponses, teachingRotateJoinCodeData, teachingRotateJoinCodeErrors, teachingRotateJoinCodeResponses, teachingTeacherOptionsData, teachingTeacherOptionsErrors, teachingTeacherOptionsResponses, teachingTransferClassData, teachingTransferClassErrors, teachingTransferClassResponses, teachingUpdateCatalogData, teachingUpdateCatalogErrors, teachingUpdateCatalogResponses, teachingUpdateSettingsData, teachingUpdateSettingsErrors, teachingUpdateSettingsResponses } from './types.gen';
+import type { authLoginData, authLoginErrors, authLoginResponses, authLogoutData, authLogoutResponses, authMeData, authMeErrors, authMeResponses, contentCancelJobData, contentCancelJobErrors, contentCancelJobResponses, contentCancelUploadData, contentCancelUploadErrors, contentCancelUploadResponses, contentCapabilitiesData, contentCapabilitiesErrors, contentCapabilitiesResponses, contentChangeLibraryData, contentChangeLibraryErrors, contentChangeLibraryResponses, contentChangeMaterialData, contentChangeMaterialErrors, contentChangeMaterialResponses, contentCreateLibraryData, contentCreateLibraryErrors, contentCreateLibraryResponses, contentCreateTextData, contentCreateTextErrors, contentCreateTextResponses, contentCreateUploadData, contentCreateUploadErrors, contentCreateUploadResponses, contentDecideReviewData, contentDecideReviewErrors, contentDecideReviewResponses, contentDownloadVersionData, contentDownloadVersionErrors, contentDownloadVersionResponses, contentJobStatusData, contentJobStatusErrors, contentJobStatusResponses, contentLessonsBanksData, contentLessonsBanksErrors, contentLessonsBanksResponses, contentLessonsChangeData, contentLessonsChangeErrors, contentLessonsChangeResponses, contentLessonsCopyData, contentLessonsCopyErrors, contentLessonsCopyResponses, contentLessonsCreateData, contentLessonsCreateErrors, contentLessonsCreateResponses, contentLessonsCreateSceneData, contentLessonsCreateSceneErrors, contentLessonsCreateSceneResponses, contentLessonsDecideData, contentLessonsDecideErrors, contentLessonsDecideResponses, contentLessonsDiscardData, contentLessonsDiscardErrors, contentLessonsDiscardResponses, contentLessonsDraftData, contentLessonsDraftErrors, contentLessonsDraftResponses, contentLessonsDraftSceneData, contentLessonsDraftSceneErrors, contentLessonsDraftSceneResponses, contentLessonsDraftsData, contentLessonsDraftsErrors, contentLessonsDraftsResponses, contentLessonsPreviewData, contentLessonsPreviewErrors, contentLessonsPreviewResponses, contentLessonsPreviewSceneData, contentLessonsPreviewSceneErrors, contentLessonsPreviewSceneResponses, contentLessonsPublicationsData, contentLessonsPublicationsErrors, contentLessonsPublicationsResponses, contentLessonsPublishData, contentLessonsPublishErrors, contentLessonsPublishResponses, contentLessonsReferenceData, contentLessonsReferenceErrors, contentLessonsReferenceResponses, contentLessonsRetireData, contentLessonsRetireErrors, contentLessonsRetireResponses, contentLessonsReviewData, contentLessonsReviewErrors, contentLessonsReviewResponses, contentLessonsReviewsData, contentLessonsReviewsErrors, contentLessonsReviewsResponses, contentLessonsSubmitData, contentLessonsSubmitErrors, contentLessonsSubmitResponses, contentLessonsUnpublishData, contentLessonsUnpublishErrors, contentLessonsUnpublishResponses, contentLessonsVersionData, contentLessonsVersionErrors, contentLessonsVersionResponses, contentLessonsVersionsData, contentLessonsVersionsErrors, contentLessonsVersionsResponses, contentListJobsData, contentListJobsErrors, contentListJobsResponses, contentListLibrariesData, contentListLibrariesErrors, contentListLibrariesResponses, contentListMaterialsData, contentListMaterialsErrors, contentListMaterialsResponses, contentListPublicationsData, contentListPublicationsErrors, contentListPublicationsResponses, contentListReviewsData, contentListReviewsErrors, contentListReviewsResponses, contentMaterialVersionsData, contentMaterialVersionsErrors, contentMaterialVersionsResponses, contentPublishReviewData, contentPublishReviewErrors, contentPublishReviewResponses, contentQuestionsBanksData, contentQuestionsBanksErrors, contentQuestionsBanksResponses, contentQuestionsCancelData, contentQuestionsCancelErrors, contentQuestionsCancelResponses, contentQuestionsChangeData, contentQuestionsChangeErrors, contentQuestionsChangeResponses, contentQuestionsConfirmImportData, contentQuestionsConfirmImportErrors, contentQuestionsConfirmImportResponses, contentQuestionsCopyData, contentQuestionsCopyErrors, contentQuestionsCopyResponses, contentQuestionsCreateData, contentQuestionsCreateErrors, contentQuestionsCreateExportData, contentQuestionsCreateExportErrors, contentQuestionsCreateExportResponses, contentQuestionsCreateImportData, contentQuestionsCreateImportErrors, contentQuestionsCreateImportResponses, contentQuestionsCreateResponses, contentQuestionsDecideData, contentQuestionsDecideErrors, contentQuestionsDecideResponses, contentQuestionsDiscardData, contentQuestionsDiscardErrors, contentQuestionsDiscardResponses, contentQuestionsDownloadExportData, contentQuestionsDownloadExportErrors, contentQuestionsDownloadExportResponses, contentQuestionsDraftData, contentQuestionsDraftErrors, contentQuestionsDraftResponses, contentQuestionsDraftsData, contentQuestionsDraftsErrors, contentQuestionsDraftsResponses, contentQuestionsImportCreatedData, contentQuestionsImportCreatedErrors, contentQuestionsImportCreatedResponses, contentQuestionsImportRowsData, contentQuestionsImportRowsErrors, contentQuestionsImportRowsResponses, contentQuestionsImportStatusData, contentQuestionsImportStatusErrors, contentQuestionsImportStatusResponses, contentQuestionsPublicationsData, contentQuestionsPublicationsErrors, contentQuestionsPublicationsResponses, contentQuestionsPublishData, contentQuestionsPublishErrors, contentQuestionsPublishResponses, contentQuestionsReferenceData, contentQuestionsReferenceErrors, contentQuestionsReferenceResponses, contentQuestionsRetireData, contentQuestionsRetireErrors, contentQuestionsRetireResponses, contentQuestionsRetryData, contentQuestionsRetryErrors, contentQuestionsRetryResponses, contentQuestionsReviewData, contentQuestionsReviewErrors, contentQuestionsReviewResponses, contentQuestionsReviewsData, contentQuestionsReviewsErrors, contentQuestionsReviewsResponses, contentQuestionsSubmitData, contentQuestionsSubmitErrors, contentQuestionsSubmitResponses, contentQuestionsTaskData, contentQuestionsTaskErrors, contentQuestionsTaskResponses, contentQuestionsUnpublishData, contentQuestionsUnpublishErrors, contentQuestionsUnpublishResponses, contentQuestionsUploadInputData, contentQuestionsUploadInputErrors, contentQuestionsUploadInputResponses, contentQuestionsVersionData, contentQuestionsVersionErrors, contentQuestionsVersionResponses, contentQuestionsVersionsData, contentQuestionsVersionsErrors, contentQuestionsVersionsResponses, contentReparseVersionData, contentReparseVersionErrors, contentReparseVersionResponses, contentRetirePublicationData, contentRetirePublicationErrors, contentRetirePublicationResponses, contentRetryJobData, contentRetryJobErrors, contentRetryJobResponses, contentReviewDetailData, contentReviewDetailErrors, contentReviewDetailResponses, contentSubmitReviewData, contentSubmitReviewErrors, contentSubmitReviewResponses, contentSubmitTargetsData, contentSubmitTargetsErrors, contentSubmitTargetsResponses, contentUploadBytesData, contentUploadBytesErrors, contentUploadBytesResponses, contentUploadStatusData, contentUploadStatusErrors, contentUploadStatusResponses, contentVersionChunksData, contentVersionChunksErrors, contentVersionChunksResponses, contentVersionDetailData, contentVersionDetailErrors, contentVersionDetailResponses, coursesContextData, coursesContextErrors, coursesContextResponses, coursesCourseData, coursesCourseErrors, coursesCourseResponses, coursesCoursesData, coursesCoursesErrors, coursesCoursesResponses, coursesCreateCourseData, coursesCreateCourseErrors, coursesCreateCourseResponses, importsCommitImportData, importsCommitImportErrors, importsCommitImportResponses, importsPreviewImportData, importsPreviewImportErrors, importsPreviewImportResponses, importsTemplateData, importsTemplateErrors, importsTemplateResponses, managementChangePasswordData, managementChangePasswordErrors, managementChangePasswordResponses, managementCreateAccountData, managementCreateAccountErrors, managementCreateAccountResponses, managementCreateCollegeData, managementCreateCollegeErrors, managementCreateCollegeResponses, managementCreateInvitationData, managementCreateInvitationErrors, managementCreateInvitationResponses, managementCreateMajorData, managementCreateMajorErrors, managementCreateMajorResponses, managementCreateSchoolData, managementCreateSchoolErrors, managementCreateSchoolResponses, managementGetAccountData, managementGetAccountErrors, managementGetAccountResponses, managementGetProfileData, managementGetProfileErrors, managementGetProfileResponses, managementGrantRoleData, managementGrantRoleErrors, managementGrantRoleResponses, managementInvitationContextData, managementInvitationContextErrors, managementInvitationContextResponses, managementListAccountsData, managementListAccountsErrors, managementListAccountsResponses, managementListCollegesData, managementListCollegesErrors, managementListCollegesResponses, managementListInvitationsData, managementListInvitationsErrors, managementListInvitationsResponses, managementListMajorsData, managementListMajorsErrors, managementListMajorsResponses, managementListSchoolsData, managementListSchoolsErrors, managementListSchoolsResponses, managementRegisterAccountData, managementRegisterAccountErrors, managementRegisterAccountResponses, managementResetPasswordData, managementResetPasswordErrors, managementResetPasswordResponses, managementRevokeInvitationData, managementRevokeInvitationErrors, managementRevokeInvitationResponses, managementRevokeRoleData, managementRevokeRoleErrors, managementRevokeRoleResponses, managementUpdateAccountData, managementUpdateAccountErrors, managementUpdateAccountResponses, managementUpdateCollegeData, managementUpdateCollegeErrors, managementUpdateCollegeResponses, managementUpdateMajorData, managementUpdateMajorErrors, managementUpdateMajorResponses, managementUpdateProfileData, managementUpdateProfileErrors, managementUpdateProfileResponses, managementUpdateSchoolData, managementUpdateSchoolErrors, managementUpdateSchoolResponses, systemHealthData, systemHealthResponses, teachingAddMemberData, teachingAddMemberErrors, teachingAddMemberResponses, teachingAddStaffData, teachingAddStaffErrors, teachingAddStaffResponses, teachingArchiveClassData, teachingArchiveClassErrors, teachingArchiveClassResponses, teachingCancelMyRequestData, teachingCancelMyRequestErrors, teachingCancelMyRequestResponses, teachingCatalogData, teachingCatalogErrors, teachingCatalogResponses, teachingCatalogsData, teachingCatalogsErrors, teachingCatalogsResponses, teachingCatalogTeacherOptionsData, teachingCatalogTeacherOptionsErrors, teachingCatalogTeacherOptionsResponses, teachingClassManagementData, teachingClassManagementErrors, teachingClassManagementResponses, teachingCreateCatalogData, teachingCreateCatalogErrors, teachingCreateCatalogResponses, teachingDecideRequestData, teachingDecideRequestErrors, teachingDecideRequestResponses, teachingJoinClassData, teachingJoinClassErrors, teachingJoinClassResponses, teachingLeaveClassData, teachingLeaveClassErrors, teachingLeaveClassResponses, teachingListStaffData, teachingListStaffErrors, teachingListStaffResponses, teachingMembersData, teachingMembersErrors, teachingMembersResponses, teachingMyEnrollmentsData, teachingMyEnrollmentsErrors, teachingMyEnrollmentsResponses, teachingMyRequestsData, teachingMyRequestsErrors, teachingMyRequestsResponses, teachingRemoveMemberData, teachingRemoveMemberErrors, teachingRemoveMemberResponses, teachingRemoveStaffData, teachingRemoveStaffErrors, teachingRemoveStaffResponses, teachingRequestsData, teachingRequestsErrors, teachingRequestsResponses, teachingRotateJoinCodeData, teachingRotateJoinCodeErrors, teachingRotateJoinCodeResponses, teachingTeacherOptionsData, teachingTeacherOptionsErrors, teachingTeacherOptionsResponses, teachingTransferClassData, teachingTransferClassErrors, teachingTransferClassResponses, teachingUpdateCatalogData, teachingUpdateCatalogErrors, teachingUpdateCatalogResponses, teachingUpdateSettingsData, teachingUpdateSettingsErrors, teachingUpdateSettingsResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -1162,6 +1162,731 @@ export class ContentService {
             security: [{ scheme: 'bearer', type: 'http' }],
             url: '/api/v1/content/versions/{version_id}/reparse',
             ...options
+        });
+    }
+}
+
+export class ContentLessonsService {
+    /**
+     * Banks
+     */
+    public static lessonsBanks<ThrowOnError extends boolean = true>(options?: Options<contentLessonsBanksData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentLessonsBanksResponses, contentLessonsBanksErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/banks',
+            ...options
+        });
+    }
+
+    /**
+     * Copy
+     */
+    public static lessonsCopy<ThrowOnError extends boolean = true>(options: Options<contentLessonsCopyData, ThrowOnError>) {
+        return (options.client ?? client).post<contentLessonsCopyResponses, contentLessonsCopyErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/copies',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Drafts
+     */
+    public static lessonsDrafts<ThrowOnError extends boolean = true>(options?: Options<contentLessonsDraftsData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentLessonsDraftsResponses, contentLessonsDraftsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/drafts',
+            ...options
+        });
+    }
+
+    /**
+     * Create
+     */
+    public static lessonsCreate<ThrowOnError extends boolean = true>(options: Options<contentLessonsCreateData, ThrowOnError>) {
+        return (options.client ?? client).post<contentLessonsCreateResponses, contentLessonsCreateErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/drafts',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Draft
+     */
+    public static lessonsDraft<ThrowOnError extends boolean = true>(options: Options<contentLessonsDraftData, ThrowOnError>) {
+        return (options.client ?? client).get<contentLessonsDraftResponses, contentLessonsDraftErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/drafts/{lesson_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Change
+     */
+    public static lessonsChange<ThrowOnError extends boolean = true>(options: Options<contentLessonsChangeData, ThrowOnError>) {
+        return (options.client ?? client).patch<contentLessonsChangeResponses, contentLessonsChangeErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/drafts/{lesson_id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Discard
+     */
+    public static lessonsDiscard<ThrowOnError extends boolean = true>(options: Options<contentLessonsDiscardData, ThrowOnError>) {
+        return (options.client ?? client).post<contentLessonsDiscardResponses, contentLessonsDiscardErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/drafts/{lesson_id}/discard',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Draft Scene
+     */
+    public static lessonsDraftScene<ThrowOnError extends boolean = true>(options: Options<contentLessonsDraftSceneData, ThrowOnError>) {
+        return (options.client ?? client).get<contentLessonsDraftSceneResponses, contentLessonsDraftSceneErrors, ThrowOnError>({
+            responseType: 'blob',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/drafts/{lesson_id}/scene',
+            ...options
+        });
+    }
+
+    /**
+     * Submit
+     */
+    public static lessonsSubmit<ThrowOnError extends boolean = true>(options: Options<contentLessonsSubmitData, ThrowOnError>) {
+        return (options.client ?? client).post<contentLessonsSubmitResponses, contentLessonsSubmitErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/drafts/{lesson_id}/submit',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Publications
+     */
+    public static lessonsPublications<ThrowOnError extends boolean = true>(options: Options<contentLessonsPublicationsData, ThrowOnError>) {
+        return (options.client ?? client).get<contentLessonsPublicationsResponses, contentLessonsPublicationsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/publications',
+            ...options
+        });
+    }
+
+    /**
+     * Unpublish
+     */
+    public static lessonsUnpublish<ThrowOnError extends boolean = true>(options: Options<contentLessonsUnpublishData, ThrowOnError>) {
+        return (options.client ?? client).post<contentLessonsUnpublishResponses, contentLessonsUnpublishErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/publications/{publication_id}/retire',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Reference
+     */
+    public static lessonsReference<ThrowOnError extends boolean = true>(options: Options<contentLessonsReferenceData, ThrowOnError>) {
+        return (options.client ?? client).post<contentLessonsReferenceResponses, contentLessonsReferenceErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/references',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Reviews
+     */
+    public static lessonsReviews<ThrowOnError extends boolean = true>(options?: Options<contentLessonsReviewsData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentLessonsReviewsResponses, contentLessonsReviewsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/reviews',
+            ...options
+        });
+    }
+
+    /**
+     * Review
+     */
+    public static lessonsReview<ThrowOnError extends boolean = true>(options: Options<contentLessonsReviewData, ThrowOnError>) {
+        return (options.client ?? client).get<contentLessonsReviewResponses, contentLessonsReviewErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/reviews/{review_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Decide
+     */
+    public static lessonsDecide<ThrowOnError extends boolean = true>(options: Options<contentLessonsDecideData, ThrowOnError>) {
+        return (options.client ?? client).post<contentLessonsDecideResponses, contentLessonsDecideErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/reviews/{review_id}/decision',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Publish
+     */
+    public static lessonsPublish<ThrowOnError extends boolean = true>(options: Options<contentLessonsPublishData, ThrowOnError>) {
+        return (options.client ?? client).post<contentLessonsPublishResponses, contentLessonsPublishErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/reviews/{review_id}/publish',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Create Scene
+     */
+    public static lessonsCreateScene<ThrowOnError extends boolean = true>(options: Options<contentLessonsCreateSceneData, ThrowOnError>) {
+        return (options.client ?? client).post<contentLessonsCreateSceneResponses, contentLessonsCreateSceneErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/scenes',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Versions
+     */
+    public static lessonsVersions<ThrowOnError extends boolean = true>(options?: Options<contentLessonsVersionsData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentLessonsVersionsResponses, contentLessonsVersionsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/versions',
+            ...options
+        });
+    }
+
+    /**
+     * Version
+     */
+    public static lessonsVersion<ThrowOnError extends boolean = true>(options: Options<contentLessonsVersionData, ThrowOnError>) {
+        return (options.client ?? client).get<contentLessonsVersionResponses, contentLessonsVersionErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/versions/{version_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Preview
+     */
+    public static lessonsPreview<ThrowOnError extends boolean = true>(options: Options<contentLessonsPreviewData, ThrowOnError>) {
+        return (options.client ?? client).get<contentLessonsPreviewResponses, contentLessonsPreviewErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/versions/{version_id}/preview',
+            ...options
+        });
+    }
+
+    /**
+     * Preview Scene
+     */
+    public static lessonsPreviewScene<ThrowOnError extends boolean = true>(options: Options<contentLessonsPreviewSceneData, ThrowOnError>) {
+        return (options.client ?? client).get<contentLessonsPreviewSceneResponses, contentLessonsPreviewSceneErrors, ThrowOnError>({
+            responseType: 'blob',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/versions/{version_id}/preview/scene',
+            ...options
+        });
+    }
+
+    /**
+     * Retire
+     */
+    public static lessonsRetire<ThrowOnError extends boolean = true>(options: Options<contentLessonsRetireData, ThrowOnError>) {
+        return (options.client ?? client).patch<contentLessonsRetireResponses, contentLessonsRetireErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/lessons/{lesson_id}/retirement',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+}
+
+export class ContentQuestionsService {
+    /**
+     * Banks
+     */
+    public static questionsBanks<ThrowOnError extends boolean = true>(options?: Options<contentQuestionsBanksData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentQuestionsBanksResponses, contentQuestionsBanksErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/banks',
+            ...options
+        });
+    }
+
+    /**
+     * Copy
+     */
+    public static questionsCopy<ThrowOnError extends boolean = true>(options: Options<contentQuestionsCopyData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsCopyResponses, contentQuestionsCopyErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/copies',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Drafts
+     */
+    public static questionsDrafts<ThrowOnError extends boolean = true>(options?: Options<contentQuestionsDraftsData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentQuestionsDraftsResponses, contentQuestionsDraftsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/drafts',
+            ...options
+        });
+    }
+
+    /**
+     * Create
+     */
+    public static questionsCreate<ThrowOnError extends boolean = true>(options: Options<contentQuestionsCreateData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsCreateResponses, contentQuestionsCreateErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/drafts',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Draft
+     */
+    public static questionsDraft<ThrowOnError extends boolean = true>(options: Options<contentQuestionsDraftData, ThrowOnError>) {
+        return (options.client ?? client).get<contentQuestionsDraftResponses, contentQuestionsDraftErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/drafts/{question_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Change
+     */
+    public static questionsChange<ThrowOnError extends boolean = true>(options: Options<contentQuestionsChangeData, ThrowOnError>) {
+        return (options.client ?? client).patch<contentQuestionsChangeResponses, contentQuestionsChangeErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/drafts/{question_id}',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Discard
+     */
+    public static questionsDiscard<ThrowOnError extends boolean = true>(options: Options<contentQuestionsDiscardData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsDiscardResponses, contentQuestionsDiscardErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/drafts/{question_id}/discard',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Submit
+     */
+    public static questionsSubmit<ThrowOnError extends boolean = true>(options: Options<contentQuestionsSubmitData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsSubmitResponses, contentQuestionsSubmitErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/drafts/{question_id}/submit',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Create Export
+     */
+    public static questionsCreateExport<ThrowOnError extends boolean = true>(options: Options<contentQuestionsCreateExportData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsCreateExportResponses, contentQuestionsCreateExportErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/exports',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Download Export
+     */
+    public static questionsDownloadExport<ThrowOnError extends boolean = true>(options: Options<contentQuestionsDownloadExportData, ThrowOnError>) {
+        return (options.client ?? client).get<contentQuestionsDownloadExportResponses, contentQuestionsDownloadExportErrors, ThrowOnError>({
+            responseType: 'blob',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/exports/{task_id}/download',
+            ...options
+        });
+    }
+
+    /**
+     * Create Import
+     */
+    public static questionsCreateImport<ThrowOnError extends boolean = true>(options: Options<contentQuestionsCreateImportData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsCreateImportResponses, contentQuestionsCreateImportErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/imports',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Import Status
+     */
+    public static questionsImportStatus<ThrowOnError extends boolean = true>(options: Options<contentQuestionsImportStatusData, ThrowOnError>) {
+        return (options.client ?? client).get<contentQuestionsImportStatusResponses, contentQuestionsImportStatusErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/imports/{batch_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Confirm Import
+     */
+    public static questionsConfirmImport<ThrowOnError extends boolean = true>(options: Options<contentQuestionsConfirmImportData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsConfirmImportResponses, contentQuestionsConfirmImportErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/imports/{batch_id}/confirm',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Import Created
+     */
+    public static questionsImportCreated<ThrowOnError extends boolean = true>(options: Options<contentQuestionsImportCreatedData, ThrowOnError>) {
+        return (options.client ?? client).get<contentQuestionsImportCreatedResponses, contentQuestionsImportCreatedErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/imports/{batch_id}/created',
+            ...options
+        });
+    }
+
+    /**
+     * Import Rows
+     */
+    public static questionsImportRows<ThrowOnError extends boolean = true>(options: Options<contentQuestionsImportRowsData, ThrowOnError>) {
+        return (options.client ?? client).get<contentQuestionsImportRowsResponses, contentQuestionsImportRowsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/imports/{batch_id}/rows',
+            ...options
+        });
+    }
+
+    /**
+     * Publications
+     */
+    public static questionsPublications<ThrowOnError extends boolean = true>(options: Options<contentQuestionsPublicationsData, ThrowOnError>) {
+        return (options.client ?? client).get<contentQuestionsPublicationsResponses, contentQuestionsPublicationsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/publications',
+            ...options
+        });
+    }
+
+    /**
+     * Unpublish
+     */
+    public static questionsUnpublish<ThrowOnError extends boolean = true>(options: Options<contentQuestionsUnpublishData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsUnpublishResponses, contentQuestionsUnpublishErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/publications/{publication_id}/retire',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Reference
+     */
+    public static questionsReference<ThrowOnError extends boolean = true>(options: Options<contentQuestionsReferenceData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsReferenceResponses, contentQuestionsReferenceErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/references',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Reviews
+     */
+    public static questionsReviews<ThrowOnError extends boolean = true>(options?: Options<contentQuestionsReviewsData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentQuestionsReviewsResponses, contentQuestionsReviewsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/reviews',
+            ...options
+        });
+    }
+
+    /**
+     * Review
+     */
+    public static questionsReview<ThrowOnError extends boolean = true>(options: Options<contentQuestionsReviewData, ThrowOnError>) {
+        return (options.client ?? client).get<contentQuestionsReviewResponses, contentQuestionsReviewErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/reviews/{review_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Decide
+     */
+    public static questionsDecide<ThrowOnError extends boolean = true>(options: Options<contentQuestionsDecideData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsDecideResponses, contentQuestionsDecideErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/reviews/{review_id}/decision',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Publish
+     */
+    public static questionsPublish<ThrowOnError extends boolean = true>(options: Options<contentQuestionsPublishData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsPublishResponses, contentQuestionsPublishErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/reviews/{review_id}/publish',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Task
+     */
+    public static questionsTask<ThrowOnError extends boolean = true>(options: Options<contentQuestionsTaskData, ThrowOnError>) {
+        return (options.client ?? client).get<contentQuestionsTaskResponses, contentQuestionsTaskErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/tasks/{task_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Cancel
+     */
+    public static questionsCancel<ThrowOnError extends boolean = true>(options: Options<contentQuestionsCancelData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsCancelResponses, contentQuestionsCancelErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/tasks/{task_id}/cancel',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Upload Input
+     */
+    public static questionsUploadInput<ThrowOnError extends boolean = true>(options: Options<contentQuestionsUploadInputData, ThrowOnError>) {
+        return (options.client ?? client).put<contentQuestionsUploadInputResponses, contentQuestionsUploadInputErrors, ThrowOnError>({
+            bodySerializer: null,
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/tasks/{task_id}/input',
+            ...options,
+            headers: {
+                'content-type': 'application/octet-stream',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Retry
+     */
+    public static questionsRetry<ThrowOnError extends boolean = true>(options: Options<contentQuestionsRetryData, ThrowOnError>) {
+        return (options.client ?? client).post<contentQuestionsRetryResponses, contentQuestionsRetryErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/tasks/{task_id}/retry',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
+        });
+    }
+
+    /**
+     * Versions
+     */
+    public static questionsVersions<ThrowOnError extends boolean = true>(options?: Options<contentQuestionsVersionsData, ThrowOnError>) {
+        return (options?.client ?? client).get<contentQuestionsVersionsResponses, contentQuestionsVersionsErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/versions',
+            ...options
+        });
+    }
+
+    /**
+     * Version
+     */
+    public static questionsVersion<ThrowOnError extends boolean = true>(options: Options<contentQuestionsVersionData, ThrowOnError>) {
+        return (options.client ?? client).get<contentQuestionsVersionResponses, contentQuestionsVersionErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/versions/{version_id}',
+            ...options
+        });
+    }
+
+    /**
+     * Retire
+     */
+    public static questionsRetire<ThrowOnError extends boolean = true>(options: Options<contentQuestionsRetireData, ThrowOnError>) {
+        return (options.client ?? client).patch<contentQuestionsRetireResponses, contentQuestionsRetireErrors, ThrowOnError>({
+            responseType: 'json',
+            security: [{ scheme: 'bearer', type: 'http' }],
+            url: '/api/v1/content/questions/{question_id}/retirement',
+            ...options,
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            }
         });
     }
 }

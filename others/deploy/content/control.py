@@ -19,14 +19,14 @@ from output_files import UnsafeOutput, read_output
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "others/backend"))
-from app.core.content_runner import (FRAME, MAX_INPUT, MAX_OUTPUT, PROTOCOL, json_bytes,  # noqa: E402
-                                     read_frame, validate_task, write_frame)
+from app.core.content_runner import (FRAME, MAX_OUTPUT, PROTOCOL, C1_PROTOCOL, TASK_KINDS, json_bytes,  # noqa: E402
+                                     read_frame, validate_task, write_frame, task_input_limit)
 from app.domains.content.parse_runner import RunnerCapabilities, RunnerUnavailable  # noqa: E402
 
 
 class Controller:
     def __init__(self, config):
-        if (config.get("protocol") != PROTOCOL or len(config.get("key", "")) < 32
+        if (config.get("protocol") not in {PROTOCOL, C1_PROTOCOL} or len(config.get("key", "")) < 32
                 or not re.fullmatch("sha256:[0-9a-f]{64}", config.get("image", ""))):
             raise RunnerUnavailable()
         self.config = config
@@ -241,7 +241,8 @@ class Controller:
                 # Sealed memfd input <=20MiB plus work tmpfs <=44MiB: total temporary memory <=64MiB.
                 "--tmpfs", "/work:rw,noexec,nosuid,nodev,size=46137344,uid=65532,gid=65532,mode=0700",
                 "--mount", "type=bind,source=" + str(path) + ",target=/output",
-                self.config["image"], task["format"], task["encoding"], task["input_sha256"])
+                self.config["image"], task["format"], task.get("encoding", "utf-8"), task["input_sha256"],
+                *([task.get("task_kind", "material_parse")] if self.config["protocol"] == C1_PROTOCOL else []))
             process = await asyncio.create_subprocess_exec(self.docker, "start", "--interactive", self.name(execution_id),
                 stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.DEVNULL,
                 stderr=asyncio.subprocess.DEVNULL, env=self.docker_environment())
@@ -260,7 +261,7 @@ class Controller:
     async def receive(self, task, reader, process):
         execution_id = task["execution_id"]
         digest, size = hashlib.sha256(), 0
-        maximum = 1024 * 1024 if task["format"] in {"txt", "text"} else MAX_INPUT
+        maximum = task_input_limit(task)
         try:
             async with asyncio.timeout(300):
                 while True:
@@ -282,7 +283,10 @@ class Controller:
                         accepted = self.output(execution_id, "accepted", 4096, missing_ok=True)
                         if accepted is not None:
                             receipt = json.loads(accepted)
-                            if receipt != {"kernel_seals": 15, "input_bytes": size, "input_sha256": digest.hexdigest()}:
+                            expected = {"kernel_seals": 15, "input_bytes": size, "input_sha256": digest.hexdigest()}
+                            if "task_kind" in task:
+                                expected.update(task_kind=task["task_kind"], work_tmpfs_bytes=46137344)
+                            if receipt != expected:
                                 raise RunnerUnavailable()
                             break
                         await asyncio.sleep(.1)
@@ -293,7 +297,8 @@ class Controller:
                 if record.get("stopped"):
                     raise RunnerUnavailable()
                 if process:
-                    record.update(receiving=False, parse_deadline=time.time() + 60)
+                    record.update(receiving=False, parse_deadline=time.time() + (30 if "task_kind" in task else 60))
+                    record["input_receipt"] = receipt
                     self.save(record)
                 return await self.inspect_locked(execution_id)
         except BaseException:
@@ -331,7 +336,7 @@ class Controller:
         self.connections += 1
         try:
             request = json.loads(await read_frame(reader, 16384, 5))
-            if (not isinstance(request, dict) or request.get("protocol") != PROTOCOL
+            if (not isinstance(request, dict) or request.get("protocol") != self.config["protocol"]
                     or not isinstance(request.get("key"), str)
                     or not hmac.compare_digest(request["key"], self.config["key"])):
                 raise RunnerUnavailable()
@@ -340,6 +345,8 @@ class Controller:
                 if set(request) != {"protocol", "key", "operation", "task"}:
                     raise RunnerUnavailable()
                 task = validate_task(request["task"])
+                if "task_kind" in task and self.config["protocol"] != C1_PROTOCOL:
+                    raise RunnerUnavailable()
                 process = await self.begin(task)
                 try:
                     await write_frame(writer, json_bytes({"ok": True, "ready": True}))
@@ -355,7 +362,8 @@ class Controller:
                 if set(request) != {"protocol", "key", "operation"}:
                     raise RunnerUnavailable()
                 await write_frame(writer, json_bytes({"ok": True, "capabilities": await self.capabilities(),
-                                                      "controller_sha256": self.source_sha256}))
+                                                      "controller_sha256": self.source_sha256,
+                                                      "task_kinds": list(TASK_KINDS) if self.config["protocol"] == C1_PROTOCOL else ["material_parse"]}))
             elif operation in {"inspect", "stop", "release", "result"}:
                 if set(request) != {"protocol", "key", "operation", "execution_id"}:
                     raise RunnerUnavailable()
@@ -428,10 +436,11 @@ async def serve(config):
         else:
             path.chmod(0o600)
     else:
-        if config.get("host") != "127.0.0.1" or config.get("port") != 18767:
+        port = 18768 if config["protocol"] == C1_PROTOCOL else 18767
+        if config.get("host") != "127.0.0.1" or config.get("port") != port:
             raise RunnerUnavailable()
-        server = await asyncio.start_server(controller.handle, host="127.0.0.1", port=18767)
-    print(json.dumps({"protocol": PROTOCOL, "ready": True, "image": config["image"]}), flush=True)
+        server = await asyncio.start_server(controller.handle, host="127.0.0.1", port=port)
+    print(json.dumps({"protocol": config["protocol"], "ready": True, "image": config["image"]}), flush=True)
     async with server:
         await server.serve_forever()
 

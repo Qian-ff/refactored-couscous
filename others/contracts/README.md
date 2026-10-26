@@ -1,8 +1,14 @@
 # 契约入口
 
+## 0.5.0 C1主线源码（运行激活待P2）
+
+T2接入实际题库/关卡教师管理路由、导入二进制PUT及鉴权Blob导出，唯一版本源为application.json 0.5.0。A已统一接收最终T2及P1工具；候选检查来源以A副 `others/reports/c1-public/t2/` 最终清单为准，原主库迁移、共享环境和三端产物仍待P2实测，见[主线接收](../docs/c1-main-reception.md)。C02既有VersionView/ReviewView等TS名称由生成器命名规则保持，D无需为同名C1 DTO改页面。
+
+B2内部受控服务为 `questions.assessment.resolve_assessment_questions`、`lessons.assessment.resolve_lesson_publication`；生成客户端中的StudentLesson来自真实教师预览模型，不新增学生答案接口。学生投影只过滤数据，不代替B2真实任务/关系/解锁授权。D消费实际TeacherLessonPreview和StudentLesson，暂不启动D2页面。
+
 现行六身份及E/F接收方见[统一协作规范](../docs/coordination.md)；仅协作身份变更，不改业务API版本。A副具体写范围见[执行委托](execution-delegations.json)。
 
-A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；main源码现行契约为 **0.4.1**，包含资料与有权正文检索；运行、客户端和ECS版本须分别看A实际发布记录。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A0历史基线0.2.0及B1首次基线0.3.0保留。
+A 维护统一契约。实际接口以 openapi.json、version.json 和生成客户端为准；main源码现行契约为 **0.5.0**，包含资料/有权正文检索及C1题库关卡管理；运行、客户端和ECS版本须分别看A实际发布记录。版本唯一来源是 ../config/application.json，应用 OpenAPI、health 与导出工具共同读取。A0历史基线0.2.0及B1首次基线0.3.0保留。
 
 0.3.0 在A0底座上增加真实组织/专业/账号/授权/改密、目录与班级管理/审批/交接、CSV导入等B1路由。模型注册、兼容迁移和生成SDK已交接，历史见[B1公共交接](../docs/b1-public-handoff.md)。B1最终领域及独立业务组件见[B1集成交接](../docs/b1-handoff.md)，正式导航由D接入；内容/助手/考试/记录接口未发布。
 

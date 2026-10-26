@@ -1,5 +1,13 @@
 # 多工作树共用本机环境
 
+## C1 T2独立候选
+
+active `c1-runtime-public-integration` 下，A副仅用本树 `others/runtime/c1-public/envs/{backend,worker}`，由 `python others/scripts/c1_candidate_env.py prepare --surface backend` / `--surface worker` 准备；只复用主树解释器和缓存，不覆盖共享venv。helper每次核对分支、已提交授权祖先、锁与描述指纹，pytest仍持共享串行锁、固定safelab_c1_test profile。正式共享环境待A接收后激活，不能拿候选新锁调用旧shared_env强行绕过不匹配检查。
+
+backend生产依赖不加Excel，dev才用openpyxl3.1.5/defusedxml0.7.1；worker增加这两项及pydantic2.13.4，锁定传递依赖、官方wheel哈希和许可，保留原语音/资料解析版本。构建只复制14包解析/传输闭包，不复制整个worker、SQLModel、API配置、模型或密钥；候选缓存官方Linux wheel哈希核对后离线安装。
+
+API8002/控制18768及其存储/任务/运行日志均在c1-public；main8000/5173/18767和原库独立。C1命令/配置、实际通过与未验边界见 [C1公共交接](c1-public-handoff.md)。
+
 现行职责见[统一协作规范](coordination.md)。A副复用主树依赖/配置/模型，但app_source、worker_source、Git提交和报告属于本树；共享测试库仍串行锁定，不能用主树服务证明分支新代码。
 
 统一入口通过 Git common directory 定位主工作区，不把个人路径写进公共配置。配置/依赖共享，源码/报告/Git分支分别属于各树。
@@ -68,5 +76,9 @@ Codex运行时刷新后若pnpm消失，A在主树执行python others/scripts/pre
 本轮证据和未完成边界见[a0-handoff.md](a0-handoff.md)，不能把环境准备当成三端语音验收。
 
 ## A副独立验证入口
+
+C1主线接入分P1工具候选与P2实际激活，见[c1-main-activation](ai/c1-main-activation.md)。只有A收到工具并发第二个完整main执行SHA后，才在真实primary/main按已接收锁激活既有两套共享venv。`Prepare-ContentParser.ps1 -Profile main`使用固定共享worker，检查已接收锁/14包版本/许可，只写忽略的 `runtime/content-parser`；不会安装共享依赖或重写受跟踪许可。可将已核对SHA的候选Linux wheels放入该目录的 `build/wheels` 复用，程序仍逐个按锁校验，不复制候选venv。切换前经旧控制端确认停止/release并保留实例/key/journal。
+
+`Start/Stop/Verify-ContentParser.ps1 -Profile main`固定18767；`-Profile c1`固定候选18768并保留登记角色/活动包校验；不传参数时仅真实primary/main自动选main，其余沿用c02候选校验。main的Verify只作来源/镜像/能力探针，非完整sandbox实测。P2后 `Open-C1-API.cmd -NoOpen` / `Start-C1.ps1 -NoOpen`检查真实8000来源/0.5.0/c1迁移及v2控制器，默认打开8000/docs；资料仍用Open-Materials，未新增题库UI。
 
 在登记的A副树先运行shared_env.py status/probe/probe-worker；已有依赖不重装。需要网页依赖时用install-web离线复用。API使用Start-Backend.ps1 -Port 8002；网页按codex/a-executor分支默认5177。端口占用或源码身份不符则保留已有服务并报告，不终止其他树进程。浏览器验证显式设置LABCONNECT_API_ROOT为本树、LABCONNECT_API_URL为http://127.0.0.1:8002，避免默认主树API产生假通过。Start-A1仅用于既有主/业务树，A副使用上述分支独立验证入口，不执行演示库迁移。

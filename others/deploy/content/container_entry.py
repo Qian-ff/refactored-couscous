@@ -31,7 +31,9 @@ def receive(args):
     signal.signal(signal.SIGALRM, expired)
     signal.alarm(300)
     digest, size = hashlib.sha256(), 0
-    maximum = 1024 * 1024 if args.format in {"txt", "text"} else 20 * 1024 * 1024
+    maximum = (16 * 1024 * 1024 if args.task_kind == "question_export" else
+               (1048576 if args.format == "csv" else 5242880) if args.task_kind == "question_import" else
+               1048576 if args.format in {"txt", "text"} else 20 * 1024 * 1024)
     descriptor = os.memfd_create("labconnect-input", os.MFD_ALLOW_SEALING)
     with os.fdopen(os.dup(descriptor), "wb") as output:
         while True:
@@ -58,8 +60,12 @@ def receive(args):
     fcntl.fcntl(descriptor, fcntl.F_ADD_SEALS,
                 fcntl.F_SEAL_WRITE | fcntl.F_SEAL_GROW | fcntl.F_SEAL_SHRINK | fcntl.F_SEAL_SEAL)
     with (OUTPUT / "accepted.new").open("x") as accepted:
-        json.dump({"kernel_seals": fcntl.fcntl(descriptor, fcntl.F_GET_SEALS),
-                   "input_bytes": size, "input_sha256": digest.hexdigest()}, accepted)
+        receipt = {"kernel_seals": fcntl.fcntl(descriptor, fcntl.F_GET_SEALS),
+                   "input_bytes": size, "input_sha256": digest.hexdigest()}
+        if args.task_kind != "material_parse":
+            work = os.statvfs("/work")
+            receipt.update(task_kind=args.task_kind, work_tmpfs_bytes=work.f_frsize * work.f_blocks)
+        json.dump(receipt, accepted)
         accepted.flush()
         os.fsync(accepted.fileno())
     (OUTPUT / "accepted.new").replace(OUTPUT / "accepted")
@@ -80,12 +86,15 @@ async def consume(stream, maximum, destination=None):
 
 async def parse(args, descriptor):
     source = "/proc/self/fd/" + str(descriptor)
-    process = await asyncio.create_subprocess_exec(sys.executable, "-m", "content.cli", "--input", source,
-        "--format", args.format, "--encoding", args.encoding,
+    command = ([sys.executable, "-m", "content.cli", "--input", source, "--format", args.format, "--encoding", args.encoding]
+        if args.task_kind == "material_parse" else
+        [sys.executable, "-m", "app.domains.content.questions.transfer_cli", "--input-fd", str(descriptor),
+         "--operation", "import" if args.task_kind == "question_import" else "export", "--format", args.format])
+    process = await asyncio.create_subprocess_exec(*command,
         pass_fds=(descriptor,),
         stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE,
         env={"PATH": "/usr/local/bin:/usr/bin:/bin", "PYTHONPATH": "/parser", "PYTHONDONTWRITEBYTECODE": "1",
-             "PYTHONUNBUFFERED": "1", "LANG": "C.UTF-8"})
+             "PYTHONUNBUFFERED": "1", "LANG": "C.UTF-8", "TMPDIR": "/work", "TEMP": "/work", "TMP": "/work"})
     result = OUTPUT / "result.json"
 
     tasks = []
@@ -93,7 +102,7 @@ async def parse(args, descriptor):
         with result.open("xb") as output:
             tasks = [asyncio.create_task(consume(process.stdout, MAX_OUTPUT, output)),
                      asyncio.create_task(consume(process.stderr, 65536)), asyncio.create_task(process.wait())]
-            async with asyncio.timeout(60):
+            async with asyncio.timeout(60 if args.task_kind == "material_parse" else 30):
                 await asyncio.gather(*tasks)
             output.flush()
             os.fsync(output.fileno())
@@ -126,10 +135,13 @@ async def parse(args, descriptor):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("format", choices=("pdf", "pptx", "docx", "txt", "text"))
+    parser.add_argument("format", choices=("pdf", "pptx", "docx", "txt", "text", "csv", "xlsx"))
     parser.add_argument("encoding", choices=("utf-8", "gb18030"))
     parser.add_argument("sha256")
+    parser.add_argument("task_kind", nargs="?", default="material_parse", choices=("material_parse", "question_import", "question_export"))
     args = parser.parse_args()
+    if (args.task_kind == "material_parse") == (args.format in {"csv", "xlsx"}):
+        parser.error("Format does not match the fixed task kind")
     try:
         return asyncio.run(parse(args, receive(args)))
     except TimeoutError:

@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('Web', 'Windows', 'Android', 'All')][string]$Target = 'Web',
+    [ValidateSet('Web', 'Windows', 'Android', 'All', 'API')][string]$Target = 'Web',
     [switch]$NoOpen
 )
 $ErrorActionPreference = 'Stop'

@@ -15,6 +15,8 @@ from app.core.db import engine
 from app.core.release import BUILD, ROOT, VERSION
 from app.core.content_runtime import lifespan
 from app.domains.content.routes import router as content_router
+from app.domains.content.questions.routes import router as questions_router
+from app.domains.content.lessons.routes import router as lessons_router
 from app.domains.content.runtime import get_runtime
 from app.domains.core.routes import router
 from app.domains.core.class_routes import router as class_router
@@ -34,6 +36,8 @@ app.add_middleware(CORSMiddleware, allow_origins=settings.CORS_ORIGINS.split(","
                    allow_headers=["Authorization", "Content-Type", "X-Work-Role", "Idempotency-Key", "If-Match"],
                    expose_headers=["Content-Disposition", "Content-Length"])
 app.include_router(router, prefix="/api/v1")
+app.include_router(questions_router, prefix="/api/v1")
+app.include_router(lessons_router, prefix="/api/v1")
 app.include_router(management_router, prefix="/api/v1")
 app.include_router(class_router, prefix="/api/v1")
 app.include_router(import_router, prefix="/api/v1")

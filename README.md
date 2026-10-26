@@ -6,7 +6,7 @@
 
 实验室安全教育与风险反馈平台，面向网页、Windows、安卓，三端共用正式账号、权限和业务数据。
 
-**当前阶段：[资料页主线基础复验通过](others/docs/material-ui-main-reception.md)，契约0.4.1；三端登录/资料预览及网页上传发布下载已核验，Windows/安卓实际保存仍未验证。** [C1最终T2候选已通过审查](others/docs/c1-main-reception.md)，A副先补主线启动工具，A再统一合入、兼容迁移和重建；当前C1代码尚未合main，B2仍未放行。云端仍以[c-start-ready交接](others/docs/cloud-asr-handoff.md)记录的旧部署为准，不能把本机源码接收当云端更新。[Open-Materials.cmd](Open-Materials.cmd)为本轮资料页入口；Open-DUI.cmd保留，Start-CloudASR.cmd恢复既有识别节点。题库、考试、助手、监控及完整新工作台尚未开放。[既有UI](others/docs/existing-ui-acceptance.md)、[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
+**当前阶段：[C1后台与主线启动工具已接收](others/docs/c1-main-reception.md)，源码契约0.5.0；原库兼容迁移、主线环境激活与三端复验待P2完成，B2仍未放行。** [已通过的资料页基础复验](others/docs/material-ui-main-reception.md)对应此前0.4.1，Windows/安卓实际保存仍未验证；不能把旧产物当作本轮0.5.0验证。A副仅在A实际发送完整main SHA后按[主线接入P2](others/docs/ai/c1-main-activation.md)执行备份、迁移、激活和构建。云端仍以[c-start-ready交接](others/docs/cloud-asr-handoff.md)记录的旧部署为准，不能把本机源码接收当云端更新。[Open-C1-API.cmd](Open-C1-API.cmd)在P2激活后打开真实后台API；资料仍用[Open-Materials.cmd](Open-Materials.cmd)，Open-DUI.cmd保留，Start-CloudASR.cmd恢复既有识别节点。题库编辑/学习考试界面、助手、监控及完整新工作台尚未开放。[既有UI](others/docs/existing-ui-acceptance.md)、[D第一批](others/docs/d-ui-foundation-handoff.md)、[B1](others/docs/b1-handoff.md)、[A0](others/docs/a0-handoff.md)及[A1](others/docs/a1-handoff.md)保留历史证据，不混用阶段结论。
 
 ## 从这里开始
 

@@ -1,6 +1,6 @@
 # A2 开工基线与分阶段交接
 
-**2026-10-26当前接棒**：[资料页主线基础复验已通过](material-ui-main-reception.md)，原生保存未验。[C1 T1与15项真实领域PG](c1-domain-reception.md)已交46394d5候选，A副按[T2具体委托](ai/c1-runtime-public-integration.md)接统一任务/HTTP/SDK；C1代码仍未合main，B2仍未放行。下文更早的待T1/未跑PG及接收状态保留历史原义。
+**2026-10-26最新接棒**：[C1最终T2及P1工具已统一接收main](c1-main-reception.md)，源码契约0.5.0，主线原库迁移、共享环境和三端运行仍待P2。A副须收到A实际发送的完整main执行SHA后按[主线接入P2](ai/c1-main-activation.md)激活和验证；此前[资料页0.4.1基础复验](material-ui-main-reception.md)保留，原生保存未验，B2/D2/C2尚未放行。下文“尚未合main/T2正在接入”和更早记录保留历史原义。
 
 **2026-10-26当前更新**：[资料页主线接收](material-ui-main-reception.md)记录af3ccf6候选及9978087合并；本轮合并版本待激活/客户端复验。C1最新84355fec由A副按[T1专用迁移与PG包](ai/c1-schema-pg-integration.md)接入，再交C执行15项领域PG；不提前放行B2、T2公共运行或新原生实现。下文带日期旧状态保留历史原义。
 

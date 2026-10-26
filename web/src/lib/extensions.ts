@@ -1,7 +1,7 @@
 import type { ComponentType, ReactNode } from "react"
-import type { UserPublic } from "../client"
+import type { UserPublic, TeacherLessonPreview } from "../client"
 import type { SessionSnapshot, WorkRole } from "./api"
-import type { ContentRef, TeacherLessonPreview } from "./lesson-protocol"
+import type { ContentRef } from "./lesson-protocol"
 
 /** A-owned integration protocol. D implements the router and supplies these parameters. */
 export type PageProps = Readonly<{

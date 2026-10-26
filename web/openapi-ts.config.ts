@@ -6,7 +6,12 @@ export default defineConfig({
 
   plugins: [
     { name: "@hey-api/client-axios", throwOnError: true },
-    { name: "@hey-api/typescript", case: "preserve" },
+    { name: "@hey-api/typescript", case: "preserve", definitions: {
+      case: "preserve",
+      // FastAPI qualifies colliding C1 names. Keep the released material DTO names stable for D.
+      name: (name: string): string => name.startsWith("app__domains__content__views__")
+        ? name.slice("app__domains__content__views__".length) : name,
+    } },
     {
       name: "@hey-api/sdk",
       operations: {

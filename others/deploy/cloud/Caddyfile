@@ -20,6 +20,16 @@
 		-Server
 		Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https:; frame-ancestors 'none'; base-uri 'self'; object-src 'none'"
 	}
+	@question_input {
+		method PUT
+		path_regexp question_input_bytes ^/api/v1/content/questions/tasks/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/input$
+	}
+	handle @question_input {
+		request_body {
+			max_size 5242880
+		}
+		reverse_proxy api:8000
+	}
 	@content_upload {
 		method PUT
 		path_regexp content_bytes ^/api/v1/content/uploads/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/bytes$

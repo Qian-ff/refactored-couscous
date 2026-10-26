@@ -269,8 +269,8 @@
       "baseline_sha": "c22328671a5d32715c4b5dbc10b66d5f4d46aa84",
       "candidate_sha": "b7b27c72c1fdfccd434663f2fc683b5576202967",
       "work_package": "others/docs/ai/c1-main-activation.md",
-      "phase": "P1_main_launcher_preparation_only",
-      "activation_requirement": "A-main dispatches the committed rule SHA for P1. P2 main backup/migration/shared-environment/controller/build operations require a second explicit full main execution SHA after A receives P1 and T2.",
+      "phase": "P2_main_activation_pending_A_explicit_main_sha",
+      "activation_requirement": "A-main received P1 plus T2 together. P2 backup/migration/shared-environment/controller/build operations start only from the second explicit full main execution SHA actually dispatched by A. Source fixes remain on executor branch for A reception before final builds.",
       "allowed_paths": [
         "others/deploy/content/prepare.py",
         "others/deploy/content/database.py",
@@ -297,7 +297,10 @@
       },
       "authorization_thread": "01a1544b-7eb1-77f1-9f83-52fa8510503c",
       "authorization_source": "Human-started C1/workflow v3 and unified continuation; A-main verified final T2 before main preparation",
-      "validation_scope": "P1 relevant tool/profile checks only. P2 original DB backup and old-data preservation, compatible migration/nonowner, real main legacy/C1 normal flow, exact source and affected client build/basic access. No main schema pytest/reset/seed/downgrade, professional auto-publication, advanced stress, new native implementation, push/ECS or paid resources."
+      "validation_scope": "P1 relevant tool/profile checks only. P2 original DB backup and old-data preservation, compatible migration/nonowner, real main legacy/C1 normal flow, exact source and affected client build/basic access. No main schema pytest/reset/seed/downgrade, professional auto-publication, advanced stress, new native implementation, push/ECS or paid resources.",
+      "launcher_candidate_sha": "58b5d26ece3cd8e076eaaf8d9034b7ca511988d2",
+      "P1_received_by_A": true,
+      "runtime_activation_pending": true
     }
   }
 }

@@ -18,7 +18,8 @@ SAFE_ERRORS = {"TIMEOUT", "RESOURCE_LIMIT", "PARSER_UNAVAILABLE", "UNSUPPORTED_T
 
 
 class ContentScheduler:
-    def __init__(self, factory, storage, runner):
+    def __init__(self, factory, storage, runner, transfer_driver=None):
+        self.transfer_driver = transfer_driver
         self.factory, self.storage, self.runner = factory, storage, runner
         self.owner = uuid4()
         self.last_error_code = None
@@ -89,6 +90,8 @@ class ContentScheduler:
             return False
 
     async def tick(self):
+        if self.transfer_driver is not None and await self.transfer_driver.tick():
+            return True
         if self.storage is not None:
             cleanup_error = await _io(reap_uploads, self.factory, self.storage)
             if cleanup_error:

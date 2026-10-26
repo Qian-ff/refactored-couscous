@@ -17,10 +17,27 @@ ROOT = Path(__file__).resolve().parents[2]
 SCHEMA = ROOT / "others/contracts/openapi.json"
 
 
+def uses_c1_candidate(root: Path, primary: Path) -> bool:
+    if root.resolve() == primary.resolve():
+        return False
+    branch = subprocess.check_output(["git", "branch", "--show-current"], cwd=root, text=True).strip()
+    if branch != "codex/a-executor":
+        return False
+    grant = json.loads((root / "others/contracts/execution-delegations.json").read_text())["packages"].get("c1-runtime-public-integration", {})
+    return grant.get("status") == "active" and grant.get("executor") == "A-executor"
+
+
 def export_schema() -> str:
     primary = primary_root(ROOT)
-    require_compatible(ROOT, primary, BACKEND_INPUTS)
-    interpreter = primary / "others/backend" / (".venv/Scripts/python.exe" if os.name == "nt" else ".venv/bin/python")
+    if uses_c1_candidate(ROOT, primary):
+        from c1_candidate_env import validate, paths, fingerprint
+        validate()
+        project, environment, interpreter = paths("backend")
+        if json.loads((environment / "c1-inputs.json").read_text())["fingerprint"] != fingerprint(project):
+            raise RuntimeError("Prepare the locked C1 candidate backend first")
+    else:
+        require_compatible(ROOT, primary, BACKEND_INPUTS)
+        interpreter = primary / "others/backend" / (".venv/Scripts/python.exe" if os.name == "nt" else ".venv/bin/python")
     process = subprocess.run([str(interpreter), "-c", BOOTSTRAP, str(ROOT), str(primary), "__openapi__"],
                              cwd=ROOT, capture_output=True, text=True, encoding="utf-8", check=True)
     return json.dumps(json.loads(process.stdout), ensure_ascii=False, sort_keys=True, indent=2) + "\n"
