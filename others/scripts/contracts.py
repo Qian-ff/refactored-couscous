@@ -17,10 +17,19 @@ ROOT = Path(__file__).resolve().parents[2]
 SCHEMA = ROOT / "others/contracts/openapi.json"
 
 
+def uses_c1_candidate(root: Path, primary: Path) -> bool:
+    if root.resolve() == primary.resolve():
+        return False
+    branch = subprocess.check_output(["git", "branch", "--show-current"], cwd=root, text=True).strip()
+    if branch != "codex/a-executor":
+        return False
+    grant = json.loads((root / "others/contracts/execution-delegations.json").read_text())["packages"].get("c1-runtime-public-integration", {})
+    return grant.get("status") == "active" and grant.get("executor") == "A-executor"
+
+
 def export_schema() -> str:
     primary = primary_root(ROOT)
-    grants = json.loads((ROOT / "others/contracts/execution-delegations.json").read_text())["packages"]
-    if ROOT.resolve() != primary.resolve() and grants.get("c1-runtime-public-integration", {}).get("status") == "active":
+    if uses_c1_candidate(ROOT, primary):
         from c1_candidate_env import validate, paths, fingerprint
         validate()
         project, environment, interpreter = paths("backend")
