@@ -148,16 +148,28 @@ def build():
     run(["docker", "build", "--build-arg", "SOURCE_SHA=" + sha, "-f", ROOT / "others/backend/Dockerfile",
          "-t", api_image, ROOT])
     run(["docker", "build", "--build-arg", "SOURCE_SHA=" + sha, "-t", web_image, web_context])
+    worker = ROOT / "others/ai_worker/.venv/Scripts/python.exe"
+    run([worker, ROOT / "others/deploy/content/prepare.py", "--profile", "cloud"], cwd=ROOT)
+    parser_image = json.loads((target / "parser/image.json").read_text(encoding="utf-8"))
+    shutil.copy2(target / "parser/image.json", target / "parser-image.json")
+    control = runpy.run_path(str(CLOUD / "controller_build.py"))["build"](ROOT, target, sha)
     identify = runpy.run_path(str(ROOT / "others/backend/app/core/provenance.py"))["identity"]
     manifest = {"source_sha": sha, "contract": identify(ROOT, "api")["contract"],
                 "api_fingerprint": identify(ROOT, "api")["source_fingerprint"],
                 "web_fingerprint": identify(ROOT, "web")["source_fingerprint"], "base_images": lock,
-                "api_image": api_image, "web_image": web_image, "image_ids": {}}
-    for label, image in (("api", api_image), ("web", web_image), ("postgres", lock["postgres"])):
+                "api_image": api_image, "web_image": web_image, "control_image": control["image"], "image_ids": {},
+                "parser_content_fingerprint": parser_image["content_fingerprint"],
+                "controller_source_files": control["source_files"],
+                "worker_lock_sha256": digest(ROOT / "others/ai_worker/uv.lock"),
+                "controller_license_sha256": digest(ROOT / "others/licenses/cloud-controller/manifest.json"),
+                "transfer_license_sha256": digest(ROOT / "others/licenses/content-transfer/manifest.json")}
+    for label, image in (("api", api_image), ("web", web_image), ("control", control["image"]),
+                         ("parser", parser_image["image"]), ("postgres", lock["postgres"])):
         manifest["image_ids"][label] = subprocess.check_output(
             ["docker", "image", "inspect", "--format", "{{.Id}}", image], text=True).strip()
     with gzip.open(target / "images.tar.gz", "wb", compresslevel=3) as output:
-        process = subprocess.Popen(["docker", "save", api_image, web_image, lock["postgres"]], stdout=subprocess.PIPE)
+        process = subprocess.Popen(["docker", "save", api_image, web_image, control["image"], parser_image["image"],
+                                    lock["postgres"]], stdout=subprocess.PIPE)
         try:
             shutil.copyfileobj(process.stdout, output, length=1024 * 1024)
         finally:
@@ -166,11 +178,13 @@ def build():
             raise RuntimeError("Docker image export failed")
     (target / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
     (target / "release.env").write_text(
-        f"API_IMAGE={api_image}\nWEB_IMAGE={web_image}\nPOSTGRES_IMAGE={manifest['image_ids']['postgres']}\n",
+        f"API_IMAGE={api_image}\nWEB_IMAGE={web_image}\nCONTROL_IMAGE={control['image']}\n"
+        f"POSTGRES_IMAGE={manifest['image_ids']['postgres']}\n",
         encoding="ascii", newline="\n")
-    for name in ("compose.yml", "release.sh", "asr-session.py"):
+    for name in ("compose.yml", "release.sh", "asr-session.py", "content_setup.py", "verify_release.py"):
         shutil.copy2(CLOUD / name, target / name)
-    names = ["images.tar.gz", "manifest.json", "release.env", "compose.yml", "release.sh", "asr-session.py"]
+    names = ["images.tar.gz", "manifest.json", "release.env", "compose.yml", "release.sh", "asr-session.py",
+             "content_setup.py", "verify_release.py", "parser-image.json", "controller-image.json"]
     (target / "SHA256SUMS").write_text("".join(digest(target / name) + "  " + name + "\n" for name in names),
                                       encoding="ascii", newline="\n")
     for name in ("release.env", "release.sh", "SHA256SUMS"):
@@ -184,9 +198,8 @@ def build():
 
 def deploy(bundle):
     with tarfile.open(bundle) as archive:
-        expected = {"images.tar.gz", "manifest.json", "release.env", "compose.yml", "release.sh", "SHA256SUMS"}
-        if "asr-session.py" in archive.getnames():
-            expected.add("asr-session.py")
+        expected = {"images.tar.gz", "manifest.json", "release.env", "compose.yml", "release.sh", "SHA256SUMS",
+                    "asr-session.py", "content_setup.py", "verify_release.py", "parser-image.json", "controller-image.json"}
         if set(archive.getnames()) != expected or any(not item.isfile() for item in archive):
             raise ValueError("Unexpected release archive contents")
         manifest = json.load(archive.extractfile("manifest.json"))
@@ -216,9 +229,10 @@ def deploy(bundle):
                "chown 10001:10001 /opt/labconnect/shared/ai-master.key\nchmod 400 /opt/labconnect/shared/ai-master.key\n")
     else:
         print("Existing server secrets preserved.")
-    remote("set -eu\nmkdir -p /opt/labconnect/shared/asr /opt/labconnect/shared/ai\n"
-           "chown 10001:10001 /opt/labconnect/shared/asr /opt/labconnect/shared/ai\n"
-           "chmod 700 /opt/labconnect/shared/asr /opt/labconnect/shared/ai\n")
+    remote("set -eu\nfor name in asr ai; do\n"
+           "  if ! test -d /opt/labconnect/shared/$name; then\n"
+           "    install -d -m 700 -o 10001 -g 10001 /opt/labconnect/shared/$name\n"
+           "  fi\ndone\n")
     target = REMOTE_ROOT + "/incoming/" + sha + ".tar"
     upload(bundle, target)
     remote("set -euo pipefail\nsha=$1\ndigest=$2\nroot=/opt/labconnect\n"
@@ -228,7 +242,7 @@ def deploy(bundle):
            "bash \"$root/releases/$sha/release.sh\" apply \"$sha\"\n", sha, digest(bundle))
 
 
-def verify(url):
+def verify(url, expected_sha=None):
     target = urllib.parse.urlsplit(url)
     configured = dict(line.split("=", 1) for line in (RUNTIME / "secrets/cloud.env").read_text().splitlines() if "=" in line)
     if (target.scheme != "https" or target.hostname not in {connection()["host"], configured.get("PUBLIC_HOST")}
@@ -237,31 +251,12 @@ def verify(url):
         raise ValueError("Verification requires this project's configured public HTTPS gateway")
     health = json.load(urllib.request.urlopen(url.rstrip("/") + "/api/v1/health", timeout=15))
     info = json.load(urllib.request.urlopen(url.rstrip("/") + "/build-info.json", timeout=15))
-    if health.get("status") != "ok" or health.get("contract") != info.get("contract"):
-        raise ValueError("Cloud health and client contract do not match")
-    remote("""set -eu
-umask 077
-python3 - "$1" <<'PY'
-from datetime import datetime, timezone
-import json, os, subprocess, sys
-from pathlib import Path
-root=Path('/opt/labconnect')
-manifest=json.loads((root/'current/manifest.json').read_text())
-sha=sys.argv[1]
-if manifest['source_sha'] != sha:
-    raise SystemExit('HTTPS client does not match the current server release')
-for name in ['labconnect-cloud-api-1','labconnect-cloud-web-1']:
-    revision=subprocess.check_output(['docker','inspect','--format','{{index .Config.Labels "org.opencontainers.image.revision"}}',name],text=True).strip()
-    if revision != sha: raise SystemExit('Container source version mismatch')
-actual=subprocess.check_output(['docker','exec','labconnect-cloud-api-1','.venv/bin/python','-c','import os; print(os.environ["LABCONNECT_SOURCE_SHA"])'],text=True).strip()
-if actual != sha: raise SystemExit('Running API source version mismatch')
-value={'source_sha':sha,'status':'trusted_https_verified','verified_at':datetime.now(timezone.utc).isoformat()}
-temporary=root/'deployment.pending.json'
-temporary.write_text(json.dumps(value)+'\\n')
-os.replace(temporary,root/'deployment.json')
-print('Verified trusted HTTPS, running API and both container source versions.')
-PY
-""", info["source_sha"])
+    expected_sha = expected_sha or git("rev-parse", "HEAD")
+    if (not re.fullmatch("[0-9a-f]{40}", expected_sha) or info.get("source_sha") != expected_sha
+            or health.get("status") != "ok" or health.get("contract") != "0.5.0"
+            or info.get("contract") != "0.5.0" or health.get("migration") != "c1d0c000001"):
+        raise ValueError("Cloud source, contract or actual migration differs from the expected release")
+    remote("set -eu\numask 077\npython3 /opt/labconnect/current/verify_release.py \"$1\"\n", expected_sha)
     print(json.dumps({"health": health, "web": info}, ensure_ascii=True))
 
 
@@ -340,6 +335,7 @@ def main():
     sub.add_parser("probe-ai")
     verify_parser = sub.add_parser("verify")
     verify_parser.add_argument("url")
+    verify_parser.add_argument("--source-sha")
     args = parser.parse_args()
     if args.command == "probe":
         remote((CLOUD / "probe.sh").read_text(encoding="utf-8"))
@@ -352,7 +348,7 @@ def main():
     elif args.command in {"status", "backup"}:
         remote((CLOUD / "release.sh").read_text(encoding="utf-8"), args.command)
     elif args.command == "verify":
-        verify(args.url)
+        verify(args.url, args.source_sha)
     elif args.command == "sync-cors":
         sync_cors()
     elif args.command == "provision-ai":

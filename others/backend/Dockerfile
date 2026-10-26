@@ -5,6 +5,7 @@ COPY others/backend/pyproject.toml others/backend/uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 COPY others/backend/app ./app
 COPY others/backend/alembic.ini ./alembic.ini
+COPY others/deploy/cloud/content_setup.py /opt/labconnect/others/deploy/cloud/content_setup.py
 COPY others/config/branding.json /opt/labconnect/others/config/branding.json
 COPY others/config/application.json /opt/labconnect/others/config/application.json
 COPY others/licenses/fastapi-template-MIT.txt /opt/labconnect/licenses/fastapi-template-MIT.txt

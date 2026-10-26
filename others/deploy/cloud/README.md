@@ -1,6 +1,6 @@
 # ECS 云端联调与演示
 
-A维护本流程；部署已集成、干净main的实际功能，当前契约0.3.2。D/B既有UI改版和C/B2门禁继续按[阶段入口](../../docs/a2-start.md)；设计图、未合并分支和开发harness不发布为产品。云端不会自动获得后续功能，A每次集成后重新构建、验证并更新。
+A维护本流程；0.5.0/C1云部署工具候选见[交接](../../docs/c1-cloud-handoff.md)，实际ECS仍以最后一次真实部署证据为准（M1准备时717e1d0/0.3.2）。必须从A接收的干净main及实际发送的执行SHA发布。D/B既有UI改版和后续门禁继续按[阶段入口](../../docs/a2-start.md)，不把候选工具或本机0.5验收冒称云端升级。
 
 ## 连接和配置
 
@@ -26,7 +26,7 @@ git status --short
 python .\others\scripts\cloud.py build
 python .\others\scripts\cloud.py deploy "上一步输出的bundle.tar绝对路径"
 python .\others\scripts\cloud.py status
-python .\others\scripts\cloud.py verify https://实际公网IP或已配置域名
+python .\others\scripts\cloud.py verify https://实际公网IP或已配置域名 --source-sha 本次准确main完整SHA
 ```
 
 build要求干净main，固定源码SHA及API/网页内容指纹，构建生产网页与非root后端镜像。基础镜像见[images.lock.json](images.lock.json)，依赖继续用pnpm-lock.yaml和uv.lock。包只含生产镜像、公开部署文件、版本及校验清单，无.env、真实账号、SSH密钥、私密PPT、设计树、虚拟环境或模型缓存。构建和上传在本机进行，减少2核4GiB服务器的构建压力。bundle.tar留忽略区，不进入Git。
@@ -48,6 +48,14 @@ HTTPS使用官方Caddy、Let's Encrypt ACME shortlived证书，持久化证书�
 初始运维登录信息仅见本机忽略的others/runtime/cloud-ecs/secrets/accounts.json；首次改密后记录实际新密码，bootstrap不会替换它。云端合成演示数据须明确标注，使用真实业务API创建，不复制本地数据库或使用已知演示密码。
 
 ## 备份、恢复与费用边界
+
+0.5发布包增加固定parser/transfer镜像与独立受信controller镜像（Python3.13.16、DockerCLI29.9.2），镜像ID/锁/闭包/许可在清单。`prepare.py --profile cloud`只写该main SHA的cloud-ecs/releases目录，并复用核验过的官方wheel缓存，不修改本机18767的image/key/instance或共享环境。
+
+仅controller持Docker socket，API和解析作业不持有。controller使用无网络容器、同宿主绝对路径的临时任务root、持久journal和私有Unix socket；客户端目录与服务端配置分开。原有ASR/AI目录及配置保留，不在云端安装宿主Python/语音模型。
+
+首次C1更新从原owner连接准备独立migration.env，停写备份后记录旧表/ID/内容摘要，通过仅管理进程创建并验证随机非owner角色，只替换api.env的数据库连接；旧JWT/CORS/密码/AI主密钥/原库/卷/证书保持。迁移后授权并比较原数据，bootstrap仍幂等且不seed。实际数据/角色检查在M2执行，M1不修改ECS。
+
+更新已有内容控制服务时，先通过旧服务确认实际停止/release并停旧控制器，再核对journal和保留的key/instance切换。缺少身份或未确认执行直接失败保留；不清空历史。完整HTTPS/预期SHA/0.5.0/c1迁移、实际镜像和非owner/内容能力检查由verify完成；普通TXT/CSV/固定Q-L及客户端真实流程另记报告，能力探针不等同业务流验证。
 
 ```powershell
 python .\others\scripts\cloud.py backup

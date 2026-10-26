@@ -1,0 +1,23 @@
+{
+  "docker_cli": {
+    "version": "29.9.2",
+    "image": "docker:29.9.2-cli@sha256:98776017a505b6d89c0adff8c63b0d8701ca10280c41315dbb0638fe3b5cf6e5",
+    "platform": "linux/amd64",
+    "official_image": "https://hub.docker.com/_/docker",
+    "image_source": "https://github.com/docker-library/docker/tree/a44773e1e79648f9fd7ebb7cb5cc00387dc05de0/29/cli",
+    "binary_source": "https://github.com/docker/cli/tree/v29.9.2",
+    "license": "Apache-2.0",
+    "files": {
+      "docker-cli-29.9.2-LICENSE": "2d81ea060825006fc8f3fe28aa5dc0ffeb80faf325b612c955229157b8c10dc0",
+      "docker-cli-29.9.2-NOTICE": "a8c869fbda819afb8d80e0ac19bac52e766bc6c19cb38cf94f52d64c4be2aab6"
+    },
+    "copied_payload": "/usr/local/bin/docker only; no daemon, buildx or compose plugins"
+  },
+  "python": {
+    "version": "3.13.16",
+    "image": "python:3.13.16-slim@sha256:cf50a4f6ac4f026458b08d5222023d700ac806410dff5e9ca8728fa44f2b850f",
+    "source": "https://github.com/docker-library/python",
+    "license": "PSF-2.0; base image distribution notices retained in image",
+    "note": "Same fixed base as accepted parser image; no host Python installation"
+  }
+}
